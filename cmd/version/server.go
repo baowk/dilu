@@ -1,9 +1,8 @@
 package version
 
 import (
+	"dilu/common/consts"
 	"fmt"
-
-	"github.com/baowk/dilu-core/core"
 
 	"github.com/spf13/cobra"
 )
@@ -23,6 +22,6 @@ var (
 )
 
 func run() error {
-	fmt.Println(core.Version)
+	fmt.Println(consts.Version)
 	return nil
 }

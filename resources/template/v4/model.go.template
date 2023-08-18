@@ -16,13 +16,13 @@ import (
      "time"
      {{- end }}
 
-	"go-admin/common/models"
+	"github.com/baowk/dilu-core/core/base"
 
 )
 
 //{{.TableComment}}
 type {{.ClassName}} struct {
-    models.Model
+    base.Model
     {{ range .Columns -}}
     {{$x := .Pk}}
     {{- if ($x) }}
@@ -34,19 +34,10 @@ type {{.ClassName}} struct {
     {{- else }}
     {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" gorm:"type:{{.ColumnType}};comment:{{- if eq .ColumnComment "" -}}{{.GoField}}{{- else -}}{{.ColumnComment}}{{end -}}"` //{{.ColumnComment}} {{end -}}
     {{- end }}
-    models.ModelTime
-    models.ControlBy
+    base.ModelIntTime
+    base.ControlBy
 }
 
 func ({{.ClassName}}) TableName() string {
     return "{{.TBName}}"
-}
-
-func (e *{{.ClassName}}) Generate() models.ActiveRecord {
-	o := *e
-	return &o
-}
-
-func (e *{{.ClassName}}) GetId() interface{} {
-	return e.{{.PkGoField}}
 }

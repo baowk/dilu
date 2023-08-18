@@ -14,10 +14,10 @@ import (
 var (
 	modName  string
 	StartCmd = &cobra.Command{
-		Use:     "module",
-		Short:   "Create a new module,Path:${project}/app/",
+		Use:     "new",
+		Short:   "Create a new module,Path:${project}/module/",
 		Long:    "Use when you need to create a new module",
-		Example: "dilu module -n yourname",
+		Example: "dilu new -n yourname",
 		Run: func(cmd *cobra.Command, args []string) {
 			run()
 		},

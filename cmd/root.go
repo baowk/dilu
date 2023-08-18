@@ -41,7 +41,6 @@ func init() {
 	rootCmd.AddCommand(start.StartCmd)
 	rootCmd.AddCommand(version.StartCmd)
 	rootCmd.AddCommand(module.StartCmd)
-	//rootCmd.AddCommand(migrate.StartCmd)
 }
 
 func Execute() {
