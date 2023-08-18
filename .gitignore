@@ -1,0 +1,17 @@
+.idea
+.vscode
+*/.DS_Store
+static/uploadfile
+main.exe
+*.exe
+dilu
+dilu.exe
+temp/
+!temp
+vendor
+resources/config.dev.yml
+*/.DS_Store
+**/**.log
+
+# go sum
+go.sum

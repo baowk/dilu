@@ -1,0 +1,148 @@
+package dto
+
+import (
+
+	 {{- $bb := false -}}
+	  {{- range .Columns -}}
+     {{$z := .IsQuery}}
+     {{- if ($z) }}
+     {{if eq .GoType "time.Time"}}{{- $bb = true -}}{{- end -}}
+     {{- end -}}
+     {{- end -}}
+     {{- range .Columns -}}
+     {{if eq .GoType "time.Time"}}{{- $bb = true -}}{{- end -}}
+     {{- end -}}
+     {{- if eq $bb true -}}
+     "time"
+     {{- end }}
+
+	"go-admin/app/{{.PackageName}}/models"
+	"go-admin/common/dto"
+	common "go-admin/common/models"
+)
+
+
+type {{.ClassName}}GetPageReq struct {
+	dto.Pagination     `search:"-"`
+    {{- $tablename := .TBName -}}
+    {{- range .Columns -}}
+    {{$z := .IsQuery}}
+    {{- if ($z) }}
+    {{.GoField}} {{.GoType}} `form:"{{.JsonField}}"  search:"type:{{if eq .QueryType "EQ"}}exact{{ else if eq .QueryType "NE"}}iexact{{ else if eq .QueryType "LIKE"}}contains{{ else if eq .QueryType "GT"}}gt{{ else if eq .QueryType "GTE"}}gte{{ else if eq .QueryType "LT"}}lt{{ else if eq .QueryType "LTE"}}lte{{- end }};column:{{.ColumnName}};table:{{$tablename}}" comment:"{{.ColumnComment}}"` //{{.ColumnComment}}
+    {{- end }}
+    {{- end }}
+    {{.ClassName}}Order
+}
+
+type {{.ClassName}}Order struct {
+    {{ $tablename := .TBName }}
+    {{- range .Columns -}}
+    {{.GoField}} string `form:"{{.JsonField}}Order"  search:"type:order;column:{{.ColumnName}};table:{{$tablename}}"`
+    {{ end }}
+}
+
+func (m *{{.ClassName}}GetPageReq) GetNeedSearch() interface{} {
+	return *m
+}
+
+type {{.ClassName}}InsertReq struct {
+    {{- range .Columns -}}
+    {{$x := .Pk}}
+    {{- if ($x) }}
+    {{.GoField}} {{.GoType}} `json:"-" comment:"{{.ColumnComment}}"` // {{.ColumnComment}}
+    {{- else if eq .GoField "CreatedAt" -}}
+    {{- else if eq .GoField "UpdatedAt" -}}
+    {{- else if eq .GoField "DeletedAt" -}}
+    {{- else if eq .GoField "CreateBy" -}}
+    {{- else if eq .GoField "UpdateBy" -}}
+    {{- else }}
+    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" comment:"{{.ColumnComment}}"` //{{.ColumnComment}}
+    {{- end -}}
+    {{- end }}
+    common.ControlBy
+}
+
+func (s *{{.ClassName}}InsertReq) Generate(model *models.{{.ClassName}})  {
+	 {{- range .Columns -}}
+    {{$x := .Pk}}
+    {{- if ($x) }}
+    if s.{{.GoField}} == 0 {
+        model.Model = common.Model{ {{.GoField}}: s.{{.GoField}} }
+    }
+    {{- else if eq .GoField "CreatedAt" -}}
+    {{- else if eq .GoField "UpdatedAt" -}}
+    {{- else if eq .GoField "DeletedAt" -}}
+    {{- else if eq .GoField "CreateBy"}}
+    model.{{.GoField}} = s.{{.GoField}} // 添加这而，需要记录是被谁创建的
+    {{- else if eq .GoField "UpdateBy" -}}
+    {{- else }}
+    model.{{.GoField}} = s.{{.GoField}}
+    {{- end -}}
+    {{- end }}
+}
+
+func (s *{{.ClassName}}InsertReq) GetId() interface{} {
+	return s.{{.PkGoField}}
+}
+
+type {{.ClassName}}UpdateReq struct {
+    {{- range .Columns -}}
+    {{$x := .Pk}}
+    {{- if ($x) }}
+    {{.GoField}} {{.GoType}} `uri:"{{.JsonField}}" comment:"{{.ColumnComment}}"` // {{.ColumnComment}}
+    {{- else if eq .GoField "CreatedAt" -}}
+    {{- else if eq .GoField "UpdatedAt" -}}
+    {{- else if eq .GoField "DeletedAt" -}}
+    {{- else if eq .GoField "CreateBy" -}}
+    {{- else if eq .GoField "UpdateBy" -}}
+    {{- else }}
+    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" comment:"{{.ColumnComment}}"` //{{.ColumnComment}}
+    {{- end -}}
+    {{- end }}
+    common.ControlBy
+}
+
+func (s *{{.ClassName}}UpdateReq) Generate(model *models.{{.ClassName}})  {
+	 {{- range .Columns -}}
+    {{$x := .Pk}}
+    {{- if ($x) }}
+    if s.{{.GoField}} == 0 {
+        model.Model = common.Model{ {{.GoField}}: s.{{.GoField}} }
+    }
+    {{- else if eq .GoField "CreatedAt" -}}
+    {{- else if eq .GoField "UpdatedAt" -}}
+    {{- else if eq .GoField "DeletedAt" -}}
+    {{- else if eq .GoField "CreateBy" -}}
+    {{- else if eq .GoField "UpdateBy"}}
+    model.{{.GoField}} = s.{{.GoField}} // 添加这而，需要记录是被谁更新的
+    {{- else }}
+    model.{{.GoField}} = s.{{.GoField}}
+    {{- end -}}
+    {{- end }}
+}
+
+func (s *{{.ClassName}}UpdateReq) GetId() interface{} {
+	return s.{{.PkGoField}}
+}
+
+// {{.ClassName}}GetReq 功能获取请求参数
+type {{.ClassName}}GetReq struct {
+	{{- range .Columns -}}
+    {{$x := .Pk}}
+    {{- if ($x) }}
+     {{.GoField}} {{.GoType}} `uri:"{{.JsonField}}"`  //{{.ColumnComment}}
+    {{- end }}
+    {{- end }}
+}
+func (s *{{.ClassName}}GetReq) GetId() interface{} {
+	return s.{{.PkGoField}}
+}
+
+// {{.ClassName}}DeleteReq 功能删除请求参数
+type {{.ClassName}}DeleteReq struct {
+	Ids []int `json:"ids"`
+}
+
+func (s *{{.ClassName}}DeleteReq) GetId() interface{} {
+	return s.Ids
+}

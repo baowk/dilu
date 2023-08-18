@@ -1,0 +1,52 @@
+package models
+
+import (
+
+	 {{- $bb := false -}}
+	  {{- range .Columns -}}
+     {{$z := .IsQuery}}
+     {{- if ($z) }}
+     {{if eq .GoType "time.Time"}}{{- $bb = true -}}{{- end -}}
+     {{- end -}}
+     {{- end -}}
+     {{- range .Columns -}}
+     {{if eq .GoType "time.Time"}}{{- $bb = true -}}{{- end -}}
+     {{- end -}}
+     {{- if eq $bb true -}}
+     "time"
+     {{- end }}
+
+	"go-admin/common/models"
+
+)
+
+//{{.TableComment}}
+type {{.ClassName}} struct {
+    models.Model
+    {{ range .Columns -}}
+    {{$x := .Pk}}
+    {{- if ($x) }}
+    {{- else if eq .GoField "CreatedAt" -}}
+    {{- else if eq .GoField "UpdatedAt" -}}
+    {{- else if eq .GoField "DeletedAt" -}}
+    {{- else if eq .GoField "CreateBy" -}}
+    {{- else if eq .GoField "UpdateBy" -}}
+    {{- else }}
+    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" gorm:"type:{{.ColumnType}};comment:{{- if eq .ColumnComment "" -}}{{.GoField}}{{- else -}}{{.ColumnComment}}{{end -}}"` //{{.ColumnComment}} {{end -}}
+    {{- end }}
+    models.ModelTime
+    models.ControlBy
+}
+
+func ({{.ClassName}}) TableName() string {
+    return "{{.TBName}}"
+}
+
+func (e *{{.ClassName}}) Generate() models.ActiveRecord {
+	o := *e
+	return &o
+}
+
+func (e *{{.ClassName}}) GetId() interface{} {
+	return e.{{.PkGoField}}
+}

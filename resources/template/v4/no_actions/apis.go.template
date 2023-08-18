@@ -1,0 +1,198 @@
+package apis
+
+import (
+    "fmt"
+
+	"github.com/gin-gonic/gin"
+	"github.com/go-admin-team/go-admin-core/sdk/api"
+	"github.com/go-admin-team/go-admin-core/sdk/pkg/jwtauth/user"
+	_ "github.com/go-admin-team/go-admin-core/sdk/pkg/response"
+
+	"go-admin/app/{{.PackageName}}/models"
+	"go-admin/app/{{.PackageName}}/service"
+	"go-admin/app/{{.PackageName}}/service/dto"
+	"go-admin/common/actions"
+)
+
+type {{.ClassName}} struct {
+	api.Api
+}
+
+// GetPage 获取{{.TableComment}}列表
+// @Summary 获取{{.TableComment}}列表
+// @Description 获取{{.TableComment}}列表
+// @Tags {{.TableComment}}
+{{- $tablename := .TBName -}}
+{{- range .Columns -}}
+{{$z := .IsQuery}}
+{{- if ($z) }}
+// @Param {{.JsonField}} query {{.GoType}} false "{{.ColumnComment}}"
+{{- end -}}
+{{- end }}
+// @Param pageSize query int false "页条数"
+// @Param pageIndex query int false "页码"
+// @Success 200 {object} response.Response{data=response.Page{list=[]models.{{.ClassName}}}} "{"code": 200, "data": [...]}"
+// @Router /api/v1/{{.ModuleName}} [get]
+// @Security Bearer
+func (e {{.ClassName}}) GetPage(c *gin.Context) {
+    req := dto.{{.ClassName}}GetPageReq{}
+    s := service.{{.ClassName}}{}
+    err := e.MakeContext(c).
+        MakeOrm().
+        Bind(&req).
+        MakeService(&s.Service).
+        Errors
+   	if err != nil {
+   		e.Logger.Error(err)
+   		e.Error(500, err, err.Error())
+   		return
+   	}
+
+	p := actions.GetPermissionFromContext(c)
+	list := make([]models.{{.ClassName}}, 0)
+	var count int64
+
+	err = s.GetPage(&req, p, &list, &count)
+	if err != nil {
+		e.Error(500, err, fmt.Sprintf("获取{{.TableComment}}失败，\r\n失败信息 %s", err.Error()))
+        return
+	}
+
+	e.PageOK(list, int(count), req.GetPageIndex(), req.GetPageSize(), "查询成功")
+}
+
+// Get 获取{{.TableComment}}
+// @Summary 获取{{.TableComment}}
+// @Description 获取{{.TableComment}}
+// @Tags {{.TableComment}}
+// @Param id path int false "id"
+// @Success 200 {object} response.Response{data=models.{{.ClassName}}} "{"code": 200, "data": [...]}"
+// @Router /api/v1/{{.ModuleName}}/{id} [get]
+// @Security Bearer
+func (e {{.ClassName}}) Get(c *gin.Context) {
+	req := dto.{{.ClassName}}GetReq{}
+	s := service.{{.ClassName}}{}
+    err := e.MakeContext(c).
+		MakeOrm().
+		Bind(&req).
+		MakeService(&s.Service).
+		Errors
+	if err != nil {
+		e.Logger.Error(err)
+		e.Error(500, err, err.Error())
+		return
+	}
+	var object models.{{.ClassName}}
+
+	p := actions.GetPermissionFromContext(c)
+	err = s.Get(&req, p, &object)
+	if err != nil {
+		e.Error(500, err, fmt.Sprintf("获取{{.TableComment}}失败，\r\n失败信息 %s", err.Error()))
+        return
+	}
+
+	e.OK( object, "查询成功")
+}
+
+// Insert 创建{{.TableComment}}
+// @Summary 创建{{.TableComment}}
+// @Description 创建{{.TableComment}}
+// @Tags {{.TableComment}}
+// @Accept application/json
+// @Product application/json
+// @Param data body dto.{{.ClassName}}InsertReq true "data"
+// @Success 200 {object} response.Response	"{"code": 200, "message": "添加成功"}"
+// @Router /api/v1/{{.ModuleName}} [post]
+// @Security Bearer
+func (e {{.ClassName}}) Insert(c *gin.Context) {
+    req := dto.{{.ClassName}}InsertReq{}
+    s := service.{{.ClassName}}{}
+    err := e.MakeContext(c).
+        MakeOrm().
+        Bind(&req).
+        MakeService(&s.Service).
+        Errors
+    if err != nil {
+        e.Logger.Error(err)
+        e.Error(500, err, err.Error())
+        return
+    }
+	// 设置创建人
+	req.SetCreateBy(user.GetUserId(c))
+
+	err = s.Insert(&req)
+	if err != nil {
+		e.Error(500, err, fmt.Sprintf("创建{{.TableComment}}失败，\r\n失败信息 %s", err.Error()))
+        return
+	}
+
+	e.OK(req.GetId(), "创建成功")
+}
+
+// Update 修改{{.TableComment}}
+// @Summary 修改{{.TableComment}}
+// @Description 修改{{.TableComment}}
+// @Tags {{.TableComment}}
+// @Accept application/json
+// @Product application/json
+// @Param id path int true "id"
+// @Param data body dto.{{.ClassName}}UpdateReq true "body"
+// @Success 200 {object} response.Response	"{"code": 200, "message": "修改成功"}"
+// @Router /api/v1/{{.ModuleName}}/{id} [put]
+// @Security Bearer
+func (e {{.ClassName}}) Update(c *gin.Context) {
+    req := dto.{{.ClassName}}UpdateReq{}
+    s := service.{{.ClassName}}{}
+    err := e.MakeContext(c).
+        MakeOrm().
+        Bind(&req).
+        MakeService(&s.Service).
+        Errors
+    if err != nil {
+        e.Logger.Error(err)
+        e.Error(500, err, err.Error())
+        return
+    }
+	req.SetUpdateBy(user.GetUserId(c))
+	p := actions.GetPermissionFromContext(c)
+
+	err = s.Update(&req, p)
+	if err != nil {
+		e.Error(500, err, fmt.Sprintf("修改{{.TableComment}}失败，\r\n失败信息 %s", err.Error()))
+        return
+	}
+	e.OK( req.GetId(), "修改成功")
+}
+
+// Delete 删除{{.TableComment}}
+// @Summary 删除{{.TableComment}}
+// @Description 删除{{.TableComment}}
+// @Tags {{.TableComment}}
+// @Param data body dto.{{.ClassName}}DeleteReq true "body"
+// @Success 200 {object} response.Response	"{"code": 200, "message": "删除成功"}"
+// @Router /api/v1/{{.ModuleName}} [delete]
+// @Security Bearer
+func (e {{.ClassName}}) Delete(c *gin.Context) {
+    s := service.{{.ClassName}}{}
+    req := dto.{{.ClassName}}DeleteReq{}
+    err := e.MakeContext(c).
+        MakeOrm().
+        Bind(&req).
+        MakeService(&s.Service).
+        Errors
+    if err != nil {
+        e.Logger.Error(err)
+        e.Error(500, err, err.Error())
+        return
+    }
+
+	// req.SetUpdateBy(user.GetUserId(c))
+	p := actions.GetPermissionFromContext(c)
+
+	err = s.Remove(&req, p)
+	if err != nil {
+		e.Error(500, err, fmt.Sprintf("删除{{.TableComment}}失败，\r\n失败信息 %s", err.Error()))
+        return
+	}
+	e.OK( req.GetId(), "删除成功")
+}

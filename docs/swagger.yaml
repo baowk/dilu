@@ -1,0 +1,290 @@
+definitions:
+  base.PageResp:
+    properties:
+      list:
+        description: 数据列表
+      page:
+        description: 当前第几页
+        type: integer
+      size:
+        description: 分页大小
+        type: integer
+      total:
+        description: 总条数
+        type: integer
+    type: object
+  base.ReqIds:
+    properties:
+      ids:
+        description: 多id
+        items:
+          type: integer
+        type: array
+    type: object
+  base.Resp:
+    properties:
+      code:
+        description: 返回码
+        type: integer
+      data:
+        description: 数据
+      msg:
+        description: 消息
+        type: string
+      reqId:
+        description: '`json:"请求id"`'
+        type: string
+    type: object
+  dilu_modules_demo_models.Demo:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  dilu_modules_demo_service_dto.DemePageReq:
+    properties:
+      page:
+        description: 页码
+        type: integer
+      size:
+        description: 每页大小
+        type: integer
+    type: object
+  dilu_modules_demo_service_dto.DemoDto:
+    properties:
+      id:
+        type: integer
+      name:
+        maxLength: 64
+        minLength: 2
+        type: string
+    required:
+    - name
+    type: object
+  utils.Cpu:
+    properties:
+      cores:
+        type: integer
+      cpus:
+        items:
+          type: number
+        type: array
+    type: object
+  utils.Disk:
+    properties:
+      totalGb:
+        type: integer
+      totalMb:
+        type: integer
+      usedGb:
+        type: integer
+      usedMb:
+        type: integer
+      usedPercent:
+        type: integer
+    type: object
+  utils.Os:
+    properties:
+      compiler:
+        type: string
+      goVersion:
+        type: string
+      goos:
+        type: string
+      numCpu:
+        type: integer
+      numGoroutine:
+        type: integer
+    type: object
+  utils.Ram:
+    properties:
+      totalMb:
+        type: integer
+      usedMb:
+        type: integer
+      usedPercent:
+        type: integer
+    type: object
+  utils.Server:
+    properties:
+      cpu:
+        $ref: '#/definitions/utils.Cpu'
+      disk:
+        $ref: '#/definitions/utils.Disk'
+      os:
+        $ref: '#/definitions/utils.Os'
+      ram:
+        $ref: '#/definitions/utils.Ram'
+    type: object
+info:
+  contact: {}
+  description: 一个简单的脚手
+  title: go-walker API
+  version: V0.0.1
+paths:
+  /api/v1/demo/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dilu_modules_demo_service_dto.DemoDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/dilu_modules_demo_models.Demo'
+              type: object
+      summary: 创建
+      tags:
+      - Demo
+  /api/v1/demo/del:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqIds'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/dilu_modules_demo_models.Demo'
+              type: object
+      summary: 删除
+      tags:
+      - Demo
+  /api/v1/demo/get:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqIds'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/dilu_modules_demo_models.Demo'
+              type: object
+      summary: 获得
+      tags:
+      - Demo
+  /api/v1/demo/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dilu_modules_demo_service_dto.DemePageReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/base.PageResp'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/dilu_modules_demo_models.Demo'
+                        type: array
+                    type: object
+              type: object
+      summary: Page接口
+      tags:
+      - Demo
+  /api/v1/demo/update:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dilu_modules_demo_service_dto.DemoDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/dilu_modules_demo_models.Demo'
+              type: object
+      summary: 更新
+      tags:
+      - Demo
+  /api/v1/init:
+    get:
+      description: init接口
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: init接口
+      tags:
+      - Default
+  /api/v1/ping:
+    get:
+      description: Ping接口
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/utils.Server'
+              type: object
+      summary: Ping接口
+      tags:
+      - Default
+securityDefinitions:
+  Bearer:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
