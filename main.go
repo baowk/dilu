@@ -10,7 +10,7 @@ import (
 //go:generate go mod download
 //go:generate swag init --parseDependency --parseDepth=6
 
-// @title dilu API
+// @title Dilu API
 // @version V0.0.1
 // @description 一个简单的脚手
 // @securityDefinitions.apikey Bearer

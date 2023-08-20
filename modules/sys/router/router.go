@@ -1,6 +1,9 @@
 package router
 
 import (
+	"dilu/docs"
+	"fmt"
+
 	"github.com/baowk/dilu-core/core"
 	"github.com/gin-gonic/gin"
 
@@ -17,6 +20,7 @@ var (
 func InitRouter() {
 	r := core.GetGinEngine()
 	if core.Cfg.Server.Mode != core.ModeProd.String() {
+		fmt.Printf("%s %s  \r\n", docs.SwaggerInfo.Title, docs.SwaggerInfo.Version)
 		//初始化swagger
 		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	}

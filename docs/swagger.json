@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "一个简单的脚手",
-        "title": "go-walker API",
+        "title": "Dilu API",
         "contact": {},
         "version": "V0.0.1"
     },
@@ -23,7 +23,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dilu_modules_demo_service_dto.DemoDto"
+                            "$ref": "#/definitions/dto.DemoDto"
                         }
                     }
                 ],
@@ -39,7 +39,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/dilu_modules_demo_models.Demo"
+                                            "$ref": "#/definitions/models.Demo"
                                         }
                                     }
                                 }
@@ -81,7 +81,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/dilu_modules_demo_models.Demo"
+                                            "$ref": "#/definitions/models.Demo"
                                         }
                                     }
                                 }
@@ -123,7 +123,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/dilu_modules_demo_models.Demo"
+                                            "$ref": "#/definitions/models.Demo"
                                         }
                                     }
                                 }
@@ -149,7 +149,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dilu_modules_demo_service_dto.DemePageReq"
+                            "$ref": "#/definitions/dto.DemePageReq"
                         }
                     }
                 ],
@@ -175,7 +175,7 @@
                                                         "list": {
                                                             "type": "array",
                                                             "items": {
-                                                                "$ref": "#/definitions/dilu_modules_demo_models.Demo"
+                                                                "$ref": "#/definitions/models.Demo"
                                                             }
                                                         }
                                                     }
@@ -206,7 +206,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dilu_modules_demo_service_dto.DemoDto"
+                            "$ref": "#/definitions/dto.DemoDto"
                         }
                     }
                 ],
@@ -222,7 +222,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/dilu_modules_demo_models.Demo"
+                                            "$ref": "#/definitions/models.Demo"
                                         }
                                     }
                                 }
@@ -344,18 +344,7 @@
                 }
             }
         },
-        "dilu_modules_demo_models.Demo": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
-                }
-            }
-        },
-        "dilu_modules_demo_service_dto.DemePageReq": {
+        "dto.DemePageReq": {
             "type": "object",
             "properties": {
                 "page": {
@@ -368,7 +357,7 @@
                 }
             }
         },
-        "dilu_modules_demo_service_dto.DemoDto": {
+        "dto.DemoDto": {
             "type": "object",
             "required": [
                 "name"
@@ -381,6 +370,17 @@
                     "type": "string",
                     "maxLength": 64,
                     "minLength": 2
+                }
+            }
+        },
+        "models.Demo": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         },
