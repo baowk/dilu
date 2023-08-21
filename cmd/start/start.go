@@ -1,9 +1,11 @@
 package start
 
 import (
+	"dilu/common/codes"
 	"fmt"
 
 	"github.com/baowk/dilu-core/core"
+	"github.com/baowk/dilu-core/core/i18n"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/cobra"
@@ -52,5 +54,11 @@ func run() {
 	//fmt.Println(core.Cfg)
 
 	core.Init()
+
+	i18n.Register(&codes.Code{
+		EnableI18N: core.Cfg.Server.I18n,
+		Lang:       core.Cfg.Server.Lang,
+	})
+
 	core.Run(&AppRouters)
 }

@@ -42,7 +42,7 @@ func (e *DemoApi) QueryPage(c *gin.Context) {
 // @Tags Demo
 // @Accept application/json
 // @Product application/json
-// @Param data body base.ReqIds true "body"
+// @Param data body base.ReqId true "body"
 // @Success 200 {object} base.Resp{data=models.Demo} "{"code": 200, "data": [...]}"
 // @Router /api/v1/demo/get [post]
 func (e *DemoApi) Get(c *gin.Context) {

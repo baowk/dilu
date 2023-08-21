@@ -116,7 +116,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/base.ReqIds"
+                            "$ref": "#/definitions/base.ReqId"
                         }
                     }
                 ],
@@ -317,6 +317,15 @@ const docTemplate = `{
                 },
                 "total": {
                     "description": "总条数",
+                    "type": "integer"
+                }
+            }
+        },
+        "base.ReqId": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "主键ID",
                     "type": "integer"
                 }
             }

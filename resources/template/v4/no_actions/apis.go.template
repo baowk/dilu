@@ -1,9 +1,9 @@
 package apis
 
 import (
-	"dilu/modules/demo/models"
-	"dilu/modules/demo/service"
-	"dilu/modules/demo/service/dto"
+	"dilu/modules/{{.PackageName}}/models"
+	"dilu/modules/{{.PackageName}}/service"
+	"dilu/modules/{{.PackageName}}/service/dto"
 
 	"github.com/baowk/dilu-core/core/base"
 	"github.com/gin-gonic/gin"
@@ -21,7 +21,7 @@ type {{.ClassName}}Api struct {
 // @Product application/json
 // @Param data body dto.DemePageReq true "body"
 // @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.{{.ClassName}}}} "{"code": 200, "data": [...]}"
-// @Router /api/v1/demo/page [post]
+// @Router /api/v1/{{.PackageName}}/page [post]
 func (e *{{.ClassName}}Api) QueryPage(c *gin.Context) {
 	var req dto.DemePageReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -42,9 +42,9 @@ func (e *{{.ClassName}}Api) QueryPage(c *gin.Context) {
 // @Tags {{.ClassName}}
 // @Accept application/json
 // @Product application/json
-// @Param data body base.ReqIds true "body"
+// @Param data body base.ReqId true "body"
 // @Success 200 {object} base.Resp{data=models.{{.ClassName}}} "{"code": 200, "data": [...]}"
-// @Router /api/v1/demo/get [post]
+// @Router /api/v1/{{.PackageName}}/get [post]
 func (e *{{.ClassName}}Api) Get(c *gin.Context) {
 	var req base.ReqId
 	if err := c.ShouldBind(&req); err != nil {
@@ -66,7 +66,7 @@ func (e *{{.ClassName}}Api) Get(c *gin.Context) {
 // @Product application/json
 // @Param data body dto.{{.ClassName}}Dto true "body"
 // @Success 200 {object} base.Resp{data=models.{{.ClassName}}} "{"code": 200, "data": [...]}"
-// @Router /api/v1/demo/create [post]
+// @Router /api/v1/{{.PackageName}}/create [post]
 func (e *{{.ClassName}}Api) Create(c *gin.Context) {
 	var req dto.{{.ClassName}}Dto
 	if err := c.ShouldBind(&req); err != nil {
@@ -89,7 +89,7 @@ func (e *{{.ClassName}}Api) Create(c *gin.Context) {
 // @Product application/json
 // @Param data body dto.{{.ClassName}}Dto true "body"
 // @Success 200 {object} base.Resp{data=models.{{.ClassName}}} "{"code": 200, "data": [...]}"
-// @Router /api/v1/demo/update [post]
+// @Router /api/v1/{{.PackageName}}/update [post]
 func (e *{{.ClassName}}Api) Update(c *gin.Context) {
 	var req dto.{{.ClassName}}Dto
 	if err := c.ShouldBind(&req); err != nil {
@@ -112,7 +112,7 @@ func (e *{{.ClassName}}Api) Update(c *gin.Context) {
 // @Product application/json
 // @Param data body base.ReqIds true "body"
 // @Success 200 {object} base.Resp{data=models.{{.ClassName}}} "{"code": 200, "data": [...]}"
-// @Router /api/v1/demo/del [post]
+// @Router /api/v1/{{.PackageName}}/del [post]
 func (e *{{.ClassName}}Api) Del(c *gin.Context) {
 	var req base.ReqIds
 	if err := c.ShouldBind(&req); err != nil {
