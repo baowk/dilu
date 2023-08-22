@@ -6,16 +6,17 @@ import (
 )
 
 const (
-	SUCCESS            = 200
-	FAILURE            = 500
-	AuthorizationError = 403
-	NotFound           = 404
-	NotLogin           = 401
-	InvalidToken       = 555
-	InvalidParameter   = 10000
-	UserDoesNotExist   = 10001
-	ServerError        = 10101
-	TooManyRequests    = 10102
+	SUCCESS            = 200   //成功
+	FAILURE            = 500   //失败
+	AuthorizationError = 403   //没有权限
+	NotFound           = 404   //资源不存在
+	NotLogin           = 401   //没有登录
+	InvalidToken       = 555   //无效Token
+	InvalidParameter   = 10000 //参数错误
+	UserDoesNotExist   = 10001 //服务器错误
+	ServerError        = 10101 //服务器错误
+	RequestsFrequently = 10102 //请求太频繁
+	CaptchaErr         = 10103 //获取验证码失败
 )
 
 const (
