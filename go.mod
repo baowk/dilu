@@ -5,9 +5,10 @@ go 1.20
 require (
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.8+incompatible
 	github.com/aws/aws-sdk-go v1.44.319
-	github.com/baowk/dilu-core v0.0.0-20230821064921-4597dba0ab27
+	github.com/baowk/dilu-core v0.0.0-20230825072557-dc54878fd447
 	github.com/fsnotify/fsnotify v1.6.0
 	github.com/gin-gonic/gin v1.9.1
+	github.com/go-admin-team/go-admin-core/sdk v1.5.1
 	github.com/golang-jwt/jwt/v5 v5.0.0
 	github.com/google/uuid v1.3.0
 	github.com/huaweicloud/huaweicloud-sdk-go-obs v3.23.4+incompatible
@@ -95,7 +96,7 @@ require (
 	go.uber.org/multierr v1.10.0 // indirect
 	golang.org/x/arch v0.3.0 // indirect
 	golang.org/x/crypto v0.9.0 // indirect
-	golang.org/x/image v0.0.0-20190802002840-cff245a6509b // indirect
+	golang.org/x/image v0.0.0-20220413100746-70e8d0d3baa9 // indirect
 	golang.org/x/net v0.10.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.10.0 // indirect
