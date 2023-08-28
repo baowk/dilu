@@ -18,10 +18,10 @@ type Wechat struct {
 }
 
 var (
-	appId          = "wxd13a9962283bff64"
-	appSecret      = "3dde53f301d53a3576975841bc730be1"
-	wxToken        = "wangdefa"
-	encodingAESKey = "iL2xLk2pIP51xMyRM9ARd7ZvKZ8FgmA01yK8VzGZdn8"
+	appId          = ""
+	appSecret      = ""
+	wxToken        = ""
+	encodingAESKey = ""
 )
 
 // MPCallback 微信公众号回调函数

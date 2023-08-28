@@ -2,17 +2,16 @@ package apis
 
 // import (
 // 	"fmt"
-// 	"github.com/shirou/gopsutil/v3/net"
 // 	"regexp"
 // 	"runtime"
 // 	"strconv"
 // 	"strings"
 // 	"time"
 
+// 	"github.com/baowk/dilu-core/core/base"
+// 	"github.com/shirou/gopsutil/v3/net"
+
 // 	"github.com/gin-gonic/gin"
-// 	"github.com/go-admin-team/go-admin-core/sdk/api"
-// 	"github.com/go-admin-team/go-admin-core/sdk/pkg"
-// 	_ "github.com/go-admin-team/go-admin-core/sdk/pkg/response"
 // 	"github.com/shirou/gopsutil/v3/cpu"
 // 	"github.com/shirou/gopsutil/v3/disk"
 // 	"github.com/shirou/gopsutil/v3/host"
@@ -44,7 +43,7 @@ package apis
 // )
 
 // type ServerMonitor struct {
-// 	api.Api
+// 	base.BaseApi
 // }
 
 // // GetHourDiffer 获取相差时间
@@ -69,7 +68,6 @@ package apis
 // // @Router /api/v1/server-monitor [get]
 // // @Security Bearer
 // func (e ServerMonitor) ServerInfo(c *gin.Context) {
-// 	e.Context = c
 
 // 	sysInfo, err := host.Info()
 // 	osDic := make(map[string]interface{}, 0)
@@ -139,6 +137,7 @@ package apis
 // 	netDic := make(map[string]interface{}, 0)
 // 	netDic["in"] = pkg.Round(float64(netInSpeed/KB), 2)
 // 	netDic["out"] = pkg.Round(float64(netOutSpeed/KB), 2)
+
 // 	e.Custom(gin.H{
 // 		"code":     200,
 // 		"os":       osDic,

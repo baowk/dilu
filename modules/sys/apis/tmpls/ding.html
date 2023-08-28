@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+    <script src="https://g.alicdn.com/dingding/dinglogin/0.0.5/ddLogin.js"></script>
+
+</head>
+<body>
+<p>钉钉登录二维码</p>
+<div id="login_container"></div>
+<p>请扫码</p>
+</body>
+<script>
+    /*
+* 解释一下goto参数，参考以下例子：
+* var url = encodeURIComponent('http://localhost.me/index.php?test=1&aa=2');
+* var goto = encodeURIComponent('https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=appid&response_type=code&scope=snsapi_login&state=STATE&redirect_uri='+url)
+*/
+    //var testBaseurl = "http://localhost:8000";
+    var baseurl = "https://www.yunlogin.com";
+    var urlapi = "/v2/sso/ding/callback"
+
+    var appId = "dingc7p3yu5c74klxobd"
+
+    var state = "dddddd12366"
+    
+    var goto = encodeURIComponent(
+        'https://oapi.dingtalk.com/connect/oauth2/sns_authorize?' +
+        'appid=' + appId  +
+        '&response_type=code&' +
+        'scope=snsapi_login&' +
+        'state='+state+'&redirect_uri=' + baseurl + urlapi);
+
+    var obj = DDLogin({
+        id:"login_container",//这里需要你在自己的页面定义一个HTML标签并设置id，例如<div id="login_container"></div>或<span id="login_container"></span>
+        goto: goto, //请参考注释里的方式
+        style: "border:none;background-color:#FFFFFF;",
+        width : "365",
+        height: "400"
+    });
+
+    console.log(obj)
+    
+    //扫完码就会执行下面这些代码
+    var handleMessage = function (event) {
+        var origin = event.origin;
+        console.log("origin", event.origin);
+        if( origin == "https://login.dingtalk.com" ) { //判断是否来自ddLogin扫码事件。
+            var loginTmpCode = event.data; //拿到loginTmpCode后就可以在这里构造跳转链接进行跳转了
+            console.log("loginTmpCode", loginTmpCode);
+            var url1 =
+                "https://oapi.dingtalk.com/connect/oauth2/sns_authorize?" +
+                "appid=" + appId +
+                "&response_type=code" +
+                "&scope=snsapi_login" +
+                "&state=" +state+
+                "&redirect_uri=" + baseurl + urlapi +
+                "&loginTmpCode=" + loginTmpCode;
+            console.log("url:", url1)
+            //window.location.href=url1;
+        }
+    };
+	//这时候页面会跳转到钉钉自己的服务器，
+	//然后钉钉根据 redirecturl在跳转到你的页面
+	//并在url中包含了loginTmpcode，
+	//这时候你获得了这个code把他传给后台来获取钉钉用户信息。。
+	
+    if (typeof window.addEventListener != 'undefined') {
+        console.log('message', handleMessage, false);
+        window.addEventListener('message', handleMessage, false);
+    } else if (typeof window.attachEvent != 'undefined') {
+        console.log('onmessage', handleMessage);
+        window.attachEvent('onmessage', handleMessage);
+    }
+</script>
+</html>
