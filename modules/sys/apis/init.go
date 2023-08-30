@@ -2,6 +2,7 @@ package apis
 
 import (
 	"dilu/modules/sys/models"
+	"dilu/modules/tools/models/tools"
 	"fmt"
 	"text/template"
 
@@ -27,8 +28,17 @@ func (Init) DoInit(c *gin.Context) {
 	err := core.DB().AutoMigrate(
 		&models.EmailLog{},
 		&models.SmsLog{},
-		&models.ThirdLogin{},
-		&models.User{},
+		&models.SysApi{},
+		&models.SysCfg{},
+		&models.SysDept{},
+		&models.SysJob{},
+		&models.SysMenu{},
+		&models.SysOperaLog{},
+		&models.SysRole{},
+		&models.SysUser{},
+		&tools.SysColumns{},
+		&tools.SysTables{},
+		//&models.SysPost{},
 	)
 	result := "执行成功"
 	if err != nil {

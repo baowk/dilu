@@ -48,7 +48,7 @@ type SysColumns struct {
 }
 
 func (SysColumns) TableName() string {
-	return "sys_columns"
+	return "gen_columns"
 }
 
 func (e *SysColumns) GetList(tx *gorm.DB, exclude bool) ([]SysColumns, error) {

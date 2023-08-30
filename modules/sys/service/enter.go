@@ -1,5 +1,3 @@
 package service
 
-var (
-	Sys = SysServ{}
-)
+var ()

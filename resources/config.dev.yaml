@@ -11,7 +11,7 @@ logger:             # 日志配置
   prefix:    # 日志前缀
   format:  # 输出
   director: temp/log      # 日志文件夹
-  #encode-level: LowercaseColorLevelEncoder # 编码级
+  encode-level: LowercaseColorLevelEncoder # 编码级
   stacktrace-key: # 栈名
   #max-age: 7                         # 日志留存时间 默认7天
   show-line: true # 显示行
@@ -27,7 +27,7 @@ cache:              # 缓存配置
   db: 5                       # Redis数据库索引
 dbcfg: # 数据库配置
   driver: mysql  
-  dns: root:123456@tcp(127.0.0.1:3306)/test?charset=utf8&parseTime=True&loc=Local&timeout=1000ms  # 数据库连接字符串
+  dns: root:123456@tcp(127.0.0.1:3306)/dilu-db?charset=utf8&parseTime=True&loc=Local&timeout=1000ms  # 数据库连接字符串
   log-mode: info #日志类型 GORM 定义了这些日志级别：silent、error、warn、info
   slow-threshold: 200 #慢日志
 # prefix: 日志前缀

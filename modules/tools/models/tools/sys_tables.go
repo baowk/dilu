@@ -47,7 +47,7 @@ type SysTables struct {
 }
 
 func (SysTables) TableName() string {
-	return "sys_tables"
+	return "gen_tables"
 }
 
 type Params struct {
@@ -56,7 +56,7 @@ type Params struct {
 	TreeName       string `gorm:"-" json:"treeName"`
 }
 
-func (e *SysTables) GetPage(tx *gorm.DB, pageSize int, pageIndex int) ([]SysTables, int, error) {
+func (e *SysTables) GetPage(tx *gorm.DB, pageSize int, pageIndex int) ([]SysTables, int64, error) {
 	var doc []SysTables
 
 	table := tx.Table("sys_tables")
@@ -74,7 +74,7 @@ func (e *SysTables) GetPage(tx *gorm.DB, pageSize int, pageIndex int) ([]SysTabl
 		return nil, 0, err
 	}
 	//table.Where("`deleted_at` IS NULL").Count(&count)
-	return doc, int(count), nil
+	return doc, count, nil
 }
 
 func (e *SysTables) Get(tx *gorm.DB, exclude bool) (SysTables, error) {
