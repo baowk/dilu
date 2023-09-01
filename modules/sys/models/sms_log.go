@@ -6,7 +6,6 @@ import (
 
 type SmsLog struct {
 	base.Model
-
 	Phone     string `json:"phone" gorm:"type:varchar(16);comment:手机号"`  //手机号
 	Code      string `json:"code" gorm:"type:varchar(6);comment:验证码"`    //验证码
 	Type      string `json:"type" gorm:"type:varchar(6);comment:类型"`     //类型，暂未定义

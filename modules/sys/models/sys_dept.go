@@ -13,10 +13,10 @@ type SysDept struct {
 	Leader    string    `json:"leader" gorm:"size:128;common:负责人"`                                  //负责人
 	Phone     string    `json:"phone" gorm:"size:11;common:手机号"`                                    //手机
 	Email     string    `json:"email" gorm:"size:64;common:邮箱"`                                     //邮箱
-	Status    int       `json:"status" gorm:"size:4;common:状态"`                                     //状态
-	DataScope string    `json:"dataScope" gorm:"-"`
-	Params    string    `json:"params" gorm:"-"`
-	Children  []SysDept `json:"children" gorm:"-"`
+	Status    int       `json:"status" gorm:"size:1;common:状态"`                                     //状态
+	DataScope string    `json:"dataScope" gorm:"-"`                                                 //数据域
+	Params    string    `json:"params" gorm:"-"`                                                    //参数
+	Children  []SysDept `json:"children" gorm:"-"`                                                  //子部门
 	base.ControlBy
 	base.ModelTime
 }

@@ -20,7 +20,7 @@ type SysOperaLog struct {
 	OperIp        string    `json:"operIp" gorm:"size:128;comment:客户端ip"`
 	OperLocation  string    `json:"operLocation" gorm:"size:128;comment:访问位置"`
 	OperParam     string    `json:"operParam" gorm:"text;comment:请求参数"`
-	Status        string    `json:"status" gorm:"size:4;comment:操作状态 1:正常 2:关闭"`
+	Status        int       `json:"status" gorm:"size:1;comment:操作状态 1:成功 2:失败"`
 	OperTime      time.Time `json:"operTime" gorm:"comment:操作时间"`
 	JsonResult    string    `json:"jsonResult" gorm:"size:255;comment:返回数据"`
 	Remark        string    `json:"remark" gorm:"size:255;comment:备注"`

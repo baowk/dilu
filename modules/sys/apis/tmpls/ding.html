@@ -21,9 +21,11 @@
     var baseurl = "https://www.yunlogin.com";
     var urlapi = "/v2/sso/ding/callback"
 
-    var appId = "dingc7p3yu5c74klxobd"
+    var appId = ""
 
-    var state = "dddddd12366"
+    var state = generateRandomString(20)
+
+    console.log("state:", state)
     
     var goto = encodeURIComponent(
         'https://oapi.dingtalk.com/connect/oauth2/sns_authorize?' +
@@ -40,7 +42,7 @@
         height: "400"
     });
 
-    console.log(obj)
+    //console.log(obj)
     
     //扫完码就会执行下面这些代码
     var handleMessage = function (event) {
@@ -73,5 +75,17 @@
         console.log('onmessage', handleMessage);
         window.attachEvent('onmessage', handleMessage);
     }
+
+    function generateRandomString(length) {
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  
+  return result;
+}
 </script>
 </html>

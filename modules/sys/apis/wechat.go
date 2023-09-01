@@ -1,7 +1,11 @@
 package apis
 
 import (
+	"dilu/common/codes"
 	"dilu/common/third/wechat"
+
+	"dilu/modules/sys/service"
+	"dilu/modules/sys/service/dto"
 
 	"net/http"
 	"strings"
@@ -75,7 +79,7 @@ func (e *Wechat) MPCallback(c *gin.Context) {
 // @Tags 微信公众号
 // @Accept application/json
 // @Product application/json
-// @Success 200 {object} response.Response{data=wechat.QrCodeResp} "{"code": 200, "data": [...]}"
+// @Success 200 {object} base.Resp{data=wechat.QrCodeResp} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sso/mp/qrCode [post]
 func (e *Wechat) GetMpQrcode(c *gin.Context) {
 	accT, err := getAccessToken(appId, appSecret)
@@ -100,30 +104,29 @@ func (e *Wechat) GetMpQrcode(c *gin.Context) {
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.MpSceneReq true "data"
-// @Success 200 {object} response.Response{data=dto.LoginOK} "{"code": 200, "data": [...]}"
+// @Success 200 {object} base.Resp{data=dto.LoginOK} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sso/mp/login [post]
-// func (e *Wechat) LoginMp(c *gin.Context) {
-// 	var req dto.MpSceneReq
-// 	s := service.User{}
+func (e *Wechat) LoginMp(c *gin.Context) {
+	var req dto.MpSceneReq
 
-// 	str, err := common.GetMpOpenId(req.Scene)
-// 	if err != nil {
-// 		e.ErrorN(constn.ErrMpNotScan)
-// 		return
-// 	}
-// 	if str == "" {
-// 		e.ErrorN(constn.ErrMpExpire)
-// 		return
-// 	}
+	str, err := common.GetMpOpenId(req.Scene)
+	if err != nil {
+		e.Code(c, codes.ErrMpNotScan)
+		return
+	}
+	if str == "" {
+		e.Code(c, codes.ErrMpExpire)
+		return
+	}
 
-// 	ip := utils.GetIP(c)
-// 	lok, err := s.LoginWechatMp(req, str, ip)
-// 	if err != nil {
-// 		e.Err(c, err)
-// 		return
-// 	}
-// 	e.Ok(c, lok)
-// }
+	ip := utils.GetIP(c)
+	lok, err := service.SysUserS.LoginWechatMp(req, str, ip)
+	if err != nil {
+		e.Error(c, err)
+		return
+	}
+	e.Ok(c, lok)
+}
 
 func getAccessToken(appId, appSecret string) (string, error) {
 	at := common.GetMpAccessToken(appId)

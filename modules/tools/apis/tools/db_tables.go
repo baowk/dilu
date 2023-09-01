@@ -17,10 +17,10 @@ import (
 // @Param tableName query string false "tableName / 数据表名称"
 // @Param pageSize query int false "pageSize / 页条数"
 // @Param pageIndex query int false "pageIndex / 页码"
-// @Success 200 {object} response.Response "{"code": 200, "data": [...]}"
+// @Success 200 {object} base.Resp "{"code": 200, "data": [...]}"
 // @Router /api/v1/db/tables/page [get]
 func (e *Gen) GetDBTableList(c *gin.Context) {
-	//var res response.Response
+	//var res base.Resp
 	var data tools.DBTables
 	var err error
 	var pageSize = 10

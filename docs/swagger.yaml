@@ -41,6 +41,21 @@ definitions:
         description: '`json:"请求id"`'
         type: string
     type: object
+  dto.CodeSendReq:
+    properties:
+      checkExist:
+        description: 检验账号是否存在
+        type: boolean
+      code:
+        description: 验证码
+        type: string
+      username:
+        description: 手机号或者邮箱
+        type: string
+      uuid:
+        description: 微信或者钉钉登录绑定用，已绑定传空，详见LoginOK
+        type: string
+    type: object
   dto.DemePageReq:
     properties:
       page:
@@ -61,6 +76,171 @@ definitions:
     required:
     - name
     type: object
+  dto.DingCfgResp:
+    properties:
+      appid:
+        description: 钉钉Appid
+        type: string
+      redirectUrl:
+        description: 重定向地址
+        type: string
+      state:
+        description: 状态码
+        type: string
+    type: object
+  dto.ForgetPwdReq:
+    properties:
+      code:
+        description: 验证码
+        type: string
+      password:
+        description: 密码
+        type: string
+      username:
+        description: 手机号|邮箱
+        type: string
+    type: object
+  dto.LoginDingReq:
+    properties:
+      client:
+        description: 客户端类型 暂未定义
+        type: string
+      code:
+        description: 钉钉登录code
+        type: string
+      device:
+        description: 客户端设备类型
+        type: string
+      inviteType:
+        description: 邀请人类型 1企业内部
+        type: integer
+      inviter:
+        description: 邀请人id
+        type: string
+      name:
+        description: 真实姓名（在该企业的名字）
+        type: string
+      state:
+        description: 服务器返回state
+        type: string
+    type: object
+  dto.LoginOK:
+    properties:
+      expire:
+        description: token有效期
+        type: string
+      need:
+        description: （0|1|2）0：已绑定 1：需要绑定账号 token 是一个加密串，走login接口在uuid上带上 2：需要设置密码
+        type: integer
+      token:
+        description: 返回token
+        type: string
+    type: object
+  dto.LoginReq:
+    properties:
+      client:
+        description: 客户端类型 未定义
+        type: string
+      code:
+        description: 验证码
+        type: string
+      inviteType:
+        description: 1企业内部邀请 2 用户邀请
+        type: integer
+      inviter:
+        description: 邀请人id
+        type: string
+      name:
+        description: 真实姓名
+        type: string
+      os:
+        description: 操作系统
+        type: string
+      password:
+        description: 密码 密码不为空 为密码登录 否则验证码登录
+        type: string
+      source:
+        description: 来源（最长32位）
+        type: string
+      username:
+        description: 手机号或者邮箱
+        type: string
+      uuid:
+        description: 微信或者钉钉第一次登录绑定用
+        type: string
+    type: object
+  dto.MpSceneReq:
+    properties:
+      client:
+        description: 客户端类型 未定义
+        type: string
+      inviteType:
+        description: 1企业内部邀请 2 用户邀请
+        type: integer
+      inviter:
+        description: 邀请人id
+        type: string
+      last_login_device:
+        description: 登录设备
+        type: string
+      last_login_port:
+        description: 登录平台
+        type: string
+      os:
+        description: 操作系统
+        type: string
+      scene:
+        description: 随机参数
+        type: string
+      source:
+        description: 来源（最长32位）
+        type: string
+    type: object
+  dto.RegisterReq:
+    properties:
+      client:
+        description: 客户端类型 未定义
+        type: string
+      code:
+        description: 验证码
+        type: string
+      inviteType:
+        description: 1企业内部邀请 2 用户邀请
+        type: integer
+      inviter:
+        description: 邀请人id
+        type: string
+      name:
+        description: 真实姓名
+        type: string
+      os:
+        description: 操作系统
+        type: string
+      password:
+        description: 密码
+        type: string
+      rePassword:
+        description: 重复密码
+        type: string
+      source:
+        description: 来源（最长32位）
+        type: string
+      username:
+        description: 手机号或者邮箱
+        type: string
+      uuid:
+        description: 微信或者钉钉第一次登录绑定用
+        type: string
+    type: object
+  dto.VerifyCodeReq:
+    properties:
+      code:
+        description: 验证码
+        type: string
+      username:
+        description: 手机号或者邮箱
+        type: string
+    type: object
   models.Demo:
     properties:
       id:
@@ -68,60 +248,196 @@ definitions:
       name:
         type: string
     type: object
-  utils.Cpu:
+  tools.Params:
     properties:
-      cores:
+      treeCode:
+        type: string
+      treeName:
+        type: string
+      treeParentCode:
+        type: string
+    type: object
+  tools.SysColumns:
+    properties:
+      columnComment:
+        type: string
+      columnId:
         type: integer
-      cpus:
+      columnName:
+        type: string
+      columnType:
+        type: string
+      createBy:
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      dictType:
+        type: string
+      edit:
+        type: boolean
+      fkCol:
         items:
-          type: number
+          $ref: '#/definitions/tools.SysColumns'
         type: array
-    type: object
-  utils.Disk:
-    properties:
-      totalGb:
-        type: integer
-      totalMb:
-        type: integer
-      usedGb:
-        type: integer
-      usedMb:
-        type: integer
-      usedPercent:
-        type: integer
-    type: object
-  utils.Os:
-    properties:
-      compiler:
+      fkLabelId:
         type: string
-      goVersion:
+      fkLabelName:
         type: string
-      goos:
+      fkTableName:
         type: string
-      numCpu:
+      fkTableNameClass:
+        type: string
+      fkTableNamePackage:
+        type: string
+      goField:
+        type: string
+      goType:
+        type: string
+      htmlType:
+        type: string
+      increment:
+        type: boolean
+      insert:
+        type: boolean
+      isEdit:
+        type: string
+      isIncrement:
+        type: string
+      isInsert:
+        type: string
+      isList:
+        type: string
+      isPk:
+        type: string
+      isQuery:
+        type: string
+      isRequired:
+        type: string
+      jsonField:
+        type: string
+      list:
+        type: string
+      pk:
+        type: boolean
+      query:
+        type: boolean
+      queryType:
+        type: string
+      remark:
+        type: string
+      required:
+        type: boolean
+      sort:
         type: integer
-      numGoroutine:
+      superColumn:
+        type: boolean
+      tableId:
         type: integer
+      updateBy:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+      usableColumn:
+        type: boolean
     type: object
-  utils.Ram:
+  tools.SysTables:
     properties:
-      totalMb:
+      businessName:
+        type: string
+      className:
+        description: 类名
+        type: string
+      columns:
+        items:
+          $ref: '#/definitions/tools.SysColumns'
+        type: array
+      createBy:
+        description: 创建者id
         type: integer
-      usedMb:
+      createdAt:
+        description: 创建时间
+        type: string
+      crud:
+        type: boolean
+      dataScope:
+        type: string
+      functionAuthor:
+        description: 功能作者
+        type: string
+      functionName:
+        description: 功能名称
+        type: string
+      isActions:
         type: integer
-      usedPercent:
+      isAuth:
         type: integer
+      isDataScope:
+        type: integer
+      isLogicalDelete:
+        type: string
+      logicalDelete:
+        type: boolean
+      logicalDeleteColumn:
+        type: string
+      moduleFrontName:
+        description: 前端文件名
+        type: string
+      moduleName:
+        description: go文件名
+        type: string
+      options:
+        type: string
+      packageName:
+        description: 包名
+        type: string
+      params:
+        $ref: '#/definitions/tools.Params'
+      pkColumn:
+        type: string
+      pkGoField:
+        type: string
+      pkJsonField:
+        type: string
+      remark:
+        type: string
+      tableComment:
+        description: 表备注
+        type: string
+      tableId:
+        description: 表编码
+        type: integer
+      tableName:
+        description: 表名称
+        type: string
+      tplCategory:
+        type: string
+      tree:
+        type: boolean
+      treeCode:
+        type: string
+      treeName:
+        type: string
+      treeParentCode:
+        type: string
+      updateBy:
+        description: 更新者id
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
     type: object
-  utils.Server:
+  wechat.QrCodeResp:
     properties:
-      cpu:
-        $ref: '#/definitions/utils.Cpu'
-      disk:
-        $ref: '#/definitions/utils.Disk'
-      os:
-        $ref: '#/definitions/utils.Os'
-      ram:
-        $ref: '#/definitions/utils.Ram'
+      expire_seconds:
+        type: integer
+      scene:
+        type: string
+      ticket:
+        type: string
+      url:
+        type: string
     type: object
 info:
   contact: {}
@@ -129,6 +445,72 @@ info:
   title: Dilu API
   version: V0.0.1
 paths:
+  /api/v1/captcha:
+    get:
+      description: 获取验证码
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  additionalProperties:
+                    type: string
+                  type: object
+              type: object
+      summary: 获取验证码
+      tags:
+      - 登陆
+  /api/v1/db/columns/page:
+    get:
+      description: 数据库表列分页列表 / database table column page list
+      parameters:
+      - description: tableName / 数据表名称
+        in: query
+        name: tableName
+        type: string
+      - description: pageSize / 页条数
+        in: query
+        name: pageSize
+        type: integer
+      - description: pageIndex / 页码
+        in: query
+        name: pageIndex
+        type: integer
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            $ref: '#/definitions/base.Resp'
+      summary: 分页列表数据 / page list data
+      tags:
+      - 工具 / 生成工具
+  /api/v1/db/tables/page:
+    get:
+      description: 数据库表分页列表 / database table page list
+      parameters:
+      - description: tableName / 数据表名称
+        in: query
+        name: tableName
+        type: string
+      - description: pageSize / 页条数
+        in: query
+        name: pageSize
+        type: integer
+      - description: pageIndex / 页码
+        in: query
+        name: pageIndex
+        type: integer
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            $ref: '#/definitions/base.Resp'
+      summary: 分页列表数据 / page list data
+      tags:
+      - 工具 / 生成工具
   /api/v1/demo/create:
     post:
       consumes:
@@ -256,9 +638,9 @@ paths:
       summary: 更新
       tags:
       - Demo
-  /api/v1/init:
+  /api/v1/sso/ding/callback:
     get:
-      description: init接口
+      description: 获取钉钉回调
       responses:
         "200":
           description: '{"code": 200, "data": [...]}'
@@ -267,14 +649,34 @@ paths:
             - $ref: '#/definitions/base.Resp'
             - properties:
                 data:
-                  type: string
+                  $ref: '#/definitions/dto.DingCfgResp'
               type: object
-      summary: init接口
+      summary: 获取钉钉回调
       tags:
-      - Default
-  /api/v1/ping:
-    get:
-      description: Ping接口
+      - sso
+  /api/v1/sso/forgetPwd:
+    post:
+      consumes:
+      - application/json
+      description: 忘记密码
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ForgetPwdReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            $ref: '#/definitions/base.Resp'
+      summary: 忘记密码
+      tags:
+      - sso
+  /api/v1/sso/getDingCfg:
+    post:
+      description: 获取钉钉登录配置信息
       responses:
         "200":
           description: '{"code": 200, "data": [...]}'
@@ -283,11 +685,282 @@ paths:
             - $ref: '#/definitions/base.Resp'
             - properties:
                 data:
-                  $ref: '#/definitions/utils.Server'
+                  $ref: '#/definitions/dto.DingCfgResp'
               type: object
-      summary: Ping接口
+      summary: 获取钉钉登录配置信息
       tags:
-      - Default
+      - sso
+  /api/v1/sso/login:
+    post:
+      consumes:
+      - application/json
+      description: 用户登录
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.LoginOK'
+              type: object
+      summary: 用户登录
+      tags:
+      - sso
+  /api/v1/sso/loginDing:
+    post:
+      consumes:
+      - application/json
+      description: 钉钉登录
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginDingReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.LoginOK'
+              type: object
+      summary: 钉钉
+      tags:
+      - sso
+  /api/v1/sso/mp/callback:
+    get:
+      consumes:
+      - application/json
+      description: 微信公众号回调函数
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 微信公众号回调函数
+      tags:
+      - 微信公众号
+  /api/v1/sso/mp/login:
+    post:
+      consumes:
+      - application/json
+      description: 获取公众号二维码
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.MpSceneReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.LoginOK'
+              type: object
+      summary: 轮询用户登录成功与否
+      tags:
+      - 微信公众号
+  /api/v1/sso/mp/qrCode:
+    post:
+      consumes:
+      - application/json
+      description: 获取公众号二维码
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/wechat.QrCodeResp'
+              type: object
+      summary: 获取公众号二维码
+      tags:
+      - 微信公众号
+  /api/v1/sso/register:
+    post:
+      consumes:
+      - application/json
+      description: 用户注册
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.LoginOK'
+              type: object
+      summary: 用户注册
+      tags:
+      - sso
+  /api/v1/sso/sendCode:
+    post:
+      consumes:
+      - application/json
+      description: 发送邮箱或者短信验证码
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CodeSendReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            $ref: '#/definitions/base.Resp'
+      summary: 发送邮箱或者短信验证码
+      tags:
+      - sso
+  /api/v1/sso/verify/code:
+    post:
+      consumes:
+      - application/json
+      description: 验证码校验
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.VerifyCodeReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            $ref: '#/definitions/base.Resp'
+      summary: 验证码校验
+      tags:
+      - sso
+  /api/v1/sys/tables/info:
+    post:
+      consumes:
+      - application/json
+      description: 添加表结构
+      parameters:
+      - description: tableName / 数据表名称
+        in: query
+        name: tables
+        type: string
+      responses:
+        "200":
+          description: '{"code": -1, "message": "添加失败"}'
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: 添加表结构
+      tags:
+      - 工具 / 生成工具
+    put:
+      consumes:
+      - application/json
+      description: 修改表结构
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/tools.SysTables'
+      responses:
+        "200":
+          description: '{"code": -1, "message": "添加失败"}'
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: 修改表结构
+      tags:
+      - 工具 / 生成工具
+  /api/v1/sys/tables/info/{tableId}:
+    delete:
+      description: 删除表结构
+      parameters:
+      - description: tableId
+        in: path
+        name: tableId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: '{"code": -1, "message": "删除失败"}'
+          schema:
+            type: string
+      summary: 删除表结构
+      tags:
+      - 工具 / 生成工具
+    get:
+      description: 获取JSON
+      parameters:
+      - description: configKey
+        in: path
+        name: configKey
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            $ref: '#/definitions/base.Resp'
+      security:
+      - Bearer: []
+      summary: 获取配置
+      tags:
+      - 工具 / 生成工具
+  /api/v1/sys/tables/page:
+    get:
+      description: 生成表分页列表
+      parameters:
+      - description: tableName / 数据表名称
+        in: query
+        name: tableName
+        type: string
+      - description: pageSize / 页条数
+        in: query
+        name: pageSize
+        type: integer
+      - description: pageIndex / 页码
+        in: query
+        name: pageIndex
+        type: integer
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            $ref: '#/definitions/base.Resp'
+      summary: 分页列表数据
+      tags:
+      - 工具 / 生成工具
 securityDefinitions:
   Bearer:
     in: header
