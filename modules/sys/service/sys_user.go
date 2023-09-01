@@ -340,7 +340,6 @@ func (e *SysUser) LoginPwd(c *dto.LoginReq, ip string) (dto.LoginOK, errs.IError
 	if model.Password == "" {
 		return lok, errs.ErrWithCode(codes.PwdNotExist)
 	}
-	fmt.Printf("hash :%s , %s\n\r", model.Password, c.Password)
 	if err := bcrypt.CompareHashAndPassword([]byte(model.Password), []byte(c.Password)); err != nil {
 		core.Log.Error("sysuser", zap.Error(err))
 		return lok, errs.ErrWithCode(codes.ErrUsernameOrPwd)
@@ -450,20 +449,28 @@ func (e *SysUser) bindById(enCode string, user models.SysUser) error {
 }
 
 // 通过验证码
-func (e *SysUser) ChangePwd(mobile, email, password string) error {
+func (e *SysUser) ChangePwd(mobile, email, password string) errs.IError {
 	enPwd, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
-		return errors.New("生成密码错误")
+		return codes.ErrSys(err)
 	}
 	var user models.SysUser
 	if mobile != "" {
 		if err := e.GetByPhone(mobile, &user); err != nil {
-			return errors.New("用户不存在")
+			if !errors.Is(err, gorm.ErrRecordNotFound) {
+				return codes.ErrSys(err)
+			} else {
+				return errs.ErrWithCode(codes.UserNotExist)
+			}
 		}
 	}
 	if email != "" {
 		if err := e.GetByEmail(email, &user); err != nil {
-			return errors.New("用户不存在")
+			if !errors.Is(err, gorm.ErrRecordNotFound) {
+				return codes.ErrSys(err)
+			} else {
+				return errs.ErrWithCode(codes.UserNotExist)
+			}
 		}
 	}
 	updates := models.SysUser{
@@ -473,7 +480,7 @@ func (e *SysUser) ChangePwd(mobile, email, password string) error {
 	db := core.DB().Model(&user).Updates(updates)
 	if err = db.Error; err != nil {
 		core.Log.Error("sysuser", zap.Error(err))
-		return err
+		return codes.ErrSys(err)
 	}
 	return nil
 }
@@ -551,17 +558,17 @@ func (e *SysUser) LoginDing(c *dto.LoginDingReq, userId string) (dto.LoginOK, er
 }
 
 // Get 获取User对象
-func (e *SysUser) GetByUsername(username string, model *models.SysUser) error {
+func (e *SysUser) GetByUsername(username string, model *models.SysUser) errs.IError {
 	var data models.SysUser
 	err := core.DB().Model(&data).Where("username = ?", username).First(model).Error
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
-		err = errors.New("当前账号不存在，请先注册")
-		core.Log.Error("sysuser", zap.Error(err))
-		return err
+		berr := errs.Err(codes.ErrUserExist, "", err)
+		core.Log.Error("sysuser", zap.Error(berr))
+		return berr
 	}
 	if err != nil {
 		core.Log.Error("sysuser", zap.Error(err))
-		return err
+		return codes.ErrSys(err)
 	}
 	return nil
 }
