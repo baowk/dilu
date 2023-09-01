@@ -111,11 +111,11 @@ func (e *Wechat) LoginMp(c *gin.Context) {
 
 	str, err := common.GetMpOpenId(req.Scene)
 	if err != nil {
-		e.Code(c, codes.ErrMpNotScan)
+		e.Code(c, codes.ThirdNotScan)
 		return
 	}
 	if str == "" {
-		e.Code(c, codes.ErrMpExpire)
+		e.Code(c, codes.ThirdExpire)
 		return
 	}
 

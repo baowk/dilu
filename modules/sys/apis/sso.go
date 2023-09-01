@@ -5,6 +5,7 @@ import (
 	"dilu/modules/sys/service"
 	"dilu/modules/sys/service/dto"
 	"errors"
+	"fmt"
 
 	"github.com/baowk/dilu-core/common/utils"
 	"github.com/baowk/dilu-core/common/utils/regexp_util"
@@ -87,7 +88,10 @@ func (e *SSO) SendCode(c *gin.Context) {
 // @Router /api/v1/sso/register [post]
 func (e *SSO) Register(c *gin.Context) {
 	req := dto.RegisterReq{}
-
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
 	if req.Password != req.RePassword {
 		e.Code(c, codes.ErrRePassword)
 		return
@@ -98,21 +102,26 @@ func (e *SSO) Register(c *gin.Context) {
 		return
 	}
 
+	fmt.Println(req.Username)
+
 	loginType := 1
 	//是否手机
 	if regexp_util.CheckMobile(req.Username) {
+		fmt.Println("1")
 		if !service.SmsS.Verify(req.Username, req.Code) {
 			e.Code(c, codes.ErrVerifyCode)
 			return
 		}
 		loginType = 1
 	} else if regexp_util.CheckEmail(req.Username) { //是否邮箱
+		fmt.Println("2")
 		if !service.EmailS.Verify(req.Username, req.Code) {
 			e.Code(c, codes.ErrVerifyCode)
 			return
 		}
 		loginType = 2
 	} else {
+		fmt.Println("3")
 		e.Code(c, codes.ErrMobileOrEmail)
 		return
 	}
@@ -139,7 +148,10 @@ func (e *SSO) Register(c *gin.Context) {
 // @Router /api/v1/sso/verify/code [post]
 func (e *SSO) VerifyCode(c *gin.Context) {
 	req := dto.VerifyCodeReq{}
-	c.ShouldBind(&req)
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
 
 	//是否手机
 	if regexp_util.CheckMobile(req.Username) {
@@ -176,7 +188,10 @@ func (e *SSO) VerifyCode(c *gin.Context) {
 // @Router /api/v1/sso/login [post]
 func (e *SSO) Login(c *gin.Context) {
 	req := dto.LoginReq{}
-	c.ShouldBind(&req)
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
 	ip := utils.GetIP(c)
 	if req.Password == "" {
 		//是否手机
@@ -190,19 +205,19 @@ func (e *SSO) Login(c *gin.Context) {
 				e.Code(c, codes.ErrVerifyCode)
 				return
 			}
-		} else {
-			e.Code(c, codes.ErrMobileOrEmail)
-			return
+			// } else {
+			// 	e.Code(c, codes.ErrMobileOrEmail)
+			// 	return
 		}
 	} else {
 		if logOk, err := service.SysUserS.LoginPwd(&req, ip); err != nil {
 			core.Log.Error("sso", zap.Error(err))
 			if err != nil {
 				if errors.Is(err, gorm.ErrRecordNotFound) {
-					e.Code(c, codes.ErrUserNotExist)
+					e.Code(c, codes.UserNotExist)
 					return
 				} else {
-					e.Code(c, 500)
+					e.Err(c, err)
 					return
 				}
 			}
@@ -214,7 +229,7 @@ func (e *SSO) Login(c *gin.Context) {
 	}
 	if logOk, err := service.SysUserS.LoginCode(&req, ip); err != nil {
 		core.Log.Error("sso", zap.Error(err))
-		e.Code(c, 500)
+		e.Err(c, err)
 		return
 	} else {
 		e.Ok(c, logOk, "登录成功")
@@ -233,7 +248,10 @@ func (e *SSO) Login(c *gin.Context) {
 // @Router /api/v1/sso/forgetPwd [post]
 func (e *SSO) ForgetPwd(c *gin.Context) {
 	req := dto.ForgetPwdReq{}
-	c.ShouldBind(&req)
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
 
 	if !regexp_util.CheckPwd(req.Password) {
 		e.Code(c, codes.ErrPasswordFMT)
@@ -264,7 +282,7 @@ func (e *SSO) ForgetPwd(c *gin.Context) {
 	}
 	if err := service.SysUserS.ChangePwd(mobile, email, req.Password); err != nil {
 		core.Log.Error("sso", zap.Error(err))
-		e.Code(c, 500)
+		e.Error(c, err)
 		return
 	} else {
 		e.Ok(c)

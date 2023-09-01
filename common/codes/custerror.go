@@ -4,6 +4,10 @@ import (
 	"github.com/baowk/dilu-core/core/errs"
 )
 
+func ErrSys(cause error) errs.IError {
+	return errs.Err(FAILURE, "", cause)
+}
+
 func ErrInvalidParameter(reqId string, cause error) errs.IError {
 	return errs.Err(InvalidParameter, reqId, cause)
 }
