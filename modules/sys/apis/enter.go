@@ -1,5 +1,6 @@
 package apis
 
 var (
-	InitApi = Init{}
+	Captcha = CaptchaApi{}
+	Sso     = SSO{}
 )

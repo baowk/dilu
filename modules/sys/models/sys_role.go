@@ -10,7 +10,7 @@ type SysRole struct {
 	RoleSort  int       `json:"roleSort" gorm:"type:int unsigned;comment:排序"`                          //角色排序
 	Flag      string    `json:"flag" gorm:"size:128;comment:flag"`                                     //
 	Remark    string    `json:"remark" gorm:"size:255;comment:备注"`                                     //备注
-	Admin     bool      `json:"admin" gorm:"size:4;comment:管理员"`
+	Admin     bool      `json:"admin" gorm:"size:4;comment:管理员"`                                       //超管标识
 	DataScope string    `json:"dataScope" gorm:"size:128;comment:数据权限"`
 	SysMenu   []SysMenu `json:"sysMenu" gorm:"many2many:sys_role_menu;foreignKey:RoleId;joinForeignKey:role_id;references:MenuId;joinReferences:menu_id;"`
 	base.ControlBy

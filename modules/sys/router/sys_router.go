@@ -12,9 +12,8 @@ func init() {
 
 // 无需认证的路由示例
 func sysNoCheckRoleRouter(v1 *gin.RouterGroup) {
-	api := apis.CaptchaApi{}
 	r := v1.Group("")
 	{
-		r.GET("captcha", api.GenerateCaptchaHandler)
+		r.GET("captcha", apis.Captcha.GenerateCaptchaHandler)
 	}
 }

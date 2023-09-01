@@ -16,7 +16,7 @@ type Init struct {
 }
 
 func (Init) Init(c *gin.Context) {
-	t1, err := template.ParseFiles("modules/sys/apis/tmpls/index.html")
+	t1, err := template.ParseFiles("modules/tools/apis/tmpls/index.html")
 	if err != nil {
 		panic(err)
 	}
@@ -44,7 +44,7 @@ func (Init) DoInit(c *gin.Context) {
 	if err != nil {
 		result = "执行失败"
 	}
-	t1, err := template.ParseFiles("modules/sys/apis/tmpls/result.html")
+	t1, err := template.ParseFiles("modules/tools/apis/tmpls/result.html")
 	if err != nil {
 		panic(err)
 	}

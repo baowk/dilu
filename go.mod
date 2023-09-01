@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.8+incompatible
 	github.com/aws/aws-sdk-go v1.44.319
-	github.com/baowk/dilu-core v0.0.0-20230826012909-b195dd7b6aeb
+	github.com/baowk/dilu-core v0.0.0-20230901022354-480047148424
 	github.com/fsnotify/fsnotify v1.6.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/golang-jwt/jwt/v5 v5.0.0
@@ -20,6 +20,8 @@ require (
 	github.com/swaggo/files v1.0.1
 	github.com/swaggo/gin-swagger v1.6.0
 	github.com/swaggo/swag v1.16.1
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.737
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms v1.0.737
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.42
 	go.uber.org/zap v1.25.0
 	golang.org/x/crypto v0.9.0

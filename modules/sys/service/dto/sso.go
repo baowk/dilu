@@ -92,7 +92,7 @@ type IdReq struct {
 type UserinfoResp struct {
 	UserId     string    `json:"userId" gorm:"type:char(32);comment:用户id"`                      //用户详情
 	Username   string    `json:"username" gorm:"type:varchar(50);default:(-);comment:用户名"`      //用户名
-	Mobile     string    `json:"mobile" gorm:"type:varchar(18);default:(-);comment:手机号"`        //手机号
+	Phone      string    `json:"phone" gorm:"type:varchar(18);default:(-);comment:手机号"`         //手机号
 	Email      string    `json:"email" gorm:"type:varchar(128);default:(-);comment:邮箱"`         //邮箱
 	FirstName  string    `json:"firstName" gorm:"type:varchar(64);default:(-);comment:名"`       //名字
 	LastName   string    `json:"lastName" gorm:"type:varchar(64);default:(-);comment:姓"`        //姓
@@ -109,7 +109,7 @@ type UserinfoResp struct {
 type MyUserinfoResp struct {
 	UserId     string    `json:"userId" gorm:"type:char(32);comment:用户id"`                       //用户id
 	Username   string    `json:"username" gorm:"type:varchar(50);default:(-);comment:用户名"`       //用户名
-	Mobile     string    `json:"mobile" gorm:"type:varchar(18);default:(-);comment:手机号"`         //手机号
+	Phone      string    `json:"phone" gorm:"type:varchar(18);default:(-);comment:手机号"`          //手机号
 	Email      string    `json:"email" gorm:"type:varchar(128);default:(-);comment:邮箱"`          //邮箱
 	FirstName  string    `json:"firstName" gorm:"type:varchar(64);default:(-);comment:名"`        //名字
 	LastName   string    `json:"lastName" gorm:"type:varchar(64);default:(-);comment:姓"`         //姓
@@ -139,4 +139,15 @@ type DingCfgResp struct {
 	Appid       string `json:"appid"`       //钉钉Appid
 	RedirectUri string `json:"redirectUrl"` //重定向地址
 	State       string `json:"state"`       //状态码
+}
+
+type MpSceneReq struct {
+	Scene           string `json:"scene"`                         //随机参数
+	Client          string `json:"client" comment:"客户端类型"`        //客户端类型 未定义
+	Source          string `json:"source"`                        //来源（最长32位）
+	LastLoginPort   string `json:"last_login_port" `              //登录平台
+	LastLoginDevice string `json:"last_login_device"`             //登录设备
+	Os              string `json:"os"`                            //操作系统
+	Inviter         string `json:"inviter" comment:"邀请人"`         //邀请人id
+	InviteType      int    `json:"inviteType" comment:"1 企业内部邀人"` //1企业内部邀请 2 用户邀请
 }

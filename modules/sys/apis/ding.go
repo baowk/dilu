@@ -4,6 +4,7 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"dilu/common"
+	"dilu/modules/sys/service"
 	"dilu/modules/sys/service/dto"
 	"encoding/base64"
 	"encoding/json"
@@ -30,8 +31,8 @@ type Ding struct {
 // @Summary 获取钉钉登录配置信息
 // @Description 获取钉钉登录配置信息
 // @Tags sso
-// @Success 200 {object} response.Response{data=dto.DingCfgResp} "{"code": 200, "data": [...]}"
-// @Router /v2/sso/getDingCfg [post]
+// @Success 200 {object} base.Resp{data=dto.DingCfgResp} "{"code": 200, "data": [...]}"
+// @Router /api/v1/sso/getDingCfg [post]
 func (e Ding) GetDingCfg(c *gin.Context) {
 
 	//domain := "http://" + c.Request.Host
@@ -46,8 +47,8 @@ func (e Ding) GetDingCfg(c *gin.Context) {
 // @Summary 获取钉钉回调
 // @Description 获取钉钉回调
 // @Tags sso
-// @Success 200 {object} response.Response{data=dto.DingCfgResp} "{"code": 200, "data": [...]}"
-// @Router /v2/sso/ding/callback [get]
+// @Success 200 {object} base.Resp{data=dto.DingCfgResp} "{"code": 200, "data": [...]}"
+// @Router /api/v1/sso/ding/callback [get]
 func (e Ding) DingCallback(c *gin.Context) {
 
 	code := c.Query("code")
@@ -73,30 +74,30 @@ func (e Ding) DingCallback(c *gin.Context) {
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.LoginDingReq true "data"
-// @Success 200 {object} response.Response{data=dto.LoginOK} "{"code": 200, "data": [...]}"
-// @Router /v2/sso/loginDing [post]
+// @Success 200 {object} base.Resp{data=dto.LoginOK} "{"code": 200, "data": [...]}"
+// @Router /api/v1/sso/loginDing [post]
 func (e Ding) LoginByDing(c *gin.Context) {
-	// req := dto.LoginDingReq{}
+	req := dto.LoginDingReq{}
 
-	// SnsAuthorize(req.State, req.Code)
+	SnsAuthorize(req.State, req.Code)
 
-	// //ip := common.GetClientIP(c)
-	// userId, err := common.GetMpOpenId("ding:" + req.State)
-	// if err != nil {
-	// 	userId, err = LoginByQRcode(req.Code)
-	// 	if err != nil {
-	// 		fmt.Println(err)
-	// 		e.Err(c, err)
-	// 		return
-	// 	}
-	// }
+	//ip := common.GetClientIP(c)
+	userId, err := common.GetMpOpenId("ding:" + req.State)
+	if err != nil {
+		userId, err = LoginByQRcode(req.Code)
+		if err != nil {
+			fmt.Println(err)
+			e.Error(c, err)
+			return
+		}
+	}
 
-	// if logOk, err := s.LoginDing(&req, userId); err != nil {
-	// 	e.Error(500, err, fmt.Sprintf("登录失败，\r\n失败信息 %s", err.Error()))
-	// 	return
-	// } else {
-	// 	e.Ok(c, logOk)
-	// }
+	if logOk, err := service.SysUserS.LoginDing(&req, userId); err != nil {
+		e.Error(c, err)
+		return
+	} else {
+		e.Ok(c, logOk)
+	}
 }
 
 // 调用钉钉auth
@@ -106,7 +107,7 @@ func SnsAuthorize(state string, code string) {
 		"&response_type=code" +
 		"&scope=snsapi_login" +
 		"&state=" + state +
-		"&redirect_uri=https://www.yunlogin.com/v2/sso/ding/callback" +
+		"&redirect_uri=https://www.yunlogin.com/api/v1/sso/ding/callback" +
 		"&loginTmpCode=" + code
 	http.Get(url)
 	// resp, err := http.Get(url)

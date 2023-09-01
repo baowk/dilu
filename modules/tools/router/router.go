@@ -1,9 +1,16 @@
 package router
 
 import (
+	"dilu/docs"
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 
+	"dilu/modules/tools/apis"
+
 	"github.com/baowk/dilu-core/core"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 var (
@@ -14,10 +21,15 @@ var (
 // InitRouter 路由初始化
 func InitRouter() {
 	r := core.GetGinEngine()
+	if core.Cfg.Server.Mode != core.ModeProd.String() {
+		fmt.Printf("%s %s  \r\n", docs.SwaggerInfo.Title, docs.SwaggerInfo.Version)
+		//初始化swagger
+		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+		r.GET("/init", apis.InitApi.Init)
+		r.POST("/doInit", apis.InitApi.DoInit)
+	}
 	noCheckRoleRouter(r)
 }
-
-
 
 // noCheckRoleRouter 无需认证的路由
 func noCheckRoleRouter(r *gin.Engine) {
