@@ -27,6 +27,7 @@ const (
 	ErrVerifyCode      = 10005 //验证码错误
 	ErrBind            = 10008 //绑定失败
 	ErrUserExist       = 10011 //账号已经注册，请直接登录
+	ErrPwd             = 10012 //密码错误
 	ErrUsernameOrPwd   = 10013 //账号或密码错误
 	RequestsFrequently = 10102 //请求太频繁
 	CaptchaErr         = 10103 //获取验证码失败

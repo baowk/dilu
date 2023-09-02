@@ -27,4 +27,5 @@ var zhCNText = map[int]string{
 	ErrBind:            "绑定失败",
 	ErrUserExist:       "账号已经注册，请直接登录",
 	ErrUsernameOrPwd:   "账号或者密码错误",
+	ErrPwd:             "密码错误",
 }

@@ -27,4 +27,5 @@ var enUSText = map[int]string{
 	ErrBind:            "Binding Failure",
 	ErrUserExist:       "Account has been registered, please login directly",
 	ErrUsernameOrPwd:   "Wrong account or password",
+	ErrPwd:             "Wrong  password",
 }

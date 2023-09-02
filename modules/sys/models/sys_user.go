@@ -20,7 +20,7 @@ type SysUser struct {
 	DeptId   int    `json:"deptId" gorm:"type:int unsigned;size:20;comment:部门"`                  //部门id
 	Post     string `json:"post" gorm:"size:32;comment:岗位"`                                      //岗位
 	Remark   string `json:"remark" gorm:"size:255;comment:备注"`                                   //备注
-	Status   int    `json:"status" gorm:"type:tinyint;comment:状态"`                               //状态
+	Status   int    `json:"status" gorm:"type:tinyint;comment:状态 1冻结 2正常 3默认"`                   //状态 1冻结 2正常 3默认
 	base.ControlBy
 	base.ModelTime
 }
@@ -48,10 +48,19 @@ func (e *SysUser) BeforeCreate(_ *gorm.DB) error {
 	return e.Encrypt()
 }
 
-func (e *SysUser) BeforeUpdate(_ *gorm.DB) error {
-	var err error
-	if e.Password != "" {
-		err = e.Encrypt()
+func (e *SysUser) GenPwd(pwd string) (enPwd string, err error) {
+	var hash []byte
+	if hash, err = bcrypt.GenerateFromPassword([]byte(pwd), bcrypt.DefaultCost); err != nil {
+		return
+	} else {
+		enPwd = string(hash)
 	}
-	return err
+	return
+}
+
+func (e *SysUser) CompPwd(srcPwd string) bool {
+	if err := bcrypt.CompareHashAndPassword([]byte(e.Password), []byte(srcPwd)); err != nil {
+		return false
+	}
+	return true
 }

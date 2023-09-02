@@ -10,30 +10,30 @@ type VerifyCodeReq struct {
 }
 
 type RegisterReq struct {
-	Username   string `json:"username" comment:"手机号或者邮箱"`    //手机号或者邮箱
-	Password   string `json:"password" comment:"密码"`         //密码
-	RePassword string `json:"rePassword" comment:"重复密码"`     //重复密码
-	UUID       string `json:"uuid" comment:"uuid"`           //微信或者钉钉第一次登录绑定用
-	Code       string `json:"code" comment:"验证码"`            //验证码
-	Client     string `json:"client" comment:"客户端类型"`        //客户端类型 未定义
-	Source     string `json:"source"`                        //来源（最长32位）
-	Os         string `json:"os"`                            //操作系统
-	Inviter    string `json:"inviter" comment:"邀请人"`         //邀请人id
-	InviteType int    `json:"inviteType" comment:"1 企业内部邀人"` //1企业内部邀请 2 用户邀请
-	Name       string `json:"name" comment:"真实姓名"`           //真实姓名
+	Username   string `json:"username" comment:"手机号或者邮箱"` //手机号或者邮箱
+	Password   string `json:"password" comment:"密码"`      //密码
+	RePassword string `json:"rePassword" comment:"重复密码"`  //重复密码
+	UUID       string `json:"uuid" comment:"uuid"`        //微信或者钉钉第一次登录绑定用
+	Code       string `json:"code" comment:"验证码"`         //验证码
+	Name       string `json:"name" comment:"真实姓名"`        //真实姓名
+	// Client     string `json:"client" comment:"客户端类型"`        //客户端类型 未定义
+	// Source     string `json:"source"`                        //来源（最长32位）
+	// Os         string `json:"os"`                            //操作系统
+	// Inviter    string `json:"inviter" comment:"邀请人"`         //邀请人id
+	// InviteType int    `json:"inviteType" comment:"1 企业内部邀人"` //1企业内部邀请 2 用户邀请
 }
 
 type LoginReq struct {
-	Username   string `json:"username" comment:"手机号或者邮箱"`                //手机号或者邮箱
-	Password   string `json:"password" comment:"密码 密码不为空 为密码登录 否则验证码登录"` //密码 密码不为空 为密码登录 否则验证码登录
-	UUID       string `json:"uuid" comment:"微信或者钉钉登录绑定用"`                //微信或者钉钉第一次登录绑定用
-	Code       string `json:"code" comment:"验证码"`                        //验证码
-	Client     string `json:"client" comment:"客户端类型"`                    //客户端类型 未定义
-	Source     string `json:"source"`                                    //来源（最长32位）
-	Os         string `json:"os"`                                        //操作系统
-	Inviter    string `json:"inviter" comment:"邀请人"`                     //邀请人id
-	InviteType int    `json:"inviteType" comment:"1 企业内部邀人"`             //1企业内部邀请 2 用户邀请
-	Name       string `json:"name" comment:"真实姓名"`                       //真实姓名
+	Username string `json:"username" comment:"手机号或者邮箱"`                //手机号或者邮箱
+	Password string `json:"password" comment:"密码 密码不为空 为密码登录 否则验证码登录"` //密码 密码不为空 为密码登录 否则验证码登录
+	UUID     string `json:"uuid" comment:"微信或者钉钉登录绑定用"`                //微信或者钉钉第一次登录绑定用
+	Code     string `json:"code" comment:"验证码"`                        //验证码
+	Name     string `json:"name" comment:"真实姓名"`                       //真实姓名
+	// Client     string `json:"client" comment:"客户端类型"`                    //客户端类型 未定义
+	// Source     string `json:"source"`                                    //来源（最长32位）
+	// Os         string `json:"os"`                                        //操作系统
+	// Inviter    string `json:"inviter" comment:"邀请人"`                     //邀请人id
+	// InviteType int    `json:"inviteType" comment:"1 企业内部邀人"`             //1企业内部邀请 2 用户邀请
 }
 
 type LoginWechatReq struct {

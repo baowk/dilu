@@ -18,7 +18,6 @@ import (
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/errs"
 	"go.uber.org/zap"
-	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -27,9 +26,7 @@ type SysUser struct {
 
 // GetPage 获取SysUser列表
 func (e *SysUser) GetPage(c *dto.SysUserGetPageReq, list *[]models.SysUser, count *int64) error {
-	var err error
-
-	err = core.DB().Debug().Preload("Dept").
+	err := core.DB().Debug().Preload("Dept").
 		Find(list).Limit(-1).Offset(-1).
 		Count(count).Error
 	if err != nil {
@@ -188,7 +185,7 @@ func (e *SysUser) Remove(userId int) error {
 }
 
 // UpdatePwd 修改SysUser对象密码
-func (e *SysUser) UpdatePwd(id int, oldPassword, newPassword string) error {
+func (e *SysUser) UpdatePwd(id int, oldPassword, newPassword string) errs.IError {
 	var err error
 
 	if newPassword == "" {
@@ -196,32 +193,30 @@ func (e *SysUser) UpdatePwd(id int, oldPassword, newPassword string) error {
 	}
 	c := &models.SysUser{}
 
-	err = core.DB().Model(c).Select("UserId", "Password", "Salt").
+	err = core.DB().Model(c).Select("UserId", "Password").
 		First(c, id).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return errors.New("无权更新该数据")
+			return codes.ErrNotFound(strconv.Itoa(id), "sysuser", "", err)
 		}
 		core.Log.Error("db error: %s", zap.Error(err))
-		return err
+		return codes.ErrSys(err)
 	}
-	err = bcrypt.CompareHashAndPassword([]byte(c.Password), []byte(oldPassword))
-	if err != nil {
-		core.Log.Error("CompareHashAndPassword error", zap.Error(err))
-		return err
+	if !c.CompPwd(oldPassword) {
+		return errs.ErrWithCode(codes.ErrPwd)
 	}
 	c.Password = newPassword
 	db := core.DB().Model(c).Where("user_id = ?", id).
 		Select("Password", "Salt").
 		Updates(c)
 	if err = db.Error; err != nil {
-		core.Log.Error("db error: %s", zap.Error(err))
-		return err
+		core.Log.Error("db error", zap.Error(err))
+		return codes.ErrSys(err)
 	}
 	if db.RowsAffected == 0 {
 		err = errors.New("set password error")
 		core.Log.Warn("db update error")
-		return err
+		return codes.ErrSys(err)
 	}
 	return nil
 }
@@ -277,11 +272,7 @@ func (e *SysUser) Register(loginType int, c *dto.RegisterReq, ip string) (dto.Lo
 			c.Name = arr[0]
 		}
 	}
-	if enPwd, err := bcrypt.GenerateFromPassword([]byte(c.Password), bcrypt.DefaultCost); err != nil {
-		return lok, codes.ErrSys(err)
-	} else {
-		model.Password = string(enPwd)
-	}
+	model.Password = c.Password
 	model.NickName = c.Name
 	model.CreatedAt = time.Now()
 	model.UpdatedAt = model.CreatedAt
@@ -340,8 +331,7 @@ func (e *SysUser) LoginPwd(c *dto.LoginReq, ip string) (dto.LoginOK, errs.IError
 	if model.Password == "" {
 		return lok, errs.ErrWithCode(codes.PwdNotExist)
 	}
-	if err := bcrypt.CompareHashAndPassword([]byte(model.Password), []byte(c.Password)); err != nil {
-		core.Log.Error("sysuser", zap.Error(err))
+	if !model.CompPwd(c.Password) {
 		return lok, errs.ErrWithCode(codes.ErrUsernameOrPwd)
 	}
 	if c.UUID != "" {
@@ -450,10 +440,7 @@ func (e *SysUser) bindById(enCode string, user models.SysUser) error {
 
 // 通过验证码
 func (e *SysUser) ChangePwd(mobile, email, password string) errs.IError {
-	enPwd, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	if err != nil {
-		return codes.ErrSys(err)
-	}
+
 	var user models.SysUser
 	if mobile != "" {
 		if err := e.GetByPhone(mobile, &user); err != nil {
@@ -472,6 +459,10 @@ func (e *SysUser) ChangePwd(mobile, email, password string) errs.IError {
 				return errs.ErrWithCode(codes.UserNotExist)
 			}
 		}
+	}
+	enPwd, err := user.GenPwd(password)
+	if err != nil {
+		return codes.ErrSys(err)
 	}
 	updates := models.SysUser{
 		Password: string(enPwd),
