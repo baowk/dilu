@@ -11,7 +11,7 @@ import (
 
 	"dilu/common/third/file_store/config"
 
-	"github.com/baowk/dilu-core/common/utils"
+	"github.com/baowk/dilu-core/common/utils/cryptos"
 	"github.com/baowk/dilu-core/core"
 	"go.uber.org/zap"
 )
@@ -40,7 +40,7 @@ func (e *Local) UploadFile(file *multipart.FileHeader) (string, string, error) {
 	ext := path.Ext(file.Filename)
 	// 读取文件名并加密
 	name := strings.TrimSuffix(file.Filename, ext)
-	name = utils.MD5V([]byte(name))
+	name = cryptos.MD5V([]byte(name))
 	// 拼接新文件名
 	filename := name + "_" + time.Now().Format("20060102150405") + ext
 	// 尝试创建此路径

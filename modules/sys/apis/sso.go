@@ -7,8 +7,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/baowk/dilu-core/common/utils"
-	"github.com/baowk/dilu-core/common/utils/regexp_util"
+	"github.com/baowk/dilu-core/common/utils/ips"
+	"github.com/baowk/dilu-core/common/utils/regexps"
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/base"
 	"github.com/baowk/dilu-core/core/errs"
@@ -48,7 +48,7 @@ func (e *SSO) SendCode(c *gin.Context) {
 	}
 
 	//是否手机
-	if regexp_util.CheckMobile(req.Username) {
+	if regexps.CheckMobile(req.Username) {
 		if req.CheckExist {
 			var count int64
 			service.SysUserS.CountByPhone(req.Username, &count)
@@ -59,7 +59,7 @@ func (e *SSO) SendCode(c *gin.Context) {
 		}
 		service.SmsS.Send(req.Username)
 
-	} else if regexp_util.CheckEmail(req.Username) { //是否邮箱
+	} else if regexps.CheckEmail(req.Username) { //是否邮箱
 		if req.CheckExist {
 			var count int64
 			service.SysUserS.CountByEmail(req.Username, &count)
@@ -97,7 +97,7 @@ func (e *SSO) Register(c *gin.Context) {
 		return
 	}
 	//密码规则
-	if req.Password != "" && !regexp_util.CheckPwd(req.Password) {
+	if req.Password != "" && !regexps.CheckPwd(req.Password) {
 		e.Code(c, codes.ErrPasswordFMT)
 		return
 	}
@@ -106,14 +106,14 @@ func (e *SSO) Register(c *gin.Context) {
 
 	loginType := 1
 	//是否手机
-	if regexp_util.CheckMobile(req.Username) {
+	if regexps.CheckMobile(req.Username) {
 		fmt.Println("1")
 		if !service.SmsS.Verify(req.Username, req.Code) {
 			e.Code(c, codes.ErrVerifyCode)
 			return
 		}
 		loginType = 1
-	} else if regexp_util.CheckEmail(req.Username) { //是否邮箱
+	} else if regexps.CheckEmail(req.Username) { //是否邮箱
 		fmt.Println("2")
 		if !service.EmailS.Verify(req.Username, req.Code) {
 			e.Code(c, codes.ErrVerifyCode)
@@ -126,7 +126,7 @@ func (e *SSO) Register(c *gin.Context) {
 		return
 	}
 
-	ip := utils.GetIP(c)
+	ip := ips.GetIP(c)
 	if logOk, err := service.SysUserS.Register(loginType, &req, ip); err != nil {
 		core.Log.Error("sso", zap.Error(err))
 		e.Error(c, err)
@@ -154,14 +154,14 @@ func (e *SSO) VerifyCode(c *gin.Context) {
 	}
 
 	//是否手机
-	if regexp_util.CheckMobile(req.Username) {
+	if regexps.CheckMobile(req.Username) {
 		s := service.SmsLog{}
 
 		if !s.Verify(req.Username, req.Code) {
 			e.Code(c, codes.ErrVerifyCode)
 			return
 		}
-	} else if regexp_util.CheckEmail(req.Username) { //是否邮箱
+	} else if regexps.CheckEmail(req.Username) { //是否邮箱
 		s := service.EmailLog{}
 
 		if !s.Verify(req.Username, req.Code) {
@@ -192,15 +192,15 @@ func (e *SSO) Login(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	ip := utils.GetIP(c)
+	ip := ips.GetIP(c)
 	if req.Password == "" {
 		//是否手机
-		if regexp_util.CheckMobile(req.Username) {
+		if regexps.CheckMobile(req.Username) {
 			if !service.SmsS.Verify(req.Username, req.Code) {
 				e.Code(c, codes.ErrVerifyCode)
 				return
 			}
-		} else if regexp_util.CheckEmail(req.Username) { //是否邮箱
+		} else if regexps.CheckEmail(req.Username) { //是否邮箱
 			if !service.EmailS.Verify(req.Username, req.Code) {
 				e.Code(c, codes.ErrVerifyCode)
 				return
@@ -253,14 +253,14 @@ func (e *SSO) ForgetPwd(c *gin.Context) {
 		return
 	}
 
-	if !regexp_util.CheckPwd(req.Password) {
+	if !regexps.CheckPwd(req.Password) {
 		e.Code(c, codes.ErrPasswordFMT)
 		return
 	}
 
 	var mobile, email string
 	//是否手机
-	if regexp_util.CheckMobile(req.Username) {
+	if regexps.CheckMobile(req.Username) {
 		s := service.SmsLog{}
 
 		if !s.Verify(req.Username, req.Code) {
@@ -268,7 +268,7 @@ func (e *SSO) ForgetPwd(c *gin.Context) {
 			return
 		}
 		mobile = req.Username
-	} else if regexp_util.CheckEmail(req.Username) { //是否邮箱
+	} else if regexps.CheckEmail(req.Username) { //是否邮箱
 		s := service.EmailLog{}
 
 		if !s.Verify(req.Username, req.Code) {
@@ -390,7 +390,7 @@ func (e *SSO) ForgetPwd(c *gin.Context) {
 // 		return
 // 	}
 
-// 	if !regexp_util.CheckPwd(req.NewPassword) {
+// 	if !regexps.CheckPwd(req.NewPassword) {
 // 		e.Code(c, codes.ErrPasswordFMT)
 // 		return
 // 	}
@@ -435,14 +435,14 @@ func (e *SSO) ForgetPwd(c *gin.Context) {
 // 		return
 // 	}
 // 	//是否手机
-// 	if regexp_util.CheckMobile(req.Username) {
+// 	if regexps.CheckMobile(req.Username) {
 // 		s := service.SmsLog{}
 //
 // 		if !s.Verify(req.Username, req.Code) {
 // 			e.Code(c, codes.ErrVerifyCode)
 // 			return
 // 		}
-// 	} else if regexp_util.CheckEmail(req.Username) { //是否邮箱
+// 	} else if regexps.CheckEmail(req.Username) { //是否邮箱
 // 		s := service.EmailLog{}
 //
 // 		if !s.Verify(req.Username, req.Code) {

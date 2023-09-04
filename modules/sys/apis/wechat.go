@@ -13,6 +13,7 @@ import (
 	"dilu/common"
 
 	"github.com/baowk/dilu-core/common/utils"
+	"github.com/baowk/dilu-core/common/utils/ips"
 	"github.com/baowk/dilu-core/core/base"
 	"github.com/gin-gonic/gin"
 )
@@ -119,7 +120,7 @@ func (e *Wechat) LoginMp(c *gin.Context) {
 		return
 	}
 
-	ip := utils.GetIP(c)
+	ip := ips.GetIP(c)
 	lok, err := service.SysUserS.LoginWechatMp(req, str, ip)
 	if err != nil {
 		e.Error(c, err)

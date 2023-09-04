@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/baowk/dilu-core/common/utils/http_util"
+	"github.com/baowk/dilu-core/common/utils/https"
 )
 
 var (
@@ -34,7 +34,7 @@ type WechatLogin struct {
 
 func AuthWechat(code string) (string, error) {
 
-	client := &(http_util.HTTPClient{
+	client := &(https.HTTPClient{
 		BaseURL: "https://api.weixin.qq.com",
 		Headers: map[string]string{
 			"Content-Type": "application/json",

@@ -13,8 +13,8 @@ import (
 	"dilu/modules/sys/models"
 	"dilu/modules/sys/service/dto"
 
-	"github.com/baowk/dilu-core/common/utils/crypto_util"
-	"github.com/baowk/dilu-core/common/utils/regexp_util"
+	"github.com/baowk/dilu-core/common/utils/cryptos"
+	"github.com/baowk/dilu-core/common/utils/regexps"
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/errs"
 	"go.uber.org/zap"
@@ -306,14 +306,14 @@ func (e *SysUser) loginOK(u *models.SysUser, need int) (dto.LoginOK, errs.IError
 func (e *SysUser) LoginPwd(c *dto.LoginReq, ip string) (dto.LoginOK, errs.IError) {
 	model := models.SysUser{}
 	lok := dto.LoginOK{}
-	if regexp_util.CheckMobile(c.Username) {
+	if regexps.CheckMobile(c.Username) {
 		if err := e.GetByPhone(c.Username, &model); err != nil {
 			if !errors.Is(err, gorm.ErrRecordNotFound) {
 				return lok, errs.ErrWithCode(codes.ErrUsernameOrPwd)
 			}
 			return lok, errs.ErrWithCode(codes.FAILURE)
 		}
-	} else if regexp_util.CheckEmail(c.Username) { //是否邮箱
+	} else if regexps.CheckEmail(c.Username) { //是否邮箱
 		if err := e.GetByEmail(c.Username, &model); err != nil {
 			if !errors.Is(err, gorm.ErrRecordNotFound) {
 				return lok, errs.ErrWithCode(codes.ErrUsernameOrPwd)
@@ -345,7 +345,7 @@ func (e *SysUser) LoginCode(c *dto.LoginReq, ip string) (dto.LoginOK, errs.IErro
 	var model models.SysUser
 	lok := dto.LoginOK{}
 	var name string
-	if regexp_util.CheckMobile(c.Username) {
+	if regexps.CheckMobile(c.Username) {
 		if err := e.GetByPhone(c.Username, &model); err != nil {
 			if !errors.Is(err, gorm.ErrRecordNotFound) {
 				return lok, codes.ErrSys(err)
@@ -354,7 +354,7 @@ func (e *SysUser) LoginCode(c *dto.LoginReq, ip string) (dto.LoginOK, errs.IErro
 				name = c.Username
 			}
 		}
-	} else if regexp_util.CheckEmail(c.Username) { //是否邮箱
+	} else if regexps.CheckEmail(c.Username) { //是否邮箱
 		if err := e.GetByEmail(c.Username, &model); err != nil {
 			if !errors.Is(err, gorm.ErrRecordNotFound) {
 				return lok, codes.ErrNotFound(c.Username, "sysuser", "", err)
@@ -412,7 +412,7 @@ func (e *SysUser) GetByPhone(mobile string, model *models.SysUser) error {
 }
 
 func (e *SysUser) bindById(enCode string, user models.SysUser) error {
-	dstr := crypto_util.RSA_Decrypt(enCode, consts.PriKey)
+	dstr := cryptos.RSA_Decrypt(enCode, consts.PriKey)
 	arr := strings.Split(dstr, "-")
 	if len(arr) != 2 {
 		return errors.New("参数错误")
@@ -550,6 +550,15 @@ func (e *SysUser) LoginDing(c *dto.LoginDingReq, userId string) (dto.LoginOK, er
 
 // Get 获取User对象
 func (e *SysUser) GetByUsername(username string, model *models.SysUser) errs.IError {
+	// str, err := core.Cache.Get("username:" + username)
+	// fmt.Println("get:" + str)
+	// if err == nil && str != "" {
+	// 	if err := json.Unmarshal([]byte(str), model); err == nil {
+	// 		return nil
+	// 	} else {
+	// 		fmt.Println("err:" + err.Error())
+	// 	}
+	// }
 	var data models.SysUser
 	err := core.DB().Model(&data).Where("username = ?", username).First(model).Error
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
@@ -561,11 +570,17 @@ func (e *SysUser) GetByUsername(username string, model *models.SysUser) errs.IEr
 		core.Log.Error("sysuser", zap.Error(err))
 		return codes.ErrSys(err)
 	}
+	// if err := core.Cache.Set("username:"+username, model, time.Hour); err == nil {
+	// 	fmt.Println("set================")
+
+	// } else {
+	// 	fmt.Println(err)
+	// }
 	return nil
 }
 
 func needMobile(platform, id int, lod *dto.LoginOK) {
-	enS := crypto_util.RSA_Encrypt(fmt.Sprintf("%d-%d", platform, id), consts.PubKey)
+	enS := cryptos.RSA_Encrypt(fmt.Sprintf("%d-%d", platform, id), consts.PubKey)
 	lod.Need = 1
 	lod.Token = enS
 }

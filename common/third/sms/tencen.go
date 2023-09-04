@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/baowk/dilu-core/common/utils/regexp_util"
+	"github.com/baowk/dilu-core/common/utils/regexps"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common"
 	terrors "github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/errors"
 	"github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile"
@@ -47,7 +47,7 @@ func Send(phone string, code string) error {
 
 	/* 下发手机号码，采用 E.164 标准，+[国家或地区码][手机号]
 	 * 示例如：+8613711112222， 其中前面有一个+号 ，86为国家码，13711112222为手机号，最多不要超过200个手机号*/
-	if regexp_util.CheckMobile(phone) {
+	if regexps.CheckMobile(phone) {
 		phone = "+86" + phone
 	} else {
 		return errors.New("")

@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/baowk/dilu-core/common/utils/http_util"
+	"github.com/baowk/dilu-core/common/utils/https"
 )
 
 const (
@@ -58,7 +58,7 @@ type ResWebAccessToken struct {
 // 获取网页授权access_token
 func GetWebAccessToken(appID, secret, code string) (res ResWebAccessToken, err error) {
 	urlStr := fmt.Sprintf(webAccessTokenURL, appID, secret, code)
-	body, err := http_util.New().Get(urlStr)
+	body, err := https.New().Get(urlStr)
 	fmt.Println("GetWebAccessToken:" + string(body))
 	if err != nil {
 		return
@@ -95,7 +95,7 @@ type WxUserInfo struct {
 
 func GetUserInfo(accessToken, openID string) (res WxUserInfo, err error) {
 	urlStr := fmt.Sprintf(userInfoURL, accessToken, openID)
-	body, err := http_util.New().Get(urlStr)
+	body, err := https.New().Get(urlStr)
 	if err != nil {
 		return
 	}
@@ -121,7 +121,7 @@ type ResAccessToken struct {
 // 获取普通access_token
 func GetAccessToken(appID, secret string) (res ResAccessToken, err error) {
 	urlStr := fmt.Sprintf(accessTokenURL, appID, secret)
-	body, err := http_util.New().Get(urlStr)
+	body, err := https.New().Get(urlStr)
 	fmt.Println("[GetAccessToken]:" + string(body))
 	if err != nil {
 		return
@@ -146,7 +146,7 @@ type resTicket struct {
 
 func GetTicket(accessToken string) (res resTicket, err error) {
 	urlStr := fmt.Sprintf(getTicketURL, accessToken)
-	body, err := http_util.New().Get(urlStr)
+	body, err := https.New().Get(urlStr)
 	if err != nil {
 		return
 	}
@@ -210,7 +210,7 @@ func GetQrCode(accessToken string, expire int, sceneId int, sceneStr string) (re
 	if err != nil {
 		return
 	}
-	body, err := http_util.New().Post(urlStr, bs)
+	body, err := https.New().Post(urlStr, bs)
 	if err != nil {
 		return
 	}
@@ -266,7 +266,7 @@ type MpUserinfo struct {
 
 func GetMpUserInfo(accessToken, openId string, ui *MpUserinfo) error {
 	urlStr := fmt.Sprintf(getMpUserInfo, accessToken, openId)
-	body, err := http_util.New().Get(urlStr)
+	body, err := https.New().Get(urlStr)
 	if err != nil {
 		return err
 	}

@@ -11,7 +11,7 @@ type SysUser struct {
 	Username string `json:"username" gorm:"size:32;comment:用户名"`                                 //用户名
 	Phone    string `json:"phone" gorm:"size:11;comment:手机号"`                                    //手机号
 	Email    string `json:"email" gorm:"size:128;comment:邮箱"`                                    //邮箱
-	Password string `json:"-" gorm:"size:128;comment:密码"`                                        //密码
+	Password string `json:"password" gorm:"size:128;comment:密码"`                                 //密码
 	NickName string `json:"nickName" gorm:"size:128;comment:昵称"`                                 //昵称
 	Avatar   string `json:"avatar" gorm:"size:255;comment:头像"`                                   //头像
 	Bio      string `json:"bio" gorm:"type:varchar(255);default:(-);comment:签名"`                 //签名

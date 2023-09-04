@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"html/template"
 
-	"github.com/baowk/dilu-core/common/utils"
+	"github.com/baowk/dilu-core/common/utils/files"
 
 	"github.com/spf13/cobra"
 )
@@ -46,32 +46,32 @@ func genFile() error {
 	}
 	path := ROOT
 	appPath := path + modName
-	err := utils.IsNotExistMkDir(appPath)
+	err := files.IsNotExistMkDir(appPath)
 	if err != nil {
 		return err
 	}
 	apiPath := appPath + "/apis/"
-	err = utils.IsNotExistMkDir(apiPath)
+	err = files.IsNotExistMkDir(apiPath)
 	if err != nil {
 		return err
 	}
 	modelsPath := appPath + "/models/"
-	err = utils.IsNotExistMkDir(modelsPath)
+	err = files.IsNotExistMkDir(modelsPath)
 	if err != nil {
 		return err
 	}
 	routerPath := appPath + "/router/"
-	err = utils.IsNotExistMkDir(routerPath)
+	err = files.IsNotExistMkDir(routerPath)
 	if err != nil {
 		return err
 	}
 	servicePath := appPath + "/service/"
-	err = utils.IsNotExistMkDir(servicePath)
+	err = files.IsNotExistMkDir(servicePath)
 	if err != nil {
 		return err
 	}
 	dtoPath := appPath + "/service/dto/"
-	err = utils.IsNotExistMkDir(dtoPath)
+	err = files.IsNotExistMkDir(dtoPath)
 	if err != nil {
 		return err
 	}
@@ -87,7 +87,7 @@ func genFile() error {
 	if err != nil {
 		return err
 	}
-	utils.FileCreate(b1, "cmd/start/"+modName+".go")
+	files.FileCreate(b1, "cmd/start/"+modName+".go")
 	t2, err := template.ParseFiles("resources/template/router.template")
 	if err != nil {
 		return err
@@ -97,6 +97,6 @@ func genFile() error {
 	if err != nil {
 		return err
 	}
-	utils.FileCreate(b2, appPath+"/router/router.go")
+	files.FileCreate(b2, appPath+"/router/router.go")
 	return nil
 }

@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.8+incompatible
 	github.com/aws/aws-sdk-go v1.44.319
-	github.com/baowk/dilu-core v0.0.0-20230901120044-c344a5e0a7e9
+	github.com/baowk/dilu-core v0.0.0-20230904033956-1a8ea0d9fb9a
 	github.com/fsnotify/fsnotify v1.6.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/golang-jwt/jwt/v5 v5.0.0

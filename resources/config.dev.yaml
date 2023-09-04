@@ -1,7 +1,7 @@
 server:
   mode: dev         # 应用程序运行模式（dev开发环境、test测试环境、prod线上环境）
   host: 0.0.0.0     # 服务器IP地址，默认使用0.0.0.0
-  name: dili-app      # 服务名称
+  name: dilu-app      # 服务名称
   port: 7788       # 服务端口号
   #read-timeout    #读超时 单位秒 默认20
   #write-timeout   #写超时 单位秒 默认20
@@ -9,7 +9,7 @@ server:
 logger:             # 日志配置
   level: debug # 级别
   prefix:    # 日志前缀
-  format:  # 输出
+  format: json # 输出
   director: temp/log      # 日志文件夹
   encode-level: LowercaseColorLevelEncoder # 编码级
   stacktrace-key: # 栈名
@@ -29,7 +29,9 @@ dbcfg: # 数据库配置
   driver: mysql  
   dns: root:123456@tcp(127.0.0.1:3306)/dilu-db?charset=utf8&parseTime=True&loc=Local&timeout=1000ms  # 数据库连接字符串
   log-mode: info #日志类型 GORM 定义了这些日志级别：silent、error、warn、info
-  slow-threshold: 200 #慢日志
+  #slow-threshold: 200 #慢日志
+  #max-idle-conns: 20 #最大空闲连接数 默认10
+  #max-open-conns: 60 #最大打开数
 # prefix: 日志前缀
   dbs:      
     - demo:    #子配置会继承父配置

@@ -7,7 +7,7 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/baowk/dilu-core/common/utils"
+	"github.com/baowk/dilu-core/common/utils/files"
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/base"
 	"github.com/gin-gonic/gin"
@@ -200,12 +200,12 @@ func (e Gen) NOActionsGen(c *gin.Context, tab tools.SysTables) {
 		return
 	}
 
-	_ = utils.PathCreate("./app/" + tab.PackageName + "/apis/")
-	_ = utils.PathCreate("./app/" + tab.PackageName + "/models/")
-	_ = utils.PathCreate("./app/" + tab.PackageName + "/router/")
-	_ = utils.PathCreate("./app/" + tab.PackageName + "/service/dto/")
-	_ = utils.PathCreate(FrontPath + "/api/" + tab.PackageName + "/")
-	err = utils.PathCreate(FrontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/")
+	_ = files.PathCreate("./app/" + tab.PackageName + "/apis/")
+	_ = files.PathCreate("./app/" + tab.PackageName + "/models/")
+	_ = files.PathCreate("./app/" + tab.PackageName + "/router/")
+	_ = files.PathCreate("./app/" + tab.PackageName + "/service/dto/")
+	_ = files.PathCreate(FrontPath + "/api/" + tab.PackageName + "/")
+	err = files.PathCreate(FrontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/")
 	if err != nil {
 		core.Log.Error("Gen", zap.Error(err))
 		e.Error(c, err)
@@ -226,13 +226,13 @@ func (e Gen) NOActionsGen(c *gin.Context, tab tools.SysTables) {
 	err = t6.Execute(&b6, tab)
 	var b7 bytes.Buffer
 	err = t7.Execute(&b7, tab)
-	utils.FileCreate(b1, "./app/"+tab.PackageName+"/models/"+tab.TBName+".go")
-	utils.FileCreate(b2, "./app/"+tab.PackageName+"/apis/"+tab.TBName+".go")
-	utils.FileCreate(b3, "./app/"+tab.PackageName+"/router/"+tab.TBName+".go")
-	utils.FileCreate(b4, FrontPath+"/api/"+tab.PackageName+"/"+tab.MLTBName+".js")
-	utils.FileCreate(b5, FrontPath+"/views/"+tab.PackageName+"/"+tab.MLTBName+"/index.vue")
-	utils.FileCreate(b6, "./app/"+tab.PackageName+"/service/dto/"+tab.TBName+".go")
-	utils.FileCreate(b7, "./app/"+tab.PackageName+"/service/"+tab.TBName+".go")
+	files.FileCreate(b1, "./app/"+tab.PackageName+"/models/"+tab.TBName+".go")
+	files.FileCreate(b2, "./app/"+tab.PackageName+"/apis/"+tab.TBName+".go")
+	files.FileCreate(b3, "./app/"+tab.PackageName+"/router/"+tab.TBName+".go")
+	files.FileCreate(b4, FrontPath+"/api/"+tab.PackageName+"/"+tab.MLTBName+".js")
+	files.FileCreate(b5, FrontPath+"/views/"+tab.PackageName+"/"+tab.MLTBName+"/index.vue")
+	files.FileCreate(b6, "./app/"+tab.PackageName+"/service/dto/"+tab.TBName+".go")
+	files.FileCreate(b7, "./app/"+tab.PackageName+"/service/"+tab.TBName+".go")
 
 }
 
@@ -251,7 +251,7 @@ func (e Gen) genApiToFile(c *gin.Context, tab tools.SysTables) {
 		GenerateTime string
 	}{tab, i})
 
-	utils.FileCreate(b1, "./cmd/migrate/migration/version-local/"+i+"_migrate.go")
+	files.FileCreate(b1, "./cmd/migrate/migration/version-local/"+i+"_migrate.go")
 
 }
 

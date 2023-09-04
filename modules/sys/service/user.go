@@ -25,7 +25,7 @@ package service
 // 	"go-admin/common/utils"
 // 	cryptoutil "go-admin/common/utils/crypto_util"
 // 	"go-admin/common/utils/oapi"
-// 	regexputil "go-admin/common/utils/regexp_util"
+// 	regexputil "go-admin/common/utils/regexps"
 // 	extConf "go-admin/config"
 // )
 
