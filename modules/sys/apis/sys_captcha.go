@@ -3,18 +3,19 @@ package apis
 import (
 	"dilu/common/codes"
 	"dilu/modules/sys/service"
+	"time"
 
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/base"
 	"github.com/baowk/dilu-core/core/errs"
 	"github.com/gin-gonic/gin"
-	"github.com/mojocn/base64Captcha"
 	"go.uber.org/zap"
 )
 
 // 当开启多服务器部署时，替换下面的配置，使用redis共享存储验证码
-// var store = captcha.NewDefaultRedisStore()
-var store = base64Captcha.DefaultMemStore
+func init() {
+	service.SetStore(service.NewCacheStore(time.Duration(10) * time.Minute))
+}
 
 type CaptchaApi struct {
 	base.BaseApi

@@ -18,8 +18,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/base"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type Ding struct {
@@ -86,7 +88,7 @@ func (e Ding) LoginByDing(c *gin.Context) {
 	if err != nil {
 		userId, err = LoginByQRcode(req.Code)
 		if err != nil {
-			fmt.Println(err)
+			core.Log.Error("ding login", zap.Error(err))
 			e.Error(c, err)
 			return
 		}

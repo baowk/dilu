@@ -1,6 +1,9 @@
 package service
 
 import (
+	"time"
+
+	"github.com/baowk/dilu-core/core"
 	"github.com/google/uuid"
 	"github.com/mojocn/base64Captcha"
 )
@@ -22,15 +25,6 @@ type configJsonBody struct {
 	DriverDigit   *base64Captcha.DriverDigit
 }
 
-// func DriverStringFunc() (id, b64s string, err error) {
-// 	e := configJsonBody{}
-// 	e.Id = uuid.New().String()
-// 	e.DriverString = base64Captcha.NewDriverString(46, 140, 2, 2, 4, "234567890abcdefghjkmnpqrstuvwxyz", &color.RGBA{240, 240, 246, 246}, []string{"wqy-microhei.ttc"})
-// 	driver := e.DriverString.ConvertFonts()
-// 	cap := base64Captcha.NewCaptcha(driver, base64Captcha.DefaultMemStore)
-// 	return cap.Generate()
-// }
-
 func DriverDigitFunc() (id, b64s string, err error) {
 	e := configJsonBody{}
 	e.Id = uuid.New().String()
@@ -43,4 +37,45 @@ func DriverDigitFunc() (id, b64s string, err error) {
 // Verify 校验验证码
 func Verify(id, code string, clear bool) bool {
 	return base64Captcha.DefaultMemStore.Verify(id, code, clear)
+}
+
+func NewCacheStore(expiration time.Duration) *CacheStore {
+	return &CacheStore{
+		expiration: expiration,
+	}
+}
+
+type CacheStore struct {
+	//sync.RWMutex
+	expiration time.Duration
+}
+
+func (s *CacheStore) GetExpiration() time.Duration {
+	if s.expiration == 0 {
+		return time.Minute * 10
+	}
+	return s.expiration
+}
+
+func (s *CacheStore) Set(id string, value string) error {
+	return core.Cache.Set("captcha:"+id, value, s.GetExpiration())
+}
+
+func (s *CacheStore) Get(id string, clear bool) (value string) {
+	str, err := core.Cache.Get("captcha:" + id)
+	if clear {
+		defer core.Cache.Del("captcha:" + id)
+	}
+	if err != nil {
+		return ""
+	}
+	return str
+}
+
+func (s *CacheStore) Verify(id, answer string, clear bool) bool {
+	if answer == "" {
+		return false
+	}
+	v := s.Get(id, clear)
+	return v == answer
 }
