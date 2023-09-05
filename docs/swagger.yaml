@@ -41,39 +41,6 @@ definitions:
         description: '`json:"请求id"`'
         type: string
     type: object
-  dilu_modules_demo_models.SysApi:
-    properties:
-      action:
-        description: 请求类型
-        type: string
-      handle:
-        description: handle
-        type: string
-      id:
-        description: 主键
-        type: integer
-      path:
-        description: 请求地址
-        type: string
-      permType:
-        description: 权限类型（n：无需任何认证 t:须token p：须权限）
-        type: string
-      status:
-        description: 状态 3 DEF 2 OK 1 del
-        type: integer
-      title:
-        description: 标题
-        type: string
-      type:
-        description: 接口类型
-        type: string
-      updateBy:
-        description: 更新者
-        type: integer
-      updatedAt:
-        description: 最后更新时间
-        type: string
-    type: object
   dto.ChangePwdReq:
     properties:
       inviteCode:
@@ -100,24 +67,6 @@ definitions:
       uuid:
         description: 微信或者钉钉登录绑定用，已绑定传空，详见LoginOK
         type: string
-    type: object
-  dto.DemoDto:
-    properties:
-      id:
-        description: 主键
-        type: integer
-      name:
-        description: 名字
-        type: string
-    type: object
-  dto.DemoGetPageReq:
-    properties:
-      page:
-        description: 页码
-        type: integer
-      size:
-        description: 每页大小
-        type: integer
     type: object
   dto.DingCfgResp:
     properties:
@@ -287,34 +236,31 @@ definitions:
         description: 微信或者钉钉第一次登录绑定用
         type: string
     type: object
-  dto.SysApiDto:
+  dto.SysCfgDto:
     properties:
-      action:
-        description: 请求类型
-        type: string
-      handle:
-        description: handle
-        type: string
       id:
         description: 主键
         type: integer
-      path:
-        description: 请求地址
+      key:
+        description: key
         type: string
-      permType:
-        description: 权限类型（n：无需任何认证 t:须token p：须权限）
+      name:
+        description: 名字
+        type: string
+      remark:
+        description: Remark
         type: string
       status:
-        description: 状态 3 DEF 2 OK 1 del
+        description: Status
         type: integer
-      title:
-        description: 标题
-        type: string
       type:
-        description: 接口类型
+        description: Type
+        type: string
+      value:
+        description: Value
         type: string
     type: object
-  dto.SysApiGetPageReq:
+  dto.SysCfgGetPageReq:
     properties:
       page:
         description: 页码
@@ -323,7 +269,7 @@ definitions:
         description: 每页大小
         type: integer
       status:
-        description: 状态 3 DEF 2 OK 1 del
+        description: Status
         type: integer
     type: object
   dto.VerifyCodeReq:
@@ -335,13 +281,34 @@ definitions:
         description: 手机号或者邮箱
         type: string
     type: object
-  models.Demo:
+  models.SysCfg:
     properties:
       id:
         description: 主键
         type: integer
+      key:
+        description: key
+        type: string
       name:
         description: 名字
+        type: string
+      remark:
+        description: Remark
+        type: string
+      status:
+        description: Status
+        type: integer
+      type:
+        description: Type
+        type: string
+      updateBy:
+        description: 更新者
+        type: integer
+      updatedAt:
+        description: 最后更新时间
+        type: string
+      value:
+        description: Value
         type: string
     type: object
   tools.Params:
@@ -561,281 +528,7 @@ paths:
               type: object
       summary: 获取验证码
       tags:
-      - 登陆
-  /api/v1/demo/demo/create:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.DemoDto'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.Demo'
-              type: object
-      security:
-      - Bearer: []
-      summary: 创建Demo
-      tags:
-      - Demo
-  /api/v1/demo/demo/del:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/base.ReqIds'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.Demo'
-              type: object
-      security:
-      - Bearer: []
-      summary: 删除Demo
-      tags:
-      - Demo
-  /api/v1/demo/demo/get:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/base.ReqId'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.Demo'
-              type: object
-      security:
-      - Bearer: []
-      summary: 获取Demo
-      tags:
-      - Demo
-  /api/v1/demo/demo/page:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.DemoGetPageReq'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  allOf:
-                  - $ref: '#/definitions/base.PageResp'
-                  - properties:
-                      list:
-                        items:
-                          $ref: '#/definitions/models.Demo'
-                        type: array
-                    type: object
-              type: object
-      security:
-      - Bearer: []
-      summary: Page接口
-      tags:
-      - Demo
-  /api/v1/demo/demo/update:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.DemoDto'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.Demo'
-              type: object
-      security:
-      - Bearer: []
-      summary: 更新Demo
-      tags:
-      - Demo
-  /api/v1/demo/sys-api/create:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.SysApiDto'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/dilu_modules_demo_models.SysApi'
-              type: object
-      security:
-      - Bearer: []
-      summary: 创建SysApi
-      tags:
-      - SysApi
-  /api/v1/demo/sys-api/del:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/base.ReqIds'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/dilu_modules_demo_models.SysApi'
-              type: object
-      security:
-      - Bearer: []
-      summary: 删除SysApi
-      tags:
-      - SysApi
-  /api/v1/demo/sys-api/get:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/base.ReqId'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/dilu_modules_demo_models.SysApi'
-              type: object
-      security:
-      - Bearer: []
-      summary: 获取SysApi
-      tags:
-      - SysApi
-  /api/v1/demo/sys-api/page:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.SysApiGetPageReq'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  allOf:
-                  - $ref: '#/definitions/base.PageResp'
-                  - properties:
-                      list:
-                        items:
-                          $ref: '#/definitions/dilu_modules_demo_models.SysApi'
-                        type: array
-                    type: object
-              type: object
-      security:
-      - Bearer: []
-      summary: Page接口
-      tags:
-      - SysApi
-  /api/v1/demo/sys-api/update:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.SysApiDto'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/dilu_modules_demo_models.SysApi'
-              type: object
-      security:
-      - Bearer: []
-      summary: 更新SysApi
-      tags:
-      - SysApi
+      - sso
   /api/v1/sso/changePwd:
     post:
       consumes:
@@ -1099,6 +792,143 @@ paths:
       summary: 验证码校验
       tags:
       - sso
+  /api/v1/sys/sys-cfg/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysCfgDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysCfg'
+              type: object
+      security:
+      - Bearer: []
+      summary: 创建SysCfg
+      tags:
+      - SysCfg
+  /api/v1/sys/sys-cfg/del:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqIds'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysCfg'
+              type: object
+      security:
+      - Bearer: []
+      summary: 删除SysCfg
+      tags:
+      - SysCfg
+  /api/v1/sys/sys-cfg/get:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqId'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysCfg'
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取SysCfg
+      tags:
+      - SysCfg
+  /api/v1/sys/sys-cfg/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysCfgGetPageReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/base.PageResp'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/models.SysCfg'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - Bearer: []
+      summary: Page接口
+      tags:
+      - SysCfg
+  /api/v1/sys/sys-cfg/update:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysCfgDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysCfg'
+              type: object
+      security:
+      - Bearer: []
+      summary: 更新SysCfg
+      tags:
+      - SysCfg
   /api/v1/tools/db/columns/page:
     get:
       description: 数据库表列分页列表 / database table column page list
@@ -1155,6 +985,25 @@ paths:
           schema:
             $ref: '#/definitions/base.Resp'
       summary: 分页列表数据 / page list data
+      tags:
+      - 工具 / 生成工具
+  /api/v1/tools/gen/api/{tableId}:
+    get:
+      consumes:
+      - application/json
+      description: 生成菜单
+      parameters:
+      - description: tableId
+        in: path
+        name: tableId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: '{"code": -1, "message": "添加失败"}'
+          schema:
+            type: string
+      summary: 生成菜单
       tags:
       - 工具 / 生成工具
   /api/v1/tools/gen/code/{tableId}:
@@ -1233,8 +1082,6 @@ paths:
           description: '{"code": -1, "message": "添加失败"}'
           schema:
             type: string
-      security:
-      - Bearer: []
       summary: 修改表结构
       tags:
       - 工具 / 生成工具
@@ -1268,8 +1115,6 @@ paths:
           description: '{"code": 200, "data": [...]}'
           schema:
             $ref: '#/definitions/base.Resp'
-      security:
-      - Bearer: []
       summary: 获取配置
       tags:
       - 工具 / 生成工具

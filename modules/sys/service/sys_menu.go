@@ -66,17 +66,17 @@ func (e *SysMenu) Get(d *dto.SysMenuGetReq, model *models.SysMenu) (*SysMenu, er
 
 // Insert 创建SysMenu对象
 func (e *SysMenu) Insert(c *dto.SysMenuInsertReq) (*SysMenu, errs.IError) {
-	// var err error
-	// var data models.SysMenu
-	// c.Generate(&data)
-	// tx := core.DB().Debug().Begin()
-	// defer func() {
-	// 	if err != nil {
-	// 		tx.Rollback()
-	// 	} else {
-	// 		tx.Commit()
-	// 	}
-	// }()
+	var err error
+	var data models.SysMenu
+	c.Generate(&data)
+	tx := core.DB().Debug().Begin()
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+		} else {
+			tx.Commit()
+		}
+	}()
 	// err = tx.Where("id in ?", c.Apis).Find(&data.SysApi).Error
 	// if err != nil {
 	// 	tx.Rollback()
@@ -84,22 +84,22 @@ func (e *SysMenu) Insert(c *dto.SysMenuInsertReq) (*SysMenu, errs.IError) {
 	// 	berr := errs.Err(codes.FAILURE, "", err)
 	// 	return e, berr
 	// }
-	// err = tx.Create(&data).Error
-	// if err != nil {
-	// 	tx.Rollback()
-	// 	core.Log.Error("sys_menu", zap.Error(err))
-	// 	berr := errs.Err(codes.FAILURE, "", err)
-	// 	return e, berr
-	// }
-	// c.MenuId = data.MenuId
-	// err = e.initPaths(tx, &data)
-	// if err != nil {
-	// 	tx.Rollback()
-	// 	core.Log.Error("sys_menu", zap.Error(err))
-	// 	berr := errs.Err(codes.FAILURE, "", err)
-	// 	return e, berr
-	// }
-	// tx.Commit()
+	err = tx.Create(&data).Error
+	if err != nil {
+		tx.Rollback()
+		core.Log.Error("sys_menu", zap.Error(err))
+		berr := errs.Err(codes.FAILURE, "", err)
+		return e, berr
+	}
+	c.MenuId = data.MenuId
+	err = e.initPaths(tx, &data)
+	if err != nil {
+		tx.Rollback()
+		core.Log.Error("sys_menu", zap.Error(err))
+		berr := errs.Err(codes.FAILURE, "", err)
+		return e, berr
+	}
+	tx.Commit()
 	return e, nil
 }
 

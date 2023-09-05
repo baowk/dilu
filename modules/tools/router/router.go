@@ -25,6 +25,8 @@ func InitRouter() {
 		fmt.Printf("%s %s  \r\n", docs.SwaggerInfo.Title, docs.SwaggerInfo.Version)
 		//初始化swagger
 		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	}
+	if core.Cfg.Gen {
 		r.GET("/init", apis.InitApi.Init)
 		r.POST("/doInit", apis.InitApi.DoInit)
 	}

@@ -36,7 +36,7 @@ func (e *SysTable) GetPage(c *gin.Context) {
 	data.TBName = c.Request.FormValue("tableName")
 	data.TableComment = c.Request.FormValue("tableComment")
 	db, _, _ := GetDb(consts.DB_DEF)
-	result, count, err := data.GetPage(db, pageIndex, pageSize)
+	result, count, err := data.GetPage(db, pageSize, pageIndex)
 	if err != nil {
 		core.Log.Error("Gen", zap.Error(err))
 		e.Error(c, err)
@@ -52,7 +52,6 @@ func (e *SysTable) GetPage(c *gin.Context) {
 // @Param configKey path int true "configKey"
 // @Success 200 {object} base.Resp "{"code": 200, "data": [...]}"
 // @Router /api/v1/tools/tables/info/{tableId} [get]
-// @Security Bearer
 func (e SysTable) Get(c *gin.Context) {
 	var data tools.SysTables
 	data.TableId, _ = strconv.Atoi(c.Param("tableId"))
@@ -169,7 +168,11 @@ func genTableInit(tx *gorm.DB, dbname string, tablesList []string, i int, c *gin
 		//data.ModuleName += strings.ToLower(strStart) + strings.ToLower(strend)
 	}
 	//data.ModuleFrontName = strings.ReplaceAll(data.ModuleName, "_", "-")
-	data.PackageName = dbname
+	if dbname == "master" {
+		data.PackageName = "sys"
+	} else {
+		data.PackageName = dbname
+	}
 	data.TplCategory = "crud"
 	data.Crud = true
 	// 中横线表名称，接口路径、前端文件夹名称和js名称使用
@@ -272,7 +275,6 @@ func genTableInit(tx *gorm.DB, dbname string, tablesList []string, i int, c *gin
 // @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
 // @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
 // @Router /api/v1/tools/tables/info [put]
-// @Security Bearer
 func (e SysTable) Update(c *gin.Context) {
 	var data tools.SysTables
 	if err := c.ShouldBind(&data); err != nil {
