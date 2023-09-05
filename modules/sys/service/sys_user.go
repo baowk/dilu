@@ -584,3 +584,32 @@ func needMobile(platform, id int, lod *dto.LoginOK) {
 	lod.Need = 1
 	lod.Token = enS
 }
+
+// 通过老密码修改
+func (e *SysUser) ChangePwdByOld(userId int, oldPwd, newPwd, inviteCode string) errs.IError {
+	var user models.SysUser
+	if userId != 0 {
+		if err := e.Get(userId, &user); err != nil {
+			return codes.ErrNotFound(strconv.Itoa(userId), "sysuser", "", err)
+		}
+	}
+	enPwd, err := user.GenPwd(newPwd)
+	if err != nil {
+		return codes.ErrSys(err)
+	}
+	updates := models.SysUser{
+		Password: string(enPwd),
+	}
+	if user.Password != "" { //已设置密码
+		if user.CompPwd(oldPwd) {
+			return errs.ErrWithCode(codes.ErrPwd)
+		}
+	}
+	db := core.DB().Model(user).Updates(updates)
+	if err = db.Error; err != nil {
+		core.Log.Error("UserService Save error", zap.Error(err))
+		return codes.ErrSys(err)
+	}
+	return nil
+
+}

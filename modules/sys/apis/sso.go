@@ -2,6 +2,8 @@ package apis
 
 import (
 	"dilu/common/codes"
+	"dilu/common/middleware"
+	"dilu/modules/sys/models"
 	"dilu/modules/sys/service"
 	"dilu/modules/sys/service/dto"
 	"errors"
@@ -13,6 +15,7 @@ import (
 	"github.com/baowk/dilu-core/core/base"
 	"github.com/baowk/dilu-core/core/errs"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/copier"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
@@ -327,84 +330,65 @@ func (e *SSO) ForgetPwd(c *gin.Context) {
 // 	e.Ok(c,resp, "查询成功")
 // }
 
-// // 获取个人信息
-// // GetUserInfo 获取个人信息
-// // @Summary 获取个人信息
-// // @Description 获取个人信息
-// // @Tags sso
-// // @Success 200 {object} base.Resp{data=models.User} "{"code": 200, "data": [...]}"
-// // @Router /api/v1/sso/auth/myUserinfo [post]
-// // @Security Bearer
-// func (e *SSO) MyUserInfo(c *gin.Context) {
-// 	s := service.User{}
-// 	err := e.MakeContext(c).
-// 		MakeOrm().
-// 		MakeService(&s.Service).
-// 		Errors
-// 	if err != nil {
-// 		core.Log.Error(err)
-// 		e.Code(500, err, err.Error())
-// 		return
-// 	}
-// 	if e.GetUserId() == "" {
-// 		e.Code(c, codes.ErrUnLogin)
-// 		return
-// 	}
-// 	var object models.User
-// 	err = s.GetByUserId(e.GetUserId(), &object)
-// 	if err != nil {
-// 		e.Code(500, err, fmt.Sprintf("获取用户表失败，\r\n失败信息 %s", err.Error()))
-// 		return
-// 	}
-// 	resp := dto.MyUserinfoResp{}
-// 	if err := copier.Copy(&resp, object); err != nil {
-// 		e.Code(500, err, fmt.Sprintf("拷贝失败，\r\n失败信息 %s", err.Error()))
-// 		return
-// 	}
-// 	e.Ok(c,resp, "查询成功")
+// 获取个人信息
+// GetUserInfo 获取个人信息
+// @Summary 获取个人信息
+// @Description 获取个人信息
+// @Tags sso
+// @Success 200 {object} base.Resp{data=dto.MyUserinfoResp} "{"code": 200, "data": [...]}"
+// @Router /api/v1/sso/myUserinfo [post]
+// @Security Bearer
+func (e *SSO) MyUserInfo(c *gin.Context) {
+	uid := middleware.GetUserId(c)
+	if uid == 0 {
+		e.Code(c, codes.NoAccessToken)
+		return
+	}
+	var object models.SysUser
+	err := service.SysUserS.Get(uid, &object)
+	if err != nil {
+		e.Error(c, err)
+		return
+	}
+	resp := dto.MyUserinfoResp{}
+	if err := copier.Copy(&resp, object); err != nil {
+		e.Error(c, err)
+		return
+	}
+	e.Ok(c, resp, "查询成功")
 
-// }
+}
 
-// // 修改密码
-// // ChangePwd 修改密码
-// // @Summary 修改密码
-// // @Description 修改密码
-// // @Tags sso
-// // @Accept application/json
-// // @Product application/json
-// // @Param data body dto.ChangePwdReq true "data"
-// // @Success 200 {object} base.Resp{} "{"code": 200, "data": [...]}"
-// // @Router /api/v1/sso/auth/changePwd [post]
-// // @Security Bearer
-// func (e *SSO) ChangePwd(c *gin.Context) {
-// 	req := dto.ChangePwdReq{}
-// 	s := service.User{}
-// 	err := e.MakeContext(c).
-// 		Bind(&req).
-// 		MakeOrm().
-// 		MakeService(&s.Service).
-// 		Errors
-// 	if err != nil {
-// 		core.Log.Error(err)
-// 		e.Code(500, err, err.Error())
-// 		return
-// 	}
+// 修改密码
+// ChangePwd 修改密码
+// @Summary 修改密码
+// @Description 修改密码
+// @Tags sso
+// @Accept application/json
+// @Product application/json
+// @Param data body dto.ChangePwdReq true "data"
+// @Success 200 {object} base.Resp{} "{"code": 200, "data": [...]}"
+// @Router /api/v1/sso/changePwd [post]
+// @Security Bearer
+func (e *SSO) ChangePwd(c *gin.Context) {
+	req := dto.ChangePwdReq{}
 
-// 	if !regexps.CheckPwd(req.NewPassword) {
-// 		e.Code(c, codes.ErrPasswordFMT)
-// 		return
-// 	}
+	if !regexps.CheckPwd(req.NewPassword) {
+		e.Code(c, codes.ErrPasswordFMT)
+		return
+	}
+	uid := middleware.GetUserId(c)
+	if uid == 0 {
+		e.Code(c, codes.NoAccessToken)
+		return
+	}
 
-// 	if e.GetUserId() == "" {
-// 		e.Code(c, codes.ErrUnLogin)
-// 		return
-// 	}
-// 	if err := s.ChangePwdByOld(e.GetUserId(), req.OldPassword, req.NewPassword, req.InviteCode); err != nil {
-// 		e.Code(500, err, fmt.Sprintf("修改密码失败，\r\n失败信息 %s", err.Error()))
-// 		return
-// 	}
-// 	e.Ok(c,c, "修改成功")
-// }
+	if err := service.SysUserS.ChangePwdByOld(uid, req.OldPassword, req.NewPassword, req.InviteCode); err != nil {
+		e.Err(c, err)
+		return
+	}
+	e.Ok(c, c, "修改成功")
+}
 
 // // 绑定手机号或者邮箱
 // // Bind 绑定手机号或者邮箱

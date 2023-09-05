@@ -9,12 +9,13 @@ import (
 	"time"
 
 	"github.com/baowk/dilu-core/common/utils"
-	"github.com/baowk/dilu-core/config"
+	"github.com/baowk/dilu-core/core"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func JwtHandler(jwtCfg config.JWT) gin.HandlerFunc {
+func JwtHandler() gin.HandlerFunc {
+	//func JwtHandler(jwtCfg config.JWT) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authorization := c.GetHeader("Authorization")
 		accessToken, err := GetAccessToken(authorization)
@@ -24,7 +25,7 @@ func JwtHandler(jwtCfg config.JWT) gin.HandlerFunc {
 		}
 		customClaims := new(CustomClaims)
 		// 解析Token
-		err = Parse(accessToken, customClaims, jwtCfg.SignKey, jwt.WithSubject(jwtCfg.Subject))
+		err = Parse(accessToken, customClaims, core.Cfg.JWT.SignKey, jwt.WithSubject(core.Cfg.JWT.Subject))
 		if err != nil || customClaims == nil {
 			Fail(c, 555, err.Error())
 			return
@@ -38,15 +39,15 @@ func JwtHandler(jwtCfg config.JWT) gin.HandlerFunc {
 		}
 
 		// 刷新时间大于0则判断剩余时间小于刷新时间时刷新Token并在Response header中返回
-		if jwtCfg.Refresh > 0 {
+		if core.Cfg.JWT.Refresh > 0 {
 			now := time.Now()
 			diff := exp.Time.Sub(now)
-			refreshTTL := time.Duration(jwtCfg.Refresh) * time.Minute
+			refreshTTL := time.Duration(core.Cfg.JWT.Refresh) * time.Minute
 			fmt.Println(diff.Seconds(), refreshTTL)
 			if diff < refreshTTL {
-				exp := time.Now().Add(time.Duration(jwtCfg.Expires) * time.Minute)
+				exp := time.Now().Add(time.Duration(core.Cfg.JWT.Expires) * time.Minute)
 				customClaims.ExpiresAt(exp)
-				newToken, _ := Refresh(customClaims, jwtCfg.SignKey)
+				newToken, _ := Refresh(customClaims, core.Cfg.JWT.SignKey)
 				c.Writer.Header().Set("refresh-access-token", newToken)
 				c.Writer.Header().Set("refresh-exp", strconv.FormatInt(exp.Unix(), 10))
 			}
@@ -58,6 +59,33 @@ func JwtHandler(jwtCfg config.JWT) gin.HandlerFunc {
 		c.Set("jwt_data", customClaims.JwtData)
 		c.Next()
 	}
+}
+
+func GetUserId(c *gin.Context) int {
+	uid := c.GetInt("a_uid")
+	if uid == 0 {
+		suid := c.GetHeader("a_uid")
+		if suid != "" {
+			uid, _ = strconv.Atoi(suid)
+		}
+	}
+	return uid
+}
+
+func GetPhone(c *gin.Context) string {
+	phone := c.GetString("a_mobile")
+	if phone == "" {
+		phone = c.GetHeader("phone")
+	}
+	return phone
+}
+
+func GetNickname(c *gin.Context) string {
+	nickname := c.GetString("a_nickname")
+	if nickname == "" {
+		nickname = c.GetHeader("a_nickname")
+	}
+	return nickname
 }
 
 func Fail(c *gin.Context, code int, msg string, data ...any) {

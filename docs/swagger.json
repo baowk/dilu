@@ -338,6 +338,42 @@
                 }
             }
         },
+        "/api/v1/sso/changePwd": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "修改密码",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sso"
+                ],
+                "summary": "修改密码",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ChangePwdReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "$ref": "#/definitions/base.Resp"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/sso/ding/callback": {
             "get": {
                 "description": "获取钉钉回调",
@@ -599,6 +635,40 @@
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/wechat.QrCodeResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sso/myUserinfo": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "获取个人信息",
+                "tags": [
+                    "sso"
+                ],
+                "summary": "获取个人信息",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.MyUserinfoResp"
                                         }
                                     }
                                 }
@@ -935,6 +1005,23 @@
                 }
             }
         },
+        "dto.ChangePwdReq": {
+            "type": "object",
+            "properties": {
+                "inviteCode": {
+                    "description": "邀请码，首次有效",
+                    "type": "string"
+                },
+                "newPassword": {
+                    "description": "新密码",
+                    "type": "string"
+                },
+                "oldPassword": {
+                    "description": "老密码",
+                    "type": "string"
+                }
+            }
+        },
         "dto.CodeSendReq": {
             "type": "object",
             "properties": {
@@ -1072,36 +1159,16 @@
         "dto.LoginReq": {
             "type": "object",
             "properties": {
-                "client": {
-                    "description": "客户端类型 未定义",
-                    "type": "string"
-                },
                 "code": {
                     "description": "验证码",
-                    "type": "string"
-                },
-                "inviteType": {
-                    "description": "1企业内部邀请 2 用户邀请",
-                    "type": "integer"
-                },
-                "inviter": {
-                    "description": "邀请人id",
                     "type": "string"
                 },
                 "name": {
                     "description": "真实姓名",
                     "type": "string"
                 },
-                "os": {
-                    "description": "操作系统",
-                    "type": "string"
-                },
                 "password": {
                     "description": "密码 密码不为空 为密码登录 否则验证码登录",
-                    "type": "string"
-                },
-                "source": {
-                    "description": "来源（最长32位）",
                     "type": "string"
                 },
                 "username": {
@@ -1151,31 +1218,84 @@
                 }
             }
         },
+        "dto.MyUserinfoResp": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "description": "头像",
+                    "type": "string"
+                },
+                "bio": {
+                    "description": "签名",
+                    "type": "string"
+                },
+                "birthday": {
+                    "description": "生日",
+                    "type": "string"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "邮箱",
+                    "type": "string"
+                },
+                "firstName": {
+                    "description": "名字",
+                    "type": "string"
+                },
+                "gender": {
+                    "description": "1 男 2女  3 未知",
+                    "type": "string"
+                },
+                "inviteType": {
+                    "description": "邀请类型",
+                    "type": "integer"
+                },
+                "inviter": {
+                    "description": "邀请人",
+                    "type": "string"
+                },
+                "lastName": {
+                    "description": "姓",
+                    "type": "string"
+                },
+                "lockEnd": {
+                    "description": "锁定截至时间",
+                    "type": "string"
+                },
+                "nickname": {
+                    "description": "昵称",
+                    "type": "string"
+                },
+                "phone": {
+                    "description": "手机号",
+                    "type": "string"
+                },
+                "updateAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                },
+                "userId": {
+                    "description": "用户id",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "用户名",
+                    "type": "string"
+                }
+            }
+        },
         "dto.RegisterReq": {
             "type": "object",
             "properties": {
-                "client": {
-                    "description": "客户端类型 未定义",
-                    "type": "string"
-                },
                 "code": {
                     "description": "验证码",
                     "type": "string"
                 },
-                "inviteType": {
-                    "description": "1企业内部邀请 2 用户邀请",
-                    "type": "integer"
-                },
-                "inviter": {
-                    "description": "邀请人id",
-                    "type": "string"
-                },
                 "name": {
                     "description": "真实姓名",
-                    "type": "string"
-                },
-                "os": {
-                    "description": "操作系统",
                     "type": "string"
                 },
                 "password": {
@@ -1184,10 +1304,6 @@
                 },
                 "rePassword": {
                     "description": "重复密码",
-                    "type": "string"
-                },
-                "source": {
-                    "description": "来源（最长32位）",
                     "type": "string"
                 },
                 "username": {
