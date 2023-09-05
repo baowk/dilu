@@ -48,15 +48,20 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/demo/create": {
+        "/api/v1/demo/demo/create": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
                 "tags": [
                     "Demo"
                 ],
-                "summary": "创建",
+                "summary": "创建Demo",
                 "parameters": [
                     {
                         "description": "body",
@@ -90,15 +95,20 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/demo/del": {
+        "/api/v1/demo/demo/del": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
                 "tags": [
                     "Demo"
                 ],
-                "summary": "删除",
+                "summary": "删除Demo",
                 "parameters": [
                     {
                         "description": "body",
@@ -132,15 +142,20 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/demo/get": {
+        "/api/v1/demo/demo/get": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
                 "tags": [
                     "Demo"
                 ],
-                "summary": "获得",
+                "summary": "获取Demo",
                 "parameters": [
                     {
                         "description": "body",
@@ -174,8 +189,13 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/demo/page": {
+        "/api/v1/demo/demo/page": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -190,7 +210,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.DemePageReq"
+                            "$ref": "#/definitions/dto.DemoGetPageReq"
                         }
                     }
                 ],
@@ -231,15 +251,20 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/demo/update": {
+        "/api/v1/demo/demo/update": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
                 "tags": [
                     "Demo"
                 ],
-                "summary": "更新",
+                "summary": "更新Demo",
                 "parameters": [
                     {
                         "description": "body",
@@ -264,6 +289,256 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/models.Demo"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/demo/sys-api/create": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysApi"
+                ],
+                "summary": "创建SysApi",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SysApiDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dilu_modules_demo_models.SysApi"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/demo/sys-api/del": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysApi"
+                ],
+                "summary": "删除SysApi",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqIds"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dilu_modules_demo_models.SysApi"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/demo/sys-api/get": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysApi"
+                ],
+                "summary": "获取SysApi",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqId"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dilu_modules_demo_models.SysApi"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/demo/sys-api/page": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysApi"
+                ],
+                "summary": "Page接口",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SysApiGetPageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/base.PageResp"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/dilu_modules_demo_models.SysApi"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/demo/sys-api/update": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysApi"
+                ],
+                "summary": "更新SysApi",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SysApiDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dilu_modules_demo_models.SysApi"
                                         }
                                     }
                                 }
@@ -806,6 +1081,64 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/tools/gen/code/{tableId}": {
+            "get": {
+                "description": "生成代码",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "生成代码",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "tableId",
+                        "name": "tableId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/tools/gen/preview/{tableId}": {
+            "get": {
+                "description": "生成预览",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "生成预览",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "tableId",
+                        "name": "tableId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/tools/tables/info": {
             "put": {
                 "security": [
@@ -842,11 +1175,6 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
                 "description": "添加表结构",
                 "consumes": [
                     "application/json"
@@ -1034,6 +1362,51 @@ const docTemplate = `{
                 }
             }
         },
+        "dilu_modules_demo_models.SysApi": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "description": "请求类型",
+                    "type": "string"
+                },
+                "handle": {
+                    "description": "handle",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "path": {
+                    "description": "请求地址",
+                    "type": "string"
+                },
+                "permType": {
+                    "description": "权限类型（n：无需任何认证 t:须token p：须权限）",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "状态 3 DEF 2 OK 1 del",
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "标题",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "接口类型",
+                    "type": "string"
+                },
+                "updateBy": {
+                    "description": "更新者",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "最后更新时间",
+                    "type": "string"
+                }
+            }
+        },
         "dto.ChangePwdReq": {
             "type": "object",
             "properties": {
@@ -1072,7 +1445,20 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.DemePageReq": {
+        "dto.DemoDto": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "名字",
+                    "type": "string"
+                }
+            }
+        },
+        "dto.DemoGetPageReq": {
             "type": "object",
             "properties": {
                 "page": {
@@ -1082,22 +1468,6 @@ const docTemplate = `{
                 "size": {
                     "description": "每页大小",
                     "type": "integer"
-                }
-            }
-        },
-        "dto.DemoDto": {
-            "type": "object",
-            "required": [
-                "name"
-            ],
-            "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string",
-                    "maxLength": 64,
-                    "minLength": 2
                 }
             }
         },
@@ -1333,6 +1703,60 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.SysApiDto": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "description": "请求类型",
+                    "type": "string"
+                },
+                "handle": {
+                    "description": "handle",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "path": {
+                    "description": "请求地址",
+                    "type": "string"
+                },
+                "permType": {
+                    "description": "权限类型（n：无需任何认证 t:须token p：须权限）",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "状态 3 DEF 2 OK 1 del",
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "标题",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "接口类型",
+                    "type": "string"
+                }
+            }
+        },
+        "dto.SysApiGetPageReq": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "size": {
+                    "description": "每页大小",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态 3 DEF 2 OK 1 del",
+                    "type": "integer"
+                }
+            }
+        },
         "dto.VerifyCodeReq": {
             "type": "object",
             "properties": {
@@ -1350,9 +1774,11 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "id": {
+                    "description": "主键",
                     "type": "integer"
                 },
                 "name": {
+                    "description": "名字",
                     "type": "string"
                 }
             }

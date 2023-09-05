@@ -21,5 +21,7 @@ func sysNoCheckSsoRouter(v1 *gin.RouterGroup) {
 		r.DELETE("/tables/info/:tableId", apis.SysTable.Delete)
 		r.GET("/db/columns/page", apis.GenApi.GetDBColumnList)
 		r.GET("db/tables/page", apis.GenApi.GetDBTableList)
+		r.GET("gen/preview/:tableId", apis.GenApi.Preview)
+		r.GET("gen/code/:tableId", apis.GenApi.GenCode)
 	}
 }

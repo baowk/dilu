@@ -2,7 +2,7 @@ package router
 
 import (
 	"dilu/modules/{{.PackageName}}/apis"
-
+	"dilu/common/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,7 +13,7 @@ func init() {
 // 无需认证的路由示例
 func register{{.ClassName}}Router(v1 *gin.RouterGroup) {
 	api := apis.{{.ClassName}}Api{}
-	r := v1.Group("{{.ModuleName}}")
+	r := v1.Group("{{.ModuleName}}").Use(middleware.JwtHandler())
 	{
 		r.POST("/get", api.Get)
 		r.POST("/create", api.Create)

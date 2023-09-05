@@ -7,8 +7,6 @@ import (
 	"dilu/modules/{{.PackageName}}/models"
 	"dilu/modules/{{.PackageName}}/service/dto"
 
-	"dilu/common/consts"
-
 	"dilu/common/codes"
 
 	"github.com/baowk/dilu-core/core"
@@ -21,8 +19,8 @@ type {{.ClassName}}Service struct {
 	//base.BaseService
 }
 
-func (e *{{.ClassName}}Service) Page(req dto.DemePageReq, list *[]models.{{.ClassName}}, total *int64, reqId string) errs.IError {
-	db := core.Db(consts.DB_DEMO)
+func (e *{{.ClassName}}Service) Page(req dto.{{.ClassName}}GetPageReq, list *[]models.{{.ClassName}}, total *int64, reqId string) errs.IError {
+	db := core.Db("{{.PackageName}}")
 	//TODO WHERE
 	if err := db.Limit(req.GetSize()).Offset(req.GetOffset()).Find(list).Count(total).Error; err != nil {
 		berr := errs.Err(codes.FAILURE, reqId, err)
@@ -33,7 +31,7 @@ func (e *{{.ClassName}}Service) Page(req dto.DemePageReq, list *[]models.{{.Clas
 }
 
 func (*{{.ClassName}}Service) Create(data *models.{{.ClassName}}, reqId string) errs.IError {
-	if err := core.Db(consts.DB_DEMO).Create(data).Error; err != nil {
+	if err := core.Db("{{.PackageName}}").Create(data).Error; err != nil {
 		berr := errs.Err(codes.FAILURE, reqId, err)
 		core.Log.Error(errs.DB_ERR.String(), zap.Error(berr))
 		return berr
@@ -42,7 +40,7 @@ func (*{{.ClassName}}Service) Create(data *models.{{.ClassName}}, reqId string) 
 }
 
 func (*{{.ClassName}}Service) Update(data *models.{{.ClassName}}, reqId string) errs.IError {
-	if err := core.Db(consts.DB_DEMO).Save(data).Error; err != nil {
+	if err := core.Db("{{.PackageName}}").Save(data).Error; err != nil {
 		berr := errs.Err(codes.FAILURE, reqId, err)
 		core.Log.Error(errs.DB_ERR.String(), zap.Error(berr))
 		return berr
@@ -51,7 +49,7 @@ func (*{{.ClassName}}Service) Update(data *models.{{.ClassName}}, reqId string) 
 }
 
 func (*{{.ClassName}}Service) Del(ids []int, reqId string) errs.IError {
-	if err := core.Db(consts.DB_DEMO).Delete(&models.{{.ClassName}}{}, ids).Error; err != nil {
+	if err := core.Db("{{.PackageName}}").Delete(&models.{{.ClassName}}{}, ids).Error; err != nil {
 		berr := errs.Err(codes.FAILURE, reqId, err)
 		core.Log.Error(errs.DB_ERR.String(), zap.Error(berr))
 		return berr
@@ -60,7 +58,7 @@ func (*{{.ClassName}}Service) Del(ids []int, reqId string) errs.IError {
 }
 
 func (*{{.ClassName}}Service) Get(id int, data *models.{{.ClassName}}, reqId string) errs.IError {
-	if err := core.Db(consts.DB_DEMO).First(data, id).Error; err != nil {
+	if err := core.Db("{{.PackageName}}").First(data, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			berr := codes.ErrNotFound(strconv.Itoa(id), "{{.ClassName}}", reqId, err)
 			core.Log.Error(errs.DB_ERR.String(), zap.Error(berr))
@@ -81,7 +79,7 @@ func (e *{{.ClassName}}Service) GetIds(ids []int, list *[]models.{{.ClassName}},
 		}
 		*list = append(*list, data)
 	} else {
-		if err := core.Db(consts.DB_DEMO).Where("id in ?", ids).Find(list).Error; err != nil {
+		if err := core.Db("{{.PackageName}}").Where("id in ?", ids).Find(list).Error; err != nil {
 			berr := errs.Err(codes.FAILURE, reqId, err)
 			core.Log.Error(errs.DB_ERR.String(), zap.Error(berr))
 			return berr

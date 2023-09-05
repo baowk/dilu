@@ -41,6 +41,39 @@ definitions:
         description: '`json:"请求id"`'
         type: string
     type: object
+  dilu_modules_demo_models.SysApi:
+    properties:
+      action:
+        description: 请求类型
+        type: string
+      handle:
+        description: handle
+        type: string
+      id:
+        description: 主键
+        type: integer
+      path:
+        description: 请求地址
+        type: string
+      permType:
+        description: 权限类型（n：无需任何认证 t:须token p：须权限）
+        type: string
+      status:
+        description: 状态 3 DEF 2 OK 1 del
+        type: integer
+      title:
+        description: 标题
+        type: string
+      type:
+        description: 接口类型
+        type: string
+      updateBy:
+        description: 更新者
+        type: integer
+      updatedAt:
+        description: 最后更新时间
+        type: string
+    type: object
   dto.ChangePwdReq:
     properties:
       inviteCode:
@@ -68,7 +101,16 @@ definitions:
         description: 微信或者钉钉登录绑定用，已绑定传空，详见LoginOK
         type: string
     type: object
-  dto.DemePageReq:
+  dto.DemoDto:
+    properties:
+      id:
+        description: 主键
+        type: integer
+      name:
+        description: 名字
+        type: string
+    type: object
+  dto.DemoGetPageReq:
     properties:
       page:
         description: 页码
@@ -76,17 +118,6 @@ definitions:
       size:
         description: 每页大小
         type: integer
-    type: object
-  dto.DemoDto:
-    properties:
-      id:
-        type: integer
-      name:
-        maxLength: 64
-        minLength: 2
-        type: string
-    required:
-    - name
     type: object
   dto.DingCfgResp:
     properties:
@@ -256,6 +287,45 @@ definitions:
         description: 微信或者钉钉第一次登录绑定用
         type: string
     type: object
+  dto.SysApiDto:
+    properties:
+      action:
+        description: 请求类型
+        type: string
+      handle:
+        description: handle
+        type: string
+      id:
+        description: 主键
+        type: integer
+      path:
+        description: 请求地址
+        type: string
+      permType:
+        description: 权限类型（n：无需任何认证 t:须token p：须权限）
+        type: string
+      status:
+        description: 状态 3 DEF 2 OK 1 del
+        type: integer
+      title:
+        description: 标题
+        type: string
+      type:
+        description: 接口类型
+        type: string
+    type: object
+  dto.SysApiGetPageReq:
+    properties:
+      page:
+        description: 页码
+        type: integer
+      size:
+        description: 每页大小
+        type: integer
+      status:
+        description: 状态 3 DEF 2 OK 1 del
+        type: integer
+    type: object
   dto.VerifyCodeReq:
     properties:
       code:
@@ -268,8 +338,10 @@ definitions:
   models.Demo:
     properties:
       id:
+        description: 主键
         type: integer
       name:
+        description: 名字
         type: string
     type: object
   tools.Params:
@@ -490,7 +562,7 @@ paths:
       summary: 获取验证码
       tags:
       - 登陆
-  /api/v1/demo/create:
+  /api/v1/demo/demo/create:
     post:
       consumes:
       - application/json
@@ -511,10 +583,12 @@ paths:
                 data:
                   $ref: '#/definitions/models.Demo'
               type: object
-      summary: 创建
+      security:
+      - Bearer: []
+      summary: 创建Demo
       tags:
       - Demo
-  /api/v1/demo/del:
+  /api/v1/demo/demo/del:
     post:
       consumes:
       - application/json
@@ -535,10 +609,12 @@ paths:
                 data:
                   $ref: '#/definitions/models.Demo'
               type: object
-      summary: 删除
+      security:
+      - Bearer: []
+      summary: 删除Demo
       tags:
       - Demo
-  /api/v1/demo/get:
+  /api/v1/demo/demo/get:
     post:
       consumes:
       - application/json
@@ -559,10 +635,12 @@ paths:
                 data:
                   $ref: '#/definitions/models.Demo'
               type: object
-      summary: 获得
+      security:
+      - Bearer: []
+      summary: 获取Demo
       tags:
       - Demo
-  /api/v1/demo/page:
+  /api/v1/demo/demo/page:
     post:
       consumes:
       - application/json
@@ -572,7 +650,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/dto.DemePageReq'
+          $ref: '#/definitions/dto.DemoGetPageReq'
       responses:
         "200":
           description: '{"code": 200, "data": [...]}'
@@ -590,10 +668,12 @@ paths:
                         type: array
                     type: object
               type: object
+      security:
+      - Bearer: []
       summary: Page接口
       tags:
       - Demo
-  /api/v1/demo/update:
+  /api/v1/demo/demo/update:
     post:
       consumes:
       - application/json
@@ -614,9 +694,148 @@ paths:
                 data:
                   $ref: '#/definitions/models.Demo'
               type: object
-      summary: 更新
+      security:
+      - Bearer: []
+      summary: 更新Demo
       tags:
       - Demo
+  /api/v1/demo/sys-api/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysApiDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/dilu_modules_demo_models.SysApi'
+              type: object
+      security:
+      - Bearer: []
+      summary: 创建SysApi
+      tags:
+      - SysApi
+  /api/v1/demo/sys-api/del:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqIds'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/dilu_modules_demo_models.SysApi'
+              type: object
+      security:
+      - Bearer: []
+      summary: 删除SysApi
+      tags:
+      - SysApi
+  /api/v1/demo/sys-api/get:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqId'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/dilu_modules_demo_models.SysApi'
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取SysApi
+      tags:
+      - SysApi
+  /api/v1/demo/sys-api/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysApiGetPageReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/base.PageResp'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/dilu_modules_demo_models.SysApi'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - Bearer: []
+      summary: Page接口
+      tags:
+      - SysApi
+  /api/v1/demo/sys-api/update:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysApiDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/dilu_modules_demo_models.SysApi'
+              type: object
+      security:
+      - Bearer: []
+      summary: 更新SysApi
+      tags:
+      - SysApi
   /api/v1/sso/changePwd:
     post:
       consumes:
@@ -938,6 +1157,44 @@ paths:
       summary: 分页列表数据 / page list data
       tags:
       - 工具 / 生成工具
+  /api/v1/tools/gen/code/{tableId}:
+    get:
+      consumes:
+      - application/json
+      description: 生成代码
+      parameters:
+      - description: tableId
+        in: path
+        name: tableId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: '{"code": -1, "message": "添加失败"}'
+          schema:
+            type: string
+      summary: 生成代码
+      tags:
+      - 工具 / 生成工具
+  /api/v1/tools/gen/preview/{tableId}:
+    get:
+      consumes:
+      - application/json
+      description: 生成预览
+      parameters:
+      - description: tableId
+        in: path
+        name: tableId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: '{"code": -1, "message": "添加失败"}'
+          schema:
+            type: string
+      summary: 生成预览
+      tags:
+      - 工具 / 生成工具
   /api/v1/tools/tables/info:
     post:
       consumes:
@@ -957,8 +1214,6 @@ paths:
           description: '{"code": -1, "message": "添加失败"}'
           schema:
             type: string
-      security:
-      - Bearer: []
       summary: 添加表结构
       tags:
       - 工具 / 生成工具

@@ -7,6 +7,7 @@ import (
 	"text/template"
 	"time"
 
+	"github.com/baowk/dilu-core/common/consts"
 	"github.com/baowk/dilu-core/common/utils/files"
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/base"
@@ -24,8 +25,17 @@ var (
 	FrontPath = ".."
 )
 
+// Preview
+// @Summary 生成预览
+// @Description 生成预览
+// @Tags 工具 / 生成工具
+// @Accept  application/json
+// @Product application/json
+// @Param tableId path int true "tableId"
+// @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
+// @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
+// @Router /api/v1/tools/gen/preview/{tableId} [get]
 func (e Gen) Preview(c *gin.Context) {
-	var dbname string
 	table := tools.SysTables{}
 	id, err := strconv.Atoi(c.Param("tableId"))
 	if err != nil {
@@ -34,50 +44,50 @@ func (e Gen) Preview(c *gin.Context) {
 		return
 	}
 	table.TableId = id
-	t1, err := template.ParseFiles("template/v4/model.go.template")
+	t1, err := template.ParseFiles("resources/template/v4/model.go.template")
 	if err != nil {
 		core.Log.Error("Gen", zap.Error(err))
 		e.Error(c, err)
 		return
 	}
-	t2, err := template.ParseFiles("template/v4/no_actions/apis.go.template")
+	t2, err := template.ParseFiles("resources/template/v4/no_actions/apis.go.template")
 	if err != nil {
 		core.Log.Error("Gen", zap.Error(err))
 		e.Error(c, err)
 		return
 	}
-	t3, err := template.ParseFiles("template/v4/js.go.template")
+	t3, err := template.ParseFiles("resources/template/v4/js.go.template")
 	if err != nil {
 		core.Log.Error("Gen", zap.Error(err))
 		e.Error(c, err)
 		return
 	}
-	t4, err := template.ParseFiles("template/v4/vue.go.template")
+	t4, err := template.ParseFiles("resources/template/v4/vue.go.template")
 	if err != nil {
 		core.Log.Error("Gen", zap.Error(err))
 		e.Error(c, err)
 		return
 	}
-	t5, err := template.ParseFiles("template/v4/no_actions/router_check_role.go.template")
+	t5, err := template.ParseFiles("resources/template/v4/no_actions/router_no_check_role.go.template")
 	if err != nil {
 		core.Log.Error("Gen", zap.Error(err))
 		e.Error(c, err)
 		return
 	}
-	t6, err := template.ParseFiles("template/v4/dto.go.template")
+	t6, err := template.ParseFiles("resources/template/v4/dto.go.template")
 	if err != nil {
 		core.Log.Error("Gen", zap.Error(err))
 		e.Error(c, err)
 		return
 	}
-	t7, err := template.ParseFiles("template/v4/no_actions/service.go.template")
+	t7, err := template.ParseFiles("resources/template/v4/no_actions/service.go.template")
 	if err != nil {
 		core.Log.Error("Gen", zap.Error(err))
 		e.Error(c, err)
 		return
 	}
 
-	db, _, _ := GetDb(dbname)
+	db, _, _ := GetDb(consts.DB_DEF)
 
 	tab, _ := table.Get(db, false)
 	var b1 bytes.Buffer
@@ -96,19 +106,27 @@ func (e Gen) Preview(c *gin.Context) {
 	err = t7.Execute(&b7, tab)
 
 	mp := make(map[string]interface{})
-	mp["template/model.go.template"] = b1.String()
-	mp["template/api.go.template"] = b2.String()
-	mp["template/js.go.template"] = b3.String()
-	mp["template/vue.go.template"] = b4.String()
-	mp["template/router.go.template"] = b5.String()
-	mp["template/dto.go.template"] = b6.String()
-	mp["template/service.go.template"] = b7.String()
+	mp["resources/template/model.go.template"] = b1.String()
+	mp["resources/template/api.go.template"] = b2.String()
+	mp["resources/template/js.go.template"] = b3.String()
+	mp["resources/template/vue.go.template"] = b4.String()
+	mp["resources/template/router.go.template"] = b5.String()
+	mp["resources/template/dto.go.template"] = b6.String()
+	mp["resources/template/service.go.template"] = b7.String()
 	e.Ok(c, mp)
 }
 
+// GenCode
+// @Summary 生成代码
+// @Description 生成代码
+// @Tags 工具 / 生成工具
+// @Accept  application/json
+// @Product application/json
+// @Param tableId path int true "tableId"
+// @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
+// @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
+// @Router /api/v1/tools/gen/code/{tableId} [get]
 func (e Gen) GenCode(c *gin.Context) {
-	var dbname string
-
 	table := tools.SysTables{}
 	id, err := strconv.Atoi(c.Param("tableId"))
 	if err != nil {
@@ -119,7 +137,7 @@ func (e Gen) GenCode(c *gin.Context) {
 
 	table.TableId = id
 
-	db, _, _ := GetDb(dbname)
+	db, _, _ := GetDb(consts.DB_DEF)
 	tab, _ := table.Get(db, false)
 
 	e.NOActionsGen(c, tab)
@@ -150,12 +168,12 @@ func (e Gen) NOActionsGen(c *gin.Context, tab tools.SysTables) {
 
 	tab.MLTBName = strings.Replace(tab.TBName, "_", "-", -1)
 
-	basePath := "template/v4/"
-	routerFile := basePath + "no_actions/router_check_role.go.template"
+	basePath := "resources/template/v4/"
+	// routerFile := basePath + "no_actions/router_check_role.go.template"
 
-	if tab.IsAuth == 2 {
-		routerFile = basePath + "no_actions/router_no_check_role.go.template"
-	}
+	// if tab.IsAuth == 2 {
+	routerFile := basePath + "no_actions/router_no_check_role.go.template"
+	//}
 
 	t1, err := template.ParseFiles(basePath + "model.go.template")
 	if err != nil {
@@ -200,10 +218,10 @@ func (e Gen) NOActionsGen(c *gin.Context, tab tools.SysTables) {
 		return
 	}
 
-	_ = files.PathCreate("./app/" + tab.PackageName + "/apis/")
-	_ = files.PathCreate("./app/" + tab.PackageName + "/models/")
-	_ = files.PathCreate("./app/" + tab.PackageName + "/router/")
-	_ = files.PathCreate("./app/" + tab.PackageName + "/service/dto/")
+	_ = files.PathCreate("./modules/" + tab.PackageName + "/apis/")
+	_ = files.PathCreate("./modules/" + tab.PackageName + "/models/")
+	_ = files.PathCreate("./modules/" + tab.PackageName + "/router/")
+	_ = files.PathCreate("./modules/" + tab.PackageName + "/service/dto/")
 	_ = files.PathCreate(FrontPath + "/api/" + tab.PackageName + "/")
 	err = files.PathCreate(FrontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/")
 	if err != nil {
@@ -226,18 +244,18 @@ func (e Gen) NOActionsGen(c *gin.Context, tab tools.SysTables) {
 	err = t6.Execute(&b6, tab)
 	var b7 bytes.Buffer
 	err = t7.Execute(&b7, tab)
-	files.FileCreate(b1, "./app/"+tab.PackageName+"/models/"+tab.TBName+".go")
-	files.FileCreate(b2, "./app/"+tab.PackageName+"/apis/"+tab.TBName+".go")
-	files.FileCreate(b3, "./app/"+tab.PackageName+"/router/"+tab.TBName+".go")
+	files.FileCreate(b1, "./modules/"+tab.PackageName+"/models/"+tab.TBName+".go")
+	files.FileCreate(b2, "./modules/"+tab.PackageName+"/apis/"+tab.TBName+".go")
+	files.FileCreate(b3, "./modules/"+tab.PackageName+"/router/"+tab.TBName+".go")
 	files.FileCreate(b4, FrontPath+"/api/"+tab.PackageName+"/"+tab.MLTBName+".js")
 	files.FileCreate(b5, FrontPath+"/views/"+tab.PackageName+"/"+tab.MLTBName+"/index.vue")
-	files.FileCreate(b6, "./app/"+tab.PackageName+"/service/dto/"+tab.TBName+".go")
-	files.FileCreate(b7, "./app/"+tab.PackageName+"/service/"+tab.TBName+".go")
+	files.FileCreate(b6, "./modules/"+tab.PackageName+"/service/dto/"+tab.TBName+".go")
+	files.FileCreate(b7, "./modules/"+tab.PackageName+"/service/"+tab.TBName+".go")
 
 }
 
 func (e Gen) genApiToFile(c *gin.Context, tab tools.SysTables) {
-	basePath := "template/"
+	basePath := "resources/template/"
 	t1, err := template.ParseFiles(basePath + "api_migrate.template")
 	if err != nil {
 		core.Log.Error("Gen", zap.Error(err))

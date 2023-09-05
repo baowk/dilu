@@ -1,23 +1,21 @@
 package models
 
 import (
-
-	 {{- $bb := false -}}
+    {{- $bb := false -}}
 	  {{- range .Columns -}}
-     {{$z := .IsQuery}}
-     {{- if ($z) }}
-     {{if eq .GoType "time.Time"}}{{- $bb = true -}}{{- end -}}
-     {{- end -}}
-     {{- end -}}
-     {{- range .Columns -}}
-     {{if eq .GoType "time.Time"}}{{- $bb = true -}}{{- end -}}
-     {{- end -}}
-     {{- if eq $bb true -}}
-     "time"
-     {{- end }}
-
-	"github.com/baowk/dilu-core/core/base"
-
+    {{$z := .IsQuery}}
+    {{- if ($z) }}
+    {{if eq .GoType "time.Time"}}{{- $bb = true -}}{{- end -}}
+    {{- end -}}
+    {{- end -}}
+    {{- range .Columns -}}
+    {{if eq .GoType "time.Time"}}{{- $bb = true -}}{{- end -}}
+    {{- end -}}
+    {{- if eq $bb true -}}
+    "time"
+    {{- end }}
+    
+    "github.com/baowk/dilu-core/core/base"
 )
 
 //{{.TableComment}}
@@ -26,16 +24,9 @@ type {{.ClassName}} struct {
     {{ range .Columns -}}
     {{$x := .Pk}}
     {{- if ($x) }}
-    {{- else if eq .GoField "CreatedAt" -}}
-    {{- else if eq .GoField "UpdatedAt" -}}
-    {{- else if eq .GoField "DeletedAt" -}}
-    {{- else if eq .GoField "CreateBy" -}}
-    {{- else if eq .GoField "UpdateBy" -}}
     {{- else }}
     {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" gorm:"type:{{.ColumnType}};comment:{{- if eq .ColumnComment "" -}}{{.GoField}}{{- else -}}{{.ColumnComment}}{{end -}}"` //{{.ColumnComment}} {{end -}}
     {{- end }}
-    base.ModelIntTime
-    base.ControlBy
 }
 
 func ({{.ClassName}}) TableName() string {
