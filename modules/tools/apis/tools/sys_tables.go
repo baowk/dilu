@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/baowk/dilu-core/common/consts"
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/base"
 	"github.com/gin-gonic/gin"
@@ -25,14 +26,8 @@ type SysTable struct {
 // @Param pageSize query int false "pageSize / 页条数"
 // @Param pageIndex query int false "pageIndex / 页码"
 // @Success 200 {object} base.Resp "{"code": 200, "data": [...]}"
-// @Router /api/v1/sys/tables/page [get]
-func (e SysTable) GetPage(c *gin.Context) {
-	var req base.ReqPage
-
-	c.ShouldBind(&req)
-
-	var dbname string
-
+// @Router /api/v1/tools/tables/page [get]
+func (e *SysTable) GetPage(c *gin.Context) {
 	var data tools.SysTables
 	var err error
 	var pageSize = 10
@@ -40,8 +35,8 @@ func (e SysTable) GetPage(c *gin.Context) {
 
 	data.TBName = c.Request.FormValue("tableName")
 	data.TableComment = c.Request.FormValue("tableComment")
-	db, _, _ := GetDb(dbname)
-	result, count, err := data.GetPage(db, req.Size, req.Page)
+	db, _, _ := GetDb(consts.DB_DEF)
+	result, count, err := data.GetPage(db, pageIndex, pageSize)
 	if err != nil {
 		core.Log.Error("Gen", zap.Error(err))
 		e.Error(c, err)
@@ -56,13 +51,12 @@ func (e SysTable) GetPage(c *gin.Context) {
 // @Tags 工具 / 生成工具
 // @Param configKey path int true "configKey"
 // @Success 200 {object} base.Resp "{"code": 200, "data": [...]}"
-// @Router /api/v1/sys/tables/info/{tableId} [get]
+// @Router /api/v1/tools/tables/info/{tableId} [get]
 // @Security Bearer
 func (e SysTable) Get(c *gin.Context) {
-	var dbname string
 	var data tools.SysTables
 	data.TableId, _ = strconv.Atoi(c.Param("tableId"))
-	db, _, _ := GetDb(dbname)
+	db, _, _ := GetDb(consts.DB_DEF)
 	result, err := data.Get(db, true)
 	if err != nil {
 		core.Log.Error("Gen", zap.Error(err))
@@ -77,12 +71,11 @@ func (e SysTable) Get(c *gin.Context) {
 }
 
 func (e SysTable) GetSysTablesInfo(c *gin.Context) {
-	var dbname string
 	var data tools.SysTables
 	if c.Request.FormValue("tableName") != "" {
 		data.TBName = c.Request.FormValue("tableName")
 	}
-	db, _, _ := GetDb(dbname)
+	db, _, _ := GetDb(consts.DB_DEF)
 	result, err := data.Get(db, true)
 	if err != nil {
 		core.Log.Error("Gen", zap.Error(err))
@@ -97,9 +90,8 @@ func (e SysTable) GetSysTablesInfo(c *gin.Context) {
 }
 
 func (e SysTable) GetSysTablesTree(c *gin.Context) {
-	var dbname string
 	var data tools.SysTables
-	db, _, _ := GetDb(dbname)
+	db, _, _ := GetDb(consts.DB_DEF)
 	result, err := data.GetTree(db)
 	if err != nil {
 		core.Log.Error("Gen", zap.Error(err))
@@ -116,18 +108,19 @@ func (e SysTable) GetSysTablesTree(c *gin.Context) {
 // @Tags 工具 / 生成工具
 // @Accept  application/json
 // @Product application/json
+// @Param dbName query string false "dbName / 数据库名称"
 // @Param tables query string false "tableName / 数据表名称"
 // @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
 // @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
-// @Router /api/v1/sys/tables/info [post]
+// @Router /api/v1/tools/tables/info [post]
 // @Security Bearer
 func (e SysTable) Insert(c *gin.Context) {
-	var dbname string
+	dbname := c.Request.FormValue("dbName")
 	tablesList := strings.Split(c.Request.FormValue("tables"), ",")
-	db, _, _ := GetDb(dbname)
+	db, _, _ := GetDb(consts.DB_DEF)
 	for i := 0; i < len(tablesList); i++ {
 
-		data, err := genTableInit(db, tablesList, i, c)
+		data, err := genTableInit(db, dbname, tablesList, i, c)
 		if err != nil {
 			core.Log.Error("Gen", zap.Error(err))
 			e.Error(c, err)
@@ -145,8 +138,7 @@ func (e SysTable) Insert(c *gin.Context) {
 
 }
 
-func genTableInit(tx *gorm.DB, tablesList []string, i int, c *gin.Context) (tools.SysTables, error) {
-	var dbname string
+func genTableInit(tx *gorm.DB, dbname string, tablesList []string, i int, c *gin.Context) (tools.SysTables, error) {
 	var data tools.SysTables
 	var dbTable tools.DBTables
 	var dbColumn tools.DBColumns
@@ -155,6 +147,7 @@ func genTableInit(tx *gorm.DB, tablesList []string, i int, c *gin.Context) (tool
 
 	dbTable.TableName = data.TBName
 	tx, _, sdbn := GetDb(dbname)
+	data.DBName = sdbn
 	dbtable, err := dbTable.Get(tx, sdbn)
 	if err != nil {
 		return data, err
@@ -177,7 +170,7 @@ func genTableInit(tx *gorm.DB, tablesList []string, i int, c *gin.Context) (tool
 		//data.ModuleName += strings.ToLower(strStart) + strings.ToLower(strend)
 	}
 	//data.ModuleFrontName = strings.ReplaceAll(data.ModuleName, "_", "-")
-	data.PackageName = "admin"
+	data.PackageName = "sys"
 	data.TplCategory = "crud"
 	data.Crud = true
 	// 中横线表名称，接口路径、前端文件夹名称和js名称使用
@@ -198,7 +191,7 @@ func genTableInit(tx *gorm.DB, tablesList []string, i int, c *gin.Context) (tool
 	data.IsDataScope = 1
 	data.IsAuth = 1
 
-	data.FunctionAuthor = "wenjianzhang"
+	data.FunctionAuthor = "baowk"
 	for i := 0; i < len(dbcolumn); i++ {
 		var column tools.SysColumns
 		column.ColumnComment = dbcolumn[i].ColumnComment
@@ -229,6 +222,7 @@ func genTableInit(tx *gorm.DB, tablesList []string, i int, c *gin.Context) (tool
 			//column.JsonField = strings.ToUpper(column.JsonField)
 			data.PkGoField = column.GoField
 			data.PkJsonField = column.JsonField
+			column.IsList = "1"
 		}
 		column.IsRequired = "0"
 		if strings.Contains(dbcolumn[i].IsNullable, "NO") {
@@ -237,21 +231,31 @@ func genTableInit(tx *gorm.DB, tablesList []string, i int, c *gin.Context) (tool
 		}
 
 		if strings.Contains(dbcolumn[i].ColumnType, "int") {
-			if strings.Contains(dbcolumn[i].ColumnKey, "PR") {
-				column.GoType = "int"
-			} else {
-				column.GoType = "string"
-			}
+			column.GoType = "int"
 			column.HtmlType = "input"
+			column.IsEdit = "1"
+			column.IsList = "1"
 		} else if strings.Contains(dbcolumn[i].ColumnType, "timestamp") {
 			column.GoType = "time.Time"
 			column.HtmlType = "datetime"
+			column.IsList = "1"
 		} else if strings.Contains(dbcolumn[i].ColumnType, "datetime") {
 			column.GoType = "time.Time"
 			column.HtmlType = "datetime"
+			column.IsList = "1"
 		} else {
 			column.GoType = "string"
 			column.HtmlType = "input"
+			column.IsEdit = "1"
+			column.IsList = "1"
+		}
+
+		if column.ColumnName == "update_by" || column.ColumnName == "create_by" {
+			column.IsEdit = ""
+		}
+
+		if strings.Contains(column.ColumnName, "status") {
+			column.IsQuery = "1"
 		}
 
 		data.Columns = append(data.Columns, column)
@@ -268,15 +272,16 @@ func genTableInit(tx *gorm.DB, tablesList []string, i int, c *gin.Context) (tool
 // @Param data body tools.SysTables true "body"
 // @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
 // @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
-// @Router /api/v1/sys/tables/info [put]
+// @Router /api/v1/tools/tables/info [put]
 // @Security Bearer
 func (e SysTable) Update(c *gin.Context) {
-	var dbname string
 	var data tools.SysTables
-	err := c.ShouldBind(&data)
-
+	if err := c.ShouldBind(&data); err != nil {
+		e.Error(c, err)
+		return
+	}
 	data.UpdateBy = 0
-	db, _, _ := GetDb(dbname)
+	db, _, _ := GetDb(consts.DB_DEF)
 	result, err := data.Update(db)
 	if err != nil {
 		core.Log.Error("Gen", zap.Error(err))
@@ -293,13 +298,12 @@ func (e SysTable) Update(c *gin.Context) {
 // @Param tableId path int true "tableId"
 // @Success 200 {string} string	"{"code": 200, "message": "删除成功"}"
 // @Success 200 {string} string	"{"code": -1, "message": "删除失败"}"
-// @Router /api/v1/sys/tables/info/{tableId} [delete]
+// @Router /api/v1/tools/tables/info/{tableId} [delete]
 func (e SysTable) Delete(c *gin.Context) {
-	var dbname string
 	var req base.ReqIds
 	c.ShouldBind(&req)
 	var data tools.SysTables
-	db, _, _ := GetDb(dbname)
+	db, _, _ := GetDb(consts.DB_DEF)
 	_, err := data.BatchDelete(db, req.Ids)
 	if err != nil {
 		core.Log.Error("Gen", zap.Error(err))

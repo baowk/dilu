@@ -48,80 +48,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/db/columns/page": {
-            "get": {
-                "description": "数据库表列分页列表 / database table column page list",
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "分页列表数据 / page list data",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "tableName / 数据表名称",
-                        "name": "tableName",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "pageSize / 页条数",
-                        "name": "pageSize",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "pageIndex / 页码",
-                        "name": "pageIndex",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "$ref": "#/definitions/base.Resp"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/db/tables/page": {
-            "get": {
-                "description": "数据库表分页列表 / database table page list",
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "分页列表数据 / page list data",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "tableName / 数据表名称",
-                        "name": "tableName",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "pageSize / 页条数",
-                        "name": "pageSize",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "pageIndex / 页码",
-                        "name": "pageIndex",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "$ref": "#/definitions/base.Resp"
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/demo/create": {
             "post": {
                 "consumes": [
@@ -792,7 +718,95 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sys/tables/info": {
+        "/api/v1/tools/db/columns/page": {
+            "get": {
+                "description": "数据库表列分页列表 / database table column page list",
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "分页列表数据 / page list data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "dbname / 数据库",
+                        "name": "dbName",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "tableName / 数据表名称",
+                        "name": "tableName",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "pageSize / 页条数",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "pageIndex / 页码",
+                        "name": "pageIndex",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "$ref": "#/definitions/base.Resp"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/tools/db/tables/page": {
+            "get": {
+                "description": "数据库表分页列表 / database table page list",
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "分页列表数据 / page list data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "dbname / 数据库",
+                        "name": "dbName",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "tableName / 数据表名称",
+                        "name": "tableName",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "pageSize / 页条数",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "pageIndex / 页码",
+                        "name": "pageIndex",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "$ref": "#/definitions/base.Resp"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/tools/tables/info": {
             "put": {
                 "security": [
                     {
@@ -844,6 +858,12 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
+                        "description": "dbName / 数据库名称",
+                        "name": "dbName",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "tableName / 数据表名称",
                         "name": "tables",
                         "in": "query"
@@ -859,7 +879,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sys/tables/info/{tableId}": {
+        "/api/v1/tools/tables/info/{tableId}": {
             "get": {
                 "security": [
                     {
@@ -914,7 +934,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sys/tables/page": {
+        "/api/v1/tools/tables/page": {
             "get": {
                 "description": "生成表分页列表",
                 "tags": [
@@ -1238,43 +1258,19 @@ const docTemplate = `{
                     "description": "签名",
                     "type": "string"
                 },
-                "birthday": {
-                    "description": "生日",
-                    "type": "string"
-                },
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
+                "deptId": {
+                    "description": "部门id",
+                    "type": "integer"
                 },
                 "email": {
                     "description": "邮箱",
                     "type": "string"
                 },
-                "firstName": {
-                    "description": "名字",
-                    "type": "string"
-                },
                 "gender": {
-                    "description": "1 男 2女  3 未知",
+                    "description": "性别 1男 2女 3未知",
                     "type": "string"
                 },
-                "inviteType": {
-                    "description": "邀请类型",
-                    "type": "integer"
-                },
-                "inviter": {
-                    "description": "邀请人",
-                    "type": "string"
-                },
-                "lastName": {
-                    "description": "姓",
-                    "type": "string"
-                },
-                "lockEnd": {
-                    "description": "锁定截至时间",
-                    "type": "string"
-                },
-                "nickname": {
+                "nickName": {
                     "description": "昵称",
                     "type": "string"
                 },
@@ -1282,13 +1278,25 @@ const docTemplate = `{
                     "description": "手机号",
                     "type": "string"
                 },
-                "updateAt": {
-                    "description": "更新时间",
+                "post": {
+                    "description": "岗位",
                     "type": "string"
                 },
-                "userId": {
-                    "description": "用户id",
+                "remark": {
+                    "description": "备注",
                     "type": "string"
+                },
+                "roleId": {
+                    "description": "角色id",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态 1冻结 2正常 3默认",
+                    "type": "integer"
+                },
+                "userId": {
+                    "description": "主键",
+                    "type": "integer"
                 },
                 "username": {
                     "description": "用户名",
@@ -1518,6 +1526,10 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "dataScope": {
+                    "type": "string"
+                },
+                "dbName": {
+                    "description": "库名",
                     "type": "string"
                 },
                 "functionAuthor": {

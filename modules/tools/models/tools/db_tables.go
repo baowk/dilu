@@ -26,7 +26,7 @@ func (e *DBTables) GetPage(tx *gorm.DB, pageSize int, pageIndex int, dbname stri
 	if core.Cfg.DBCfg.Driver == "mysql" {
 
 		table = tx.Table("information_schema.tables")
-		table = table.Where("TABLE_NAME not in (select table_name from `" + defDbName + "`.sys_tables) ")
+		table = table.Where("TABLE_NAME not in (select table_name from `" + defDbName + "`.gen_tables) ")
 		table = table.Where("table_schema= ? ", dbname)
 
 		if e.TableName != "" {

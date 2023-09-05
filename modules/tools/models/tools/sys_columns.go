@@ -53,7 +53,7 @@ func (SysColumns) TableName() string {
 
 func (e *SysColumns) GetList(tx *gorm.DB, exclude bool) ([]SysColumns, error) {
 	var doc []SysColumns
-	table := tx.Table("sys_columns")
+	table := tx.Table("gen_columns")
 	table = table.Where("table_id = ? ", e.TableId)
 	if exclude {
 		notIn := make([]string, 0, 6)
@@ -75,7 +75,7 @@ func (e *SysColumns) GetList(tx *gorm.DB, exclude bool) ([]SysColumns, error) {
 func (e *SysColumns) Create(tx *gorm.DB) (SysColumns, error) {
 	var doc SysColumns
 	e.CreateBy = 0
-	result := tx.Table("sys_columns").Create(&e)
+	result := tx.Table("gen_columns").Create(&e)
 	if result.Error != nil {
 		err := result.Error
 		return doc, err
@@ -85,14 +85,14 @@ func (e *SysColumns) Create(tx *gorm.DB) (SysColumns, error) {
 }
 
 func (e *SysColumns) Update(tx *gorm.DB) (update SysColumns, err error) {
-	if err = tx.Table("sys_columns").First(&update, e.ColumnId).Error; err != nil {
+	if err = tx.Table("gen_columns").First(&update, e.ColumnId).Error; err != nil {
 		return
 	}
 
 	//参数1:是要修改的数据
 	//参数2:是修改的数据
 	e.UpdateBy = 0
-	if err = tx.Table("sys_columns").Model(&update).Updates(&e).Error; err != nil {
+	if err = tx.Table("gen_columns").Model(&update).Updates(&e).Error; err != nil {
 		return
 	}
 

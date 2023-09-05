@@ -31,7 +31,7 @@ func (e *DBColumns) GetPage(tx *gorm.DB, pageSize int, pageIndex int, dbname str
 		table = tx.Table("information_schema.`COLUMNS`")
 		table = table.Where("table_schema= ? ", dbname)
 
-		if e.TableName != "" {
+		if e.TableName == "" {
 			return nil, 0, errors.New("table name cannot be empty！")
 		}
 
