@@ -2,6 +2,7 @@ package tools
 
 import (
 	"bytes"
+	"fmt"
 	"strconv"
 	"strings"
 	"text/template"
@@ -22,7 +23,7 @@ type Gen struct {
 }
 
 var (
-	FrontPath = ".."
+	FrontPath = "../vue"
 )
 
 // Preview
@@ -164,6 +165,8 @@ func (e Gen) GenApiToFile(c *gin.Context) {
 	e.Ok(c, "Code generated successfully！")
 }
 
+const ROOT = "./modules/"
+
 func (e Gen) NOActionsGen(c *gin.Context, tab tools.SysTables) {
 
 	tab.MLTBName = strings.Replace(tab.TBName, "_", "-", -1)
@@ -218,16 +221,50 @@ func (e Gen) NOActionsGen(c *gin.Context, tab tools.SysTables) {
 		return
 	}
 
-	_ = files.PathCreate("./modules/" + tab.PackageName + "/apis/")
-	_ = files.PathCreate("./modules/" + tab.PackageName + "/models/")
-	_ = files.PathCreate("./modules/" + tab.PackageName + "/router/")
-	_ = files.PathCreate("./modules/" + tab.PackageName + "/service/dto/")
-	_ = files.PathCreate(FrontPath + "/api/" + tab.PackageName + "/")
-	err = files.PathCreate(FrontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/")
+	fmt.Println(1)
+	flag, err := files.PathExists(ROOT + tab.PackageName)
 	if err != nil {
-		core.Log.Error("Gen", zap.Error(err))
 		e.Error(c, err)
 		return
+	}
+	if !flag {
+		_ = files.PathCreate(ROOT + tab.PackageName + "/apis/")
+		_ = files.PathCreate(ROOT + tab.PackageName + "/models/")
+		_ = files.PathCreate(ROOT + tab.PackageName + "/router/")
+		_ = files.PathCreate(ROOT + tab.PackageName + "/service/dto/")
+		_ = files.PathCreate(FrontPath + "/api/" + tab.PackageName + "/")
+		err = files.PathCreate(FrontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/")
+		if err != nil {
+			core.Log.Error("Gen", zap.Error(err))
+			e.Error(c, err)
+			return
+		}
+
+		t1, err := template.ParseFiles("resources/template/cmd_api.template")
+		if err != nil {
+			core.Log.Error("Gen", zap.Error(err))
+			e.Error(c, err)
+		}
+		m := map[string]string{}
+		m["modName"] = tab.PackageName
+		var b1 bytes.Buffer
+		if err = t1.Execute(&b1, m); err != nil {
+			fmt.Println(err)
+		}
+
+		files.FileCreate(b1, "cmd/start/"+tab.PackageName+".go")
+		t2, err := template.ParseFiles("resources/template/router.template")
+		if err != nil {
+			core.Log.Error("Gen", zap.Error(err))
+			e.Error(c, err)
+		}
+		var b2 bytes.Buffer
+		err = t2.Execute(&b2, m)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		files.FileCreate(b2, ROOT+tab.PackageName+"/router/router.go")
 	}
 
 	var b1 bytes.Buffer
@@ -244,13 +281,13 @@ func (e Gen) NOActionsGen(c *gin.Context, tab tools.SysTables) {
 	err = t6.Execute(&b6, tab)
 	var b7 bytes.Buffer
 	err = t7.Execute(&b7, tab)
-	files.FileCreate(b1, "./modules/"+tab.PackageName+"/models/"+tab.TBName+".go")
-	files.FileCreate(b2, "./modules/"+tab.PackageName+"/apis/"+tab.TBName+".go")
-	files.FileCreate(b3, "./modules/"+tab.PackageName+"/router/"+tab.TBName+".go")
+	files.FileCreate(b1, ROOT+tab.PackageName+"/models/"+tab.TBName+".go")
+	files.FileCreate(b2, ROOT+tab.PackageName+"/apis/"+tab.TBName+".go")
+	files.FileCreate(b3, ROOT+tab.PackageName+"/router/"+tab.TBName+".go")
 	files.FileCreate(b4, FrontPath+"/api/"+tab.PackageName+"/"+tab.MLTBName+".js")
 	files.FileCreate(b5, FrontPath+"/views/"+tab.PackageName+"/"+tab.MLTBName+"/index.vue")
-	files.FileCreate(b6, "./modules/"+tab.PackageName+"/service/dto/"+tab.TBName+".go")
-	files.FileCreate(b7, "./modules/"+tab.PackageName+"/service/"+tab.TBName+".go")
+	files.FileCreate(b6, ROOT+tab.PackageName+"/service/dto/"+tab.TBName+".go")
+	files.FileCreate(b7, ROOT+tab.PackageName+"/service/"+tab.TBName+".go")
 
 }
 

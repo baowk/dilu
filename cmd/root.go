@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 
-	"dilu/cmd/module"
 	"dilu/cmd/start"
 	"dilu/cmd/version"
 
@@ -40,7 +39,6 @@ func tip() {
 func init() {
 	rootCmd.AddCommand(start.StartCmd)
 	rootCmd.AddCommand(version.StartCmd)
-	rootCmd.AddCommand(module.StartCmd)
 }
 
 func Execute() {
