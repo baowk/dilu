@@ -471,7 +471,6 @@ func (e *Gen) GenApis(c *gin.Context) {
 	db := core.DB()
 	jsonparser.ObjectEach(data, func(key []byte, value []byte, dataType jsonparser.ValueType, offset int) error {
 		path := basePath + string(key)
-
 		if !strings.HasPrefix(path, "/api/v1/tools/") {
 			if reg.MatchString(path) {
 				path = reg.ReplaceAllString(path, "${1}/{${2}}") // 把:id换成{id}
@@ -483,8 +482,15 @@ func (e *Gen) GenApis(c *gin.Context) {
 					apiTitle, _ = jsonparser.GetString(value, "description")
 				}
 
+				pt := "n"
+				if token, _, _, err := jsonparser.Get(value, "security"); err == nil {
+					if len(token) > 0 {
+						pt = "t"
+					}
+				}
+
 				err := db.Debug().Where(models.SysApi{Path: path, Action: method}).
-					Attrs(models.SysApi{Title: apiTitle, Status: 3}).
+					Attrs(models.SysApi{Title: apiTitle, Status: 3, PermType: pt}).
 					FirstOrCreate(&models.SysApi{}).Error
 				if err != nil {
 					e.Error(c, err)
