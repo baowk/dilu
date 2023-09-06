@@ -16,7 +16,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/captcha": {
+        "/v1/captcha": {
             "get": {
                 "description": "获取验证码",
                 "tags": [
@@ -48,7 +48,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sso/changePwd": {
+        "/v1/sso/changePwd": {
             "post": {
                 "security": [
                     {
@@ -84,7 +84,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sso/ding/callback": {
+        "/v1/sso/ding/callback": {
             "get": {
                 "description": "获取钉钉回调",
                 "tags": [
@@ -113,7 +113,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sso/forgetPwd": {
+        "/v1/sso/forgetPwd": {
             "post": {
                 "description": "忘记密码",
                 "consumes": [
@@ -144,7 +144,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sso/getDingCfg": {
+        "/v1/sso/getDingCfg": {
             "post": {
                 "description": "获取钉钉登录配置信息",
                 "tags": [
@@ -173,7 +173,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sso/login": {
+        "/v1/sso/login": {
             "post": {
                 "description": "用户登录",
                 "consumes": [
@@ -216,7 +216,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sso/loginDing": {
+        "/v1/sso/loginDing": {
             "post": {
                 "description": "钉钉登录",
                 "consumes": [
@@ -259,7 +259,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sso/mp/callback": {
+        "/v1/sso/mp/callback": {
             "get": {
                 "description": "微信公众号回调函数",
                 "consumes": [
@@ -279,7 +279,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sso/mp/login": {
+        "/v1/sso/mp/login": {
             "post": {
                 "description": "获取公众号二维码",
                 "consumes": [
@@ -322,7 +322,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sso/mp/qrCode": {
+        "/v1/sso/mp/qrCode": {
             "post": {
                 "description": "获取公众号二维码",
                 "consumes": [
@@ -354,7 +354,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sso/myUserinfo": {
+        "/v1/sso/myUserinfo": {
             "post": {
                 "security": [
                     {
@@ -388,7 +388,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sso/register": {
+        "/v1/sso/register": {
             "post": {
                 "description": "用户注册",
                 "consumes": [
@@ -431,7 +431,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sso/sendCode": {
+        "/v1/sso/sendCode": {
             "post": {
                 "description": "发送邮箱或者短信验证码",
                 "consumes": [
@@ -462,7 +462,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sso/verify/code": {
+        "/v1/sso/verify/code": {
             "post": {
                 "description": "验证码校验",
                 "consumes": [
@@ -493,7 +493,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sys/sys-cfg/create": {
+        "/v1/sys/sys-cfg/create": {
             "post": {
                 "security": [
                     {
@@ -540,7 +540,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sys/sys-cfg/del": {
+        "/v1/sys/sys-cfg/del": {
             "post": {
                 "security": [
                     {
@@ -587,7 +587,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sys/sys-cfg/get": {
+        "/v1/sys/sys-cfg/get": {
             "post": {
                 "security": [
                     {
@@ -634,7 +634,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sys/sys-cfg/page": {
+        "/v1/sys/sys-cfg/page": {
             "post": {
                 "security": [
                     {
@@ -696,7 +696,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sys/sys-cfg/update": {
+        "/v1/sys/sys-cfg/update": {
             "post": {
                 "security": [
                     {
@@ -743,7 +743,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/tools/db/columns/page": {
+        "/v1/tools/db/columns/page": {
             "get": {
                 "description": "数据库表列分页列表 / database table column page list",
                 "tags": [
@@ -787,7 +787,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/tools/db/tables/page": {
+        "/v1/tools/db/tables/page": {
             "get": {
                 "description": "数据库表分页列表 / database table page list",
                 "tags": [
@@ -831,25 +831,16 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/tools/gen/api/{tableId}": {
+        "/v1/tools/gen/api": {
             "get": {
-                "description": "生成菜单",
+                "description": "生成Api",
                 "consumes": [
                     "application/json"
                 ],
                 "tags": [
                     "工具 / 生成工具"
                 ],
-                "summary": "生成菜单",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "tableId",
-                        "name": "tableId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
+                "summary": "生成Api",
                 "responses": {
                     "200": {
                         "description": "{\"code\": -1, \"message\": \"添加失败\"}",
@@ -860,7 +851,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/tools/gen/code/{tableId}": {
+        "/v1/tools/gen/code/{tableId}": {
             "get": {
                 "description": "生成代码",
                 "consumes": [
@@ -889,7 +880,36 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/tools/gen/preview/{tableId}": {
+        "/v1/tools/gen/memu/{tableId}": {
+            "get": {
+                "description": "生成菜单",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "生成菜单",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "tableId",
+                        "name": "tableId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/tools/gen/preview/{tableId}": {
             "get": {
                 "description": "生成预览",
                 "consumes": [
@@ -918,7 +938,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/tools/tables/info": {
+        "/v1/tools/tables/info": {
             "put": {
                 "description": "修改表结构",
                 "consumes": [
@@ -981,7 +1001,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/tools/tables/info/{tableId}": {
+        "/v1/tools/tables/info/{tableId}": {
             "get": {
                 "description": "获取JSON",
                 "tags": [
@@ -1031,7 +1051,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/tools/tables/page": {
+        "/v1/tools/tables/page": {
             "get": {
                 "description": "生成表分页列表",
                 "tags": [
@@ -1804,7 +1824,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "V0.0.1",
 	Host:             "",
-	BasePath:         "",
+	BasePath:         "/api",
 	Schemes:          []string{},
 	Title:            "Dilu API",
 	Description:      "一个简单的脚手",

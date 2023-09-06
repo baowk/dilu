@@ -3,6 +3,8 @@ package tools
 import (
 	"bytes"
 	"fmt"
+	"os"
+	"regexp"
 	"strconv"
 	"strings"
 	"text/template"
@@ -12,9 +14,11 @@ import (
 	"github.com/baowk/dilu-core/common/utils/files"
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/base"
+	"github.com/buger/jsonparser"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 
+	"dilu/modules/sys/models"
 	"dilu/modules/sys/service"
 	"dilu/modules/sys/service/dto"
 	"dilu/modules/tools/models/tools"
@@ -37,8 +41,8 @@ var (
 // @Param tableId path int true "tableId"
 // @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
 // @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
-// @Router /api/v1/tools/gen/preview/{tableId} [get]
-func (e Gen) Preview(c *gin.Context) {
+// @Router /v1/tools/gen/preview/{tableId} [get]
+func (e *Gen) Preview(c *gin.Context) {
 	table := tools.SysTables{}
 	id, err := strconv.Atoi(c.Param("tableId"))
 	if err != nil {
@@ -128,8 +132,8 @@ func (e Gen) Preview(c *gin.Context) {
 // @Param tableId path int true "tableId"
 // @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
 // @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
-// @Router /api/v1/tools/gen/code/{tableId} [get]
-func (e Gen) GenCode(c *gin.Context) {
+// @Router /v1/tools/gen/code/{tableId} [get]
+func (e *Gen) GenCode(c *gin.Context) {
 	table := tools.SysTables{}
 	id, err := strconv.Atoi(c.Param("tableId"))
 	if err != nil {
@@ -148,7 +152,7 @@ func (e Gen) GenCode(c *gin.Context) {
 	e.Ok(c, "Code generated successfully！")
 }
 
-func (e Gen) GenApiToFile(c *gin.Context) {
+func (e *Gen) GenApiToFile(c *gin.Context) {
 	var dbname string
 	table := tools.SysTables{}
 	id, err := strconv.Atoi(c.Param("tableId"))
@@ -169,7 +173,7 @@ func (e Gen) GenApiToFile(c *gin.Context) {
 
 const ROOT = "./modules/"
 
-func (e Gen) NOActionsGen(c *gin.Context, tab tools.SysTables) {
+func (e *Gen) NOActionsGen(c *gin.Context, tab tools.SysTables) {
 
 	tab.MLTBName = strings.Replace(tab.TBName, "_", "-", -1)
 
@@ -293,7 +297,7 @@ func (e Gen) NOActionsGen(c *gin.Context, tab tools.SysTables) {
 
 }
 
-func (e Gen) genApiToFile(c *gin.Context, tab tools.SysTables) {
+func (e *Gen) genApiToFile(c *gin.Context, tab tools.SysTables) {
 	basePath := "resources/template/"
 	t1, err := template.ParseFiles(basePath + "api_migrate.template")
 	if err != nil {
@@ -321,8 +325,8 @@ func (e Gen) genApiToFile(c *gin.Context, tab tools.SysTables) {
 // @Param tableId path int true "tableId"
 // @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
 // @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
-// @Router /api/v1/tools/gen/api/{tableId} [get]
-func (e Gen) GenMenuAndApi(c *gin.Context) {
+// @Router /v1/tools/gen/memu/{tableId} [get]
+func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	table := tools.SysTables{}
 	id, err := strconv.Atoi(c.Param("tableId"))
 	if err != nil {
@@ -443,3 +447,96 @@ func (e Gen) GenMenuAndApi(c *gin.Context) {
 
 	e.Ok(c, "数据生成成功！")
 }
+
+// SaveSysApi
+// @Summary 生成Api
+// @Description 生成Api
+// @Tags 工具 / 生成工具
+// @Accept  application/json
+// @Product application/json
+// @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
+// @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
+// @Router /v1/tools/gen/api [get]
+func (e *Gen) GenApis(c *gin.Context) {
+	data, err := os.ReadFile("docs/swagger.json")
+	if err != nil {
+		e.Error(c, err)
+		return
+	}
+	basePath, err := jsonparser.GetString(data, "basePath")
+	if err != nil {
+		e.Error(c, err)
+		return
+	}
+	db := core.DB()
+	jsonparser.ObjectEach(data, func(key []byte, value []byte, dataType jsonparser.ValueType, offset int) error {
+		path := basePath + string(key)
+
+		if !strings.HasPrefix(path, "/api/v1/tools/") {
+			if reg.MatchString(path) {
+				path = reg.ReplaceAllString(path, "${1}/{${2}}") // 把:id换成{id}
+			}
+			jsonparser.ObjectEach(value, func(key []byte, value []byte, dataType jsonparser.ValueType, offset int) error {
+				method := strings.ToUpper(string(key))
+				apiTitle, _ := jsonparser.GetString(value, "summary")
+				if apiTitle == "" {
+					apiTitle, _ = jsonparser.GetString(value, "description")
+				}
+
+				err := db.Debug().Where(models.SysApi{Path: path, Action: method}).
+					Attrs(models.SysApi{Title: apiTitle, Status: 3}).
+					FirstOrCreate(&models.SysApi{}).Error
+				if err != nil {
+					e.Error(c, err)
+					return err
+				}
+				return nil
+			})
+		}
+		return nil
+	}, "paths")
+
+	e.Ok(c)
+
+	// var p fastjson.Parser
+	// m, err := p.Parse(j)
+	// if err != nil {
+	// 	e.Error(c, err)
+	// 	return
+	// }
+
+	// l, _ := m.Get("paths").Array()
+
+	// for _, v := range l {
+
+	// 	if v.HttpMethod != "HEAD" ||
+	// 		strings.Contains(v.RelativePath, "/swagger/") ||
+	// 		strings.Contains(v.RelativePath, "/static/") ||
+	// 		strings.Contains(v.RelativePath, "/form-generator/") ||
+	// 		strings.Contains(v.RelativePath, "/sys/tables") {
+
+	// 		urlPath := v.RelativePath
+	// 		idPatten := "(.*)/:(\\w+)" // 正则替换，把:id换成{id}
+	// 		reg, _ := regexp.Compile(idPatten)
+	// 		if reg.MatchString(urlPath) {
+	// 			urlPath = reg.ReplaceAllString(v.RelativePath, "${1}/{${2}}") // 把:id换成{id}
+	// 		}
+	// 		apiTitle, _ := jsonData.Get("paths").Get(urlPath).Get(strings.ToLower(v.HttpMethod)).Get("summary").String()
+
+	// 		err := db.Debug().Where(models.SysApi{Path: v.RelativePath, Action: v.HttpMethod}).
+	// 			Attrs(models.SysApi{Handle: v.Handler, Title: apiTitle}).
+	// 			FirstOrCreate(&models.SysApi{}).
+	// 			//Update("handle", v.Handler).
+	// 			Error
+	// 		if err != nil {
+	// 			err := fmt.Errorf("Models SaveSysApi error: %s \r\n ", err.Error())
+	// 			e.Error(c, err)
+	// 			return
+	// 		}
+	// 	}
+	// }
+	return
+}
+
+var idPatten = "(.*)/:(\\w+)" // 正则替换，把:id换成{id}
+var reg, _ = regexp.Compile(idPatten)

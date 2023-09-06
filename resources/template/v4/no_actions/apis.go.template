@@ -21,7 +21,7 @@ type {{.ClassName}}Api struct {
 // @Product application/json
 // @Param data body dto.{{.ClassName}}GetPageReq true "body"
 // @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.{{.ClassName}}}} "{"code": 200, "data": [...]}"
-// @Router /api/v1/{{.PackageName}}/{{.ModuleName}}/page [post]
+// @Router /v1/{{.PackageName}}/{{.ModuleName}}/page [post]
 // @Security Bearer
 func (e *{{.ClassName}}Api) QueryPage(c *gin.Context) {
 	var req dto.{{.ClassName}}GetPageReq
@@ -45,7 +45,7 @@ func (e *{{.ClassName}}Api) QueryPage(c *gin.Context) {
 // @Product application/json
 // @Param data body base.ReqId true "body"
 // @Success 200 {object} base.Resp{data=models.{{.ClassName}}} "{"code": 200, "data": [...]}"
-// @Router /api/v1/{{.PackageName}}/{{.ModuleName}}/get [post]
+// @Router /v1/{{.PackageName}}/{{.ModuleName}}/get [post]
 // @Security Bearer
 func (e *{{.ClassName}}Api) Get(c *gin.Context) {
 	var req base.ReqId
@@ -68,7 +68,7 @@ func (e *{{.ClassName}}Api) Get(c *gin.Context) {
 // @Product application/json
 // @Param data body dto.{{.ClassName}}Dto true "body"
 // @Success 200 {object} base.Resp{data=models.{{.ClassName}}} "{"code": 200, "data": [...]}"
-// @Router /api/v1/{{.PackageName}}/{{.ModuleName}}/create [post]
+// @Router /v1/{{.PackageName}}/{{.ModuleName}}/create [post]
 // @Security Bearer
 func (e *{{.ClassName}}Api) Create(c *gin.Context) {
 	var req dto.{{.ClassName}}Dto
@@ -92,7 +92,7 @@ func (e *{{.ClassName}}Api) Create(c *gin.Context) {
 // @Product application/json
 // @Param data body dto.{{.ClassName}}Dto true "body"
 // @Success 200 {object} base.Resp{data=models.{{.ClassName}}} "{"code": 200, "data": [...]}"
-// @Router /api/v1/{{.PackageName}}/{{.ModuleName}}/update [post]
+// @Router /v1/{{.PackageName}}/{{.ModuleName}}/update [post]
 // @Security Bearer
 func (e *{{.ClassName}}Api) Update(c *gin.Context) {
 	var req dto.{{.ClassName}}Dto
@@ -116,7 +116,7 @@ func (e *{{.ClassName}}Api) Update(c *gin.Context) {
 // @Product application/json
 // @Param data body base.ReqIds true "body"
 // @Success 200 {object} base.Resp{data=models.{{.ClassName}}} "{"code": 200, "data": [...]}"
-// @Router /api/v1/{{.PackageName}}/{{.ModuleName}}/del [post]
+// @Router /v1/{{.PackageName}}/{{.ModuleName}}/del [post]
 // @Security Bearer
 func (e *{{.ClassName}}Api) Del(c *gin.Context) {
 	var req base.ReqIds

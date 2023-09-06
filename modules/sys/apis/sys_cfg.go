@@ -21,7 +21,7 @@ type SysCfgApi struct {
 // @Product application/json
 // @Param data body dto.SysCfgGetPageReq true "body"
 // @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.SysCfg}} "{"code": 200, "data": [...]}"
-// @Router /api/v1/sys/sys-cfg/page [post]
+// @Router /v1/sys/sys-cfg/page [post]
 // @Security Bearer
 func (e *SysCfgApi) QueryPage(c *gin.Context) {
 	var req dto.SysCfgGetPageReq
@@ -45,7 +45,7 @@ func (e *SysCfgApi) QueryPage(c *gin.Context) {
 // @Product application/json
 // @Param data body base.ReqId true "body"
 // @Success 200 {object} base.Resp{data=models.SysCfg} "{"code": 200, "data": [...]}"
-// @Router /api/v1/sys/sys-cfg/get [post]
+// @Router /v1/sys/sys-cfg/get [post]
 // @Security Bearer
 func (e *SysCfgApi) Get(c *gin.Context) {
 	var req base.ReqId
@@ -68,7 +68,7 @@ func (e *SysCfgApi) Get(c *gin.Context) {
 // @Product application/json
 // @Param data body dto.SysCfgDto true "body"
 // @Success 200 {object} base.Resp{data=models.SysCfg} "{"code": 200, "data": [...]}"
-// @Router /api/v1/sys/sys-cfg/create [post]
+// @Router /v1/sys/sys-cfg/create [post]
 // @Security Bearer
 func (e *SysCfgApi) Create(c *gin.Context) {
 	var req dto.SysCfgDto
@@ -92,7 +92,7 @@ func (e *SysCfgApi) Create(c *gin.Context) {
 // @Product application/json
 // @Param data body dto.SysCfgDto true "body"
 // @Success 200 {object} base.Resp{data=models.SysCfg} "{"code": 200, "data": [...]}"
-// @Router /api/v1/sys/sys-cfg/update [post]
+// @Router /v1/sys/sys-cfg/update [post]
 // @Security Bearer
 func (e *SysCfgApi) Update(c *gin.Context) {
 	var req dto.SysCfgDto
@@ -116,7 +116,7 @@ func (e *SysCfgApi) Update(c *gin.Context) {
 // @Product application/json
 // @Param data body base.ReqIds true "body"
 // @Success 200 {object} base.Resp{data=models.SysCfg} "{"code": 200, "data": [...]}"
-// @Router /api/v1/sys/sys-cfg/del [post]
+// @Router /v1/sys/sys-cfg/del [post]
 // @Security Bearer
 func (e *SysCfgApi) Del(c *gin.Context) {
 	var req base.ReqIds

@@ -18,7 +18,7 @@ import (
 // @Param pageSize query int false "pageSize / 页条数"
 // @Param pageIndex query int false "pageIndex / 页码"
 // @Success 200 {object} base.Resp "{"code": 200, "data": [...]}"
-// @Router /api/v1/tools/db/columns/page [get]
+// @Router /v1/tools/db/columns/page [get]
 func (e *Gen) GetDBColumnList(c *gin.Context) {
 
 	var data tools.DBColumns

@@ -1,3 +1,4 @@
+basePath: /api
 definitions:
   base.PageResp:
     properties:
@@ -511,7 +512,7 @@ info:
   title: Dilu API
   version: V0.0.1
 paths:
-  /api/v1/captcha:
+  /v1/captcha:
     get:
       description: 获取验证码
       responses:
@@ -529,7 +530,7 @@ paths:
       summary: 获取验证码
       tags:
       - sso
-  /api/v1/sso/changePwd:
+  /v1/sso/changePwd:
     post:
       consumes:
       - application/json
@@ -551,7 +552,7 @@ paths:
       summary: 修改密码
       tags:
       - sso
-  /api/v1/sso/ding/callback:
+  /v1/sso/ding/callback:
     get:
       description: 获取钉钉回调
       responses:
@@ -567,7 +568,7 @@ paths:
       summary: 获取钉钉回调
       tags:
       - sso
-  /api/v1/sso/forgetPwd:
+  /v1/sso/forgetPwd:
     post:
       consumes:
       - application/json
@@ -587,7 +588,7 @@ paths:
       summary: 忘记密码
       tags:
       - sso
-  /api/v1/sso/getDingCfg:
+  /v1/sso/getDingCfg:
     post:
       description: 获取钉钉登录配置信息
       responses:
@@ -603,7 +604,7 @@ paths:
       summary: 获取钉钉登录配置信息
       tags:
       - sso
-  /api/v1/sso/login:
+  /v1/sso/login:
     post:
       consumes:
       - application/json
@@ -628,7 +629,7 @@ paths:
       summary: 用户登录
       tags:
       - sso
-  /api/v1/sso/loginDing:
+  /v1/sso/loginDing:
     post:
       consumes:
       - application/json
@@ -653,7 +654,7 @@ paths:
       summary: 钉钉
       tags:
       - sso
-  /api/v1/sso/mp/callback:
+  /v1/sso/mp/callback:
     get:
       consumes:
       - application/json
@@ -666,7 +667,7 @@ paths:
       summary: 微信公众号回调函数
       tags:
       - 微信公众号
-  /api/v1/sso/mp/login:
+  /v1/sso/mp/login:
     post:
       consumes:
       - application/json
@@ -691,7 +692,7 @@ paths:
       summary: 轮询用户登录成功与否
       tags:
       - 微信公众号
-  /api/v1/sso/mp/qrCode:
+  /v1/sso/mp/qrCode:
     post:
       consumes:
       - application/json
@@ -709,7 +710,7 @@ paths:
       summary: 获取公众号二维码
       tags:
       - 微信公众号
-  /api/v1/sso/myUserinfo:
+  /v1/sso/myUserinfo:
     post:
       description: 获取个人信息
       responses:
@@ -727,7 +728,7 @@ paths:
       summary: 获取个人信息
       tags:
       - sso
-  /api/v1/sso/register:
+  /v1/sso/register:
     post:
       consumes:
       - application/json
@@ -752,7 +753,7 @@ paths:
       summary: 用户注册
       tags:
       - sso
-  /api/v1/sso/sendCode:
+  /v1/sso/sendCode:
     post:
       consumes:
       - application/json
@@ -772,7 +773,7 @@ paths:
       summary: 发送邮箱或者短信验证码
       tags:
       - sso
-  /api/v1/sso/verify/code:
+  /v1/sso/verify/code:
     post:
       consumes:
       - application/json
@@ -792,7 +793,7 @@ paths:
       summary: 验证码校验
       tags:
       - sso
-  /api/v1/sys/sys-cfg/create:
+  /v1/sys/sys-cfg/create:
     post:
       consumes:
       - application/json
@@ -818,7 +819,7 @@ paths:
       summary: 创建SysCfg
       tags:
       - SysCfg
-  /api/v1/sys/sys-cfg/del:
+  /v1/sys/sys-cfg/del:
     post:
       consumes:
       - application/json
@@ -844,7 +845,7 @@ paths:
       summary: 删除SysCfg
       tags:
       - SysCfg
-  /api/v1/sys/sys-cfg/get:
+  /v1/sys/sys-cfg/get:
     post:
       consumes:
       - application/json
@@ -870,7 +871,7 @@ paths:
       summary: 获取SysCfg
       tags:
       - SysCfg
-  /api/v1/sys/sys-cfg/page:
+  /v1/sys/sys-cfg/page:
     post:
       consumes:
       - application/json
@@ -903,7 +904,7 @@ paths:
       summary: Page接口
       tags:
       - SysCfg
-  /api/v1/sys/sys-cfg/update:
+  /v1/sys/sys-cfg/update:
     post:
       consumes:
       - application/json
@@ -929,7 +930,7 @@ paths:
       summary: 更新SysCfg
       tags:
       - SysCfg
-  /api/v1/tools/db/columns/page:
+  /v1/tools/db/columns/page:
     get:
       description: 数据库表列分页列表 / database table column page list
       parameters:
@@ -958,7 +959,7 @@ paths:
       summary: 分页列表数据 / page list data
       tags:
       - 工具 / 生成工具
-  /api/v1/tools/db/tables/page:
+  /v1/tools/db/tables/page:
     get:
       description: 数据库表分页列表 / database table page list
       parameters:
@@ -987,26 +988,20 @@ paths:
       summary: 分页列表数据 / page list data
       tags:
       - 工具 / 生成工具
-  /api/v1/tools/gen/api/{tableId}:
+  /v1/tools/gen/api:
     get:
       consumes:
       - application/json
-      description: 生成菜单
-      parameters:
-      - description: tableId
-        in: path
-        name: tableId
-        required: true
-        type: integer
+      description: 生成Api
       responses:
         "200":
           description: '{"code": -1, "message": "添加失败"}'
           schema:
             type: string
-      summary: 生成菜单
+      summary: 生成Api
       tags:
       - 工具 / 生成工具
-  /api/v1/tools/gen/code/{tableId}:
+  /v1/tools/gen/code/{tableId}:
     get:
       consumes:
       - application/json
@@ -1025,7 +1020,26 @@ paths:
       summary: 生成代码
       tags:
       - 工具 / 生成工具
-  /api/v1/tools/gen/preview/{tableId}:
+  /v1/tools/gen/memu/{tableId}:
+    get:
+      consumes:
+      - application/json
+      description: 生成菜单
+      parameters:
+      - description: tableId
+        in: path
+        name: tableId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: '{"code": -1, "message": "添加失败"}'
+          schema:
+            type: string
+      summary: 生成菜单
+      tags:
+      - 工具 / 生成工具
+  /v1/tools/gen/preview/{tableId}:
     get:
       consumes:
       - application/json
@@ -1044,7 +1058,7 @@ paths:
       summary: 生成预览
       tags:
       - 工具 / 生成工具
-  /api/v1/tools/tables/info:
+  /v1/tools/tables/info:
     post:
       consumes:
       - application/json
@@ -1085,7 +1099,7 @@ paths:
       summary: 修改表结构
       tags:
       - 工具 / 生成工具
-  /api/v1/tools/tables/info/{tableId}:
+  /v1/tools/tables/info/{tableId}:
     delete:
       description: 删除表结构
       parameters:
@@ -1118,7 +1132,7 @@ paths:
       summary: 获取配置
       tags:
       - 工具 / 生成工具
-  /api/v1/tools/tables/page:
+  /v1/tools/tables/page:
     get:
       description: 生成表分页列表
       parameters:

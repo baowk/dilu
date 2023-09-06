@@ -12,6 +12,7 @@ import (
 
 // @title Dilu API
 // @version V0.0.1
+// @BasePath /api
 // @description 一个简单的脚手
 // @securityDefinitions.apikey Bearer
 // @in header

@@ -34,7 +34,7 @@ type Ding struct {
 // @Description 获取钉钉登录配置信息
 // @Tags sso
 // @Success 200 {object} base.Resp{data=dto.DingCfgResp} "{"code": 200, "data": [...]}"
-// @Router /api/v1/sso/getDingCfg [post]
+// @Router /v1/sso/getDingCfg [post]
 func (e Ding) GetDingCfg(c *gin.Context) {
 
 	//domain := "http://" + c.Request.Host
@@ -50,7 +50,7 @@ func (e Ding) GetDingCfg(c *gin.Context) {
 // @Description 获取钉钉回调
 // @Tags sso
 // @Success 200 {object} base.Resp{data=dto.DingCfgResp} "{"code": 200, "data": [...]}"
-// @Router /api/v1/sso/ding/callback [get]
+// @Router /v1/sso/ding/callback [get]
 func (e Ding) DingCallback(c *gin.Context) {
 
 	code := c.Query("code")
@@ -77,7 +77,7 @@ func (e Ding) DingCallback(c *gin.Context) {
 // @Product application/json
 // @Param data body dto.LoginDingReq true "data"
 // @Success 200 {object} base.Resp{data=dto.LoginOK} "{"code": 200, "data": [...]}"
-// @Router /api/v1/sso/loginDing [post]
+// @Router /v1/sso/loginDing [post]
 func (e Ding) LoginByDing(c *gin.Context) {
 	req := dto.LoginDingReq{}
 
@@ -109,7 +109,7 @@ func SnsAuthorize(state string, code string) {
 		"&response_type=code" +
 		"&scope=snsapi_login" +
 		"&state=" + state +
-		"&redirect_uri=https://www.yunlogin.com/api/v1/sso/ding/callback" +
+		"&redirect_uri=https://www.yunlogin.com/v1/sso/ding/callback" +
 		"&loginTmpCode=" + code
 	http.Get(url)
 	// resp, err := http.Get(url)
@@ -230,9 +230,9 @@ func EncodeSHA256(message, secret string) string {
 }
 
 var (
-	agent_id   = "2464941691"
-	app_key    = "dingc7p3yu5c74klxobd"
-	app_secret = "Xu8qjSAu9XCYqaZmpEonvacFuHzmPY0KmFCFurhMdpjGbfPx9KmViKpaSANAGi27"
+	agent_id   = ""
+	app_key    = ""
+	app_secret = ""
 	crop_id    = ""
 )
 

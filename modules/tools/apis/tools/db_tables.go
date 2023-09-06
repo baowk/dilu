@@ -19,7 +19,7 @@ import (
 // @Param pageSize query int false "pageSize / 页条数"
 // @Param pageIndex query int false "pageIndex / 页码"
 // @Success 200 {object} base.Resp "{"code": 200, "data": [...]}"
-// @Router /api/v1/tools/db/tables/page [get]
+// @Router /v1/tools/db/tables/page [get]
 func (e *Gen) GetDBTableList(c *gin.Context) {
 	//var res base.Resp
 	var data tools.DBTables
