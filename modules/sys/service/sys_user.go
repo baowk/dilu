@@ -412,8 +412,11 @@ func (e *SysUser) GetByPhone(mobile string, model *models.SysUser) error {
 }
 
 func (e *SysUser) bindById(enCode string, user models.SysUser) error {
-	dstr := cryptos.RSA_Decrypt(enCode, consts.PriKey)
-	arr := strings.Split(dstr, "-")
+	dstr, err := cryptos.RSA_Decrypt(enCode, consts.PriKey)
+	if err != nil {
+		return err
+	}
+	arr := strings.Split(string(dstr), "-")
 	if len(arr) != 2 {
 		return errors.New("参数错误")
 	}
@@ -579,10 +582,14 @@ func (e *SysUser) GetByUsername(username string, model *models.SysUser) errs.IEr
 	return nil
 }
 
-func needMobile(platform, id int, lod *dto.LoginOK) {
-	enS := cryptos.RSA_Encrypt(fmt.Sprintf("%d-%d", platform, id), consts.PubKey)
+func needMobile(platform, id int, lod *dto.LoginOK) error {
+	enS, err := cryptos.RSA_Encrypt([]byte(fmt.Sprintf("%d-%d", platform, id)), consts.PubKey)
+	if err != nil {
+		return err
+	}
 	lod.Need = 1
 	lod.Token = enS
+	return nil
 }
 
 // 通过老密码修改

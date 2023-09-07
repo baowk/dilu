@@ -40,7 +40,7 @@ func (e *Local) UploadFile(file *multipart.FileHeader) (string, string, error) {
 	ext := path.Ext(file.Filename)
 	// 读取文件名并加密
 	name := strings.TrimSuffix(file.Filename, ext)
-	name = cryptos.MD5V([]byte(name))
+	name = cryptos.MD5([]byte(name))
 	// 拼接新文件名
 	filename := name + "_" + time.Now().Format("20060102150405") + ext
 	// 尝试创建此路径
