@@ -19,6 +19,8 @@ type {{.ClassName}}Service struct {
 	//base.BaseService
 }
 
+var {{.ClassName}}S = {{.ClassName}}Service{}
+
 func (e *{{.ClassName}}Service) Page(req dto.{{.ClassName}}GetPageReq, list *[]models.{{.ClassName}}, total *int64, reqId string) errs.IError {
 	db := core.Db("{{.PackageName}}")
 	//TODO WHERE

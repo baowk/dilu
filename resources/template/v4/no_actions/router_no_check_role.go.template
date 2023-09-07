@@ -10,15 +10,14 @@ func init() {
 	routerNoCheckRole = append(routerNoCheckRole, register{{.ClassName}}Router)
 }
 
-// 无需认证的路由示例
+// 默认需登录认证的路由
 func register{{.ClassName}}Router(v1 *gin.RouterGroup) {
-	api := apis.{{.ClassName}}Api{}
 	r := v1.Group("{{.ModuleName}}").Use(middleware.JwtHandler())
 	{
-		r.POST("/get", api.Get)
-		r.POST("/create", api.Create)
-		r.POST("/update", api.Update)
-		r.POST("/page", api.QueryPage)
-		r.POST("/del", api.Del)
+		r.POST("/get", apis.{{.ClassName}}A.Get)
+		r.POST("/create", apis.{{.ClassName}}A.Create)
+		r.POST("/update", apis.{{.ClassName}}A.Update)
+		r.POST("/page", apis.{{.ClassName}}A.QueryPage)
+		r.POST("/del", apis.{{.ClassName}}A.Del)
 	}
 }
