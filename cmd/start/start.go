@@ -2,6 +2,7 @@ package start
 
 import (
 	"dilu/common/codes"
+	"dilu/common/config"
 	"fmt"
 
 	"github.com/baowk/dilu-core/core"
@@ -46,12 +47,13 @@ func run() {
 		if err = v.Unmarshal(&core.Cfg); err != nil {
 			fmt.Println(err)
 		}
+		v.Sub("extend").Unmarshal(&config.Ext)
 	})
 	if err = v.Unmarshal(&core.Cfg); err != nil {
 		fmt.Println(err)
 	}
 
-	//fmt.Println(core.Cfg)
+	v.Sub("extend").Unmarshal(&config.Ext)
 
 	core.Init()
 
