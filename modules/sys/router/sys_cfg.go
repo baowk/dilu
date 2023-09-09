@@ -1,8 +1,9 @@
 package router
 
 import (
-	"dilu/modules/sys/apis"
 	"dilu/common/middleware"
+	"dilu/modules/sys/apis"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,5 +21,6 @@ func registerSysCfgRouter(v1 *gin.RouterGroup) {
 		r.POST("/update", api.Update)
 		r.POST("/page", api.QueryPage)
 		r.POST("/del", api.Del)
+		r.POST("/gets", api.Gets)
 	}
 }

@@ -31,8 +31,15 @@ func (e *SysCfgApi) QueryPage(c *gin.Context) {
 	}
 	list := make([]models.SysCfg, 10)
 	var total int64
-	if err := service.SysCfgS.Page(req, &list, &total, e.GetReqId(c)); err != nil {
-		e.Err(c, err)
+
+	var model models.SysCfg
+	if err := copier.Copy(&model, req); err != nil {
+		e.Error(c, err)
+		return
+	}
+
+	if err := service.SysCfgS.Page(model, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
+		e.Error(c, err)
 		return
 	}
 	e.Page(c, list, total, req.GetPage(), req.GetSize())
@@ -54,10 +61,50 @@ func (e *SysCfgApi) Get(c *gin.Context) {
 		return
 	}
 	var data models.SysCfg
-	if err := service.SysCfgS.Get(req.Id, &data, e.GetReqId(c)); err != nil {
-		e.Err(c, err)
+	if err := service.SysCfgS.Get(req.Id, &data); err != nil {
+		e.Error(c, err)
 		return
 	}
+	e.Ok(c, data)
+}
+
+// Gets 获取SysCfg
+// @Summary 获取SysCfg
+// @Tags SysCfg
+// @Accept application/json
+// @Product application/json
+// @Param data body base.ReqIds true "body"
+// @Success 200 {object} base.Resp{data=[]models.SysCfg} "{"code": 200, "data": [...]}"
+// @Router /v1/sys/sys-cfg/gets [post]
+// @Security Bearer
+func (e *SysCfgApi) Gets(c *gin.Context) {
+	var req base.ReqIds
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
+	var data []models.SysCfg
+	if err := service.SysCfgS.GetByWhere(req.Ids, &data); err != nil {
+		e.Error(c, err)
+		return
+	}
+
+	um := models.SysCfg{
+		Status: 3,
+	}
+	if err := service.SysCfgS.UpdateWhereModel(req.Ids, um); err != nil {
+		e.Error(c, err)
+		return
+	}
+
+	u := map[string]any{
+		"status": 2,
+	}
+	if err := service.SysCfgS.UpdateWhere(&models.SysCfg{}, req.Ids, u); err != nil {
+		e.Error(c, err)
+		return
+	}
+
 	e.Ok(c, data)
 }
 
@@ -78,8 +125,8 @@ func (e *SysCfgApi) Create(c *gin.Context) {
 	}
 	var data models.SysCfg
 	copier.Copy(&data, req)
-	if err := service.SysCfgS.Create(&data, e.GetReqId(c)); err != nil {
-		e.Err(c, err)
+	if err := service.SysCfgS.Create(&data); err != nil {
+		e.Error(c, err)
 		return
 	}
 	e.Ok(c, data)
@@ -102,8 +149,8 @@ func (e *SysCfgApi) Update(c *gin.Context) {
 	}
 	var data models.SysCfg
 	copier.Copy(&data, req)
-	if err := service.SysCfgS.Update(&data, e.GetReqId(c)); err != nil {
-		e.Err(c, err)
+	if err := service.SysCfgS.Save(&data); err != nil {
+		e.Error(c, err)
 		return
 	}
 	e.Ok(c, data)
@@ -124,8 +171,8 @@ func (e *SysCfgApi) Del(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	if err := service.SysCfgS.Del(req.Ids, e.GetReqId(c)); err != nil {
-		e.Err(c, err)
+	if err := service.SysCfgS.DelIds(&models.SysCfg{}, req.Ids); err != nil {
+		e.Error(c, err)
 		return
 	}
 	e.Ok(c)

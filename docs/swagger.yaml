@@ -871,6 +871,34 @@ paths:
       summary: 获取SysCfg
       tags:
       - SysCfg
+  /v1/sys/sys-cfg/gets:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqIds'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.SysCfg'
+                  type: array
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取SysCfg
+      tags:
+      - SysCfg
   /v1/sys/sys-cfg/page:
     post:
       consumes:

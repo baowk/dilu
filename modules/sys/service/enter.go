@@ -7,5 +7,5 @@ var (
 	SmsS        = SmsLog{}
 	ThirdLoginS = ThirdLogin{}
 	//SysApiS     = SysApiService{}
-	SysCfgS = SysCfgService{}
+
 )
