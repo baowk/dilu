@@ -1,4 +1,3 @@
-basePath: /api
 definitions:
   base.PageResp:
     properties:
@@ -237,6 +236,42 @@ definitions:
         description: 微信或者钉钉第一次登录绑定用
         type: string
     type: object
+  dto.SysApiDto:
+    properties:
+      action:
+        description: 请求类型
+        type: string
+      id:
+        description: 主键
+        type: integer
+      path:
+        description: 请求地址
+        type: string
+      permType:
+        description: 权限类型（n：无需任何认证 t:须token p：须权限）
+        type: string
+      status:
+        description: 状态 3 DEF 2 OK 1 del
+        type: integer
+      title:
+        description: 标题
+        type: string
+      type:
+        description: 接口类型
+        type: string
+    type: object
+  dto.SysApiGetPageReq:
+    properties:
+      page:
+        description: 页码
+        type: integer
+      size:
+        description: 每页大小
+        type: integer
+      status:
+        description: 状态 3 DEF 2 OK 1 del
+        type: integer
+    type: object
   dto.SysCfgDto:
     properties:
       id:
@@ -280,6 +315,36 @@ definitions:
         type: string
       username:
         description: 手机号或者邮箱
+        type: string
+    type: object
+  models.SysApi:
+    properties:
+      action:
+        description: 请求类型
+        type: string
+      id:
+        description: 主键
+        type: integer
+      path:
+        description: 请求地址
+        type: string
+      permType:
+        description: 权限类型（n：无需任何认证 t:须token p：须权限）
+        type: string
+      status:
+        description: 状态 3 DEF 2 OK 1 del
+        type: integer
+      title:
+        description: 标题
+        type: string
+      type:
+        description: 接口类型
+        type: string
+      updateBy:
+        description: 更新者
+        type: integer
+      updatedAt:
+        description: 最后更新时间
         type: string
     type: object
   models.SysCfg:
@@ -530,28 +595,6 @@ paths:
       summary: 获取验证码
       tags:
       - sso
-  /v1/sso/changePwd:
-    post:
-      consumes:
-      - application/json
-      description: 修改密码
-      parameters:
-      - description: data
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.ChangePwdReq'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            $ref: '#/definitions/base.Resp'
-      security:
-      - Bearer: []
-      summary: 修改密码
-      tags:
-      - sso
   /v1/sso/ding/callback:
     get:
       description: 获取钉钉回调
@@ -568,26 +611,6 @@ paths:
       summary: 获取钉钉回调
       tags:
       - sso
-  /v1/sso/forgetPwd:
-    post:
-      consumes:
-      - application/json
-      description: 忘记密码
-      parameters:
-      - description: data
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.ForgetPwdReq'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            $ref: '#/definitions/base.Resp'
-      summary: 忘记密码
-      tags:
-      - sso
   /v1/sso/getDingCfg:
     post:
       description: 获取钉钉登录配置信息
@@ -602,31 +625,6 @@ paths:
                   $ref: '#/definitions/dto.DingCfgResp'
               type: object
       summary: 获取钉钉登录配置信息
-      tags:
-      - sso
-  /v1/sso/login:
-    post:
-      consumes:
-      - application/json
-      description: 用户登录
-      parameters:
-      - description: data
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.LoginReq'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/dto.LoginOK'
-              type: object
-      summary: 用户登录
       tags:
       - sso
   /v1/sso/loginDing:
@@ -710,7 +708,74 @@ paths:
       summary: 获取公众号二维码
       tags:
       - 微信公众号
-  /v1/sso/myUserinfo:
+  /v1/sys/sso/changePwd:
+    post:
+      consumes:
+      - application/json
+      description: 修改密码
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ChangePwdReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            $ref: '#/definitions/base.Resp'
+      security:
+      - Bearer: []
+      summary: 修改密码
+      tags:
+      - sso
+  /v1/sys/sso/forgetPwd:
+    post:
+      consumes:
+      - application/json
+      description: 忘记密码
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ForgetPwdReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            $ref: '#/definitions/base.Resp'
+      summary: 忘记密码
+      tags:
+      - sso
+  /v1/sys/sso/login:
+    post:
+      consumes:
+      - application/json
+      description: 用户登录
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.LoginOK'
+              type: object
+      summary: 用户登录
+      tags:
+      - sso
+  /v1/sys/sso/myUserinfo:
     post:
       description: 获取个人信息
       responses:
@@ -728,7 +793,7 @@ paths:
       summary: 获取个人信息
       tags:
       - sso
-  /v1/sso/register:
+  /v1/sys/sso/register:
     post:
       consumes:
       - application/json
@@ -753,7 +818,7 @@ paths:
       summary: 用户注册
       tags:
       - sso
-  /v1/sso/sendCode:
+  /v1/sys/sso/sendCode:
     post:
       consumes:
       - application/json
@@ -773,7 +838,7 @@ paths:
       summary: 发送邮箱或者短信验证码
       tags:
       - sso
-  /v1/sso/verify/code:
+  /v1/sys/sso/verify/code:
     post:
       consumes:
       - application/json
@@ -793,6 +858,143 @@ paths:
       summary: 验证码校验
       tags:
       - sso
+  /v1/sys/sys-api/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysApiDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysApi'
+              type: object
+      security:
+      - Bearer: []
+      summary: 创建SysApi
+      tags:
+      - SysApi
+  /v1/sys/sys-api/del:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqIds'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysApi'
+              type: object
+      security:
+      - Bearer: []
+      summary: 删除SysApi
+      tags:
+      - SysApi
+  /v1/sys/sys-api/get:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqId'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysApi'
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取SysApi
+      tags:
+      - SysApi
+  /v1/sys/sys-api/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysApiGetPageReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/base.PageResp'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/models.SysApi'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - Bearer: []
+      summary: Page接口
+      tags:
+      - SysApi
+  /v1/sys/sys-api/update:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysApiDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysApi'
+              type: object
+      security:
+      - Bearer: []
+      summary: 更新SysApi
+      tags:
+      - SysApi
   /v1/sys/sys-cfg/create:
     post:
       consumes:
@@ -865,34 +1067,6 @@ paths:
             - properties:
                 data:
                   $ref: '#/definitions/models.SysCfg'
-              type: object
-      security:
-      - Bearer: []
-      summary: 获取SysCfg
-      tags:
-      - SysCfg
-  /v1/sys/sys-cfg/gets:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/base.ReqIds'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/models.SysCfg'
-                  type: array
               type: object
       security:
       - Bearer: []

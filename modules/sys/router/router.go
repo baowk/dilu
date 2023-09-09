@@ -17,12 +17,10 @@ func InitRouter() {
 	noCheckRoleRouter(r)
 }
 
-
-
 // noCheckRoleRouter 无需认证的路由
 func noCheckRoleRouter(r *gin.Engine) {
 	// 可根据业务需求来设置接口版本
-	v := r.Group("/api/v1/sys")
+	v := r.Group("/v1/sys")
 
 	for _, f := range routerNoCheckRole {
 		f(v)

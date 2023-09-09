@@ -14,6 +14,8 @@ type SysCfgApi struct {
 	base.BaseApi
 }
 
+var SysCfgA = SysCfgApi{}
+
 // QueryPage 获取SysCfg列表
 // @Summary Page接口
 // @Tags SysCfg
@@ -37,7 +39,6 @@ func (e *SysCfgApi) QueryPage(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-
 	if err := service.SysCfgS.Page(model, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
 		e.Error(c, err)
 		return
@@ -65,46 +66,6 @@ func (e *SysCfgApi) Get(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	e.Ok(c, data)
-}
-
-// Gets 获取SysCfg
-// @Summary 获取SysCfg
-// @Tags SysCfg
-// @Accept application/json
-// @Product application/json
-// @Param data body base.ReqIds true "body"
-// @Success 200 {object} base.Resp{data=[]models.SysCfg} "{"code": 200, "data": [...]}"
-// @Router /v1/sys/sys-cfg/gets [post]
-// @Security Bearer
-func (e *SysCfgApi) Gets(c *gin.Context) {
-	var req base.ReqIds
-	if err := c.ShouldBind(&req); err != nil {
-		e.Error(c, err)
-		return
-	}
-	var data []models.SysCfg
-	if err := service.SysCfgS.GetByWhere(req.Ids, &data); err != nil {
-		e.Error(c, err)
-		return
-	}
-
-	um := models.SysCfg{
-		Status: 3,
-	}
-	if err := service.SysCfgS.UpdateWhereModel(req.Ids, um); err != nil {
-		e.Error(c, err)
-		return
-	}
-
-	u := map[string]any{
-		"status": 2,
-	}
-	if err := service.SysCfgS.UpdateWhere(&models.SysCfg{}, req.Ids, u); err != nil {
-		e.Error(c, err)
-		return
-	}
-
 	e.Ok(c, data)
 }
 

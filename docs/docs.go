@@ -48,42 +48,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/sso/changePwd": {
-            "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "description": "修改密码",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "sso"
-                ],
-                "summary": "修改密码",
-                "parameters": [
-                    {
-                        "description": "data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.ChangePwdReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "$ref": "#/definitions/base.Resp"
-                        }
-                    }
-                }
-            }
-        },
         "/v1/sso/ding/callback": {
             "get": {
                 "description": "获取钉钉回调",
@@ -113,37 +77,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/sso/forgetPwd": {
-            "post": {
-                "description": "忘记密码",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "sso"
-                ],
-                "summary": "忘记密码",
-                "parameters": [
-                    {
-                        "description": "data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.ForgetPwdReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "$ref": "#/definitions/base.Resp"
-                        }
-                    }
-                }
-            }
-        },
         "/v1/sso/getDingCfg": {
             "post": {
                 "description": "获取钉钉登录配置信息",
@@ -164,49 +97,6 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/dto.DingCfgResp"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/sso/login": {
-            "post": {
-                "description": "用户登录",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "sso"
-                ],
-                "summary": "用户登录",
-                "parameters": [
-                    {
-                        "description": "data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.LoginReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/dto.LoginOK"
                                         }
                                     }
                                 }
@@ -354,7 +244,117 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/sso/myUserinfo": {
+        "/v1/sys/sso/changePwd": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "修改密码",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sso"
+                ],
+                "summary": "修改密码",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ChangePwdReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "$ref": "#/definitions/base.Resp"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/sys/sso/forgetPwd": {
+            "post": {
+                "description": "忘记密码",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sso"
+                ],
+                "summary": "忘记密码",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ForgetPwdReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "$ref": "#/definitions/base.Resp"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/sys/sso/login": {
+            "post": {
+                "description": "用户登录",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sso"
+                ],
+                "summary": "用户登录",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.LoginReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.LoginOK"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/sys/sso/myUserinfo": {
             "post": {
                 "security": [
                     {
@@ -388,7 +388,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/sso/register": {
+        "/v1/sys/sso/register": {
             "post": {
                 "description": "用户注册",
                 "consumes": [
@@ -431,7 +431,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/sso/sendCode": {
+        "/v1/sys/sso/sendCode": {
             "post": {
                 "description": "发送邮箱或者短信验证码",
                 "consumes": [
@@ -462,7 +462,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/sso/verify/code": {
+        "/v1/sys/sso/verify/code": {
             "post": {
                 "description": "验证码校验",
                 "consumes": [
@@ -488,6 +488,256 @@ const docTemplate = `{
                         "description": "{\"code\": 200, \"data\": [...]}",
                         "schema": {
                             "$ref": "#/definitions/base.Resp"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/sys/sys-api/create": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysApi"
+                ],
+                "summary": "创建SysApi",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SysApiDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.SysApi"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/sys/sys-api/del": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysApi"
+                ],
+                "summary": "删除SysApi",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqIds"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.SysApi"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/sys/sys-api/get": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysApi"
+                ],
+                "summary": "获取SysApi",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqId"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.SysApi"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/sys/sys-api/page": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysApi"
+                ],
+                "summary": "Page接口",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SysApiGetPageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/base.PageResp"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/models.SysApi"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/sys/sys-api/update": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysApi"
+                ],
+                "summary": "更新SysApi",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SysApiDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.SysApi"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -625,56 +875,6 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/models.SysCfg"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/sys/sys-cfg/gets": {
-            "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "SysCfg"
-                ],
-                "summary": "获取SysCfg",
-                "parameters": [
-                    {
-                        "description": "body",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/base.ReqIds"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.SysCfg"
-                                            }
                                         }
                                     }
                                 }
@@ -1471,6 +1671,56 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.SysApiDto": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "description": "请求类型",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "path": {
+                    "description": "请求地址",
+                    "type": "string"
+                },
+                "permType": {
+                    "description": "权限类型（n：无需任何认证 t:须token p：须权限）",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "状态 3 DEF 2 OK 1 del",
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "标题",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "接口类型",
+                    "type": "string"
+                }
+            }
+        },
+        "dto.SysApiGetPageReq": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "size": {
+                    "description": "每页大小",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态 3 DEF 2 OK 1 del",
+                    "type": "integer"
+                }
+            }
+        },
         "dto.SysCfgDto": {
             "type": "object",
             "properties": {
@@ -1530,6 +1780,47 @@ const docTemplate = `{
                 },
                 "username": {
                     "description": "手机号或者邮箱",
+                    "type": "string"
+                }
+            }
+        },
+        "models.SysApi": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "description": "请求类型",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "path": {
+                    "description": "请求地址",
+                    "type": "string"
+                },
+                "permType": {
+                    "description": "权限类型（n：无需任何认证 t:须token p：须权限）",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "状态 3 DEF 2 OK 1 del",
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "标题",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "接口类型",
+                    "type": "string"
+                },
+                "updateBy": {
+                    "description": "更新者",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "最后更新时间",
                     "type": "string"
                 }
             }
@@ -1874,7 +2165,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "V0.0.1",
 	Host:             "",
-	BasePath:         "/api",
+	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "Dilu API",
 	Description:      "一个简单的脚手",

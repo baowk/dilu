@@ -10,7 +10,6 @@ import (
 type SysApi struct {
 	base.Model
 
-	//Handle    string    `json:"handle" gorm:"type:varchar(128);comment:handle"`                        //handle
 	Title     string    `json:"title" gorm:"type:varchar(128);comment:标题"`                             //标题
 	Action    string    `json:"action" gorm:"type:varchar(16);comment:请求类型"`                           //请求类型
 	Path      string    `json:"path" gorm:"type:varchar(128);comment:请求地址"`                            //请求地址
@@ -23,4 +22,53 @@ type SysApi struct {
 
 func (SysApi) TableName() string {
 	return "sys_api"
+}
+
+func NewSysApi() *SysApi {
+	return &SysApi{}
+}
+
+func (e *SysApi) SetId(id int) *SysApi {
+	e.Id = id
+	return e
+}
+
+func (e *SysApi) SetTitle(title string) *SysApi {
+	e.Title = title
+	return e
+}
+
+func (e *SysApi) SetAction(action string) *SysApi {
+	e.Action = action
+	return e
+}
+
+func (e *SysApi) SetPath(path string) *SysApi {
+	e.Path = path
+	return e
+}
+
+func (e *SysApi) SetType(atype string) *SysApi {
+	e.Type = atype
+	return e
+}
+
+func (e *SysApi) SetPermType(permType string) *SysApi {
+	e.PermType = permType
+	return e
+}
+
+func (e *SysApi) SetStatus(status int) *SysApi {
+	e.Status = status
+	return e
+}
+
+func (e *SysApi) SetUpdateBy(updateBy int) *SysApi {
+	e.UpdateBy = updateBy
+	return e
+}
+
+func (e *SysApi) SetUpdatedAt(updatedAt time.Time) *SysApi {
+	e.UpdatedAt = updatedAt
+	return e
 }

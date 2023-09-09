@@ -4,11 +4,11 @@ import (
 	"github.com/baowk/dilu-core/core/base"
 )
 
-type SysCfgService struct {
+type SysApiService struct {
 	base.BaseService
 }
 
-var SysCfgS = SysCfgService{
+var SysApiS = SysApiService{
 	base.BaseService{
 		DbName: "sys",
 	},

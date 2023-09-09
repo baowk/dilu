@@ -32,3 +32,20 @@ type {{.ClassName}} struct {
 func ({{.ClassName}}) TableName() string {
     return "{{.TBName}}"
 }
+
+func New{{.ClassName}}() *{{.ClassName}}{
+    return &{{.ClassName}}{}
+}
+
+{{$x := .ClassName}}
+{{ range .Columns }}
+{{$arg := .JsonField}}
+{{if eq .JsonField "type"}}
+    {{$arg = "aType"}}    
+{{end}}
+func (e *{{$x}}) Set{{.GoField}}({{$arg}} {{.GoType}}) *{{$x}} {
+	e.{{.GoField}} = {{$arg}}
+	return e
+}
+{{ end }}
+

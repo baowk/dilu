@@ -33,7 +33,7 @@ type SSO struct {
 // @Product application/json
 // @Param data body dto.CodeSendReq true "data"
 // @Success 200 {object} base.Resp{} "{"code": 200, "data": [...]}"
-// @Router /v1/sso/sendCode [post]
+// @Router /v1/sys/sso/sendCode [post]
 func (e *SSO) SendCode(c *gin.Context) {
 	req := dto.CodeSendReq{}
 	if err := c.ShouldBind(&req); err != nil {
@@ -88,7 +88,7 @@ func (e *SSO) SendCode(c *gin.Context) {
 // @Product application/json
 // @Param data body dto.RegisterReq true "data"
 // @Success 200 {object} base.Resp{data=dto.LoginOK} "{"code": 200, "data": [...]}"
-// @Router /v1/sso/register [post]
+// @Router /v1/sys/sso/register [post]
 func (e *SSO) Register(c *gin.Context) {
 	req := dto.RegisterReq{}
 	if err := c.ShouldBind(&req); err != nil {
@@ -148,7 +148,7 @@ func (e *SSO) Register(c *gin.Context) {
 // @Product application/json
 // @Param data body dto.VerifyCodeReq true "data"
 // @Success 200 {object} base.Resp{} "{"code": 200, "data": [...]}"
-// @Router /v1/sso/verify/code [post]
+// @Router /v1/sys/sso/verify/code [post]
 func (e *SSO) VerifyCode(c *gin.Context) {
 	req := dto.VerifyCodeReq{}
 	if err := c.ShouldBind(&req); err != nil {
@@ -188,7 +188,7 @@ func (e *SSO) VerifyCode(c *gin.Context) {
 // @Product application/json
 // @Param data body dto.LoginReq true "data"
 // @Success 200 {object} base.Resp{data=dto.LoginOK} "{"code": 200, "data": [...]}"
-// @Router /v1/sso/login [post]
+// @Router /v1/sys/sso/login [post]
 func (e *SSO) Login(c *gin.Context) {
 	req := dto.LoginReq{}
 	if err := c.ShouldBind(&req); err != nil {
@@ -248,7 +248,7 @@ func (e *SSO) Login(c *gin.Context) {
 // @Product application/json
 // @Param data body dto.ForgetPwdReq true "data"
 // @Success 200 {object} base.Resp{} "{"code": 200, "data": [...]}"
-// @Router /v1/sso/forgetPwd [post]
+// @Router /v1/sys/sso/forgetPwd [post]
 func (e *SSO) ForgetPwd(c *gin.Context) {
 	req := dto.ForgetPwdReq{}
 	if err := c.ShouldBind(&req); err != nil {
@@ -300,7 +300,7 @@ func (e *SSO) ForgetPwd(c *gin.Context) {
 // // @Tags sso
 // // @Param data body dto.IdReq true "data"
 // // @Success 200 {object} base.Resp{data=models.User} "{"code": 200, "data": [...]}"
-// // @Router /v1/sso/getUserinfo [post]
+// // @Router /v1/sys/sso/getUserinfo [post]
 // func (e *SSO) GetUserInfo(c *gin.Context) {
 // 	req := dto.IdReq{}
 // 	s := service.User{}
@@ -336,7 +336,7 @@ func (e *SSO) ForgetPwd(c *gin.Context) {
 // @Description 获取个人信息
 // @Tags sso
 // @Success 200 {object} base.Resp{data=dto.MyUserinfoResp} "{"code": 200, "data": [...]}"
-// @Router /v1/sso/myUserinfo [post]
+// @Router /v1/sys/sso/myUserinfo [post]
 // @Security Bearer
 func (e *SSO) MyUserInfo(c *gin.Context) {
 	uid := middleware.GetUserId(c)
@@ -368,7 +368,7 @@ func (e *SSO) MyUserInfo(c *gin.Context) {
 // @Product application/json
 // @Param data body dto.ChangePwdReq true "data"
 // @Success 200 {object} base.Resp{} "{"code": 200, "data": [...]}"
-// @Router /v1/sso/changePwd [post]
+// @Router /v1/sys/sso/changePwd [post]
 // @Security Bearer
 func (e *SSO) ChangePwd(c *gin.Context) {
 	req := dto.ChangePwdReq{}
@@ -399,7 +399,7 @@ func (e *SSO) ChangePwd(c *gin.Context) {
 // // @Product application/json
 // // @Param data body dto.BindReq true "data"
 // // @Success 200 {object} base.Resp{} "{"code": 200, "data": [...]}"
-// // @Router /v1/sso/auth/bind [post]
+// // @Router /v1/sys/sso/auth/bind [post]
 // // @Security Bearer
 // func (e *SSO) Bind(c *gin.Context) {
 // 	req := dto.BindReq{}
@@ -455,7 +455,7 @@ func (e *SSO) ChangePwd(c *gin.Context) {
 // // @Product application/json
 // // @Param data body dto.ChangeUserinfoReq true "data"
 // // @Success 200 {object} base.Resp{} "{"code": 200, "data": [...]}"
-// // @Router /v1/sso/auth/changeUserinfo [post]
+// // @Router /v1/sys/sso/auth/changeUserinfo [post]
 // // @Security Bearer
 // func (e *SSO) ChangeUserinfo(c *gin.Context) {
 // 	req := dto.ChangeUserinfoReq{}
@@ -489,7 +489,7 @@ func (e *SSO) ChangePwd(c *gin.Context) {
 // // // @Description 退出登录（调用后清空本地token）
 // // // @Tags sso
 // // // @Success 200 {object} base.Resp{} "{"code": 200, "data": [...]}"
-// // // @Router /v1/sso/auth/logout [post]
+// // // @Router /v1/sys/sso/auth/logout [post]
 // // // @Security Bearer
 // // func (e *SSO) Logout(c *gin.Context) {
 
@@ -505,7 +505,7 @@ func (e *SSO) ChangePwd(c *gin.Context) {
 // // @Product application/json
 // // @Param data body dto.LoginWechatReq true "data"
 // // @Success 200 {object} base.Resp{data=dto.LoginOK} "{"code": 200, "data": [...]}"
-// // @Router /v1/sso/loginWechat [post]
+// // @Router /v1/sys/sso/loginWechat [post]
 // func (e *SSO) LoginByWechat(c *gin.Context) {
 // 	req := dto.LoginWechatReq{}
 // 	s := service.User{}
@@ -535,7 +535,7 @@ func (e *SSO) ChangePwd(c *gin.Context) {
 // // @Description 获取钉钉登录配置信息
 // // @Tags sso
 // // @Success 200 {object} base.Resp{data=dto.DingCfgResp} "{"code": 200, "data": [...]}"
-// // @Router /v1/sso/getDingCfg [post]
+// // @Router /v1/sys/sso/getDingCfg [post]
 // func (e *SSO) GetDingCfg(c *gin.Context) {
 // 	err := e.MakeContext(c).MakeOrm().
 // 		Errors
@@ -559,7 +559,7 @@ func (e *SSO) ChangePwd(c *gin.Context) {
 // // @Product application/json
 // // @Param data body dto.LoginDingReq true "data"
 // // @Success 200 {object} base.Resp{data=dto.LoginOK} "{"code": 200, "data": [...]}"
-// // @Router /v1/sso/loginDing [post]
+// // @Router /v1/sys/sso/loginDing [post]
 // func (e *SSO) LoginByDing(c *gin.Context) {
 // 	req := dto.LoginDingReq{}
 // 	s := service.User{}
@@ -593,7 +593,7 @@ func (e *SSO) ChangePwd(c *gin.Context) {
 // // @Product application/json
 // // @Param data body dto.LoginDingReq true "data"
 // // @Success 200 {object} base.Resp{} "{"code": 200, "data": [...]}"
-// // @Router /v1/sso/auth/bindDing [post]
+// // @Router /v1/sys/sso/auth/bindDing [post]
 // // @Security Bearer
 // func (e *SSO) BindDing(c *gin.Context) {
 // 	req := dto.LoginDingReq{}
@@ -629,7 +629,7 @@ func (e *SSO) ChangePwd(c *gin.Context) {
 // // @Product application/json
 // // @Param data body dto.LoginWechatReq true "data"
 // // @Success 200 {object} base.Resp{} "{"code": 200, "data": [...]}"
-// // @Router /v1/sso/auth/bindWechat [post]
+// // @Router /v1/sys/sso/auth/bindWechat [post]
 // // @Security Bearer
 // func (e *SSO) BindWechat(c *gin.Context) {
 // 	req := dto.LoginWechatReq{}

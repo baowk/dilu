@@ -23,3 +23,76 @@ type SysCfg struct {
 func (SysCfg) TableName() string {
     return "sys_cfg"
 }
+
+func NewSysCfg() *SysCfg{
+    return &SysCfg{}
+}
+
+
+
+
+
+func (e *SysCfg) SetId(id int) *SysCfg {
+	e.Id = id
+	return e
+}
+
+
+
+func (e *SysCfg) SetName(name string) *SysCfg {
+	e.Name = name
+	return e
+}
+
+
+
+func (e *SysCfg) SetKey(key string) *SysCfg {
+	e.Key = key
+	return e
+}
+
+
+
+func (e *SysCfg) SetValue(value string) *SysCfg {
+	e.Value = value
+	return e
+}
+
+
+
+        
+
+func (e *SysCfg) SetType(aType string) *SysCfg {
+	e.Type = aType
+	return e
+}
+
+
+
+func (e *SysCfg) SetRemark(remark string) *SysCfg {
+	e.Remark = remark
+	return e
+}
+
+
+
+func (e *SysCfg) SetStatus(status int) *SysCfg {
+	e.Status = status
+	return e
+}
+
+
+
+func (e *SysCfg) SetUpdateBy(updateBy int) *SysCfg {
+	e.UpdateBy = updateBy
+	return e
+}
+
+
+
+func (e *SysCfg) SetUpdatedAt(updatedAt time.Time) *SysCfg {
+	e.UpdatedAt = updatedAt
+	return e
+}
+
+

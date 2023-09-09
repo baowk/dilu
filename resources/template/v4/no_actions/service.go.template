@@ -1,91 +1,16 @@
 package service
 
 import (
-	"errors"
-	"strconv"
-
-	"dilu/modules/{{.PackageName}}/models"
-	"dilu/modules/{{.PackageName}}/service/dto"
-
-	"dilu/common/codes"
-
-	"github.com/baowk/dilu-core/core"
-	"github.com/baowk/dilu-core/core/errs"
-	"go.uber.org/zap"
-	"gorm.io/gorm"
+	"github.com/baowk/dilu-core/core/base"
 )
 
 type {{.ClassName}}Service struct {
-	//base.BaseService
+	base.BaseService
 }
 
-var {{.ClassName}}S = {{.ClassName}}Service{}
-
-func (e *{{.ClassName}}Service) Page(req dto.{{.ClassName}}GetPageReq, list *[]models.{{.ClassName}}, total *int64, reqId string) errs.IError {
-	db := core.Db("{{.PackageName}}")
-	//TODO WHERE
-	if err := db.Limit(req.GetSize()).Offset(req.GetOffset()).Find(list).Count(total).Error; err != nil {
-		berr := errs.Err(codes.FAILURE, reqId, err)
-		core.Log.Error(errs.DB_ERR.String(), zap.Error(berr))
-		return berr
-	}
-	return nil
+var {{.ClassName}}S = {{.ClassName}}Service{
+	base.BaseService{
+		DbName: "{{.PackageName}}",
+	},
 }
 
-func (*{{.ClassName}}Service) Create(data *models.{{.ClassName}}, reqId string) errs.IError {
-	if err := core.Db("{{.PackageName}}").Create(data).Error; err != nil {
-		berr := errs.Err(codes.FAILURE, reqId, err)
-		core.Log.Error(errs.DB_ERR.String(), zap.Error(berr))
-		return berr
-	}
-	return nil
-}
-
-func (*{{.ClassName}}Service) Update(data *models.{{.ClassName}}, reqId string) errs.IError {
-	if err := core.Db("{{.PackageName}}").Save(data).Error; err != nil {
-		berr := errs.Err(codes.FAILURE, reqId, err)
-		core.Log.Error(errs.DB_ERR.String(), zap.Error(berr))
-		return berr
-	}
-	return nil
-}
-
-func (*{{.ClassName}}Service) Del(ids []int, reqId string) errs.IError {
-	if err := core.Db("{{.PackageName}}").Delete(&models.{{.ClassName}}{}, ids).Error; err != nil {
-		berr := errs.Err(codes.FAILURE, reqId, err)
-		core.Log.Error(errs.DB_ERR.String(), zap.Error(berr))
-		return berr
-	}
-	return nil
-}
-
-func (*{{.ClassName}}Service) Get(id int, data *models.{{.ClassName}}, reqId string) errs.IError {
-	if err := core.Db("{{.PackageName}}").First(data, id).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			berr := codes.ErrNotFound(strconv.Itoa(id), "{{.ClassName}}", reqId, err)
-			core.Log.Error(errs.DB_ERR.String(), zap.Error(berr))
-			return berr
-		}
-		berr := errs.Err(codes.FAILURE, reqId, err)
-		core.Log.Error(errs.DB_ERR.String(), zap.Error(berr))
-		return berr
-	}
-	return nil
-}
-
-func (e *{{.ClassName}}Service) GetIds(ids []int, list *[]models.{{.ClassName}}, reqId string) errs.IError {
-	if len(ids) == 1 {
-		var data models.{{.ClassName}}
-		if err := e.Get(ids[0], &data, reqId); err != nil {
-			return err
-		}
-		*list = append(*list, data)
-	} else {
-		if err := core.Db("{{.PackageName}}").Where("id in ?", ids).Find(list).Error; err != nil {
-			berr := errs.Err(codes.FAILURE, reqId, err)
-			core.Log.Error(errs.DB_ERR.String(), zap.Error(berr))
-			return berr
-		}
-	}
-	return nil
-}

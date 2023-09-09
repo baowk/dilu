@@ -33,8 +33,14 @@ func (e *{{.ClassName}}Api) QueryPage(c *gin.Context) {
 	}
 	list := make([]models.{{.ClassName}}, 10)
 	var total int64
-	if err := service.{{.ClassName}}S.Page(req, &list, &total, e.GetReqId(c)); err != nil {
-		e.Err(c, err)
+
+	var model models.{{.ClassName}}
+	if err := copier.Copy(&model, req); err != nil {
+		e.Error(c, err)
+		return
+	}
+	if err := service.{{.ClassName}}S.Page(model, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
+		e.Error(c, err)
 		return
 	}
 	e.Page(c, list, total, req.GetPage(), req.GetSize())
@@ -56,8 +62,8 @@ func (e *{{.ClassName}}Api) Get(c *gin.Context) {
 		return
 	}
 	var data models.{{.ClassName}}
-	if err := service.{{.ClassName}}S.Get(req.Id, &data, e.GetReqId(c)); err != nil {
-		e.Err(c, err)
+	if err := service.{{.ClassName}}S.Get(req.Id, &data); err != nil {
+		e.Error(c, err)
 		return
 	}
 	e.Ok(c, data)
@@ -80,8 +86,8 @@ func (e *{{.ClassName}}Api) Create(c *gin.Context) {
 	}
 	var data models.{{.ClassName}}
 	copier.Copy(&data, req)
-	if err := service.{{.ClassName}}S.Create(&data, e.GetReqId(c)); err != nil {
-		e.Err(c, err)
+	if err := service.{{.ClassName}}S.Create(&data); err != nil {
+		e.Error(c, err)
 		return
 	}
 	e.Ok(c, data)
@@ -104,8 +110,8 @@ func (e *{{.ClassName}}Api) Update(c *gin.Context) {
 	}
 	var data models.{{.ClassName}}
 	copier.Copy(&data, req)
-	if err := service.{{.ClassName}}S.Update(&data, e.GetReqId(c)); err != nil {
-		e.Err(c, err)
+	if err := service.{{.ClassName}}S.Save(&data); err != nil {
+		e.Error(c, err)
 		return
 	}
 	e.Ok(c, data)
@@ -126,8 +132,8 @@ func (e *{{.ClassName}}Api) Del(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	if err := service.{{.ClassName}}S.Del(req.Ids, e.GetReqId(c)); err != nil {
-		e.Err(c, err)
+	if err := service.{{.ClassName}}S.DelIds(&models.{{.ClassName}}{}, req.Ids); err != nil {
+		e.Error(c, err)
 		return
 	}
 	e.Ok(c)
