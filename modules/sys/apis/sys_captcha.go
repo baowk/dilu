@@ -12,6 +12,8 @@ import (
 	"go.uber.org/zap"
 )
 
+var ApiCaptcha = CaptchaApi{}
+
 // 当开启多服务器部署时，替换下面的配置，使用redis共享存储验证码
 func init() {
 	service.SetStore(service.NewCacheStore(time.Duration(10) * time.Minute))

@@ -20,6 +20,8 @@ import (
 	"gorm.io/gorm"
 )
 
+var ApiSso = SSO{}
+
 type SSO struct {
 	base.BaseApi
 }
@@ -54,24 +56,24 @@ func (e *SSO) SendCode(c *gin.Context) {
 	if regexps.CheckMobile(req.Username) {
 		if req.CheckExist {
 			var count int64
-			service.SysUserS.CountByPhone(req.Username, &count)
+			service.SerSysUser.CountByPhone(req.Username, &count)
 			if count > 0 {
 				e.Code(c, codes.PhoneExistErr)
 				return
 			}
 		}
-		service.SmsS.Send(req.Username)
+		service.SerSms.Send(req.Username)
 
 	} else if regexps.CheckEmail(req.Username) { //是否邮箱
 		if req.CheckExist {
 			var count int64
-			service.SysUserS.CountByEmail(req.Username, &count)
+			service.SerSysUser.CountByEmail(req.Username, &count)
 			if count > 0 {
 				e.Code(c, codes.EmailExistErr)
 				return
 			}
 		}
-		service.EmailS.Send(req.Username)
+		service.SerEmail.Send(req.Username)
 	} else {
 		e.Code(c, codes.ErrMobileOrEmail)
 		return
@@ -111,14 +113,14 @@ func (e *SSO) Register(c *gin.Context) {
 	//是否手机
 	if regexps.CheckMobile(req.Username) {
 		fmt.Println("1")
-		if !service.SmsS.Verify(req.Username, req.Code) {
+		if !service.SerSms.Verify(req.Username, req.Code) {
 			e.Code(c, codes.ErrVerifyCode)
 			return
 		}
 		loginType = 1
 	} else if regexps.CheckEmail(req.Username) { //是否邮箱
 		fmt.Println("2")
-		if !service.EmailS.Verify(req.Username, req.Code) {
+		if !service.SerEmail.Verify(req.Username, req.Code) {
 			e.Code(c, codes.ErrVerifyCode)
 			return
 		}
@@ -130,7 +132,7 @@ func (e *SSO) Register(c *gin.Context) {
 	}
 
 	ip := ips.GetIP(c)
-	if logOk, err := service.SysUserS.Register(loginType, &req, ip); err != nil {
+	if logOk, err := service.SerSysUser.Register(loginType, &req, ip); err != nil {
 		core.Log.Error("sso", zap.Error(err))
 		e.Error(c, err)
 		return
@@ -198,12 +200,12 @@ func (e *SSO) Login(c *gin.Context) {
 	if req.Password == "" {
 		//是否手机
 		if regexps.CheckMobile(req.Username) {
-			if !service.SmsS.Verify(req.Username, req.Code) {
+			if !service.SerSms.Verify(req.Username, req.Code) {
 				e.Code(c, codes.ErrVerifyCode)
 				return
 			}
 		} else if regexps.CheckEmail(req.Username) { //是否邮箱
-			if !service.EmailS.Verify(req.Username, req.Code) {
+			if !service.SerEmail.Verify(req.Username, req.Code) {
 				e.Code(c, codes.ErrVerifyCode)
 				return
 			}
@@ -212,7 +214,7 @@ func (e *SSO) Login(c *gin.Context) {
 			// 	return
 		}
 	} else {
-		if logOk, err := service.SysUserS.LoginPwd(&req, ip); err != nil {
+		if logOk, err := service.SerSysUser.LoginPwd(&req, ip); err != nil {
 			core.Log.Error("sso", zap.Error(err))
 			if err != nil {
 				if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -229,7 +231,7 @@ func (e *SSO) Login(c *gin.Context) {
 			return
 		}
 	}
-	if logOk, err := service.SysUserS.LoginCode(&req, ip); err != nil {
+	if logOk, err := service.SerSysUser.LoginCode(&req, ip); err != nil {
 		core.Log.Error("sso", zap.Error(err))
 		e.Err(c, err)
 		return
@@ -282,7 +284,7 @@ func (e *SSO) ForgetPwd(c *gin.Context) {
 		e.Code(c, codes.ErrMobileOrEmail)
 		return
 	}
-	if err := service.SysUserS.ChangePwd(mobile, email, req.Password); err != nil {
+	if err := service.SerSysUser.ChangePwd(mobile, email, req.Password); err != nil {
 		core.Log.Error("sso", zap.Error(err))
 		e.Error(c, err)
 		return
@@ -344,7 +346,7 @@ func (e *SSO) MyUserInfo(c *gin.Context) {
 		return
 	}
 	var object models.SysUser
-	err := service.SysUserS.Get(uid, &object)
+	err := service.SerSysUser.Get(uid, &object)
 	if err != nil {
 		e.Error(c, err)
 		return
@@ -382,7 +384,7 @@ func (e *SSO) ChangePwd(c *gin.Context) {
 		return
 	}
 
-	if err := service.SysUserS.ChangePwdByOld(uid, req.OldPassword, req.NewPassword, req.InviteCode); err != nil {
+	if err := service.SerSysUser.ChangePwdByOld(uid, req.OldPassword, req.NewPassword, req.InviteCode); err != nil {
 		e.Err(c, err)
 		return
 	}

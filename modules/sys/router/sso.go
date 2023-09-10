@@ -15,15 +15,15 @@ func init() {
 func sysNoCheckSsoRouter(v1 *gin.RouterGroup) {
 	r := v1.Group("")
 	{
-		r.POST("login", apis.Sso.Login)
-		r.POST("register", apis.Sso.Register)
-		r.POST("sendCode", apis.Sso.SendCode)
-		r.POST("forgetPwd", apis.Sso.ForgetPwd)
+		r.POST("login", apis.ApiSso.Login)
+		r.POST("register", apis.ApiSso.Register)
+		r.POST("sendCode", apis.ApiSso.SendCode)
+		r.POST("forgetPwd", apis.ApiSso.ForgetPwd)
 	}
 
 	rj := v1.Group("").Use(middleware.JwtHandler())
 	{
-		rj.POST("changePwd", apis.Sso.ChangePwd)
-		rj.POST("myUserinfo", apis.Sso.MyUserInfo)
+		rj.POST("changePwd", apis.ApiSso.ChangePwd)
+		rj.POST("myUserinfo", apis.ApiSso.MyUserInfo)
 	}
 }

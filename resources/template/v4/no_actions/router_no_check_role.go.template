@@ -14,10 +14,10 @@ func init() {
 func register{{.ClassName}}Router(v1 *gin.RouterGroup) {
 	r := v1.Group("{{.ModuleName}}").Use(middleware.JwtHandler())
 	{
-		r.POST("/get", apis.{{.ClassName}}A.Get)
-		r.POST("/create", apis.{{.ClassName}}A.Create)
-		r.POST("/update", apis.{{.ClassName}}A.Update)
-		r.POST("/page", apis.{{.ClassName}}A.QueryPage)
-		r.POST("/del", apis.{{.ClassName}}A.Del)
+		r.POST("/get", apis.Api{{.ClassName}}.Get)
+		r.POST("/create", apis.Api{{.ClassName}}.Create)
+		r.POST("/update", apis.Api{{.ClassName}}.Update)
+		r.POST("/page", apis.Api{{.ClassName}}.QueryPage)
+		r.POST("/del", apis.Api{{.ClassName}}.Del)
 	}
 }

@@ -95,7 +95,7 @@ func (e Ding) LoginByDing(c *gin.Context) {
 		}
 	}
 
-	if logOk, err := service.SysUserS.LoginDing(&req, userId); err != nil {
+	if logOk, err := service.SerSysUser.LoginDing(&req, userId); err != nil {
 		e.Error(c, err)
 		return
 	} else {

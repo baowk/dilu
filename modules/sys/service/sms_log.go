@@ -7,10 +7,16 @@ import (
 
 	"github.com/baowk/dilu-core/common/utils"
 	"github.com/baowk/dilu-core/core"
+	"github.com/baowk/dilu-core/core/base"
 	"go.uber.org/zap"
 )
 
 type SmsLog struct {
+	*base.BaseService
+}
+
+var SerSms = SmsLog{
+	base.NewService("sys"),
 }
 
 func (e *SmsLog) Send(phone string) error {

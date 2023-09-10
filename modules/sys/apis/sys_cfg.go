@@ -14,7 +14,7 @@ type SysCfgApi struct {
 	base.BaseApi
 }
 
-var SysCfgA = SysCfgApi{}
+var ApiSysCfg = SysCfgApi{}
 
 // QueryPage 获取系统配置项列表
 // @Summary Page接口
@@ -39,7 +39,7 @@ func (e *SysCfgApi) QueryPage(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	if err := service.SysCfgS.Page(model, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
+	if err := service.SerSysCfg.Page(model, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -62,7 +62,7 @@ func (e *SysCfgApi) Get(c *gin.Context) {
 		return
 	}
 	var data models.SysCfg
-	if err := service.SysCfgS.Get(req.Id, &data); err != nil {
+	if err := service.SerSysCfg.Get(req.Id, &data); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -86,7 +86,7 @@ func (e *SysCfgApi) Create(c *gin.Context) {
 	}
 	var data models.SysCfg
 	copier.Copy(&data, req)
-	if err := service.SysCfgS.Create(&data); err != nil {
+	if err := service.SerSysCfg.Create(&data); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -110,7 +110,7 @@ func (e *SysCfgApi) Update(c *gin.Context) {
 	}
 	var data models.SysCfg
 	copier.Copy(&data, req)
-	if err := service.SysCfgS.Save(&data); err != nil {
+	if err := service.SerSysCfg.Save(&data); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -132,7 +132,7 @@ func (e *SysCfgApi) Del(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	if err := service.SysCfgS.DelIds(&models.SysCfg{}, req.Ids); err != nil {
+	if err := service.SerSysCfg.DelIds(&models.SysCfg{}, req.Ids); err != nil {
 		e.Error(c, err)
 		return
 	}

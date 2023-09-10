@@ -365,7 +365,7 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 		Mmenu.Sort = 0
 		Mmenu.Hidden = false
 		Mmenu.CreateBy = 1
-		service.SysMenuS.Insert(&Mmenu)
+		service.SerSysMenu.Insert(&Mmenu)
 		menuPid = Mmenu.Id
 	}
 
@@ -383,17 +383,17 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	Cmenu.Hidden = false
 	Cmenu.CreateBy = 1
 	Cmenu.UpdateBy = 1
-	service.SysMenuS.Insert(&Cmenu)
+	service.SerSysMenu.Insert(&Cmenu)
 
 	mApi := models.NewSysApi().SetMethod("POST").SetPermType("t").
 		SetPath(fmt.Sprintf("%s/%s/%s/page", tab.ApiRoot, tab.PackageName, tab.ModuleName)).
 		SetStatus(3).SetTitle("分页获取" + tab.TableComment)
-	service.SysApiS.Create(mApi)
+	service.SerSysApi.Create(mApi)
 
 	gApi := models.NewSysApi().SetMethod("POST").SetPermType("t").
 		SetPath(fmt.Sprintf("%s/%s/%s/get", tab.ApiRoot, tab.PackageName, tab.ModuleName)).
 		SetStatus(3).SetTitle("根据id获取" + tab.TableComment)
-	service.SysApiS.Create(gApi)
+	service.SerSysApi.Create(gApi)
 
 	MList := dto.SysMenuInsertReq{}
 	MList.MenuName = ""
@@ -409,12 +409,12 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	MList.CreateBy = 1
 	MList.UpdateBy = 1
 	MList.SysApi = []models.SysApi{*mApi, *gApi}
-	service.SysMenuS.Insert(&MList)
+	service.SerSysMenu.Insert(&MList)
 
 	cApi := models.NewSysApi().SetMethod("POST").SetPermType("t").
 		SetPath(fmt.Sprintf("%s/%s/%s/create", tab.ApiRoot, tab.PackageName, tab.ModuleName)).
 		SetStatus(3).SetTitle("创建" + tab.TableComment)
-	service.SysApiS.Create(cApi)
+	service.SerSysApi.Create(cApi)
 
 	MCreate := dto.SysMenuInsertReq{}
 	MCreate.MenuName = ""
@@ -430,12 +430,12 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	MCreate.CreateBy = 1
 	MCreate.UpdateBy = 1
 	MCreate.SysApi = []models.SysApi{*cApi}
-	service.SysMenuS.Insert(&MCreate)
+	service.SerSysMenu.Insert(&MCreate)
 
 	uApi := models.NewSysApi().SetMethod("POST").SetPermType("t").
 		SetPath(fmt.Sprintf("%s/%s/%s/update", tab.ApiRoot, tab.PackageName, tab.ModuleName)).
 		SetStatus(3).SetTitle("修改" + tab.TableComment)
-	service.SysApiS.Create(uApi)
+	service.SerSysApi.Create(uApi)
 
 	MUpdate := dto.SysMenuInsertReq{}
 	MUpdate.MenuName = ""
@@ -451,12 +451,12 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	MUpdate.CreateBy = 1
 	MUpdate.UpdateBy = 1
 	MUpdate.SysApi = []models.SysApi{*uApi}
-	service.SysMenuS.Insert(&MUpdate)
+	service.SerSysMenu.Insert(&MUpdate)
 
 	dApi := models.NewSysApi().SetMethod("POST").SetPermType("t").
 		SetPath(fmt.Sprintf("%s/%s/%s/del", tab.ApiRoot, tab.PackageName, tab.ModuleName)).
 		SetStatus(3).SetTitle("删除" + tab.TableComment)
-	service.SysApiS.Create(dApi)
+	service.SerSysApi.Create(dApi)
 
 	MDelete := dto.SysMenuInsertReq{}
 	MDelete.MenuName = ""
@@ -472,7 +472,7 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	MDelete.CreateBy = 1
 	MDelete.UpdateBy = 1
 	MUpdate.SysApi = []models.SysApi{*dApi}
-	service.SysMenuS.Insert(&MDelete)
+	service.SerSysMenu.Insert(&MDelete)
 
 	e.Ok(c, "数据生成成功！")
 }

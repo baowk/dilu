@@ -115,7 +115,7 @@ func (e *Wechat) LoginMp(c *gin.Context) {
 	}
 
 	ip := ips.GetIP(c)
-	lok, err := service.SysUserS.LoginWechatMp(req, str, ip)
+	lok, err := service.SerSysUser.LoginWechatMp(req, str, ip)
 	if err != nil {
 		e.Error(c, err)
 		return

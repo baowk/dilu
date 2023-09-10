@@ -5,12 +5,18 @@ import (
 	"time"
 
 	"github.com/baowk/dilu-core/core"
+	"github.com/baowk/dilu-core/core/base"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
 type ThirdLogin struct {
+	*base.BaseService
+}
+
+var SerThirdLogin = ThirdLogin{
+	base.NewService("sys"),
 }
 
 // Insert 创建ThirdLogin对象

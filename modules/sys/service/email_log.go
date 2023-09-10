@@ -8,10 +8,16 @@ import (
 	"github.com/baowk/dilu-core/common/utils"
 	"github.com/baowk/dilu-core/common/utils/email"
 	"github.com/baowk/dilu-core/core"
+	"github.com/baowk/dilu-core/core/base"
 	"go.uber.org/zap"
 )
 
 type EmailLog struct {
+	*base.BaseService
+}
+
+var SerEmail = EmailLog{
+	base.NewService("sys"),
 }
 
 var mail_tmp = `

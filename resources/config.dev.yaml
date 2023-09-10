@@ -55,5 +55,15 @@ cors:
   #  allow-credentials: true
 gen: true
 extend:             # 扩展项（此处没有提供具体说明）
-  authBaseUrl: http://localhost:8000
+  ding: 
+    agent-id:
+    app-key:
+    app-secret:
+    crop-id:
+  wechat-mp:
+    app-id:
+    app-secret:
+    wx-token:
+    encoding-aes-key:
+    
     

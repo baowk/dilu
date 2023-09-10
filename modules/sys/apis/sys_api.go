@@ -39,7 +39,7 @@ func (e *SysApiApi) QueryPage(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	if err := service.SysApiS.Page(model, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
+	if err := service.SerSysApi.Page(model, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -62,7 +62,7 @@ func (e *SysApiApi) Get(c *gin.Context) {
 		return
 	}
 	var data models.SysApi
-	if err := service.SysApiS.Get(req.Id, &data); err != nil {
+	if err := service.SerSysApi.Get(req.Id, &data); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -86,7 +86,7 @@ func (e *SysApiApi) Create(c *gin.Context) {
 	}
 	var data models.SysApi
 	copier.Copy(&data, req)
-	if err := service.SysApiS.Create(&data); err != nil {
+	if err := service.SerSysApi.Create(&data); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -110,7 +110,7 @@ func (e *SysApiApi) Update(c *gin.Context) {
 	}
 	var data models.SysApi
 	copier.Copy(&data, req)
-	if err := service.SysApiS.Save(&data); err != nil {
+	if err := service.SerSysApi.Save(&data); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -132,7 +132,7 @@ func (e *SysApiApi) Del(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	if err := service.SysApiS.DelIds(&models.SysApi{}, req.Ids); err != nil {
+	if err := service.SerSysApi.DelIds(&models.SysApi{}, req.Ids); err != nil {
 		e.Error(c, err)
 		return
 	}

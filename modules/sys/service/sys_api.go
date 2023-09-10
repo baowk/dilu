@@ -8,7 +8,6 @@ type SysApiService struct {
 	*base.BaseService
 }
 
-var SysApiS = SysApiService{
+var SerSysApi = SysApiService{
 	base.NewService("sys"),
 }
-

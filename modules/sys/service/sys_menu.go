@@ -20,7 +20,7 @@ type SysMenu struct {
 	*base.BaseService
 }
 
-var SysMenuS = SysMenu{
+var SerSysMenu = SysMenu{
 	base.NewService("sys"),
 }
 

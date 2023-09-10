@@ -14,7 +14,7 @@ type {{.ClassName}}Api struct {
 	base.BaseApi
 }
 
-var {{.ClassName}}A = {{.ClassName}}Api{}
+var Api{{.ClassName}} = {{.ClassName}}Api{}
 
 // QueryPage 获取{{.TableComment}}列表
 // @Summary Page接口
@@ -39,7 +39,7 @@ func (e *{{.ClassName}}Api) QueryPage(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	if err := service.{{.ClassName}}S.Page(model, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
+	if err := service.Ser{{.ClassName}}.Page(model, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -62,7 +62,7 @@ func (e *{{.ClassName}}Api) Get(c *gin.Context) {
 		return
 	}
 	var data models.{{.ClassName}}
-	if err := service.{{.ClassName}}S.Get(req.Id, &data); err != nil {
+	if err := service.Ser{{.ClassName}}.Get(req.Id, &data); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -86,7 +86,7 @@ func (e *{{.ClassName}}Api) Create(c *gin.Context) {
 	}
 	var data models.{{.ClassName}}
 	copier.Copy(&data, req)
-	if err := service.{{.ClassName}}S.Create(&data); err != nil {
+	if err := service.Ser{{.ClassName}}.Create(&data); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -110,7 +110,7 @@ func (e *{{.ClassName}}Api) Update(c *gin.Context) {
 	}
 	var data models.{{.ClassName}}
 	copier.Copy(&data, req)
-	if err := service.{{.ClassName}}S.Save(&data); err != nil {
+	if err := service.Ser{{.ClassName}}.Save(&data); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -132,7 +132,7 @@ func (e *{{.ClassName}}Api) Del(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	if err := service.{{.ClassName}}S.DelIds(&models.{{.ClassName}}{}, req.Ids); err != nil {
+	if err := service.Ser{{.ClassName}}.DelIds(&models.{{.ClassName}}{}, req.Ids); err != nil {
 		e.Error(c, err)
 		return
 	}

@@ -8,7 +8,7 @@ type SysCfgService struct {
 	*base.BaseService
 }
 
-var SysCfgS = SysCfgService{
+var SerSysCfg = SysCfgService{
 	base.NewService("sys"),
 }
 

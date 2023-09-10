@@ -16,12 +16,18 @@ import (
 	"github.com/baowk/dilu-core/common/utils/cryptos"
 	"github.com/baowk/dilu-core/common/utils/regexps"
 	"github.com/baowk/dilu-core/core"
+	"github.com/baowk/dilu-core/core/base"
 	"github.com/baowk/dilu-core/core/errs"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
 type SysUser struct {
+	*base.BaseService
+}
+
+var SerSysUser = SysUser{
+	base.NewService("sys"),
 }
 
 // GetPage 获取SysUser列表
@@ -426,7 +432,7 @@ func (e *SysUser) bindById(enCode string, user models.SysUser) error {
 	if err != nil {
 		return errors.New("参数错误")
 	}
-	err = ThirdLoginS.GetById(id, &tlm)
+	err = SerThirdLogin.GetById(id, &tlm)
 	if err != nil {
 		return err
 	}
@@ -434,7 +440,7 @@ func (e *SysUser) bindById(enCode string, user models.SysUser) error {
 		return errors.New("参数错误")
 	}
 
-	if err := ThirdLoginS.UpdateUserId(user.UserId, tlm); err != nil {
+	if err := SerThirdLogin.UpdateUserId(user.UserId, tlm); err != nil {
 		return err
 	}
 	return nil
@@ -485,7 +491,7 @@ func (e *SysUser) LoginWechatMp(req dto.MpSceneReq, openId, ip string) (dto.Logi
 	lok := dto.LoginOK{}
 
 	var tl models.ThirdLogin
-	if err := ThirdLoginS.GetTL(3, openId, "", &tl); err != nil {
+	if err := SerThirdLogin.GetTL(3, openId, "", &tl); err != nil {
 		if !errors.Is(err, gorm.ErrRecordNotFound) {
 			return lok, codes.ErrSys(err)
 		}
@@ -496,7 +502,7 @@ func (e *SysUser) LoginWechatMp(req dto.MpSceneReq, openId, ip string) (dto.Logi
 		tl.Platform = 3
 		tl.CreatedAt = time.Now().Unix()
 		tl.UpdatedAt = tl.CreatedAt
-		if err := ThirdLoginS.Create(&tl); err != nil {
+		if err := SerThirdLogin.Create(&tl); err != nil {
 			return lok, codes.ErrSys(err)
 		}
 		needMobile(tl.Platform, tl.Id, &lok)
@@ -523,7 +529,7 @@ func (e *SysUser) LoginDing(c *dto.LoginDingReq, userId string) (dto.LoginOK, er
 	}
 	var user models.SysUser
 	var tlModel models.ThirdLogin
-	if err := ThirdLoginS.GetTL(2, userId, "", &tlModel); err != nil {
+	if err := SerThirdLogin.GetTL(2, userId, "", &tlModel); err != nil {
 		if !errors.Is(err, gorm.ErrRecordNotFound) {
 			return lok, codes.ErrSys(err)
 		}
@@ -534,7 +540,7 @@ func (e *SysUser) LoginDing(c *dto.LoginDingReq, userId string) (dto.LoginOK, er
 		tlModel.Platform = 2
 		tlModel.CreatedAt = time.Now().Unix()
 		tlModel.UpdatedAt = tlModel.CreatedAt
-		if err := ThirdLoginS.Create(&tlModel); err != nil {
+		if err := SerThirdLogin.Create(&tlModel); err != nil {
 			return lok, codes.ErrSys(err)
 		}
 		needMobile(tlModel.Platform, tlModel.Id, &lok)

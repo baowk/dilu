@@ -8,7 +8,7 @@ type {{.ClassName}}Service struct {
 	*base.BaseService
 }
 
-var {{.ClassName}}S = {{.ClassName}}Service{
+var Ser{{.ClassName}} = {{.ClassName}}Service{
 	base.NewService("{{.PackageName}}"),
 }
 
