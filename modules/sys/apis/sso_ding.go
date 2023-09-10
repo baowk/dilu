@@ -4,6 +4,7 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"dilu/common"
+	"dilu/common/config"
 	"dilu/modules/sys/service"
 	"dilu/modules/sys/service/dto"
 	"encoding/base64"
@@ -105,7 +106,7 @@ func (e Ding) LoginByDing(c *gin.Context) {
 // 调用钉钉auth
 func SnsAuthorize(state string, code string) {
 	url := "https://oapi.dingtalk.com/connect/oauth2/sns_authorize?" +
-		"appid=" + appId +
+		"appid=" + config.Ext.Ding.AppKey +
 		"&response_type=code" +
 		"&scope=snsapi_login" +
 		"&state=" + state +
@@ -125,8 +126,8 @@ func LoginByQRcode(code string) (userid string, err error) {
 	var resp *http.Response
 	//fmt.Println("AppKey,AppSecret", AppKey, AppSecret)
 	//服务端通过临时授权码获取授权用户的个人信息
-	appKey := app_key
-	appSecret := app_secret
+	appKey := config.Ext.Ding.AppKey
+	appSecret := config.Ext.Ding.AppSecret
 	timestamp := strconv.FormatInt(time.Now().UnixNano()/1000000, 10) // 毫秒时间戳
 	signature := EncodeSHA256(timestamp, appSecret)                   // 加密签名  加密算法见我另一个函数
 	url2 := fmt.Sprintf(
@@ -153,16 +154,16 @@ func LoginByQRcode(code string) (userid string, err error) {
 	_ = json.Unmarshal(body, &i) ///返回的数据给i
 	errcode := i["errcode"].(float64)
 	if errcode != 0 {
-		return "", errors.New(fmt.Sprintf("登录错误: %f, %s", errcode, i["errmsg"].(string)))
+		return "", fmt.Errorf("登录错误: %f, %s", errcode, i["errmsg"].(string))
 	}
 	unionid := i["user_info"].(map[string]interface{})["unionid"].(string) // unionid 可以用来查询userinfo
 	accesstoken, err := GetAccesstoken()                                   // 获取accesstoken
 	if err != nil {
-		return "", errors.New(fmt.Sprintf("登录错误accesstoken获取失败: %s", err.Error()))
+		return "", fmt.Errorf("登录错误accesstoken获取失败: %s", err.Error())
 	}
 	userid, err = GetUseridByUnionid(accesstoken, unionid)
 	if err != nil {
-		return "", errors.New(fmt.Sprintf("登录错误userid获取失败: %s", err))
+		return "", fmt.Errorf("登录错误userid获取失败: %s", err)
 	}
 	return userid, nil
 }
@@ -185,7 +186,7 @@ func GetUseridByUnionid(accesstoken, unionid string) (userid string, err error) 
 	_ = json.Unmarshal(body, &i)
 	errcode := i["errcode"].(float64)
 	if errcode != 0 {
-		return "", errors.New(fmt.Sprintf("userid获取错误: %f, %s", errcode, i["errmsg"].(string)))
+		return "", fmt.Errorf("userid获取错误: %f, %s", errcode, i["errmsg"].(string))
 	}
 	return i["userid"].(string), nil
 }
@@ -194,7 +195,7 @@ func GetAccesstoken() (accesstoken string, err error) {
 	var resp *http.Response
 	//var AppKey, AppSecret string
 	//获取access_token
-	url := fmt.Sprintf("https://oapi.dingtalk.com/gettoken?appkey=%s&appsecret=%s", app_key, app_secret)
+	url := fmt.Sprintf("https://oapi.dingtalk.com/gettoken?appkey=%s&appsecret=%s", config.Ext.Ding.AppKey, config.Ext.Ding.AppSecret)
 	resp, err = http.Get(url)
 	if err != nil {
 		return "", err
@@ -229,17 +230,10 @@ func EncodeSHA256(message, secret string) string {
 
 }
 
-var (
-	agent_id   = ""
-	app_key    = ""
-	app_secret = ""
-	crop_id    = ""
-)
-
 func DingTmpHtml(c *gin.Context) {
 	t1, err := template.ParseFiles("app/sso/apis/ding.html")
 	if err != nil {
-		fmt.Errorf("temperr %v", err)
+		core.Log.Error("template err", zap.Error(err))
 	}
 	t1.Execute(c.Writer, "")
 }

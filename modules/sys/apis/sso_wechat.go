@@ -2,6 +2,7 @@ package apis
 
 import (
 	"dilu/common/codes"
+	"dilu/common/config"
 	"dilu/common/third/wechat"
 
 	"dilu/modules/sys/service"
@@ -22,13 +23,6 @@ type Wechat struct {
 	base.BaseApi
 }
 
-var (
-	appId          = ""
-	appSecret      = ""
-	wxToken        = ""
-	encodingAESKey = ""
-)
-
 // MPCallback 微信公众号回调函数
 // @Summary 微信公众号回调函数
 // @Description 微信公众号回调函数
@@ -43,7 +37,7 @@ func (e *Wechat) MPCallback(c *gin.Context) {
 	nonce := c.Query("nonce")
 	echostr := c.Query("echostr")
 
-	if wechat.MPCheckSign(timestamp, nonce, signature, wxToken) {
+	if wechat.MPCheckSign(timestamp, nonce, signature, config.Ext.WechatMp.WxToken) {
 		if echostr != "" {
 			c.String(http.StatusOK, echostr)
 		} else {
@@ -83,7 +77,7 @@ func (e *Wechat) MPCallback(c *gin.Context) {
 // @Success 200 {object} base.Resp{data=wechat.QrCodeResp} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/mp/qrCode [post]
 func (e *Wechat) GetMpQrcode(c *gin.Context) {
-	accT, err := getAccessToken(appId, appSecret)
+	accT, err := getAccessToken(config.Ext.WechatMp.AppId, config.Ext.WechatMp.AppSecret)
 	if err != nil {
 		e.Error(c, err)
 		return
