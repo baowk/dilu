@@ -1,6 +1,8 @@
 package router
 
 import (
+	"dilu/common/consts"
+
 	"github.com/gin-gonic/gin"
 
 	"github.com/baowk/dilu-core/core"
@@ -17,10 +19,12 @@ func InitRouter() {
 	noCheckRoleRouter(r)
 }
 
+
+
 // noCheckRoleRouter 无需认证的路由
 func noCheckRoleRouter(r *gin.Engine) {
 	// 可根据业务需求来设置接口版本
-	v := r.Group("/v1/sys")
+	v := r.Group(consts.ApiRoot +"/sys")
 
 	for _, f := range routerNoCheckRole {
 		f(v)

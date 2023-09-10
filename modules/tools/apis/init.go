@@ -36,8 +36,8 @@ func (Init) DoInit(c *gin.Context) {
 		&models.SysOperaLog{},
 		&models.SysRole{},
 		&models.SysUser{},
-		&tools.SysColumns{},
-		&tools.SysTables{},
+		&tools.GenColumn{},
+		&tools.GenColumn{},
 		//&models.SysPost{},
 	)
 	result := "执行成功"

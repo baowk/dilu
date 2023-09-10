@@ -5,7 +5,7 @@ const (
 )
 
 const (
-	DB_DEMO = "demo"
+	ApiRoot = "/api/v1"
 )
 
 // 私钥

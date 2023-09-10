@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/baowk/dilu-core/core"
+	"github.com/baowk/dilu-core/core/base"
 	"github.com/baowk/dilu-core/core/errs"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
@@ -16,6 +17,11 @@ import (
 )
 
 type SysMenu struct {
+	*base.BaseService
+}
+
+var SysMenuS = SysMenu{
+	base.NewService("sys"),
 }
 
 // GetPage 获取SysMenu列表
@@ -56,10 +62,10 @@ func (e *SysMenu) Get(d *dto.SysMenuGetReq, model *models.SysMenu) (*SysMenu, er
 		berr := errs.Err(codes.FAILURE, "", err)
 		return e, berr
 	}
-	apis := make([]int, 0)
-	for _, v := range model.SysApi {
-		apis = append(apis, v.Id)
-	}
+	// apis := make([]int, 0)
+	// for _, v := range model.SysApi {
+	// 	apis = append(apis, v.Id)
+	// }
 	//model.SysApi = apis
 	return e, nil
 }
@@ -91,7 +97,7 @@ func (e *SysMenu) Insert(c *dto.SysMenuInsertReq) (*SysMenu, errs.IError) {
 		berr := errs.Err(codes.FAILURE, "", err)
 		return e, berr
 	}
-	c.MenuId = data.MenuId
+	c.Id = data.Id
 	err = e.initPaths(tx, &data)
 	if err != nil {
 		tx.Rollback()
@@ -116,11 +122,11 @@ func (e *SysMenu) initPaths(tx *gorm.DB, menu *models.SysMenu) error {
 			err = errors.New("父级paths异常，请尝试对当前节点父级菜单进行更新操作！")
 			return err
 		}
-		menu.Paths = parentMenu.Paths + "/" + strconv.Itoa(menu.MenuId)
+		menu.Paths = parentMenu.Paths + "/" + strconv.Itoa(menu.Id)
 	} else {
-		menu.Paths = "/0/" + strconv.Itoa(menu.MenuId)
+		menu.Paths = "/0/" + strconv.Itoa(menu.Id)
 	}
-	err = tx.Model(&data).Where("menu_id = ?", menu.MenuId).Update("paths", menu.Paths).Error
+	err = tx.Model(&data).Where("id = ?", menu.Id).Update("paths", menu.Paths).Error
 	return err
 }
 
@@ -140,24 +146,24 @@ func (e *SysMenu) Update(c *dto.SysMenuUpdateReq) (*SysMenu, errs.IError) {
 	tx.Preload("SysApi").First(&model, c.GetId())
 	oldPath := model.Paths
 	tx.Where("id in ?", c.Apis).Find(&alist)
-	err = tx.Model(&model).Association("SysApi").Delete(model.SysApi)
-	if err != nil {
-		core.Log.Error("sys_menu", zap.Error(err))
-		berr := errs.Err(codes.FAILURE, "", err)
-		return e, berr
-	}
+	// err = tx.Model(&model).Association("SysApi").Delete(model.SysApi)
+	// if err != nil {
+	// 	core.Log.Error("sys_menu", zap.Error(err))
+	// 	berr := errs.Err(codes.FAILURE, "", err)
+	// 	return e, berr
+	// }
 	c.Generate(&model)
-	model.SysApi = alist
-	db := tx.Model(&model).Session(&gorm.Session{FullSaveAssociations: true}).Debug().Save(&model)
-	if err = db.Error; err != nil {
-		core.Log.Error("sys_menu", zap.Error(err))
-		berr := errs.Err(codes.FAILURE, "", err)
-		return e, berr
-	}
-	if db.RowsAffected == 0 {
-		berr := errs.Err(codes.FAILURE, "", err)
-		return e, berr
-	}
+	// model.SysApi = alist
+	// db := tx.Model(&model).Session(&gorm.Session{FullSaveAssociations: true}).Debug().Save(&model)
+	// if err = db.Error; err != nil {
+	// 	core.Log.Error("sys_menu", zap.Error(err))
+	// 	berr := errs.Err(codes.FAILURE, "", err)
+	// 	return e, berr
+	// }
+	// if db.RowsAffected == 0 {
+	// 	berr := errs.Err(codes.FAILURE, "", err)
+	// 	return e, berr
+	// }
 	var menuList []models.SysMenu
 	tx.Where("paths like ?", oldPath+"%").Find(&menuList)
 	for _, v := range menuList {
@@ -212,7 +218,7 @@ func (e *SysMenu) SetLabel() (m []dto.MenuLabel, err error) {
 			continue
 		}
 		e := dto.MenuLabel{}
-		e.Id = list[i].MenuId
+		e.Id = list[i].Id
 		e.Label = list[i].Title
 		deptsInfo := menuLabelCall(&list, e)
 
@@ -265,7 +271,7 @@ func menuLabelCall(eList *[]models.SysMenu, dept dto.MenuLabel) dto.MenuLabel {
 			continue
 		}
 		mi := dto.MenuLabel{}
-		mi.Id = list[j].MenuId
+		mi.Id = list[j].Id
 		mi.Label = list[j].Title
 		mi.Children = []dto.MenuLabel{}
 		if list[j].MenuType != "F" {
@@ -290,11 +296,11 @@ func menuCall(menuList *[]models.SysMenu, menu models.SysMenu) models.SysMenu {
 	// min := make([]models.SysMenu, 0)
 	// for j := 0; j < len(list); j++ {
 
-	// 	if menu.MenuId != list[j].ParentId {
+	// 	if menu.Id != list[j].ParentId {
 	// 		continue
 	// 	}
 	// 	mi := models.SysMenu{}
-	// 	mi.MenuId = list[j].MenuId
+	// 	mi.Id = list[j].Id
 	// 	mi.MenuName = list[j].MenuName
 	// 	mi.Title = list[j].Title
 	// 	mi.Icon = list[j].Icon
@@ -326,8 +332,8 @@ func menuCall(menuList *[]models.SysMenu, menu models.SysMenu) models.SysMenu {
 func menuDistinct(menuList []models.SysMenu) (result []models.SysMenu) {
 	distinctMap := make(map[int]struct{}, len(menuList))
 	for _, menu := range menuList {
-		if _, ok := distinctMap[menu.MenuId]; !ok {
-			distinctMap[menu.MenuId] = struct{}{}
+		if _, ok := distinctMap[menu.Id]; !ok {
+			distinctMap[menu.Id] = struct{}{}
 			result = append(result, menu)
 		}
 	}
@@ -339,7 +345,7 @@ func menuDistinct(menuList []models.SysMenu) (result []models.SysMenu) {
 // 		return nil
 // 	}
 // 	var subMenus []models.SysMenu
-// 	err := orm.Where(fmt.Sprintf(" menu_type in ('%s', '%s', '%s') and menu_id in ?",
+// 	err := orm.Where(fmt.Sprintf(" menu_type in ('%s', '%s', '%s') and id in ?",
 // 		cModels.Directory, cModels.Menu, cModels.Button), mIds).Order("sort").Find(&subMenus).Error
 // 	if err != nil {
 // 		return err
@@ -389,7 +395,7 @@ func (e *SysMenu) getByRoleName(roleName string) ([]models.SysMenu, error) {
 	// 	if role.SysMenu != nil {
 	// 		mIds := make([]int, 0)
 	// 		for _, menu := range *role.SysMenu {
-	// 			mIds = append(mIds, menu.MenuId)
+	// 			mIds = append(mIds, menu.Id)
 	// 		}
 	// 		if err := recursiveSetMenu(core.DB(), mIds, &data); err != nil {
 	// 			return nil, err

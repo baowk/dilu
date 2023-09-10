@@ -16,14 +16,14 @@ type SysApiApi struct {
 
 var SysApiA = SysApiApi{}
 
-// QueryPage 获取SysApi列表
+// QueryPage 获取接口列表列表
 // @Summary Page接口
 // @Tags SysApi
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysApiGetPageReq true "body"
 // @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.SysApi}} "{"code": 200, "data": [...]}"
-// @Router /v1/sys/sys-api/page [post]
+// @Router /api/v1/sys/sys-api/page [post]
 // @Security Bearer
 func (e *SysApiApi) QueryPage(c *gin.Context) {
 	var req dto.SysApiGetPageReq
@@ -46,14 +46,14 @@ func (e *SysApiApi) QueryPage(c *gin.Context) {
 	e.Page(c, list, total, req.GetPage(), req.GetSize())
 }
 
-// Get 获取SysApi
-// @Summary 获取SysApi
+// Get 获取接口列表
+// @Summary 获取接口列表
 // @Tags SysApi
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqId true "body"
 // @Success 200 {object} base.Resp{data=models.SysApi} "{"code": 200, "data": [...]}"
-// @Router /v1/sys/sys-api/get [post]
+// @Router /api/v1/sys/sys-api/get [post]
 // @Security Bearer
 func (e *SysApiApi) Get(c *gin.Context) {
 	var req base.ReqId
@@ -69,14 +69,14 @@ func (e *SysApiApi) Get(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Create 创建SysApi
-// @Summary 创建SysApi
+// Create 创建接口列表
+// @Summary 创建接口列表
 // @Tags SysApi
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysApiDto true "body"
 // @Success 200 {object} base.Resp{data=models.SysApi} "{"code": 200, "data": [...]}"
-// @Router /v1/sys/sys-api/create [post]
+// @Router /api/v1/sys/sys-api/create [post]
 // @Security Bearer
 func (e *SysApiApi) Create(c *gin.Context) {
 	var req dto.SysApiDto
@@ -93,14 +93,14 @@ func (e *SysApiApi) Create(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Update 更新SysApi
-// @Summary 更新SysApi
+// Update 更新接口列表
+// @Summary 更新接口列表
 // @Tags SysApi
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysApiDto true "body"
 // @Success 200 {object} base.Resp{data=models.SysApi} "{"code": 200, "data": [...]}"
-// @Router /v1/sys/sys-api/update [post]
+// @Router /api/v1/sys/sys-api/update [post]
 // @Security Bearer
 func (e *SysApiApi) Update(c *gin.Context) {
 	var req dto.SysApiDto
@@ -117,14 +117,14 @@ func (e *SysApiApi) Update(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Del 删除SysApi
-// @Summary 删除SysApi
+// Del 删除接口列表
+// @Summary 删除接口列表
 // @Tags SysApi
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqIds true "body"
 // @Success 200 {object} base.Resp{data=models.SysApi} "{"code": 200, "data": [...]}"
-// @Router /v1/sys/sys-api/del [post]
+// @Router /api/v1/sys/sys-api/del [post]
 // @Security Bearer
 func (e *SysApiApi) Del(c *gin.Context) {
 	var req base.ReqIds

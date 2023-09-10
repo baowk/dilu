@@ -16,14 +16,14 @@ type SysCfgApi struct {
 
 var SysCfgA = SysCfgApi{}
 
-// QueryPage 获取SysCfg列表
+// QueryPage 获取系统配置项列表
 // @Summary Page接口
 // @Tags SysCfg
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysCfgGetPageReq true "body"
 // @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.SysCfg}} "{"code": 200, "data": [...]}"
-// @Router /v1/sys/sys-cfg/page [post]
+// @Router /api/v1/sys/sys-cfg/page [post]
 // @Security Bearer
 func (e *SysCfgApi) QueryPage(c *gin.Context) {
 	var req dto.SysCfgGetPageReq
@@ -46,14 +46,14 @@ func (e *SysCfgApi) QueryPage(c *gin.Context) {
 	e.Page(c, list, total, req.GetPage(), req.GetSize())
 }
 
-// Get 获取SysCfg
-// @Summary 获取SysCfg
+// Get 获取系统配置项
+// @Summary 获取系统配置项
 // @Tags SysCfg
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqId true "body"
 // @Success 200 {object} base.Resp{data=models.SysCfg} "{"code": 200, "data": [...]}"
-// @Router /v1/sys/sys-cfg/get [post]
+// @Router /api/v1/sys/sys-cfg/get [post]
 // @Security Bearer
 func (e *SysCfgApi) Get(c *gin.Context) {
 	var req base.ReqId
@@ -69,14 +69,14 @@ func (e *SysCfgApi) Get(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Create 创建SysCfg
-// @Summary 创建SysCfg
+// Create 创建系统配置项
+// @Summary 创建系统配置项
 // @Tags SysCfg
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysCfgDto true "body"
 // @Success 200 {object} base.Resp{data=models.SysCfg} "{"code": 200, "data": [...]}"
-// @Router /v1/sys/sys-cfg/create [post]
+// @Router /api/v1/sys/sys-cfg/create [post]
 // @Security Bearer
 func (e *SysCfgApi) Create(c *gin.Context) {
 	var req dto.SysCfgDto
@@ -93,14 +93,14 @@ func (e *SysCfgApi) Create(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Update 更新SysCfg
-// @Summary 更新SysCfg
+// Update 更新系统配置项
+// @Summary 更新系统配置项
 // @Tags SysCfg
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysCfgDto true "body"
 // @Success 200 {object} base.Resp{data=models.SysCfg} "{"code": 200, "data": [...]}"
-// @Router /v1/sys/sys-cfg/update [post]
+// @Router /api/v1/sys/sys-cfg/update [post]
 // @Security Bearer
 func (e *SysCfgApi) Update(c *gin.Context) {
 	var req dto.SysCfgDto
@@ -117,14 +117,14 @@ func (e *SysCfgApi) Update(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Del 删除SysCfg
-// @Summary 删除SysCfg
+// Del 删除系统配置项
+// @Summary 删除系统配置项
 // @Tags SysCfg
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqIds true "body"
 // @Success 200 {object} base.Resp{data=models.SysCfg} "{"code": 200, "data": [...]}"
-// @Router /v1/sys/sys-cfg/del [post]
+// @Router /api/v1/sys/sys-cfg/del [post]
 // @Security Bearer
 func (e *SysCfgApi) Del(c *gin.Context) {
 	var req base.ReqIds

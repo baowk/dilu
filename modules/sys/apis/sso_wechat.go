@@ -32,11 +32,11 @@ var (
 // MPCallback 微信公众号回调函数
 // @Summary 微信公众号回调函数
 // @Description 微信公众号回调函数
-// @Tags 微信公众号
+// @Tags sso wechat mp
 // @Accept application/json
 // @Product application/json
 // @Success 200 {object} string
-// @Router /v1/sso/mp/callback [get]
+// @Router /api/v1/sys/mp/callback [get]
 func (e *Wechat) MPCallback(c *gin.Context) {
 	signature := c.Query("signature")
 	timestamp := c.Query("timestamp")
@@ -77,11 +77,11 @@ func (e *Wechat) MPCallback(c *gin.Context) {
 // GetMpQrcode 获取公众号二维码
 // @Summary 获取公众号二维码
 // @Description 获取公众号二维码
-// @Tags 微信公众号
+// @Tags sso wechat mp
 // @Accept application/json
 // @Product application/json
 // @Success 200 {object} base.Resp{data=wechat.QrCodeResp} "{"code": 200, "data": [...]}"
-// @Router /v1/sso/mp/qrCode [post]
+// @Router /api/v1/sys/mp/qrCode [post]
 func (e *Wechat) GetMpQrcode(c *gin.Context) {
 	accT, err := getAccessToken(appId, appSecret)
 	if err != nil {
@@ -101,12 +101,12 @@ func (e *Wechat) GetMpQrcode(c *gin.Context) {
 // LoginMp  轮询用户登录成功与否
 // @Summary  轮询用户登录成功与否
 // @Description 获取公众号二维码
-// @Tags 微信公众号
+// @Tags sso wechat mp
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.MpSceneReq true "data"
 // @Success 200 {object} base.Resp{data=dto.LoginOK} "{"code": 200, "data": [...]}"
-// @Router /v1/sso/mp/login [post]
+// @Router /api/v1/sys/mp/login [post]
 func (e *Wechat) LoginMp(c *gin.Context) {
 	var req dto.MpSceneReq
 

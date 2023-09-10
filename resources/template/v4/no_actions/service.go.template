@@ -5,12 +5,10 @@ import (
 )
 
 type {{.ClassName}}Service struct {
-	base.BaseService
+	*base.BaseService
 }
 
 var {{.ClassName}}S = {{.ClassName}}Service{
-	base.BaseService{
-		DbName: "{{.PackageName}}",
-	},
+	base.NewService("{{.PackageName}}"),
 }
 

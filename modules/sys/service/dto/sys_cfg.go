@@ -4,16 +4,12 @@ import (
 	"github.com/baowk/dilu-core/core/base"
 )
 
-
 type SysCfgGetPageReq struct {
 	base.ReqPage `search:"-"`
     Status int `form:"status"  search:"type:exact;column:status;table:sys_cfg" comment:"Status"` //Status
 }
 
-
-
-
-//SysCfg
+//系统配置项
 type SysCfgDto struct {
     base.Model
     

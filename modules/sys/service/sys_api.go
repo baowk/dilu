@@ -5,12 +5,10 @@ import (
 )
 
 type SysApiService struct {
-	base.BaseService
+	*base.BaseService
 }
 
 var SysApiS = SysApiService{
-	base.BaseService{
-		DbName: "sys",
-	},
+	base.NewService("sys"),
 }
 

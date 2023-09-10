@@ -16,7 +16,358 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/v1/captcha": {
+        "/api/tools/db/columns/page": {
+            "get": {
+                "description": "数据库表列分页列表 / database table column page list",
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "分页列表数据 / page list data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "dbname / 数据库",
+                        "name": "dbName",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "tableName / 数据表名称",
+                        "name": "tableName",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "pageSize / 页条数",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "pageIndex / 页码",
+                        "name": "pageIndex",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "$ref": "#/definitions/base.Resp"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tools/db/tables/page": {
+            "get": {
+                "description": "数据库表分页列表 / database table page list",
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "分页列表数据 / page list data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "dbname / 数据库",
+                        "name": "dbName",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "tableName / 数据表名称",
+                        "name": "tableName",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "pageSize / 页条数",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "pageIndex / 页码",
+                        "name": "pageIndex",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "$ref": "#/definitions/base.Resp"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tools/gen/api": {
+            "get": {
+                "description": "生成Api",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "生成Api",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tools/gen/code/{tableId}": {
+            "get": {
+                "description": "生成代码",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "生成代码",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "tableId",
+                        "name": "tableId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tools/gen/menu/{tableId}/{menuPid}": {
+            "get": {
+                "description": "生成菜单",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "生成菜单",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "tableId",
+                        "name": "tableId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "menuPid",
+                        "name": "menuPid",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tools/gen/preview/{tableId}": {
+            "get": {
+                "description": "生成预览",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "生成预览",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "tableId",
+                        "name": "tableId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tools/tables/info": {
+            "put": {
+                "description": "修改表结构",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "修改表结构",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/tools.GenTable"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "添加表结构",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "添加表结构",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "dbName / 数据库名称",
+                        "name": "dbName",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "tableName / 数据表名称",
+                        "name": "tables",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tools/tables/info/{tableId}": {
+            "get": {
+                "description": "获取JSON",
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "获取配置",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "configKey",
+                        "name": "configKey",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "$ref": "#/definitions/base.Resp"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "删除表结构",
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "删除表结构",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "tableId",
+                        "name": "tableId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": -1, \"message\": \"删除失败\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tools/tables/page": {
+            "get": {
+                "description": "生成表分页列表",
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "分页列表数据",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tableName / 数据表名称",
+                        "name": "tableName",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "pageSize / 页条数",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "pageIndex / 页码",
+                        "name": "pageIndex",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "$ref": "#/definitions/base.Resp"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sys/captcha": {
             "get": {
                 "description": "获取验证码",
                 "tags": [
@@ -48,203 +399,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/sso/ding/callback": {
-            "get": {
-                "description": "获取钉钉回调",
-                "tags": [
-                    "sso"
-                ],
-                "summary": "获取钉钉回调",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/dto.DingCfgResp"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/sso/getDingCfg": {
-            "post": {
-                "description": "获取钉钉登录配置信息",
-                "tags": [
-                    "sso"
-                ],
-                "summary": "获取钉钉登录配置信息",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/dto.DingCfgResp"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/sso/loginDing": {
-            "post": {
-                "description": "钉钉登录",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "sso"
-                ],
-                "summary": "钉钉",
-                "parameters": [
-                    {
-                        "description": "data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.LoginDingReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/dto.LoginOK"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/sso/mp/callback": {
-            "get": {
-                "description": "微信公众号回调函数",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "微信公众号"
-                ],
-                "summary": "微信公众号回调函数",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/sso/mp/login": {
-            "post": {
-                "description": "获取公众号二维码",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "微信公众号"
-                ],
-                "summary": "轮询用户登录成功与否",
-                "parameters": [
-                    {
-                        "description": "data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.MpSceneReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/dto.LoginOK"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/sso/mp/qrCode": {
-            "post": {
-                "description": "获取公众号二维码",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "微信公众号"
-                ],
-                "summary": "获取公众号二维码",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/wechat.QrCodeResp"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/sys/sso/changePwd": {
+        "/api/v1/sys/changePwd": {
             "post": {
                 "security": [
                     {
@@ -280,7 +435,36 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/sys/sso/forgetPwd": {
+        "/api/v1/sys/ding/callback": {
+            "get": {
+                "description": "获取钉钉回调",
+                "tags": [
+                    "sso ding"
+                ],
+                "summary": "获取钉钉回调",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.DingCfgResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sys/forgetPwd": {
             "post": {
                 "description": "忘记密码",
                 "consumes": [
@@ -311,7 +495,36 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/sys/sso/login": {
+        "/api/v1/sys/getDingCfg": {
+            "post": {
+                "description": "获取钉钉登录配置信息",
+                "tags": [
+                    "sso ding"
+                ],
+                "summary": "获取钉钉登录配置信息",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.DingCfgResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sys/login": {
             "post": {
                 "description": "用户登录",
                 "consumes": [
@@ -354,7 +567,145 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/sys/sso/myUserinfo": {
+        "/api/v1/sys/loginDing": {
+            "post": {
+                "description": "钉钉登录",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sso ding"
+                ],
+                "summary": "钉钉",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.LoginDingReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.LoginOK"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sys/mp/callback": {
+            "get": {
+                "description": "微信公众号回调函数",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sso wechat mp"
+                ],
+                "summary": "微信公众号回调函数",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sys/mp/login": {
+            "post": {
+                "description": "获取公众号二维码",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sso wechat mp"
+                ],
+                "summary": "轮询用户登录成功与否",
+                "parameters": [
+                    {
+                        "description": "data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.MpSceneReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.LoginOK"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sys/mp/qrCode": {
+            "post": {
+                "description": "获取公众号二维码",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sso wechat mp"
+                ],
+                "summary": "获取公众号二维码",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/wechat.QrCodeResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sys/myUserinfo": {
             "post": {
                 "security": [
                     {
@@ -388,7 +739,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/sys/sso/register": {
+        "/api/v1/sys/register": {
             "post": {
                 "description": "用户注册",
                 "consumes": [
@@ -431,7 +782,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/sys/sso/sendCode": {
+        "/api/v1/sys/sendCode": {
             "post": {
                 "description": "发送邮箱或者短信验证码",
                 "consumes": [
@@ -462,38 +813,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/sys/sso/verify/code": {
-            "post": {
-                "description": "验证码校验",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "sso"
-                ],
-                "summary": "验证码校验",
-                "parameters": [
-                    {
-                        "description": "data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.VerifyCodeReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "$ref": "#/definitions/base.Resp"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/sys/sys-api/create": {
+        "/api/v1/sys/sys-api/create": {
             "post": {
                 "security": [
                     {
@@ -506,7 +826,7 @@ const docTemplate = `{
                 "tags": [
                     "SysApi"
                 ],
-                "summary": "创建SysApi",
+                "summary": "创建接口列表",
                 "parameters": [
                     {
                         "description": "body",
@@ -540,7 +860,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/sys/sys-api/del": {
+        "/api/v1/sys/sys-api/del": {
             "post": {
                 "security": [
                     {
@@ -553,7 +873,7 @@ const docTemplate = `{
                 "tags": [
                     "SysApi"
                 ],
-                "summary": "删除SysApi",
+                "summary": "删除接口列表",
                 "parameters": [
                     {
                         "description": "body",
@@ -587,7 +907,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/sys/sys-api/get": {
+        "/api/v1/sys/sys-api/get": {
             "post": {
                 "security": [
                     {
@@ -600,7 +920,7 @@ const docTemplate = `{
                 "tags": [
                     "SysApi"
                 ],
-                "summary": "获取SysApi",
+                "summary": "获取接口列表",
                 "parameters": [
                     {
                         "description": "body",
@@ -634,7 +954,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/sys/sys-api/page": {
+        "/api/v1/sys/sys-api/page": {
             "post": {
                 "security": [
                     {
@@ -696,7 +1016,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/sys/sys-api/update": {
+        "/api/v1/sys/sys-api/update": {
             "post": {
                 "security": [
                     {
@@ -709,7 +1029,7 @@ const docTemplate = `{
                 "tags": [
                     "SysApi"
                 ],
-                "summary": "更新SysApi",
+                "summary": "更新接口列表",
                 "parameters": [
                     {
                         "description": "body",
@@ -743,7 +1063,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/sys/sys-cfg/create": {
+        "/api/v1/sys/sys-cfg/create": {
             "post": {
                 "security": [
                     {
@@ -756,7 +1076,7 @@ const docTemplate = `{
                 "tags": [
                     "SysCfg"
                 ],
-                "summary": "创建SysCfg",
+                "summary": "创建系统配置项",
                 "parameters": [
                     {
                         "description": "body",
@@ -790,7 +1110,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/sys/sys-cfg/del": {
+        "/api/v1/sys/sys-cfg/del": {
             "post": {
                 "security": [
                     {
@@ -803,7 +1123,7 @@ const docTemplate = `{
                 "tags": [
                     "SysCfg"
                 ],
-                "summary": "删除SysCfg",
+                "summary": "删除系统配置项",
                 "parameters": [
                     {
                         "description": "body",
@@ -837,7 +1157,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/sys/sys-cfg/get": {
+        "/api/v1/sys/sys-cfg/get": {
             "post": {
                 "security": [
                     {
@@ -850,7 +1170,7 @@ const docTemplate = `{
                 "tags": [
                     "SysCfg"
                 ],
-                "summary": "获取SysCfg",
+                "summary": "获取系统配置项",
                 "parameters": [
                     {
                         "description": "body",
@@ -884,7 +1204,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/sys/sys-cfg/page": {
+        "/api/v1/sys/sys-cfg/page": {
             "post": {
                 "security": [
                     {
@@ -946,7 +1266,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/sys/sys-cfg/update": {
+        "/api/v1/sys/sys-cfg/update": {
             "post": {
                 "security": [
                     {
@@ -959,7 +1279,7 @@ const docTemplate = `{
                 "tags": [
                     "SysCfg"
                 ],
-                "summary": "更新SysCfg",
+                "summary": "更新系统配置项",
                 "parameters": [
                     {
                         "description": "body",
@@ -993,339 +1313,25 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/tools/db/columns/page": {
-            "get": {
-                "description": "数据库表列分页列表 / database table column page list",
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "分页列表数据 / page list data",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "dbname / 数据库",
-                        "name": "dbName",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "tableName / 数据表名称",
-                        "name": "tableName",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "pageSize / 页条数",
-                        "name": "pageSize",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "pageIndex / 页码",
-                        "name": "pageIndex",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "$ref": "#/definitions/base.Resp"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/tools/db/tables/page": {
-            "get": {
-                "description": "数据库表分页列表 / database table page list",
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "分页列表数据 / page list data",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "dbname / 数据库",
-                        "name": "dbName",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "tableName / 数据表名称",
-                        "name": "tableName",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "pageSize / 页条数",
-                        "name": "pageSize",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "pageIndex / 页码",
-                        "name": "pageIndex",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "$ref": "#/definitions/base.Resp"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/tools/gen/api": {
-            "get": {
-                "description": "生成Api",
+        "/api/v1/sys/verify/code": {
+            "post": {
+                "description": "验证码校验",
                 "consumes": [
                     "application/json"
                 ],
                 "tags": [
-                    "工具 / 生成工具"
+                    "sso"
                 ],
-                "summary": "生成Api",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/tools/gen/code/{tableId}": {
-            "get": {
-                "description": "生成代码",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "生成代码",
+                "summary": "验证码校验",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "tableId",
-                        "name": "tableId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/tools/gen/memu/{tableId}": {
-            "get": {
-                "description": "生成菜单",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "生成菜单",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "tableId",
-                        "name": "tableId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/tools/gen/preview/{tableId}": {
-            "get": {
-                "description": "生成预览",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "生成预览",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "tableId",
-                        "name": "tableId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/tools/tables/info": {
-            "put": {
-                "description": "修改表结构",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "修改表结构",
-                "parameters": [
-                    {
-                        "description": "body",
+                        "description": "data",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/tools.SysTables"
+                            "$ref": "#/definitions/dto.VerifyCodeReq"
                         }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "添加表结构",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "添加表结构",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "dbName / 数据库名称",
-                        "name": "dbName",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "tableName / 数据表名称",
-                        "name": "tables",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/tools/tables/info/{tableId}": {
-            "get": {
-                "description": "获取JSON",
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "获取配置",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "configKey",
-                        "name": "configKey",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "$ref": "#/definitions/base.Resp"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "删除表结构",
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "删除表结构",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "tableId",
-                        "name": "tableId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": -1, \"message\": \"删除失败\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/v1/tools/tables/page": {
-            "get": {
-                "description": "生成表分页列表",
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "分页列表数据",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "tableName / 数据表名称",
-                        "name": "tableName",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "pageSize / 页条数",
-                        "name": "pageSize",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "pageIndex / 页码",
-                        "name": "pageIndex",
-                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1674,13 +1680,13 @@ const docTemplate = `{
         "dto.SysApiDto": {
             "type": "object",
             "properties": {
-                "action": {
-                    "description": "请求类型",
-                    "type": "string"
-                },
                 "id": {
                     "description": "主键",
                     "type": "integer"
+                },
+                "method": {
+                    "description": "请求类型",
+                    "type": "string"
                 },
                 "path": {
                     "description": "请求地址",
@@ -1787,13 +1793,13 @@ const docTemplate = `{
         "models.SysApi": {
             "type": "object",
             "properties": {
-                "action": {
-                    "description": "请求类型",
-                    "type": "string"
-                },
                 "id": {
                     "description": "主键",
                     "type": "integer"
+                },
+                "method": {
+                    "description": "请求类型",
+                    "type": "string"
                 },
                 "path": {
                     "description": "请求地址",
@@ -1866,21 +1872,7 @@ const docTemplate = `{
                 }
             }
         },
-        "tools.Params": {
-            "type": "object",
-            "properties": {
-                "treeCode": {
-                    "type": "string"
-                },
-                "treeName": {
-                    "type": "string"
-                },
-                "treeParentCode": {
-                    "type": "string"
-                }
-            }
-        },
-        "tools.SysColumns": {
+        "tools.GenColumn": {
             "type": "object",
             "properties": {
                 "columnComment": {
@@ -1911,7 +1903,7 @@ const docTemplate = `{
                 "fkCol": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/tools.SysColumns"
+                        "$ref": "#/definitions/tools.GenColumn"
                     }
                 },
                 "fkLabelId": {
@@ -2007,9 +1999,12 @@ const docTemplate = `{
                 }
             }
         },
-        "tools.SysTables": {
+        "tools.GenTable": {
             "type": "object",
             "properties": {
+                "apiRoot": {
+                    "type": "string"
+                },
                 "businessName": {
                     "type": "string"
                 },
@@ -2020,7 +2015,7 @@ const docTemplate = `{
                 "columns": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/tools.SysColumns"
+                        "$ref": "#/definitions/tools.GenColumn"
                     }
                 },
                 "createBy": {
@@ -2134,6 +2129,20 @@ const docTemplate = `{
                 }
             }
         },
+        "tools.Params": {
+            "type": "object",
+            "properties": {
+                "treeCode": {
+                    "type": "string"
+                },
+                "treeName": {
+                    "type": "string"
+                },
+                "treeParentCode": {
+                    "type": "string"
+                }
+            }
+        },
         "wechat.QrCodeResp": {
             "type": "object",
             "properties": {
@@ -2168,7 +2177,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "Dilu API",
-	Description:      "一个简单的脚手",
+	Description:      "致力于做一个开发快速，运行稳定的框架",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

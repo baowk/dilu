@@ -4,7 +4,6 @@ import (
 	"github.com/baowk/dilu-core/core/base"
 )
 
-
 type {{.ClassName}}GetPageReq struct {
 	base.ReqPage `search:"-"`
     {{- $tablename := .TBName -}}
@@ -15,9 +14,6 @@ type {{.ClassName}}GetPageReq struct {
     {{- end }}
     {{- end }}
 }
-
-
-
 
 //{{.TableComment}}
 type {{.ClassName}}Dto struct {

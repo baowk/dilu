@@ -5,12 +5,10 @@ import (
 )
 
 type SysCfgService struct {
-	base.BaseService
+	*base.BaseService
 }
 
 var SysCfgS = SysCfgService{
-	base.BaseService{
-		DbName: "sys",
-	},
+	base.NewService("sys"),
 }
 

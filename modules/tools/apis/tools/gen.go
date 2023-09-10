@@ -11,12 +11,15 @@ import (
 	"time"
 
 	"github.com/baowk/dilu-core/common/consts"
+
 	"github.com/baowk/dilu-core/common/utils/files"
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/base"
 	"github.com/buger/jsonparser"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+
+	cons "dilu/common/consts"
 
 	"dilu/modules/sys/models"
 	"dilu/modules/sys/service"
@@ -41,9 +44,9 @@ var (
 // @Param tableId path int true "tableId"
 // @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
 // @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
-// @Router /v1/tools/gen/preview/{tableId} [get]
+// @Router /api/tools/gen/preview/{tableId} [get]
 func (e *Gen) Preview(c *gin.Context) {
-	table := tools.SysTables{}
+	table := tools.GenTable{}
 	id, err := strconv.Atoi(c.Param("tableId"))
 	if err != nil {
 		core.Log.Error("Gen", zap.Error(err))
@@ -132,9 +135,9 @@ func (e *Gen) Preview(c *gin.Context) {
 // @Param tableId path int true "tableId"
 // @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
 // @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
-// @Router /v1/tools/gen/code/{tableId} [get]
+// @Router /api/tools/gen/code/{tableId} [get]
 func (e *Gen) GenCode(c *gin.Context) {
-	table := tools.SysTables{}
+	table := tools.GenTable{}
 	id, err := strconv.Atoi(c.Param("tableId"))
 	if err != nil {
 		core.Log.Error("Gen", zap.Error(err))
@@ -146,15 +149,16 @@ func (e *Gen) GenCode(c *gin.Context) {
 
 	db, _, _ := GetDb(consts.DB_DEF)
 	tab, _ := table.Get(db, false)
+	tab.ApiRoot = cons.ApiRoot
 
-	e.NOActionsGen(c, tab)
+	e.NOMethodsGen(c, tab)
 
 	e.Ok(c, "Code generated successfully！")
 }
 
 func (e *Gen) GenApiToFile(c *gin.Context) {
 	var dbname string
-	table := tools.SysTables{}
+	table := tools.GenTable{}
 	id, err := strconv.Atoi(c.Param("tableId"))
 	if err != nil {
 		core.Log.Error("Gen", zap.Error(err))
@@ -173,7 +177,7 @@ func (e *Gen) GenApiToFile(c *gin.Context) {
 
 const ROOT = "./modules/"
 
-func (e *Gen) NOActionsGen(c *gin.Context, tab tools.SysTables) {
+func (e *Gen) NOMethodsGen(c *gin.Context, tab tools.GenTable) {
 
 	tab.MLTBName = strings.Replace(tab.TBName, "_", "-", -1)
 
@@ -297,7 +301,7 @@ func (e *Gen) NOActionsGen(c *gin.Context, tab tools.SysTables) {
 
 }
 
-func (e *Gen) genApiToFile(c *gin.Context, tab tools.SysTables) {
+func (e *Gen) genApiToFile(c *gin.Context, tab tools.GenTable) {
 	basePath := "resources/template/"
 	t1, err := template.ParseFiles(basePath + "api_migrate.template")
 	if err != nil {
@@ -308,7 +312,7 @@ func (e *Gen) genApiToFile(c *gin.Context, tab tools.SysTables) {
 	i := strconv.FormatInt(time.Now().UnixNano()/1e6, 10)
 	var b1 bytes.Buffer
 	err = t1.Execute(&b1, struct {
-		tools.SysTables
+		tools.GenTable
 		GenerateTime string
 	}{tab, i})
 
@@ -323,16 +327,21 @@ func (e *Gen) genApiToFile(c *gin.Context, tab tools.SysTables) {
 // @Accept  application/json
 // @Product application/json
 // @Param tableId path int true "tableId"
+// @Param menuPid path uint false "menuPid"
 // @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
 // @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
-// @Router /v1/tools/gen/memu/{tableId} [get]
+// @Router /api/tools/gen/menu/{tableId}/{menuPid} [get]
 func (e *Gen) GenMenuAndApi(c *gin.Context) {
-	table := tools.SysTables{}
+	table := tools.GenTable{}
 	id, err := strconv.Atoi(c.Param("tableId"))
 	if err != nil {
 		core.Log.Error("Gen", zap.Error(err))
 		e.Error(c, err)
 		return
+	}
+	menuPid, err := strconv.Atoi(c.Param("menuPid"))
+	if err != nil {
+		menuPid = 0
 	}
 
 	table.TableId = id
@@ -342,22 +351,23 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	tab, _ := table.Get(db, true)
 	tab.MLTBName = strings.Replace(tab.TBName, "_", "-", -1)
 
-	s := service.SysMenu{}
+	tab.ApiRoot = cons.ApiRoot
 
-	Mmenu := dto.SysMenuInsertReq{}
-	Mmenu.Title = tab.TableComment
-	Mmenu.Icon = "pass"
-	Mmenu.Path = "/" + tab.MLTBName
-	Mmenu.MenuType = "M"
-	Mmenu.Action = "无"
-	Mmenu.ParentId = 0
-	Mmenu.NoCache = false
-	Mmenu.Component = "Layout"
-	Mmenu.Sort = 0
-	Mmenu.Visible = "0"
-	Mmenu.IsFrame = "0"
-	Mmenu.CreateBy = 1
-	s.Insert(&Mmenu)
+	if menuPid == 0 {
+		Mmenu := dto.SysMenuInsertReq{}
+		Mmenu.Title = tab.TableComment
+		Mmenu.Icon = "pass"
+		Mmenu.Path = "/" + tab.MLTBName
+		Mmenu.MenuType = "M"
+		Mmenu.ParentId = 0
+		Mmenu.NoCache = false
+		Mmenu.Component = "Layout"
+		Mmenu.Sort = 0
+		Mmenu.Hidden = false
+		Mmenu.CreateBy = 1
+		service.SysMenuS.Insert(&Mmenu)
+		menuPid = Mmenu.Id
+	}
 
 	Cmenu := dto.SysMenuInsertReq{}
 	Cmenu.MenuName = tab.ClassName + "Manage"
@@ -365,17 +375,25 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	Cmenu.Icon = "pass"
 	Cmenu.Path = "/" + tab.PackageName + "/" + tab.MLTBName
 	Cmenu.MenuType = "C"
-	Cmenu.Action = "无"
 	Cmenu.Permission = tab.PackageName + ":" + tab.BusinessName + ":list"
-	Cmenu.ParentId = Mmenu.MenuId
+	Cmenu.ParentId = menuPid
 	Cmenu.NoCache = false
 	Cmenu.Component = "/" + tab.PackageName + "/" + tab.MLTBName + "/index"
 	Cmenu.Sort = 0
-	Cmenu.Visible = "0"
-	Cmenu.IsFrame = "0"
+	Cmenu.Hidden = false
 	Cmenu.CreateBy = 1
 	Cmenu.UpdateBy = 1
-	s.Insert(&Cmenu)
+	service.SysMenuS.Insert(&Cmenu)
+
+	mApi := models.NewSysApi().SetMethod("POST").SetPermType("t").
+		SetPath(fmt.Sprintf("%s/%s/%s/page", tab.ApiRoot, tab.PackageName, tab.ModuleName)).
+		SetStatus(3).SetTitle("分页获取" + tab.TableComment)
+	service.SysApiS.Create(mApi)
+
+	gApi := models.NewSysApi().SetMethod("POST").SetPermType("t").
+		SetPath(fmt.Sprintf("%s/%s/%s/get", tab.ApiRoot, tab.PackageName, tab.ModuleName)).
+		SetStatus(3).SetTitle("根据id获取" + tab.TableComment)
+	service.SysApiS.Create(gApi)
 
 	MList := dto.SysMenuInsertReq{}
 	MList.MenuName = ""
@@ -383,16 +401,20 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	MList.Icon = ""
 	MList.Path = tab.TBName
 	MList.MenuType = "F"
-	MList.Action = "无"
 	MList.Permission = tab.PackageName + ":" + tab.BusinessName + ":query"
-	MList.ParentId = Cmenu.MenuId
+	MList.ParentId = Cmenu.Id
 	MList.NoCache = false
 	MList.Sort = 0
-	MList.Visible = "0"
-	MList.IsFrame = "0"
+	MList.Hidden = false
 	MList.CreateBy = 1
 	MList.UpdateBy = 1
-	s.Insert(&MList)
+	MList.SysApi = []models.SysApi{*mApi, *gApi}
+	service.SysMenuS.Insert(&MList)
+
+	cApi := models.NewSysApi().SetMethod("POST").SetPermType("t").
+		SetPath(fmt.Sprintf("%s/%s/%s/create", tab.ApiRoot, tab.PackageName, tab.ModuleName)).
+		SetStatus(3).SetTitle("创建" + tab.TableComment)
+	service.SysApiS.Create(cApi)
 
 	MCreate := dto.SysMenuInsertReq{}
 	MCreate.MenuName = ""
@@ -400,16 +422,20 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	MCreate.Icon = ""
 	MCreate.Path = tab.TBName
 	MCreate.MenuType = "F"
-	MCreate.Action = "无"
 	MCreate.Permission = tab.PackageName + ":" + tab.BusinessName + ":add"
-	MCreate.ParentId = Cmenu.MenuId
+	MCreate.ParentId = Cmenu.Id
 	MCreate.NoCache = false
 	MCreate.Sort = 0
-	MCreate.Visible = "0"
-	MCreate.IsFrame = "0"
+	MCreate.Hidden = false
 	MCreate.CreateBy = 1
 	MCreate.UpdateBy = 1
-	s.Insert(&MCreate)
+	MCreate.SysApi = []models.SysApi{*cApi}
+	service.SysMenuS.Insert(&MCreate)
+
+	uApi := models.NewSysApi().SetMethod("POST").SetPermType("t").
+		SetPath(fmt.Sprintf("%s/%s/%s/update", tab.ApiRoot, tab.PackageName, tab.ModuleName)).
+		SetStatus(3).SetTitle("修改" + tab.TableComment)
+	service.SysApiS.Create(uApi)
 
 	MUpdate := dto.SysMenuInsertReq{}
 	MUpdate.MenuName = ""
@@ -417,16 +443,20 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	MUpdate.Icon = ""
 	MUpdate.Path = tab.TBName
 	MUpdate.MenuType = "F"
-	MUpdate.Action = "无"
 	MUpdate.Permission = tab.PackageName + ":" + tab.BusinessName + ":edit"
-	MUpdate.ParentId = Cmenu.MenuId
+	MUpdate.ParentId = Cmenu.Id
 	MUpdate.NoCache = false
 	MUpdate.Sort = 0
-	MUpdate.Visible = "0"
-	MUpdate.IsFrame = "0"
+	MUpdate.Hidden = false
 	MUpdate.CreateBy = 1
 	MUpdate.UpdateBy = 1
-	s.Insert(&MUpdate)
+	MUpdate.SysApi = []models.SysApi{*uApi}
+	service.SysMenuS.Insert(&MUpdate)
+
+	dApi := models.NewSysApi().SetMethod("POST").SetPermType("t").
+		SetPath(fmt.Sprintf("%s/%s/%s/del", tab.ApiRoot, tab.PackageName, tab.ModuleName)).
+		SetStatus(3).SetTitle("删除" + tab.TableComment)
+	service.SysApiS.Create(dApi)
 
 	MDelete := dto.SysMenuInsertReq{}
 	MDelete.MenuName = ""
@@ -434,16 +464,15 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	MDelete.Icon = ""
 	MDelete.Path = tab.TBName
 	MDelete.MenuType = "F"
-	MDelete.Action = "无"
 	MDelete.Permission = tab.PackageName + ":" + tab.BusinessName + ":remove"
-	MDelete.ParentId = Cmenu.MenuId
+	MDelete.ParentId = Cmenu.Id
 	MDelete.NoCache = false
 	MDelete.Sort = 0
-	MDelete.Visible = "0"
-	MDelete.IsFrame = "0"
+	MDelete.Hidden = false
 	MDelete.CreateBy = 1
 	MDelete.UpdateBy = 1
-	s.Insert(&MDelete)
+	MUpdate.SysApi = []models.SysApi{*dApi}
+	service.SysMenuS.Insert(&MDelete)
 
 	e.Ok(c, "数据生成成功！")
 }
@@ -456,7 +485,7 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 // @Product application/json
 // @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
 // @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
-// @Router /v1/tools/gen/api [get]
+// @Router /api/tools/gen/api [get]
 func (e *Gen) GenApis(c *gin.Context) {
 	data, err := os.ReadFile("docs/swagger.json")
 	if err != nil {
@@ -465,13 +494,13 @@ func (e *Gen) GenApis(c *gin.Context) {
 	}
 	basePath, err := jsonparser.GetString(data, "basePath")
 	if err != nil {
-		e.Error(c, err)
-		return
+		fmt.Println(err)
+		basePath = ""
 	}
 	db := core.DB()
 	jsonparser.ObjectEach(data, func(key []byte, value []byte, dataType jsonparser.ValueType, offset int) error {
 		path := basePath + string(key)
-		if !strings.HasPrefix(path, "/api/v1/tools/") {
+		if !strings.HasPrefix(path, "/api/tools/") {
 			if reg.MatchString(path) {
 				path = reg.ReplaceAllString(path, "${1}/{${2}}") // 把:id换成{id}
 			}
@@ -489,7 +518,7 @@ func (e *Gen) GenApis(c *gin.Context) {
 					}
 				}
 
-				err := db.Debug().Where(models.SysApi{Path: path, Action: method}).
+				err := db.Debug().Where(models.SysApi{Path: path, Method: method}).
 					Attrs(models.SysApi{Title: apiTitle, Status: 3, PermType: pt}).
 					FirstOrCreate(&models.SysApi{}).Error
 				if err != nil {
@@ -501,47 +530,7 @@ func (e *Gen) GenApis(c *gin.Context) {
 		}
 		return nil
 	}, "paths")
-
 	e.Ok(c)
-
-	// var p fastjson.Parser
-	// m, err := p.Parse(j)
-	// if err != nil {
-	// 	e.Error(c, err)
-	// 	return
-	// }
-
-	// l, _ := m.Get("paths").Array()
-
-	// for _, v := range l {
-
-	// 	if v.HttpMethod != "HEAD" ||
-	// 		strings.Contains(v.RelativePath, "/swagger/") ||
-	// 		strings.Contains(v.RelativePath, "/static/") ||
-	// 		strings.Contains(v.RelativePath, "/form-generator/") ||
-	// 		strings.Contains(v.RelativePath, "/sys/tables") {
-
-	// 		urlPath := v.RelativePath
-	// 		idPatten := "(.*)/:(\\w+)" // 正则替换，把:id换成{id}
-	// 		reg, _ := regexp.Compile(idPatten)
-	// 		if reg.MatchString(urlPath) {
-	// 			urlPath = reg.ReplaceAllString(v.RelativePath, "${1}/{${2}}") // 把:id换成{id}
-	// 		}
-	// 		apiTitle, _ := jsonData.Get("paths").Get(urlPath).Get(strings.ToLower(v.HttpMethod)).Get("summary").String()
-
-	// 		err := db.Debug().Where(models.SysApi{Path: v.RelativePath, Action: v.HttpMethod}).
-	// 			Attrs(models.SysApi{Handle: v.Handler, Title: apiTitle}).
-	// 			FirstOrCreate(&models.SysApi{}).
-	// 			//Update("handle", v.Handler).
-	// 			Error
-	// 		if err != nil {
-	// 			err := fmt.Errorf("Models SaveSysApi error: %s \r\n ", err.Error())
-	// 			e.Error(c, err)
-	// 			return
-	// 		}
-	// 	}
-	// }
-	return
 }
 
 var idPatten = "(.*)/:(\\w+)" // 正则替换，把:id换成{id}
