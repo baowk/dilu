@@ -34,11 +34,11 @@ func (e *Gen) GetDBTableList(c *gin.Context) {
 	}
 
 	if size := c.Request.FormValue("pageSize"); size != "" {
-		pageSize, err = strconv.Atoi(size)
+		pageSize, _ = strconv.Atoi(size)
 	}
 
 	if index := c.Request.FormValue("pageIndex"); index != "" {
-		pageIndex, err = strconv.Atoi(index)
+		pageIndex, _ = strconv.Atoi(index)
 	}
 
 	data.TableName = c.Request.FormValue("tableName")

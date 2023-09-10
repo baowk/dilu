@@ -118,7 +118,7 @@ func (e SysTable) Insert(c *gin.Context) {
 	db, _, _ := GetDb(consts.DB_DEF)
 	for i := 0; i < len(tablesList); i++ {
 
-		data, err := genTableInit(db, dbname, tablesList, i, c)
+		data, err := genTableInit(db, dbname, tablesList, i)
 		if err != nil {
 			core.Log.Error("Gen", zap.Error(err))
 			e.Error(c, err)
@@ -136,7 +136,7 @@ func (e SysTable) Insert(c *gin.Context) {
 
 }
 
-func genTableInit(tx *gorm.DB, dbname string, tablesList []string, i int, c *gin.Context) (tools.GenTable, error) {
+func genTableInit(tx *gorm.DB, dbname string, tablesList []string, i int) (tools.GenTable, error) {
 	var data tools.GenTable
 	var dbTable tools.DBTables
 	var dbColumn tools.DBColumns
@@ -144,7 +144,7 @@ func genTableInit(tx *gorm.DB, dbname string, tablesList []string, i int, c *gin
 	data.CreateBy = 0
 
 	dbTable.TableName = data.TBName
-	tx, _, sdbn := GetDb(dbname)
+	_, _, sdbn := GetDb(dbname)
 	data.DBName = sdbn
 	dbtable, err := dbTable.Get(tx, sdbn)
 	if err != nil {

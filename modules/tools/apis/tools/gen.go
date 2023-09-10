@@ -102,18 +102,39 @@ func (e *Gen) Preview(c *gin.Context) {
 	tab, _ := table.Get(db, false)
 	var b1 bytes.Buffer
 	err = t1.Execute(&b1, tab)
+	if err != nil {
+		core.Log.Error("gen err", zap.Error(err))
+	}
 	var b2 bytes.Buffer
 	err = t2.Execute(&b2, tab)
+	if err != nil {
+		core.Log.Error("gen err", zap.Error(err))
+	}
 	var b3 bytes.Buffer
 	err = t3.Execute(&b3, tab)
+	if err != nil {
+		core.Log.Error("gen err", zap.Error(err))
+	}
 	var b4 bytes.Buffer
 	err = t4.Execute(&b4, tab)
+	if err != nil {
+		core.Log.Error("gen err", zap.Error(err))
+	}
 	var b5 bytes.Buffer
 	err = t5.Execute(&b5, tab)
+	if err != nil {
+		core.Log.Error("gen err", zap.Error(err))
+	}
 	var b6 bytes.Buffer
 	err = t6.Execute(&b6, tab)
+	if err != nil {
+		core.Log.Error("gen err", zap.Error(err))
+	}
 	var b7 bytes.Buffer
 	err = t7.Execute(&b7, tab)
+	if err != nil {
+		core.Log.Error("gen err", zap.Error(err))
+	}
 
 	mp := make(map[string]interface{})
 	mp["resources/template/model.go.template"] = b1.String()
@@ -279,18 +300,39 @@ func (e *Gen) NOMethodsGen(c *gin.Context, tab tools.GenTable) {
 
 	var b1 bytes.Buffer
 	err = t1.Execute(&b1, tab)
+	if err != nil {
+		core.Log.Error("gen err", zap.Error(err))
+	}
 	var b2 bytes.Buffer
 	err = t2.Execute(&b2, tab)
+	if err != nil {
+		core.Log.Error("gen err", zap.Error(err))
+	}
 	var b3 bytes.Buffer
 	err = t3.Execute(&b3, tab)
+	if err != nil {
+		core.Log.Error("gen err", zap.Error(err))
+	}
 	var b4 bytes.Buffer
 	err = t4.Execute(&b4, tab)
+	if err != nil {
+		core.Log.Error("gen err", zap.Error(err))
+	}
 	var b5 bytes.Buffer
 	err = t5.Execute(&b5, tab)
+	if err != nil {
+		core.Log.Error("gen err", zap.Error(err))
+	}
 	var b6 bytes.Buffer
 	err = t6.Execute(&b6, tab)
+	if err != nil {
+		core.Log.Error("gen err", zap.Error(err))
+	}
 	var b7 bytes.Buffer
 	err = t7.Execute(&b7, tab)
+	if err != nil {
+		core.Log.Error("gen err", zap.Error(err))
+	}
 	files.FileCreate(b1, ROOT+tab.PackageName+"/models/"+tab.TBName+".go")
 	files.FileCreate(b2, ROOT+tab.PackageName+"/apis/"+tab.TBName+".go")
 	files.FileCreate(b3, ROOT+tab.PackageName+"/router/"+tab.TBName+".go")
@@ -315,6 +357,9 @@ func (e *Gen) genApiToFile(c *gin.Context, tab tools.GenTable) {
 		tools.GenTable
 		GenerateTime string
 	}{tab, i})
+	if err != nil {
+		core.Log.Error("gen err", zap.Error(err))
+	}
 
 	files.FileCreate(b1, "./cmd/migrate/migration/version-local/"+i+"_migrate.go")
 

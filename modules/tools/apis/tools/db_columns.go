@@ -28,10 +28,16 @@ func (e *Gen) GetDBColumnList(c *gin.Context) {
 
 	if size := c.Request.FormValue("pageSize"); size != "" {
 		pageSize, err = strconv.Atoi(size)
+		if err != nil {
+			core.Log.Error("", zap.Error(err))
+		}
 	}
 
 	if index := c.Request.FormValue("pageIndex"); index != "" {
 		pageIndex, err = strconv.Atoi(index)
+		if err != nil {
+			core.Log.Error("", zap.Error(err))
+		}
 	}
 
 	var dbname = c.Request.FormValue("dbName")
