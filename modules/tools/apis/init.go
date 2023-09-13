@@ -26,8 +26,8 @@ func (Init) Init(c *gin.Context) {
 func (Init) DoInit(c *gin.Context) {
 	fmt.Println("开始运行初始化")
 	err := core.DB().AutoMigrate(
-		&models.EmailLog{},
-		&models.SmsLog{},
+		&models.SysEmail{},
+		&models.SysSms{},
 		&models.SysApi{},
 		&models.SysCfg{},
 		&models.SysDept{},
@@ -36,9 +36,10 @@ func (Init) DoInit(c *gin.Context) {
 		&models.SysOperaLog{},
 		&models.SysRole{},
 		&models.SysUser{},
+		&models.ThirdLogin{},
 		&tools.GenColumn{},
-		&tools.GenColumn{},
-		//&models.SysPost{},
+		&tools.GenTable{},
+		&models.SysUserDept{},
 	)
 	result := "执行成功"
 	if err != nil {

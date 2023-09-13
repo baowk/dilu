@@ -2,72 +2,132 @@ package models
 
 import (
 	"time"
-
-	"github.com/baowk/dilu-core/core/base"
 )
 
+// SysOperaLog
 type SysOperaLog struct {
-	base.Model
-	Title         string    `json:"title" gorm:"size:255;comment:操作模块"`
-	BusinessType  string    `json:"businessType" gorm:"size:128;comment:操作类型"`
-	BusinessTypes string    `json:"businessTypes" gorm:"size:128;comment:BusinessTypes"`
-	Method        string    `json:"method" gorm:"size:128;comment:函数"`
-	RequestMethod string    `json:"requestMethod" gorm:"size:128;comment:请求方式 GET POST PUT DELETE"`
-	OperatorType  string    `json:"operatorType" gorm:"size:128;comment:操作类型"`
-	OperName      string    `json:"operName" gorm:"size:128;comment:操作者"`
-	DeptName      string    `json:"deptName" gorm:"size:128;comment:部门名称"`
-	OperUrl       string    `json:"operUrl" gorm:"size:255;comment:访问地址"`
-	OperIp        string    `json:"operIp" gorm:"size:128;comment:客户端ip"`
-	OperLocation  string    `json:"operLocation" gorm:"size:128;comment:访问位置"`
-	OperParam     string    `json:"operParam" gorm:"text;comment:请求参数"`
-	Status        int       `json:"status" gorm:"size:1;comment:操作状态 1:成功 2:失败"`
-	OperTime      time.Time `json:"operTime" gorm:"comment:操作时间"`
-	JsonResult    string    `json:"jsonResult" gorm:"size:255;comment:返回数据"`
-	Remark        string    `json:"remark" gorm:"size:255;comment:备注"`
-	LatencyTime   string    `json:"latencyTime" gorm:"size:128;comment:耗时"`
-	UserAgent     string    `json:"userAgent" gorm:"size:255;comment:ua"`
-	CreatedAt     time.Time `json:"createdAt" gorm:"comment:创建时间"`
-	UpdatedAt     time.Time `json:"updatedAt" gorm:"comment:最后更新时间"`
-	base.ControlBy
+	Id            int       `json:"id" gorm:"type:int unsigned;primaryKey;autoIncrement;comment:主键"`         //主键
+	Title         string    `json:"title" gorm:"type:varchar(255);comment:操作模块"`                             //操作模块
+	BusinessType  string    `json:"businessType" gorm:"type:varchar(128);comment:操作类型"`                      //操作类型
+	BusinessTypes string    `json:"businessTypes" gorm:"type:varchar(128);comment:BusinessTypes"`            //BusinessTypes
+	Method        string    `json:"method" gorm:"type:varchar(128);comment:函数"`                              //函数
+	RequestMethod string    `json:"requestMethod" gorm:"type:varchar(128);comment:请求方式 GET POST PUT DELETE"` //请求方式 GET POST PUT DELETE
+	OperatorType  string    `json:"operatorType" gorm:"type:varchar(128);comment:操作类型"`                      //操作类型
+	OperName      string    `json:"operName" gorm:"type:varchar(128);comment:操作者"`                           //操作者
+	DeptName      string    `json:"deptName" gorm:"type:varchar(128);comment:部门名称"`                          //部门名称
+	OperUrl       string    `json:"operUrl" gorm:"type:varchar(255);comment:访问地址"`                           //访问地址
+	OperIp        string    `json:"operIp" gorm:"type:varchar(128);comment:客户端ip"`                           //客户端ip
+	OperLocation  string    `json:"operLocation" gorm:"type:varchar(128);comment:访问位置"`                      //访问位置
+	OperParam     string    `json:"operParam" gorm:"type:longtext;comment:请求参数"`                             //请求参数
+	Status        int       `json:"status" gorm:"type:tinyint;comment:操作状态 1:成功 2:失败"`                       //操作状态 1:成功 2:失败
+	OperTime      time.Time `json:"operTime" gorm:"type:datetime(3);comment:操作时间"`                           //操作时间
+	JsonResult    string    `json:"jsonResult" gorm:"type:varchar(255);comment:返回数据"`                        //返回数据
+	Remark        string    `json:"remark" gorm:"type:varchar(255);comment:备注"`                              //备注
+	LatencyTime   string    `json:"latencyTime" gorm:"type:varchar(128);comment:耗时"`                         //耗时
+	UserAgent     string    `json:"userAgent" gorm:"type:varchar(255);comment:ua"`                           //ua
+	CreatedAt     time.Time `json:"createdAt" gorm:"type:datetime(3);comment:创建时间"`                          //创建时间
+	UpdatedAt     time.Time `json:"updatedAt" gorm:"type:datetime(3);comment:最后更新时间"`                        //最后更新时间
+	CreateBy      int       `json:"createBy" gorm:"type:int unsigned;comment:创建者"`                           //创建者
+	UpdateBy      int       `json:"updateBy" gorm:"type:int unsigned;comment:更新者"`                           //更新者
 }
 
 func (SysOperaLog) TableName() string {
 	return "sys_opera_log"
 }
 
-// SaveOperaLog 从队列中获取操作日志
-// func SaveOperaLog(message storage.Messager) (err error) {
-// 	//准备db
-// 	db := sdk.Runtime.GetDbByKey(message.GetPrefix())
-// 	if db == nil {
-// 		err = errors.New("db not exist")
-// 		log.Errorf("host[%s]'s %s", message.GetPrefix(), err.Error())
-// 		// Log writing to the database ignores error
-// 		return nil
-// 	}
-// 	var rb []byte
-// 	rb, err = json.Marshal(message.GetValues())
-// 	if err != nil {
-// 		log.Errorf("json Marshal error, %s", err.Error())
-// 		// Log writing to the database ignores error
-// 		return nil
-// 	}
-// 	var l SysOperaLog
-// 	err = json.Unmarshal(rb, &l)
-// 	if err != nil {
-// 		log.Errorf("json Unmarshal error, %s", err.Error())
-// 		// Log writing to the database ignores error
-// 		return nil
-// 	}
-// 	// 超出100个字符返回值截断
-// 	if len(l.JsonResult) > 100 {
-// 		l.JsonResult = l.JsonResult[:100]
-// 	}
-// 	err = db.Create(&l).Error
-// 	if err != nil {
-// 		log.Errorf("db create error, %s", err.Error())
-// 		// Log writing to the database ignores error
-// 		return nil
-// 	}
-// 	return nil
-// }
+func NewSysOperaLog() *SysOperaLog {
+	return &SysOperaLog{}
+}
+
+func (e *SysOperaLog) SetId(id int) *SysOperaLog {
+	e.Id = id
+	return e
+}
+func (e *SysOperaLog) SetTitle(title string) *SysOperaLog {
+	e.Title = title
+	return e
+}
+func (e *SysOperaLog) SetBusinessType(businessType string) *SysOperaLog {
+	e.BusinessType = businessType
+	return e
+}
+func (e *SysOperaLog) SetBusinessTypes(businessTypes string) *SysOperaLog {
+	e.BusinessTypes = businessTypes
+	return e
+}
+func (e *SysOperaLog) SetMethod(method string) *SysOperaLog {
+	e.Method = method
+	return e
+}
+func (e *SysOperaLog) SetRequestMethod(requestMethod string) *SysOperaLog {
+	e.RequestMethod = requestMethod
+	return e
+}
+func (e *SysOperaLog) SetOperatorType(operatorType string) *SysOperaLog {
+	e.OperatorType = operatorType
+	return e
+}
+func (e *SysOperaLog) SetOperName(operName string) *SysOperaLog {
+	e.OperName = operName
+	return e
+}
+func (e *SysOperaLog) SetDeptName(deptName string) *SysOperaLog {
+	e.DeptName = deptName
+	return e
+}
+func (e *SysOperaLog) SetOperUrl(operUrl string) *SysOperaLog {
+	e.OperUrl = operUrl
+	return e
+}
+func (e *SysOperaLog) SetOperIp(operIp string) *SysOperaLog {
+	e.OperIp = operIp
+	return e
+}
+func (e *SysOperaLog) SetOperLocation(operLocation string) *SysOperaLog {
+	e.OperLocation = operLocation
+	return e
+}
+func (e *SysOperaLog) SetOperParam(operParam string) *SysOperaLog {
+	e.OperParam = operParam
+	return e
+}
+func (e *SysOperaLog) SetStatus(status int) *SysOperaLog {
+	e.Status = status
+	return e
+}
+func (e *SysOperaLog) SetOperTime(operTime time.Time) *SysOperaLog {
+	e.OperTime = operTime
+	return e
+}
+func (e *SysOperaLog) SetJsonResult(jsonResult string) *SysOperaLog {
+	e.JsonResult = jsonResult
+	return e
+}
+func (e *SysOperaLog) SetRemark(remark string) *SysOperaLog {
+	e.Remark = remark
+	return e
+}
+func (e *SysOperaLog) SetLatencyTime(latencyTime string) *SysOperaLog {
+	e.LatencyTime = latencyTime
+	return e
+}
+func (e *SysOperaLog) SetUserAgent(userAgent string) *SysOperaLog {
+	e.UserAgent = userAgent
+	return e
+}
+func (e *SysOperaLog) SetCreatedAt(createdAt time.Time) *SysOperaLog {
+	e.CreatedAt = createdAt
+	return e
+}
+func (e *SysOperaLog) SetUpdatedAt(updatedAt time.Time) *SysOperaLog {
+	e.UpdatedAt = updatedAt
+	return e
+}
+func (e *SysOperaLog) SetCreateBy(createBy int) *SysOperaLog {
+	e.CreateBy = createBy
+	return e
+}
+func (e *SysOperaLog) SetUpdateBy(updateBy int) *SysOperaLog {
+	e.UpdateBy = updateBy
+	return e
+}

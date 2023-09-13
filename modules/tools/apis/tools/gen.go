@@ -154,12 +154,22 @@ func (e *Gen) Preview(c *gin.Context) {
 // @Accept  application/json
 // @Product application/json
 // @Param tableId path int true "tableId"
+// @Param force path string false "force"
 // @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
 // @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
-// @Router /api/tools/gen/code/{tableId} [get]
+// @Router /api/tools/gen/code/{tableId}/{force} [get]
 func (e *Gen) GenCode(c *gin.Context) {
 	table := tools.GenTable{}
 	id, err := strconv.Atoi(c.Param("tableId"))
+	if err != nil {
+		e.Error(c, err)
+		return
+	}
+	force, err := strconv.ParseBool(c.Param("force"))
+	if err != nil {
+		force = false
+	}
+	fmt.Println(force)
 	if err != nil {
 		core.Log.Error("Gen", zap.Error(err))
 		e.Error(c, err)
@@ -172,7 +182,7 @@ func (e *Gen) GenCode(c *gin.Context) {
 	tab, _ := table.Get(db, false)
 	tab.ApiRoot = cons.ApiRoot
 
-	e.NOMethodsGen(c, tab)
+	e.NOMethodsGen(c, tab, force)
 
 	e.Ok(c, "Code generated successfully！")
 }
@@ -198,148 +208,169 @@ func (e *Gen) GenApiToFile(c *gin.Context) {
 
 const ROOT = "./modules/"
 
-func (e *Gen) NOMethodsGen(c *gin.Context, tab tools.GenTable) {
+func (e *Gen) NOMethodsGen(c *gin.Context, tab tools.GenTable, force bool) {
 
 	tab.MLTBName = strings.Replace(tab.TBName, "_", "-", -1)
 
 	basePath := "resources/template/v4/"
-	// routerFile := basePath + "no_actions/router_check_role.go.template"
 
-	// if tab.IsAuth == 2 {
-	routerFile := basePath + "no_actions/router_no_check_role.go.template"
-	//}
-
-	t1, err := template.ParseFiles(basePath + "model.go.template")
-	if err != nil {
-		core.Log.Error("Gen", zap.Error(err))
-		e.Error(c, err)
-		return
-	}
-	t2, err := template.ParseFiles(basePath + "no_actions/apis.go.template")
-	if err != nil {
-		core.Log.Error("Gen", zap.Error(err))
-		e.Error(c, err)
-		return
-	}
-	t3, err := template.ParseFiles(routerFile)
-	if err != nil {
-		core.Log.Error("Gen", zap.Error(err))
-		e.Error(c, err)
-		return
-	}
-	t4, err := template.ParseFiles(basePath + "js.go.template")
-	if err != nil {
-		core.Log.Error("Gen", zap.Error(err))
-		e.Error(c, err)
-		return
-	}
-	t5, err := template.ParseFiles(basePath + "vue.go.template")
-	if err != nil {
-		core.Log.Error("Gen", zap.Error(err))
-		e.Error(c, err)
-		return
-	}
-	t6, err := template.ParseFiles(basePath + "dto.go.template")
-	if err != nil {
-		core.Log.Error("Gen", zap.Error(err))
-		e.Error(c, err)
-		return
-	}
-	t7, err := template.ParseFiles(basePath + "no_actions/service.go.template")
-	if err != nil {
-		core.Log.Error("Gen", zap.Error(err))
-		e.Error(c, err)
-		return
-	}
-
-	// fmt.Println(1)
-	// flag, err := files.PathExists(ROOT + tab.PackageName)
-	// if err != nil {
-	// 	e.Error(c, err)
-	// 	return
-	// }
-	// if !flag {
 	_ = files.PathCreate(ROOT + tab.PackageName + "/apis/")
 	_ = files.PathCreate(ROOT + tab.PackageName + "/models/")
 	_ = files.PathCreate(ROOT + tab.PackageName + "/router/")
 	_ = files.PathCreate(ROOT + tab.PackageName + "/service/dto/")
 	_ = files.PathCreate(FrontPath + "/api/" + tab.PackageName + "/")
-	err = files.PathCreate(FrontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/")
+	err := files.PathCreate(FrontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/")
 	if err != nil {
 		core.Log.Error("Gen", zap.Error(err))
 		e.Error(c, err)
 		return
 	}
 
-	rt1, err := template.ParseFiles("resources/template/cmd_api.template")
-	if err != nil {
-		core.Log.Error("Gen", zap.Error(err))
-		e.Error(c, err)
-	}
 	m := map[string]string{}
 	m["modName"] = tab.PackageName
-	var rb1 bytes.Buffer
-	if err = rt1.Execute(&rb1, m); err != nil {
-		fmt.Println(err)
+
+	cmdApi := "cmd/start/" + tab.PackageName + ".go"
+	if files.CheckExist(cmdApi) || force {
+		fmt.Println("aaaaaaaaaaaaaaaaaaaaaa")
+		rt1, err := template.ParseFiles("resources/template/cmd_api.template")
+		if err != nil {
+			core.Log.Error("Gen", zap.Error(err))
+			e.Error(c, err)
+		}
+		var rb1 bytes.Buffer
+		if err = rt1.Execute(&rb1, m); err != nil {
+			fmt.Println(err)
+		}
+		files.FileCreate(rb1, cmdApi)
 	}
 
-	files.FileCreate(rb1, "cmd/start/"+tab.PackageName+".go")
-	rt2, err := template.ParseFiles("resources/template/router.template")
-	if err != nil {
-		core.Log.Error("Gen", zap.Error(err))
-		e.Error(c, err)
-	}
-	var rb2 bytes.Buffer
-	err = rt2.Execute(&rb2, m)
-	if err != nil {
-		fmt.Println(err)
+	baseRouter := ROOT + tab.PackageName + "/router/router.go"
+	if files.CheckExist(baseRouter) || force {
+		rt2, err := template.ParseFiles("resources/template/router.template")
+		if err != nil {
+			core.Log.Error("Gen", zap.Error(err))
+			e.Error(c, err)
+		}
+		var rb2 bytes.Buffer
+		err = rt2.Execute(&rb2, m)
+		if err != nil {
+			fmt.Println(err)
+		}
+		files.FileCreate(rb2, baseRouter)
 	}
 
-	files.FileCreate(rb2, ROOT+tab.PackageName+"/router/router.go")
-	//}
+	modelgo := ROOT + tab.PackageName + "/models/" + tab.TBName + ".go"
+	if files.CheckExist(modelgo) || force {
+		t1, err := template.ParseFiles(basePath + "model.go.template")
+		if err != nil {
+			core.Log.Error("Gen", zap.Error(err))
+			e.Error(c, err)
+			return
+		}
+		var b1 bytes.Buffer
+		err = t1.Execute(&b1, tab)
+		if err != nil {
+			core.Log.Error("gen err", zap.Error(err))
+		}
+		files.FileCreate(b1, modelgo)
+	}
 
-	var b1 bytes.Buffer
-	err = t1.Execute(&b1, tab)
-	if err != nil {
-		core.Log.Error("gen err", zap.Error(err))
+	apigo := ROOT + tab.PackageName + "/apis/" + tab.TBName + ".go"
+	if files.CheckExist(apigo) || force {
+		t2, err := template.ParseFiles(basePath + "no_actions/apis.go.template")
+		if err != nil {
+			core.Log.Error("Gen", zap.Error(err))
+			e.Error(c, err)
+			return
+		}
+		var b2 bytes.Buffer
+		err = t2.Execute(&b2, tab)
+		if err != nil {
+			core.Log.Error("gen err", zap.Error(err))
+		}
+		files.FileCreate(b2, apigo)
 	}
-	var b2 bytes.Buffer
-	err = t2.Execute(&b2, tab)
-	if err != nil {
-		core.Log.Error("gen err", zap.Error(err))
+
+	routergo := ROOT + tab.PackageName + "/router/" + tab.TBName + ".go"
+	if files.CheckExist(routergo) || force {
+		routerFile := basePath + "no_actions/router_no_check_role.go.template"
+		t3, err := template.ParseFiles(routerFile)
+		if err != nil {
+			core.Log.Error("Gen", zap.Error(err))
+			e.Error(c, err)
+			return
+		}
+		var b3 bytes.Buffer
+		err = t3.Execute(&b3, tab)
+		if err != nil {
+			core.Log.Error("gen err", zap.Error(err))
+		}
+		files.FileCreate(b3, routergo)
 	}
-	var b3 bytes.Buffer
-	err = t3.Execute(&b3, tab)
-	if err != nil {
-		core.Log.Error("gen err", zap.Error(err))
+
+	js := FrontPath + "/api/" + tab.PackageName + "/" + tab.MLTBName + ".js"
+	if files.CheckExist(js) || force {
+		t4, err := template.ParseFiles(basePath + "js.go.template")
+		if err != nil {
+			core.Log.Error("Gen", zap.Error(err))
+			e.Error(c, err)
+			return
+		}
+		var b4 bytes.Buffer
+		err = t4.Execute(&b4, tab)
+		if err != nil {
+			core.Log.Error("gen err", zap.Error(err))
+		}
+		files.FileCreate(b4, js)
 	}
-	var b4 bytes.Buffer
-	err = t4.Execute(&b4, tab)
-	if err != nil {
-		core.Log.Error("gen err", zap.Error(err))
+
+	vue := FrontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/index.vue"
+	if files.CheckExist(vue) || force {
+		t5, err := template.ParseFiles(basePath + "vue.go.template")
+		if err != nil {
+			core.Log.Error("Gen", zap.Error(err))
+			e.Error(c, err)
+			return
+		}
+		var b5 bytes.Buffer
+		err = t5.Execute(&b5, tab)
+		if err != nil {
+			core.Log.Error("gen err", zap.Error(err))
+		}
+		files.FileCreate(b5, vue)
 	}
-	var b5 bytes.Buffer
-	err = t5.Execute(&b5, tab)
-	if err != nil {
-		core.Log.Error("gen err", zap.Error(err))
+
+	dto := ROOT + tab.PackageName + "/service/dto/" + tab.TBName + ".go"
+	if files.CheckExist(dto) || force {
+		t6, err := template.ParseFiles(basePath + "dto.go.template")
+		if err != nil {
+			core.Log.Error("Gen", zap.Error(err))
+			e.Error(c, err)
+			return
+		}
+		var b6 bytes.Buffer
+		err = t6.Execute(&b6, tab)
+		if err != nil {
+			core.Log.Error("gen err", zap.Error(err))
+		}
+		files.FileCreate(b6, dto)
 	}
-	var b6 bytes.Buffer
-	err = t6.Execute(&b6, tab)
-	if err != nil {
-		core.Log.Error("gen err", zap.Error(err))
+
+	service := ROOT + tab.PackageName + "/service/" + tab.TBName + ".go"
+	if files.CheckExist(service) || force {
+		t7, err := template.ParseFiles(basePath + "no_actions/service.go.template")
+		if err != nil {
+			core.Log.Error("Gen", zap.Error(err))
+			e.Error(c, err)
+			return
+		}
+		var b7 bytes.Buffer
+		err = t7.Execute(&b7, tab)
+		if err != nil {
+			core.Log.Error("gen err", zap.Error(err))
+		}
+		files.FileCreate(b7, service)
 	}
-	var b7 bytes.Buffer
-	err = t7.Execute(&b7, tab)
-	if err != nil {
-		core.Log.Error("gen err", zap.Error(err))
-	}
-	files.FileCreate(b1, ROOT+tab.PackageName+"/models/"+tab.TBName+".go")
-	files.FileCreate(b2, ROOT+tab.PackageName+"/apis/"+tab.TBName+".go")
-	files.FileCreate(b3, ROOT+tab.PackageName+"/router/"+tab.TBName+".go")
-	files.FileCreate(b4, FrontPath+"/api/"+tab.PackageName+"/"+tab.MLTBName+".js")
-	files.FileCreate(b5, FrontPath+"/views/"+tab.PackageName+"/"+tab.MLTBName+"/index.vue")
-	files.FileCreate(b6, ROOT+tab.PackageName+"/service/dto/"+tab.TBName+".go")
-	files.FileCreate(b7, ROOT+tab.PackageName+"/service/"+tab.TBName+".go")
 
 }
 

@@ -1,22 +1,88 @@
 package models
 
-import "github.com/baowk/dilu-core/core/base"
+import (
+	"time"
 
+	"gorm.io/gorm"
+)
+
+// SysRole
 type SysRole struct {
-	RoleId    int       `json:"roleId" gorm:"type:int unsigned;primaryKey;autoIncrement;comment:角色编码"` // 角色编码
-	RoleName  string    `json:"roleName" gorm:"size:128;comment:角色名称"`                                 // 角色名称
-	Status    int       `json:"status" gorm:"type:tinyint;comment:状态"`                                 //状态
-	RoleKey   string    `json:"roleKey" gorm:"size:128;comment:角色代码"`                                  //角色代码
-	RoleSort  int       `json:"roleSort" gorm:"type:int unsigned;comment:排序"`                          //角色排序
-	Flag      string    `json:"flag" gorm:"size:128;comment:flag"`                                     //
-	Remark    string    `json:"remark" gorm:"size:255;comment:备注"`                                     //备注
-	Admin     bool      `json:"admin" gorm:"size:4;comment:管理员"`                                       //超管标识
-	DataScope string    `json:"dataScope" gorm:"size:128;comment:数据权限"`
-	SysMenu   []SysMenu `json:"sysMenu" gorm:"many2many:sys_role_menu;foreignKey:RoleId;joinForeignKey:role_id;references:Id;joinReferences:id;"`
-	base.ControlBy
-	base.ModelTime
+	RoleId    int            `json:"roleId" gorm:"type:int unsigned;primaryKey;autoIncrement;comment:主键"` //主键
+	RoleName  string         `json:"roleName" gorm:"type:varchar(128);comment:角色名称"`                      //角色名称
+	Status    int            `json:"status" gorm:"type:tinyint;comment:状态"`                               //状态
+	RoleKey   string         `json:"roleKey" gorm:"type:varchar(128);comment:角色代码"`                       //角色代码
+	RoleSort  int            `json:"roleSort" gorm:"type:int unsigned;comment:排序"`                        //排序
+	Flag      string         `json:"flag" gorm:"type:varchar(128);comment:flag"`                          //flag
+	Remark    string         `json:"remark" gorm:"type:varchar(255);comment:备注"`                          //备注
+	Admin     int            `json:"admin" gorm:"type:tinyint(1);comment:管理员"`                            //管理员
+	DataScope string         `json:"dataScope" gorm:"type:varchar(128);comment:数据权限"`                     //数据权限
+	CreateBy  int            `json:"createBy" gorm:"type:int unsigned;comment:创建者"`                       //创建者
+	UpdateBy  int            `json:"updateBy" gorm:"type:int unsigned;comment:更新者"`                       //更新者
+	CreatedAt time.Time      `json:"createdAt" gorm:"type:datetime(3);comment:创建时间"`                      //创建时间
+	UpdatedAt time.Time      `json:"updatedAt" gorm:"type:datetime(3);comment:最后更新时间"`                    //最后更新时间
+	DeletedAt gorm.DeletedAt `json:"-" gorm:"index;comment:删除时间"`                                         //删除时间
+
+	SysMenu *[]SysMenu `json:"sysMenu" gorm:"many2many:sys_role_menu;foreignKey:RoleId;joinForeignKey:role_id;references:MenuId;joinReferences:menu_id;"`
 }
 
 func (SysRole) TableName() string {
 	return "sys_role"
+}
+
+func NewSysRole() *SysRole {
+	return &SysRole{}
+}
+
+func (e *SysRole) SetRoleId(roleId int) *SysRole {
+	e.RoleId = roleId
+	return e
+}
+func (e *SysRole) SetRoleName(roleName string) *SysRole {
+	e.RoleName = roleName
+	return e
+}
+func (e *SysRole) SetStatus(status int) *SysRole {
+	e.Status = status
+	return e
+}
+func (e *SysRole) SetRoleKey(roleKey string) *SysRole {
+	e.RoleKey = roleKey
+	return e
+}
+func (e *SysRole) SetRoleSort(roleSort int) *SysRole {
+	e.RoleSort = roleSort
+	return e
+}
+func (e *SysRole) SetFlag(flag string) *SysRole {
+	e.Flag = flag
+	return e
+}
+func (e *SysRole) SetRemark(remark string) *SysRole {
+	e.Remark = remark
+	return e
+}
+func (e *SysRole) SetAdmin(admin int) *SysRole {
+	e.Admin = admin
+	return e
+}
+func (e *SysRole) SetDataScope(dataScope string) *SysRole {
+	e.DataScope = dataScope
+	return e
+}
+func (e *SysRole) SetCreateBy(createBy int) *SysRole {
+	e.CreateBy = createBy
+	return e
+}
+func (e *SysRole) SetUpdateBy(updateBy int) *SysRole {
+	e.UpdateBy = updateBy
+	return e
+}
+func (e *SysRole) SetCreatedAt(createdAt time.Time) *SysRole {
+	e.CreatedAt = createdAt
+	return e
+}
+func (e *SysRole) SetUpdatedAt(updatedAt time.Time) *SysRole {
+	e.UpdatedAt = updatedAt
+	return e
 }

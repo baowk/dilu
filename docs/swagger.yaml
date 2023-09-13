@@ -41,6 +41,15 @@ definitions:
         description: '`json:"请求id"`'
         type: string
     type: object
+  dto.BindReq:
+    properties:
+      code:
+        description: 验证码
+        type: string
+      username:
+        description: 手机号|邮箱
+        type: string
+    type: object
   dto.ChangePwdReq:
     properties:
       inviteCode:
@@ -51,6 +60,30 @@ definitions:
         type: string
       oldPassword:
         description: 老密码
+        type: string
+    type: object
+  dto.ChangeUserinfoReq:
+    properties:
+      avatar:
+        description: 头像
+        type: string
+      bio:
+        description: 签名
+        type: string
+      birthday:
+        description: 生日
+        type: string
+      gender:
+        description: 性别 1 男 2女  3 未知
+        type: string
+      lastName:
+        description: 姓
+        type: string
+      name:
+        description: 名
+        type: string
+      nickname:
+        description: 昵称
         type: string
     type: object
   dto.CodeSendReq:
@@ -308,6 +341,240 @@ definitions:
         description: Status
         type: integer
     type: object
+  dto.SysDeptDto:
+    properties:
+      deptId:
+        description: 主键
+        type: integer
+      deptName:
+        type: string
+      deptPath:
+        type: string
+      email:
+        type: string
+      leader:
+        type: string
+      parentId:
+        type: integer
+      phone:
+        type: string
+      sort:
+        type: integer
+      status:
+        type: integer
+    type: object
+  dto.SysDeptGetPageReq:
+    properties:
+      page:
+        description: 页码
+        type: integer
+      size:
+        description: 每页大小
+        type: integer
+      status:
+        type: integer
+    type: object
+  dto.SysJobDto:
+    properties:
+      args:
+        type: string
+      concurrent:
+        type: integer
+      cronExpression:
+        type: string
+      entryId:
+        type: integer
+      invokeTarget:
+        type: string
+      jobGroup:
+        type: string
+      jobId:
+        description: 主键
+        type: integer
+      jobName:
+        type: string
+      jobType:
+        type: integer
+      misfirePolicy:
+        type: integer
+      status:
+        type: integer
+    type: object
+  dto.SysJobGetPageReq:
+    properties:
+      page:
+        description: 页码
+        type: integer
+      size:
+        description: 每页大小
+        type: integer
+      status:
+        type: integer
+    type: object
+  dto.SysMenuGetReq:
+    properties:
+      id:
+        type: integer
+    type: object
+  dto.SysOperaLogDto:
+    properties:
+      businessType:
+        description: 操作类型
+        type: string
+      businessTypes:
+        description: BusinessTypes
+        type: string
+      deptName:
+        description: 部门名称
+        type: string
+      id:
+        description: 主键
+        type: integer
+      jsonResult:
+        description: 返回数据
+        type: string
+      latencyTime:
+        description: 耗时
+        type: string
+      method:
+        description: 函数
+        type: string
+      operIp:
+        description: 客户端ip
+        type: string
+      operLocation:
+        description: 访问位置
+        type: string
+      operName:
+        description: 操作者
+        type: string
+      operParam:
+        description: 请求参数
+        type: string
+      operTime:
+        description: 操作时间
+        type: string
+      operUrl:
+        description: 访问地址
+        type: string
+      operatorType:
+        description: 操作类型
+        type: string
+      remark:
+        description: 备注
+        type: string
+      requestMethod:
+        description: 请求方式 GET POST PUT DELETE
+        type: string
+      status:
+        description: 操作状态 1:成功 2:失败
+        type: integer
+      title:
+        description: 操作模块
+        type: string
+      userAgent:
+        description: ua
+        type: string
+    type: object
+  dto.SysOperaLogGetPageReq:
+    properties:
+      page:
+        description: 页码
+        type: integer
+      size:
+        description: 每页大小
+        type: integer
+      status:
+        description: 操作状态 1:成功 2:失败
+        type: integer
+    type: object
+  dto.SysRoleDto:
+    properties:
+      admin:
+        description: 管理员
+        type: integer
+      dataScope:
+        description: 数据权限
+        type: string
+      flag:
+        description: flag
+        type: string
+      remark:
+        description: 备注
+        type: string
+      roleId:
+        description: 主键
+        type: integer
+      roleKey:
+        description: 角色代码
+        type: string
+      roleName:
+        description: 角色名称
+        type: string
+      roleSort:
+        description: 排序
+        type: integer
+      status:
+        description: 状态
+        type: integer
+    type: object
+  dto.SysRoleGetPageReq:
+    properties:
+      page:
+        description: 页码
+        type: integer
+      size:
+        description: 每页大小
+        type: integer
+      status:
+        description: 状态
+        type: integer
+    type: object
+  dto.UserinfoResp:
+    properties:
+      avatar:
+        description: 头像
+        type: string
+      bio:
+        description: 签名
+        type: string
+      birthday:
+        description: 生日
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      email:
+        description: 邮箱
+        type: string
+      firstName:
+        description: 名字
+        type: string
+      gender:
+        description: 1 男 2女  3 未知
+        type: string
+      inviteType:
+        description: 邀请类型
+        type: integer
+      inviter:
+        description: 邀请人
+        type: string
+      lastName:
+        description: 姓
+        type: string
+      nickname:
+        description: 昵称
+        type: string
+      phone:
+        description: 手机号
+        type: string
+      userId:
+        description: 用户详情
+        type: string
+      username:
+        description: 用户名
+        type: string
+    type: object
   dto.VerifyCodeReq:
     properties:
       code:
@@ -375,6 +642,263 @@ definitions:
         type: string
       value:
         description: Value
+        type: string
+    type: object
+  models.SysDept:
+    properties:
+      createBy:
+        description: 创建者
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      deptId:
+        description: 主键
+        type: integer
+      deptName:
+        type: string
+      deptPath:
+        type: string
+      email:
+        type: string
+      leader:
+        type: string
+      parentId:
+        type: integer
+      phone:
+        type: string
+      sort:
+        type: integer
+      status:
+        type: integer
+      updateBy:
+        description: 更新者
+        type: integer
+      updatedAt:
+        description: 最后更新时间
+        type: string
+    type: object
+  models.SysJob:
+    properties:
+      args:
+        type: string
+      concurrent:
+        type: integer
+      createBy:
+        description: 创建者
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      cronExpression:
+        type: string
+      entryId:
+        type: integer
+      invokeTarget:
+        type: string
+      jobGroup:
+        type: string
+      jobId:
+        description: 主键
+        type: integer
+      jobName:
+        type: string
+      jobType:
+        type: integer
+      misfirePolicy:
+        type: integer
+      status:
+        type: integer
+      updateBy:
+        description: 更新者
+        type: integer
+      updatedAt:
+        description: 最后更新时间
+        type: string
+    type: object
+  models.SysMenu:
+    properties:
+      children:
+        description: 子菜单
+        items:
+          $ref: '#/definitions/models.SysMenu'
+        type: array
+      component:
+        description: 前端组件路径
+        type: string
+      createBy:
+        description: 创建者id
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      hidden:
+        description: 隐藏
+        type: boolean
+      icon:
+        description: 图标
+        type: string
+      is_select:
+        description: 是否选中
+        type: boolean
+      menuId:
+        description: 主键
+        type: integer
+      menuName:
+        description: 菜单名
+        type: string
+      menuType:
+        description: 菜单类型
+        type: string
+      noCache:
+        description: 是否缓存
+        type: boolean
+      parentId:
+        description: 菜单父id
+        type: integer
+      path:
+        description: 路径
+        type: string
+      paths:
+        description: id路径
+        type: string
+      permission:
+        description: 权限
+        type: string
+      sort:
+        description: 排序
+        type: integer
+      sysApi:
+        description: api关联表
+        items:
+          $ref: '#/definitions/models.SysApi'
+        type: array
+      title:
+        description: 显示名称
+        type: string
+      updateBy:
+        description: 更新者id
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  models.SysOperaLog:
+    properties:
+      businessType:
+        description: 操作类型
+        type: string
+      businessTypes:
+        description: BusinessTypes
+        type: string
+      createBy:
+        description: 创建者
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      deptName:
+        description: 部门名称
+        type: string
+      id:
+        description: 主键
+        type: integer
+      jsonResult:
+        description: 返回数据
+        type: string
+      latencyTime:
+        description: 耗时
+        type: string
+      method:
+        description: 函数
+        type: string
+      operIp:
+        description: 客户端ip
+        type: string
+      operLocation:
+        description: 访问位置
+        type: string
+      operName:
+        description: 操作者
+        type: string
+      operParam:
+        description: 请求参数
+        type: string
+      operTime:
+        description: 操作时间
+        type: string
+      operUrl:
+        description: 访问地址
+        type: string
+      operatorType:
+        description: 操作类型
+        type: string
+      remark:
+        description: 备注
+        type: string
+      requestMethod:
+        description: 请求方式 GET POST PUT DELETE
+        type: string
+      status:
+        description: 操作状态 1:成功 2:失败
+        type: integer
+      title:
+        description: 操作模块
+        type: string
+      updateBy:
+        description: 更新者
+        type: integer
+      updatedAt:
+        description: 最后更新时间
+        type: string
+      userAgent:
+        description: ua
+        type: string
+    type: object
+  models.SysRole:
+    properties:
+      admin:
+        description: 管理员
+        type: integer
+      createBy:
+        description: 创建者
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      dataScope:
+        description: 数据权限
+        type: string
+      flag:
+        description: flag
+        type: string
+      remark:
+        description: 备注
+        type: string
+      roleId:
+        description: 主键
+        type: integer
+      roleKey:
+        description: 角色代码
+        type: string
+      roleName:
+        description: 角色名称
+        type: string
+      roleSort:
+        description: 排序
+        type: integer
+      status:
+        description: 状态
+        type: integer
+      sysMenu:
+        items:
+          $ref: '#/definitions/models.SysMenu'
+        type: array
+      updateBy:
+        description: 更新者
+        type: integer
+      updatedAt:
+        description: 最后更新时间
         type: string
     type: object
   tools.GenColumn:
@@ -650,7 +1174,7 @@ paths:
       summary: 生成Api
       tags:
       - 工具 / 生成工具
-  /api/tools/gen/code/{tableId}:
+  /api/tools/gen/code/{tableId}/{force}:
     get:
       consumes:
       - application/json
@@ -661,6 +1185,10 @@ paths:
         name: tableId
         required: true
         type: integer
+      - description: force
+        in: path
+        name: force
+        type: string
       responses:
         "200":
           description: '{"code": -1, "message": "添加失败"}'
@@ -809,6 +1337,63 @@ paths:
       summary: 分页列表数据
       tags:
       - 工具 / 生成工具
+  /api/v1/sys/auth/bind:
+    post:
+      consumes:
+      - application/json
+      description: 绑定手机号或者邮箱
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.BindReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            $ref: '#/definitions/base.Resp'
+      security:
+      - Bearer: []
+      summary: 绑定手机号或者邮箱
+      tags:
+      - sso
+  /api/v1/sys/auth/changeUserinfo:
+    post:
+      consumes:
+      - application/json
+      description: 修改用户信息
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ChangeUserinfoReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            $ref: '#/definitions/base.Resp'
+      security:
+      - Bearer: []
+      summary: 修改用户信息
+      tags:
+      - sso
+  /api/v1/sys/auth/logout:
+    post:
+      description: 退出登录（调用后清空本地token）
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            $ref: '#/definitions/base.Resp'
+      security:
+      - Bearer: []
+      summary: 退出登录
+      tags:
+      - sso
   /api/v1/sys/captcha:
     get:
       description: 获取验证码
@@ -901,6 +1486,29 @@ paths:
       summary: 获取钉钉登录配置信息
       tags:
       - sso ding
+  /api/v1/sys/getUserinfo:
+    post:
+      description: 获取用户信息
+      parameters:
+      - description: data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqId'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.UserinfoResp'
+              type: object
+      summary: 获取用户信息
+      tags:
+      - sso
   /api/v1/sys/login:
     post:
       consumes:
@@ -1344,6 +1952,691 @@ paths:
       summary: 更新系统配置项
       tags:
       - SysCfg
+  /api/v1/sys/sys-dept/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysDeptDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysDept'
+              type: object
+      security:
+      - Bearer: []
+      summary: 创建SysDept
+      tags:
+      - SysDept
+  /api/v1/sys/sys-dept/del:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqIds'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysDept'
+              type: object
+      security:
+      - Bearer: []
+      summary: 删除SysDept
+      tags:
+      - SysDept
+  /api/v1/sys/sys-dept/get:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqId'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysDept'
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取SysDept
+      tags:
+      - SysDept
+  /api/v1/sys/sys-dept/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysDeptGetPageReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/base.PageResp'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/models.SysDept'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - Bearer: []
+      summary: Page接口
+      tags:
+      - SysDept
+  /api/v1/sys/sys-dept/update:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysDeptDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysDept'
+              type: object
+      security:
+      - Bearer: []
+      summary: 更新SysDept
+      tags:
+      - SysDept
+  /api/v1/sys/sys-job/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysJobDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysJob'
+              type: object
+      security:
+      - Bearer: []
+      summary: 创建SysJob
+      tags:
+      - SysJob
+  /api/v1/sys/sys-job/del:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqIds'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysJob'
+              type: object
+      security:
+      - Bearer: []
+      summary: 删除SysJob
+      tags:
+      - SysJob
+  /api/v1/sys/sys-job/get:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqId'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysJob'
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取SysJob
+      tags:
+      - SysJob
+  /api/v1/sys/sys-job/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysJobGetPageReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/base.PageResp'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/models.SysJob'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - Bearer: []
+      summary: Page接口
+      tags:
+      - SysJob
+  /api/v1/sys/sys-job/update:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysJobDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysJob'
+              type: object
+      security:
+      - Bearer: []
+      summary: 更新SysJob
+      tags:
+      - SysJob
+  /api/v1/sys/sys-menu/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysApiDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysMenu'
+              type: object
+      security:
+      - Bearer: []
+      summary: 创建接口列表
+      tags:
+      - SysMenu
+  /api/v1/sys/sys-menu/del:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqIds'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysMenu'
+              type: object
+      security:
+      - Bearer: []
+      summary: 删除接口列表
+      tags:
+      - SysMenu
+  /api/v1/sys/sys-menu/get:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysMenuGetReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysMenu'
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取接口列表
+      tags:
+      - SysMenu
+  /api/v1/sys/sys-menu/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysApiGetPageReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/base.PageResp'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/models.SysMenu'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - Bearer: []
+      summary: Page接口
+      tags:
+      - SysMenu
+  /api/v1/sys/sys-menu/update:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysApiDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysMenu'
+              type: object
+      security:
+      - Bearer: []
+      summary: 更新接口列表
+      tags:
+      - SysMenu
+  /api/v1/sys/sys-opera-log/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysOperaLogDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysOperaLog'
+              type: object
+      security:
+      - Bearer: []
+      summary: 创建SysOperaLog
+      tags:
+      - SysOperaLog
+  /api/v1/sys/sys-opera-log/del:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqIds'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysOperaLog'
+              type: object
+      security:
+      - Bearer: []
+      summary: 删除SysOperaLog
+      tags:
+      - SysOperaLog
+  /api/v1/sys/sys-opera-log/get:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqId'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysOperaLog'
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取SysOperaLog
+      tags:
+      - SysOperaLog
+  /api/v1/sys/sys-opera-log/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysOperaLogGetPageReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/base.PageResp'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/models.SysOperaLog'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - Bearer: []
+      summary: Page接口
+      tags:
+      - SysOperaLog
+  /api/v1/sys/sys-opera-log/update:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysOperaLogDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysOperaLog'
+              type: object
+      security:
+      - Bearer: []
+      summary: 更新SysOperaLog
+      tags:
+      - SysOperaLog
+  /api/v1/sys/sys-role/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysRoleDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysRole'
+              type: object
+      security:
+      - Bearer: []
+      summary: 创建SysRole
+      tags:
+      - SysRole
+  /api/v1/sys/sys-role/del:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqIds'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysRole'
+              type: object
+      security:
+      - Bearer: []
+      summary: 删除SysRole
+      tags:
+      - SysRole
+  /api/v1/sys/sys-role/get:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqId'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysRole'
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取SysRole
+      tags:
+      - SysRole
+  /api/v1/sys/sys-role/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysRoleGetPageReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/base.PageResp'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/models.SysRole'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - Bearer: []
+      summary: Page接口
+      tags:
+      - SysRole
+  /api/v1/sys/sys-role/update:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysRoleDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysRole'
+              type: object
+      security:
+      - Bearer: []
+      summary: 更新SysRole
+      tags:
+      - SysRole
   /api/v1/sys/verify/code:
     post:
       consumes:

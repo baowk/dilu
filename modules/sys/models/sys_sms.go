@@ -4,7 +4,7 @@ import (
 	"github.com/baowk/dilu-core/core/base"
 )
 
-type SmsLog struct {
+type SysSms struct {
 	base.Model
 	Phone     string `json:"phone" gorm:"type:varchar(16);comment:手机号"`  //手机号
 	Code      string `json:"code" gorm:"type:varchar(6);comment:验证码"`    //验证码
@@ -14,6 +14,6 @@ type SmsLog struct {
 	base.ModelIntTime
 }
 
-func (SmsLog) TableName() string {
-	return "sms_log"
+func (SysSms) TableName() string {
+	return "sys_sms"
 }

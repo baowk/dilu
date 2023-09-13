@@ -91,7 +91,7 @@ type SysUserInsertReq struct {
 	UserId   int    `json:"userId" comment:"用户ID"` // 用户ID
 	Username string `json:"username" comment:"用户名" vd:"len($)>0"`
 	Password string `json:"password" comment:"密码"`
-	NickName string `json:"nickName" comment:"昵称" vd:"len($)>0"`
+	Nickname string `json:"nickname" comment:"昵称" vd:"len($)>0"`
 	Phone    string `json:"phone" comment:"手机号" vd:"len($)>0"`
 	RoleId   int    `json:"roleId" comment:"角色ID"`
 	Avatar   string `json:"avatar" comment:"头像"`
@@ -110,13 +110,12 @@ func (s *SysUserInsertReq) Generate(model *models.SysUser) {
 	}
 	//model.Username = s.Username
 	model.Password = s.Password
-	model.NickName = s.NickName
+	model.Nickname = s.Nickname
 	model.Phone = s.Phone
 	model.RoleId = s.RoleId
 	model.Avatar = s.Avatar
 	model.Gender = s.Gender
 	model.Email = s.Email
-	model.DeptId = s.DeptId
 	model.Post = s.Post
 	model.Remark = s.Remark
 	model.Status = s.Status
@@ -130,7 +129,7 @@ func (s *SysUserInsertReq) GetId() interface{} {
 type SysUserUpdateReq struct {
 	UserId   int    `json:"userId" comment:"用户ID"` // 用户ID
 	Username string `json:"username" comment:"用户名" vd:"len($)>0"`
-	NickName string `json:"nickName" comment:"昵称" vd:"len($)>0"`
+	Nickname string `json:"nickName" comment:"昵称" vd:"len($)>0"`
 	Phone    string `json:"phone" comment:"手机号" vd:"len($)>0"`
 	RoleId   int    `json:"roleId" comment:"角色ID"`
 	Avatar   string `json:"avatar" comment:"头像"`
@@ -147,13 +146,12 @@ func (s *SysUserUpdateReq) Generate(model *models.SysUser) {
 	if s.UserId != 0 {
 		model.UserId = s.UserId
 	}
-	model.NickName = s.NickName
+	model.Nickname = s.Nickname
 	model.Phone = s.Phone
 	model.RoleId = s.RoleId
 	model.Avatar = s.Avatar
 	model.Gender = s.Gender
 	model.Email = s.Email
-	model.DeptId = s.DeptId
 	model.Post = s.Post
 	model.Remark = s.Remark
 	model.Status = s.Status

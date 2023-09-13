@@ -4,7 +4,7 @@ import (
 	"github.com/baowk/dilu-core/core/base"
 )
 
-type EmailLog struct {
+type SysEmail struct {
 	base.Model
 
 	Email     string `json:"email" gorm:"type:varchar(255);comment:邮箱地址"` //邮箱地址
@@ -15,6 +15,6 @@ type EmailLog struct {
 	base.ModelIntTime
 }
 
-func (EmailLog) TableName() string {
-	return "email_log"
+func (SysEmail) TableName() string {
+	return "sys_email"
 }

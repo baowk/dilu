@@ -160,14 +160,14 @@ func (e *SSO) VerifyCode(c *gin.Context) {
 
 	//是否手机
 	if regexps.CheckMobile(req.Username) {
-		s := service.SmsLog{}
+		s := service.SysSms{}
 
 		if !s.Verify(req.Username, req.Code) {
 			e.Code(c, codes.ErrVerifyCode)
 			return
 		}
 	} else if regexps.CheckEmail(req.Username) { //是否邮箱
-		s := service.EmailLog{}
+		s := service.SysEmail{}
 
 		if !s.Verify(req.Username, req.Code) {
 			e.Code(c, codes.ErrVerifyCode)
@@ -265,7 +265,7 @@ func (e *SSO) ForgetPwd(c *gin.Context) {
 	var mobile, email string
 	//是否手机
 	if regexps.CheckMobile(req.Username) {
-		s := service.SmsLog{}
+		s := service.SysSms{}
 
 		if !s.Verify(req.Username, req.Code) {
 			e.Code(c, codes.ErrVerifyCode)
@@ -273,7 +273,7 @@ func (e *SSO) ForgetPwd(c *gin.Context) {
 		}
 		mobile = req.Username
 	} else if regexps.CheckEmail(req.Username) { //是否邮箱
-		s := service.EmailLog{}
+		s := service.SysEmail{}
 
 		if !s.Verify(req.Username, req.Code) {
 			e.Code(c, codes.ErrVerifyCode)
@@ -294,42 +294,37 @@ func (e *SSO) ForgetPwd(c *gin.Context) {
 
 }
 
-// // 获取用户信息
-// // GetUserInfo 获取用户信息
-// // @Summary 获取用户信息
-// // @Description 获取用户信息
-// // @Tags sso
-// // @Param data body dto.IdReq true "data"
-// // @Success 200 {object} base.Resp{data=models.User} "{"code": 200, "data": [...]}"
-// // @Router /api/v1/sys/getUserinfo [post]
-// func (e *SSO) GetUserInfo(c *gin.Context) {
-// 	req := dto.IdReq{}
-// 	s := service.User{}
-// 	err := e.MakeContext(c).
-// 		MakeOrm().
-// 		Bind(&req).
-// 		MakeService(&s.Service).
-// 		Errors
-// 	if err != nil {
-// 		core.Log.Error(err)
-// 		e.Code(500, err, err.Error())
-// 		return
-// 	}
-// 	var object models.User
+// 获取用户信息
+// GetUserInfo 获取用户信息
+// @Summary 获取用户信息
+// @Description 获取用户信息
+// @Tags sso
+// @Param data body base.ReqId true "data"
+// @Success 200 {object} base.Resp{data=dto.UserinfoResp} "{"code": 200, "data": [...]}"
+// @Router /api/v1/sys/getUserinfo [post]
+func (e *SSO) GetUserInfo(c *gin.Context) {
+	req := base.ReqId{}
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
+	var object models.SysUser
 
-// 	err = s.GetByUserId(req.Id, &object)
-// 	if err != nil {
-// 		e.Code(500, err, fmt.Sprintf("获取用户表失败，\r\n失败信息 %s", err.Error()))
-// 		return
-// 	}
-// 	resp := dto.UserinfoResp{}
-// 	if err := copier.Copy(&resp, object); err != nil {
-// 		e.Code(500, err, fmt.Sprintf("拷贝失败，\r\n失败信息 %s", err.Error()))
-// 		return
-// 	}
+	err := service.SerSysUser.Get(req.Id, &object)
+	if err != nil {
+		core.Log.Error("sso", zap.Error(err))
+		e.Error(c, err)
+		return
+	}
+	resp := dto.UserinfoResp{}
+	if err := copier.Copy(&resp, object); err != nil {
+		core.Log.Error("sso", zap.Error(err))
+		e.Error(c, err)
+		return
+	}
 
-// 	e.Ok(c,resp, "查询成功")
-// }
+	e.Ok(c, resp, "查询成功")
+}
 
 // 获取个人信息
 // GetUserInfo 获取个人信息
@@ -391,111 +386,101 @@ func (e *SSO) ChangePwd(c *gin.Context) {
 	e.Ok(c, c, "修改成功")
 }
 
-// // 绑定手机号或者邮箱
-// // Bind 绑定手机号或者邮箱
-// // @Summary 绑定手机号或者邮箱
-// // @Description 绑定手机号或者邮箱
-// // @Tags sso
-// // @Accept application/json
-// // @Product application/json
-// // @Param data body dto.BindReq true "data"
-// // @Success 200 {object} base.Resp{} "{"code": 200, "data": [...]}"
-// // @Router /api/v1/sys/auth/bind [post]
-// // @Security Bearer
-// func (e *SSO) Bind(c *gin.Context) {
-// 	req := dto.BindReq{}
-// 	s := service.User{}
-// 	err := e.MakeContext(c).
-// 		Bind(&req).
-// 		MakeOrm().
-// 		MakeService(&s.Service).
-// 		Errors
-// 	if err != nil {
-// 		core.Log.Error(err)
-// 		e.Code(500, err, err.Error())
-// 		return
-// 	}
-// 	if e.GetUserId() == "" {
-// 		e.Code(c, codes.ErrUnLogin)
-// 		return
-// 	}
-// 	//是否手机
-// 	if regexps.CheckMobile(req.Username) {
-// 		s := service.SmsLog{}
-//
-// 		if !s.Verify(req.Username, req.Code) {
-// 			e.Code(c, codes.ErrVerifyCode)
-// 			return
-// 		}
-// 	} else if regexps.CheckEmail(req.Username) { //是否邮箱
-// 		s := service.EmailLog{}
-//
-// 		if !s.Verify(req.Username, req.Code) {
-// 			e.Code(c, codes.ErrVerifyCode)
-// 			return
-// 		}
-// 	} else {
-// 		e.Code(c, codes.ErrMobileOrEmail)
-// 		return
-// 	}
+// 绑定手机号或者邮箱
+// Bind 绑定手机号或者邮箱
+// @Summary 绑定手机号或者邮箱
+// @Description 绑定手机号或者邮箱
+// @Tags sso
+// @Accept application/json
+// @Product application/json
+// @Param data body dto.BindReq true "data"
+// @Success 200 {object} base.Resp{} "{"code": 200, "data": [...]}"
+// @Router /api/v1/sys/auth/bind [post]
+// @Security Bearer
+func (e *SSO) Bind(c *gin.Context) {
+	req := dto.BindReq{}
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
 
-// 	if err := s.Bind(e.GetUserId(), &req); err != nil {
-// 		e.Code(c, codes.ErrBind)
-// 		return
-// 	}
+	uid := middleware.GetUserId(c)
+	if uid == 0 {
+		e.Code(c, codes.NoAccessToken)
+		return
+	}
+	//是否手机
+	if regexps.CheckMobile(req.Username) {
+		s := service.SysSms{}
 
-// 	e.Ok(c,c, "绑定成功")
-// }
+		if !s.Verify(req.Username, req.Code) {
+			e.Code(c, codes.ErrVerifyCode)
+			return
+		}
+	} else if regexps.CheckEmail(req.Username) { //是否邮箱
+		s := service.SysEmail{}
 
-// // 修改用户信息
-// // ChangeUserinfo 修改用户信息
-// // @Summary 修改用户信息
-// // @Description 修改用户信息
-// // @Tags sso
-// // @Accept application/json
-// // @Product application/json
-// // @Param data body dto.ChangeUserinfoReq true "data"
-// // @Success 200 {object} base.Resp{} "{"code": 200, "data": [...]}"
-// // @Router /api/v1/sys/auth/changeUserinfo [post]
-// // @Security Bearer
-// func (e *SSO) ChangeUserinfo(c *gin.Context) {
-// 	req := dto.ChangeUserinfoReq{}
-// 	s := service.User{}
-// 	err := e.MakeContext(c).
-// 		Bind(&req).
-// 		MakeOrm().
-// 		MakeService(&s.Service).
-// 		Errors
-// 	if err != nil {
-// 		core.Log.Error(err)
-// 		e.Code(500, err, err.Error())
-// 		return
-// 	}
-// 	if e.GetUserId() == "" {
-// 		e.Code(c, codes.ErrUnLogin)
-// 		return
-// 	}
-// 	//是否手机
+		if !s.Verify(req.Username, req.Code) {
+			e.Code(c, codes.ErrVerifyCode)
+			return
+		}
+	} else {
+		e.Code(c, codes.ErrMobileOrEmail)
+		return
+	}
 
-// 	if err := s.ChangeUserinfo(e.GetUserId(), &req); err != nil {
-// 		e.Code(c, codes.ErrBind)
-// 		return
-// 	}
-// 	e.Ok(c,c, "修改成功")
-// }
+	if err := service.SerSysUser.Bind(uid, &req); err != nil {
+		e.Code(c, codes.ErrBind)
+		return
+	}
 
-// // // 退出登录
-// // // Logout 退出登录
-// // // @Summary 退出登录
-// // // @Description 退出登录（调用后清空本地token）
-// // // @Tags sso
-// // // @Success 200 {object} base.Resp{} "{"code": 200, "data": [...]}"
-// // // @Router /api/v1/sys/auth/logout [post]
-// // // @Security Bearer
-// // func (e *SSO) Logout(c *gin.Context) {
+	e.Ok(c, c, "绑定成功")
+}
 
-// // 	e.Ok(c,c, "退出成功")
-// // }
+// 修改用户信息
+// ChangeUserinfo 修改用户信息
+// @Summary 修改用户信息
+// @Description 修改用户信息
+// @Tags sso
+// @Accept application/json
+// @Product application/json
+// @Param data body dto.ChangeUserinfoReq true "data"
+// @Success 200 {object} base.Resp{} "{"code": 200, "data": [...]}"
+// @Router /api/v1/sys/auth/changeUserinfo [post]
+// @Security Bearer
+func (e *SSO) ChangeUserinfo(c *gin.Context) {
+	req := dto.ChangeUserinfoReq{}
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
+
+	uid := middleware.GetUserId(c)
+	if uid == 0 {
+		e.Code(c, codes.NoAccessToken)
+		return
+	}
+	//是否手机
+
+	if err := service.SerSysUser.ChangeUserinfo(uid, &req); err != nil {
+		e.Code(c, codes.ErrBind)
+		return
+	}
+	e.Ok(c, c, "修改成功")
+}
+
+// 退出登录
+// Logout 退出登录
+// @Summary 退出登录
+// @Description 退出登录（调用后清空本地token）
+// @Tags sso
+// @Success 200 {object} base.Resp{} "{"code": 200, "data": [...]}"
+// @Router /api/v1/sys/auth/logout [post]
+// @Security Bearer
+func (e *SSO) Logout(c *gin.Context) {
+
+	e.Ok(c, c, "退出成功")
+}
 
 // // 微信登录
 // // LoginByWechat 微信登录

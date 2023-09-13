@@ -2,30 +2,32 @@ package models
 
 import (
     {{- $bb := false -}}
-	  {{- range .Columns -}}
-    {{$z := .IsQuery}}
-    {{- if ($z) }}
-    {{if eq .GoType "time.Time"}}{{- $bb = true -}}{{- end -}}
-    {{- end -}}
+	{{- range .Columns -}}
+        {{$z := .IsQuery}}
+        {{- if ($z) }}
+            {{if eq .GoType "time.Time"}}{{- $bb = true -}}{{- end -}}
+        {{- end -}}
     {{- end -}}
     {{- range .Columns -}}
-    {{if eq .GoType "time.Time"}}{{- $bb = true -}}{{- end -}}
+        {{if eq .GoType "time.Time"}}{{- $bb = true -}}{{- end -}}
+        {{if eq .GoField "DeletedAt" }}"gorm.io/gorm"{{ end -}}
     {{- end -}}
-    {{- if eq $bb true -}}
+    {{- if eq $bb true }}
     "time"
     {{- end }}
     
-    "github.com/baowk/dilu-core/core/base"
 )
 
 //{{.TableComment}}
 type {{.ClassName}} struct {
-    base.Model
     {{ range .Columns -}}
     {{$x := .Pk}}
     {{- if ($x) }}
+    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" gorm:"type:{{.ColumnType}};primaryKey;autoIncrement;comment:主键"` //主键
+    {{- else if eq .GoField "DeletedAt" }}
+    DeletedAt gorm.DeletedAt `json:"-" gorm:"index;comment:删除时间"`     //删除时间
     {{- else }}
-    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" gorm:"type:{{.ColumnType}};comment:{{- if eq .ColumnComment "" -}}{{.GoField}}{{- else -}}{{.ColumnComment}}{{end -}}"` //{{.ColumnComment}} {{end -}}
+    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" gorm:"type:{{.ColumnType}};comment:{{- if eq .ColumnComment "" -}}{{.GoField}}{{- else -}}{{.ColumnComment}}{{ end -}}"` //{{.ColumnComment}} {{ end -}}
     {{- end }}
 }
 
@@ -39,6 +41,8 @@ func New{{.ClassName}}() *{{.ClassName}}{
 
 {{- $x := .ClassName}}
 {{ range .Columns }}
+{{- if eq .GoField "DeletedAt" -}}
+{{- else -}}
 {{- $arg := .JsonField}}
 {{- if eq .JsonField "type"}}
     {{- $arg = "aType"}}    
@@ -47,5 +51,6 @@ func (e *{{$x}}) Set{{.GoField}}({{$arg}} {{.GoType}}) *{{$x}} {
 	e.{{.GoField}} = {{$arg}}
 	return e
 }
+{{- end -}}
 {{ end }}
 

@@ -85,10 +85,6 @@ type BindReq struct {
 	Code     string `json:"code" comment:"验证码"`        //验证码
 }
 
-type IdReq struct {
-	Id string `json:"id"` //string型id统一请求
-}
-
 type UserinfoResp struct {
 	UserId     string    `json:"userId" gorm:"type:char(32);comment:用户id"`                      //用户详情
 	Username   string    `json:"username" gorm:"type:varchar(50);default:(-);comment:用户名"`      //用户名
@@ -123,13 +119,12 @@ type MyUserinfoResp struct {
 }
 
 type ChangeUserinfoReq struct {
-	FirstName string `json:"firstName" gorm:"type:varchar(64);default:(-);comment:名"`        //名
-	LastName  string `json:"lastName" gorm:"type:varchar(64);default:(-);comment:姓"`         //姓
-	Nickname  string `json:"nickname" gorm:"type:varchar(64);default:(-);comment:昵称"`        //昵称
-	Avatar    string `json:"avatar" gorm:"type:varchar(255);default:(-);comment:头像"`         //头像
-	Bio       string `json:"bio" gorm:"type:varchar(255);default:(-);comment:签名"`            //签名
-	Gender    string `json:"gender" gorm:"type:char(1);default:'2';comment:性别 1 男 2女  3 未知"` //性别 1 男 2女  3 未知
-	Birthday  string `json:"birthday" gorm:"type:date;default:(-);comment:生日 格式 yyyy-MM-dd"` //生日
+	Name     string `json:"name" gorm:"type:varchar(64);default:(-);comment:名"`             //名
+	Nickname string `json:"nickname" gorm:"type:varchar(64);default:(-);comment:昵称"`        //昵称
+	Avatar   string `json:"avatar" gorm:"type:varchar(255);default:(-);comment:头像"`         //头像
+	Bio      string `json:"bio" gorm:"type:varchar(255);default:(-);comment:签名"`            //签名
+	Gender   string `json:"gender" gorm:"type:char(1);default:'2';comment:性别 1 男 2女  3 未知"` //性别 1 男 2女  3 未知
+	Birthday string `json:"birthday" gorm:"type:date;default:(-);comment:生日 格式 yyyy-MM-dd"` //生日
 }
 
 type DingCfgResp struct {

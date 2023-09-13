@@ -279,7 +279,7 @@ func (e *SysUser) Register(loginType int, c *dto.RegisterReq, ip string) (dto.Lo
 		}
 	}
 	model.Password = c.Password
-	model.NickName = c.Name
+	model.Nickname = c.Name
 	model.CreatedAt = time.Now()
 	model.UpdatedAt = model.CreatedAt
 	err := core.DB().Create(&model).Error
@@ -295,7 +295,7 @@ func (e *SysUser) loginOK(u *models.SysUser, need int) (dto.LoginOK, errs.IError
 	exp := time.Now().Add(time.Duration(core.Cfg.JWT.Expires) * time.Minute)
 	claims := middleware.NewClaims(u.UserId, exp, core.Cfg.JWT.Issuer, core.Cfg.JWT.Subject)
 	claims.Phone = u.Phone
-	claims.Nickname = u.NickName
+	claims.Nickname = u.Nickname
 	claims.RoleId = u.RoleId
 	token, err := middleware.Generate(claims, core.Cfg.JWT.SignKey)
 	lok := dto.LoginOK{}
@@ -376,7 +376,7 @@ func (e *SysUser) LoginCode(c *dto.LoginReq, ip string) (dto.LoginOK, errs.IErro
 	if model.UserId == 0 {
 		model.CreatedAt = time.Now()
 		model.UpdatedAt = model.CreatedAt
-		model.NickName = name
+		model.Nickname = name
 
 		err := core.DB().Create(&model).Error
 		if err != nil {
@@ -624,5 +624,81 @@ func (e *SysUser) ChangePwdByOld(userId int, oldPwd, newPwd, inviteCode string) 
 		return codes.ErrSys(err)
 	}
 	return nil
+}
 
+// 通过老密码修改
+func (e *SysUser) Bind(userId int, c *dto.BindReq) error {
+	var user models.SysUser
+	if userId != 0 {
+		if err := e.Get(userId, &user); err != nil {
+			return errors.New("用户不存在")
+		}
+	}
+
+	updates := models.SysUser{}
+
+	if regexps.CheckMobile(c.Username) {
+		updates.Phone = c.Username
+		var count int64
+		if err := e.CountByPhone(c.Username, &count); err != nil {
+			return err
+		}
+		if count > 0 {
+			return errors.New("该手机号已存在")
+		}
+	} else if regexps.CheckEmail(c.Username) {
+		updates.Email = c.Username
+		var count int64
+		if err := e.CountByEmail(c.Username, &count); err != nil {
+			return err
+		}
+		if count > 0 {
+			return errors.New("该邮箱已存在")
+		}
+	} else {
+		return errors.New("请输入正确的手机号或者邮箱")
+	}
+
+	db := core.DB().Model(user).Updates(updates)
+	if err := db.Error; err != nil {
+		core.Log.Error("UserService Save error", zap.Error(err))
+		return err
+	}
+	return nil
+}
+
+// 通过老密码修改
+func (e *SysUser) ChangeUserinfo(userId int, c *dto.ChangeUserinfoReq) error {
+	var user models.SysUser
+	if userId != 0 {
+		if err := e.Get(userId, &user); err != nil {
+			return errors.New("用户不存在")
+		}
+	} else {
+		return errors.New("参数错误")
+	}
+
+	updates := models.SysUser{}
+	if c.Birthday != "" {
+		updates.Birthday = c.Birthday
+	}
+	if c.Avatar != "" {
+		updates.Avatar = c.Avatar
+	}
+	if c.Bio != "" {
+		updates.Bio = c.Bio
+	}
+	if c.Nickname != "" {
+		updates.Nickname = c.Nickname
+	}
+	if c.Name != "" {
+		updates.Name = c.Name
+	}
+
+	db := core.DB().Model(user).Updates(updates)
+	if err := db.Error; err != nil {
+		core.Log.Error("UserService Save error", zap.Error(err))
+		return err
+	}
+	return nil
 }

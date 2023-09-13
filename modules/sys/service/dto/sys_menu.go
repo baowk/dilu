@@ -38,7 +38,7 @@ type SysMenuInsertReq struct {
 
 func (s *SysMenuInsertReq) Generate(model *models.SysMenu) {
 	if s.Id != 0 {
-		model.Id = s.Id
+		model.MenuId = s.Id
 	}
 	model.MenuName = s.MenuName
 	model.Title = s.Title
@@ -86,7 +86,7 @@ type SysMenuUpdateReq struct {
 
 func (s *SysMenuUpdateReq) Generate(model *models.SysMenu) {
 	if s.Id != 0 {
-		model.Id = s.Id
+		model.MenuId = s.Id
 	}
 	model.MenuName = s.MenuName
 	model.Title = s.Title

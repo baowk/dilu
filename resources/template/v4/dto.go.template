@@ -1,7 +1,7 @@
 package dto
 
 import (
-	"github.com/baowk/dilu-core/core/base"
+    "github.com/baowk/dilu-core/core/base"
 )
 
 type {{.ClassName}}GetPageReq struct {
@@ -10,17 +10,17 @@ type {{.ClassName}}GetPageReq struct {
     {{- range .Columns -}}
     {{$z := .IsQuery}}
     {{- if ($z) }}
-    {{.GoField}} {{.GoType}} `form:"{{.JsonField}}"  search:"type:{{if eq .QueryType "EQ"}}exact{{ else if eq .QueryType "NE"}}iexact{{ else if eq .QueryType "LIKE"}}contains{{ else if eq .QueryType "GT"}}gt{{ else if eq .QueryType "GTE"}}gte{{ else if eq .QueryType "LT"}}lt{{ else if eq .QueryType "LTE"}}lte{{- end }};column:{{.ColumnName}};table:{{$tablename}}" comment:"{{.ColumnComment}}"` //{{.ColumnComment}}
+    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" form:"{{.JsonField}}"` //{{.ColumnComment}}
     {{- end }}
     {{- end }}
 }
 
 //{{.TableComment}}
 type {{.ClassName}}Dto struct {
-    base.Model
     {{ range .Columns -}}
     {{$x := .Pk}}
     {{- if ($x) }}
+    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}"` //主键
     {{- else if eq .GoField "CreatedAt" -}}
     {{- else if eq .GoField "UpdatedAt" -}}
     {{- else if eq .GoField "DeletedAt" -}}

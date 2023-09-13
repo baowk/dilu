@@ -3,7 +3,7 @@ package models
 import "github.com/baowk/dilu-core/core/base"
 
 type SysMenu struct {
-	Id         int       `json:"menuId" gorm:"type:int unsigned;primaryKey;autoIncrement; comment:主键"` // 主键
+	MenuId     int       `json:"menuId" gorm:"type:int unsigned;primaryKey;autoIncrement; comment:主键"` // 主键
 	MenuName   string    `json:"menuName" gorm:"size:128;comment:菜单名"`                                 //菜单名
 	Title      string    `json:"title" gorm:"size:128;comment:显示名称"`                                   //显示名称
 	Icon       string    `json:"icon" gorm:"size:128;comment:图标"`                                      //图标
