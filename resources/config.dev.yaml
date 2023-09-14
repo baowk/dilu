@@ -9,7 +9,7 @@ server:
 logger:             # 日志配置
   level: debug # 级别
   prefix:    # 日志前缀
-  format: json # 输出
+  format:  # 输出格式 json
   director: temp/log      # 日志文件夹
   encode-level: LowercaseColorLevelEncoder # 编码级
   stacktrace-key: # 栈名
