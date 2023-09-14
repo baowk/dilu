@@ -2,7 +2,7 @@ server:
   mode: dev         # 应用程序运行模式（dev开发环境、test测试环境、prod线上环境）
   host: 0.0.0.0     # 服务器IP地址，默认使用0.0.0.0
   name: dilu-app      # 服务名称
-  port: 7788       # 服务端口号
+  port: 7888       # 服务端口号
   #read-timeout    #读超时 单位秒 默认20
   #write-timeout   #写超时 单位秒 默认20
   fs-type: local    #文件服务

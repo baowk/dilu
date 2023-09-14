@@ -3,6 +3,7 @@ package start
 import (
 	"dilu/common/codes"
 	"dilu/common/config"
+	"dilu/common/middleware"
 	"fmt"
 
 	"github.com/baowk/dilu-core/core"
@@ -62,5 +63,12 @@ func run() {
 		Lang:       core.Cfg.Server.Lang,
 	})
 
-	core.Run(&AppRouters)
+	//初始化gin
+	r := core.GetGinEngine()
+	middleware.InitMiddleware(r, &core.Cfg)
+	//初始化路由
+	for _, f := range AppRouters {
+		f()
+	}
+	core.Run()
 }

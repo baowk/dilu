@@ -231,7 +231,6 @@ func (e *Gen) NOMethodsGen(c *gin.Context, tab tools.GenTable, force bool) {
 
 	cmdApi := "cmd/start/" + tab.PackageName + ".go"
 	if files.CheckExist(cmdApi) || force {
-		fmt.Println("aaaaaaaaaaaaaaaaaaaaaa")
 		rt1, err := template.ParseFiles("resources/template/cmd_api.template")
 		if err != nil {
 			core.Log.Error("Gen", zap.Error(err))
