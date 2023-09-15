@@ -3,12 +3,11 @@ package middleware
 import (
 	"bufio"
 	"bytes"
-	"encoding/json"
 	"io"
 	"net/http"
-	"strings"
 	"time"
 
+	"github.com/baowk/dilu-core/common/utils"
 	"github.com/baowk/dilu-core/common/utils/ips"
 	"github.com/baowk/dilu-core/core"
 	"github.com/gin-gonic/gin"
@@ -16,18 +15,18 @@ import (
 )
 
 // LogLayout 日志layout
-type LogLayout struct {
-	//Metadata  map[string]interface{} // 存储自定义原数据
-	Method    string //方法
-	Path      string // 访问路径
-	Query     string // 携带query
-	Body      string // 携带body数据
-	IP        string // ip地址
-	UserAgent string // 代理
-	Error     string // 错误
-	Cost      string // 花费时间
-	Source    string // 来源
-}
+// type LogLayout struct {
+// 	//Metadata  map[string]interface{} // 存储自定义原数据
+// 	Method    string //方法
+// 	Path      string // 访问路径
+// 	Query     string // 携带query
+// 	Body      string // 携带body数据
+// 	IP        string // ip地址
+// 	UserAgent string // 代理
+// 	Error     string // 错误
+// 	Cost      string // 花费时间
+// 	Source    string // 来源
+// }
 
 // LoggerToFile 日志记录到文件
 func LoggerToFile() gin.HandlerFunc {
@@ -52,7 +51,7 @@ func LoggerToFile() gin.HandlerFunc {
 
 		c.Next()
 
-		go writeLog(startTime, body, c)
+		writeLog(startTime, body, c)
 	}
 }
 
@@ -62,22 +61,16 @@ func writeLog(startTime time.Time, body string, c *gin.Context) {
 		return
 	}
 	cost := time.Since(startTime)
-	layout := LogLayout{
-		Path:      c.Request.RequestURI,
-		Query:     c.Request.URL.RawQuery,
-		IP:        ips.GetIP(c),
-		UserAgent: c.Request.UserAgent(),
-		Error:     strings.TrimRight(c.Errors.ByType(gin.ErrorTypePrivate).String(), "\n"),
-		Cost:      cost.String(),
-		Body:      body,
-		Method:    c.Request.Method,
-		Source:    core.Cfg.Server.Name,
-	}
 
-	b, _ := json.Marshal(layout)
 	if cost.Milliseconds() < 200 {
-		core.Log.Info(string(b))
+		core.Log.Info("request", zap.String("ip", ips.GetIP(c)), zap.String("method", c.Request.Method), zap.String("path", c.Request.RequestURI),
+			zap.Duration("cost", cost), zap.String("userAgent", c.Request.UserAgent()), zap.String("query", c.Request.URL.RawQuery),
+			zap.String("body", body), zap.String("source", core.Cfg.Server.Name), zap.String("reqId", utils.GetReqId(c)))
+		//,zap.String("error", strings.TrimRight(c.Errors.ByType(gin.ErrorTypePrivate).String(), "\n")))
 	} else {
-		core.Log.Warn(string(b))
+		core.Log.Warn("request", zap.String("ip", ips.GetIP(c)), zap.String("method", c.Request.Method), zap.String("path", c.Request.RequestURI),
+			zap.Duration("cost", cost), zap.String("userAgent", c.Request.UserAgent()), zap.String("query", c.Request.URL.RawQuery),
+			zap.String("body", body), zap.String("source", core.Cfg.Server.Name), zap.String("reqId", utils.GetReqId(c)))
+		//,zap.String("error", strings.TrimRight(c.Errors.ByType(gin.ErrorTypePrivate).String(), "\n")))
 	}
 }

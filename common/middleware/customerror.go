@@ -1,20 +1,22 @@
 package middleware
 
 import (
-	"fmt"
 	"net/http"
 	"runtime"
 	"strconv"
 	"strings"
-	"time"
 
+	"github.com/baowk/dilu-core/common/utils"
+	"github.com/baowk/dilu-core/common/utils/ips"
+	"github.com/baowk/dilu-core/core"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 func CustomError(c *gin.Context) {
 	defer func() {
 		if err := recover(); err != nil {
-
+			//fmt.Printf("Custom error %v \n", err)
 			if c.IsAborted() {
 				c.Status(200)
 			}
@@ -27,16 +29,11 @@ func CustomError(c *gin.Context) {
 						break
 					}
 					c.Status(statusCode)
-					fmt.Println(
-						time.Now().Format("2006-01-02 15:04:05"),
-						"[ERROR]",
-						c.Request.Method,
-						c.Request.URL,
-						statusCode,
-						c.Request.RequestURI,
-						c.ClientIP(),
-						p[2],
-					)
+
+					core.Log.Warn("request", zap.String("ip", ips.GetIP(c)), zap.String("method", c.Request.Method), zap.String("path", c.Request.RequestURI),
+						zap.String("query", c.Request.URL.RawQuery), zap.String("source", core.Cfg.Server.Name), zap.String("reqId", utils.GetReqId(c)),
+						zap.String("error", p[2]))
+
 					c.JSON(http.StatusOK, gin.H{
 						"code": statusCode,
 						"msg":  p[2],
