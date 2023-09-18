@@ -24,6 +24,6 @@ func sysNoCheckSsoRouter(v1 *gin.RouterGroup) {
 	rj := v1.Group("").Use(middleware.JwtHandler())
 	{
 		rj.POST("changePwd", apis.ApiSso.ChangePwd)
-		rj.POST("myUserinfo", apis.ApiSso.MyUserInfo)
+		rj.GET("myUserinfo", apis.ApiSso.MyUserInfo)
 	}
 }

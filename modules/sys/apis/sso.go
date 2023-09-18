@@ -227,7 +227,7 @@ func (e *SSO) Login(c *gin.Context) {
 			}
 			return
 		} else {
-			e.Ok(c, logOk, "登录成功")
+			e.Ok(c, logOk)
 			return
 		}
 	}
@@ -236,7 +236,7 @@ func (e *SSO) Login(c *gin.Context) {
 		e.Err(c, err)
 		return
 	} else {
-		e.Ok(c, logOk, "登录成功")
+		e.Ok(c, logOk)
 	}
 }
 
@@ -332,12 +332,12 @@ func (e *SSO) GetUserInfo(c *gin.Context) {
 // @Description 获取个人信息
 // @Tags sso
 // @Success 200 {object} base.Resp{data=dto.MyUserinfoResp} "{"code": 200, "data": [...]}"
-// @Router /api/v1/sys/myUserinfo [post]
+// @Router /api/v1/sys/myUserinfo [get]
 // @Security Bearer
 func (e *SSO) MyUserInfo(c *gin.Context) {
 	uid := middleware.GetUserId(c)
 	if uid == 0 {
-		e.Code(c, codes.NoAccessToken)
+		e.Code(c, codes.InvalidToken_401)
 		return
 	}
 	var object models.SysUser
@@ -375,7 +375,7 @@ func (e *SSO) ChangePwd(c *gin.Context) {
 	}
 	uid := middleware.GetUserId(c)
 	if uid == 0 {
-		e.Code(c, codes.NoAccessToken)
+		e.Code(c, codes.InvalidToken_401)
 		return
 	}
 
@@ -406,7 +406,7 @@ func (e *SSO) Bind(c *gin.Context) {
 
 	uid := middleware.GetUserId(c)
 	if uid == 0 {
-		e.Code(c, codes.NoAccessToken)
+		e.Code(c, codes.InvalidToken_401)
 		return
 	}
 	//是否手机
@@ -457,7 +457,7 @@ func (e *SSO) ChangeUserinfo(c *gin.Context) {
 
 	uid := middleware.GetUserId(c)
 	if uid == 0 {
-		e.Code(c, codes.NoAccessToken)
+		e.Code(c, codes.InvalidToken_401)
 		return
 	}
 	//是否手机

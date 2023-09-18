@@ -8,12 +8,9 @@ import (
 const (
 	SUCCESS            = 200   //成功
 	FAILURE            = 500   //失败
+	InvalidToken_401   = 401   //没有登录
 	AuthorizationError = 403   //没有权限
 	NotFound           = 404   //资源不存在
-	NotLogin           = 401   //没有登录
-	InvalidToken       = 555   //无效Token
-	NoAccessToken      = 1023  //登录用户才能访问
-	NoAccessRights     = 1024  //没有访问权限
 	UserNotExist       = 1027  //当前账号不存在，请先注册
 	UserLock           = 1028  //当前账号被冻结
 	PwdNotExist        = 1029  //尚未设置密码，请选择验证码登录

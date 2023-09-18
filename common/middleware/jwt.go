@@ -20,21 +20,21 @@ func JwtHandler() gin.HandlerFunc {
 		authorization := c.GetHeader("Authorization")
 		accessToken, err := GetAccessToken(authorization)
 		if err != nil {
-			Fail(c, 555, err.Error())
+			Fail(c, 401, err.Error())
 			return
 		}
 		customClaims := new(CustomClaims)
 		// 解析Token
 		err = Parse(accessToken, customClaims, core.Cfg.JWT.SignKey, jwt.WithSubject(core.Cfg.JWT.Subject))
 		if err != nil || customClaims == nil {
-			Fail(c, 555, err.Error())
+			Fail(c, 401, err.Error())
 			return
 		}
 
 		exp, err := customClaims.GetExpirationTime()
 		// 获取过期时间返回err,或者exp为nil都返回错误
 		if err != nil || exp == nil {
-			Fail(c, 555, err.Error())
+			Fail(c, 401, err.Error())
 			return
 		}
 
