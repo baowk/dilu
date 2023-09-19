@@ -78,7 +78,7 @@ func (e *SSO) SendCode(c *gin.Context) {
 		e.Code(c, codes.ErrMobileOrEmail)
 		return
 	}
-	e.Ok(c, c, "验证码发送成功")
+	e.Ok(c)
 }
 
 // 用户注册
@@ -323,7 +323,7 @@ func (e *SSO) GetUserInfo(c *gin.Context) {
 		return
 	}
 
-	e.Ok(c, resp, "查询成功")
+	e.Ok(c, resp)
 }
 
 // 获取个人信息
@@ -351,7 +351,7 @@ func (e *SSO) MyUserInfo(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	e.Ok(c, resp, "查询成功")
+	e.Ok(c, resp)
 
 }
 
@@ -383,7 +383,7 @@ func (e *SSO) ChangePwd(c *gin.Context) {
 		e.Err(c, err)
 		return
 	}
-	e.Ok(c, c, "修改成功")
+	e.Ok(c)
 }
 
 // 绑定手机号或者邮箱
@@ -434,7 +434,7 @@ func (e *SSO) Bind(c *gin.Context) {
 		return
 	}
 
-	e.Ok(c, c, "绑定成功")
+	e.Ok(c)
 }
 
 // 修改用户信息
@@ -466,7 +466,7 @@ func (e *SSO) ChangeUserinfo(c *gin.Context) {
 		e.Code(c, codes.ErrBind)
 		return
 	}
-	e.Ok(c, c, "修改成功")
+	e.Ok(c)
 }
 
 // 退出登录
@@ -479,7 +479,7 @@ func (e *SSO) ChangeUserinfo(c *gin.Context) {
 // @Security Bearer
 func (e *SSO) Logout(c *gin.Context) {
 
-	e.Ok(c, c, "退出成功")
+	e.Ok(c)
 }
 
 // // 微信登录
@@ -511,7 +511,7 @@ func (e *SSO) Logout(c *gin.Context) {
 // 		e.Code(500, err, fmt.Sprintf("登录失败，\r\n失败信息 %s", err.Error()))
 // 		return
 // 	} else {
-// 		e.Ok(c,logOk, "登录成功")
+// 		e.Ok(c,logOk)
 // 	}
 // }
 
@@ -533,7 +533,7 @@ func (e *SSO) Logout(c *gin.Context) {
 // 	domain := "http://" + c.Request.Host
 // 	var cfg dto.DingCfgResp
 // 	service.GetDingConfig(domain, &cfg)
-// 	e.Ok(c,cfg, "OK")
+// 	e.Ok(c,cfg)
 // }
 
 // // 钉钉
@@ -565,7 +565,7 @@ func (e *SSO) Logout(c *gin.Context) {
 // 		e.Code(500, err, fmt.Sprintf("登录失败，\r\n失败信息 %s", err.Error()))
 // 		return
 // 	} else {
-// 		e.Ok(c,logOk, "登录成功")
+// 		e.Ok(c,logOk)
 // 	}
 
 // }
@@ -603,7 +603,7 @@ func (e *SSO) Logout(c *gin.Context) {
 // 		e.Code(c, codes.ErrBind)
 // 		return
 // 	}
-// 	e.Ok(c,c, "成功")
+// 	e.Ok(c)
 // }
 
 // // 绑定微信
@@ -639,5 +639,5 @@ func (e *SSO) Logout(c *gin.Context) {
 // 		e.Code(c, codes.ErrBind)
 // 		return
 // 	}
-// 	e.Ok(c,c, "成功")
+// 	e.Ok(c)
 // }

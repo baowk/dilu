@@ -846,7 +846,7 @@ const docTemplate = `{
             }
         },
         "/api/v1/sys/myUserinfo": {
-            "post": {
+            "get": {
                 "security": [
                     {
                         "Bearer": []
@@ -2703,6 +2703,256 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/sys/sys-user-dept/create": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUserDept"
+                ],
+                "summary": "创建SysUserDept",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SysUserDeptDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.SysUserDept"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sys/sys-user-dept/del": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUserDept"
+                ],
+                "summary": "删除SysUserDept",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqIds"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.SysUserDept"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sys/sys-user-dept/get": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUserDept"
+                ],
+                "summary": "获取SysUserDept",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqId"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.SysUserDept"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sys/sys-user-dept/page": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUserDept"
+                ],
+                "summary": "Page接口",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SysUserDeptGetPageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/base.PageResp"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/models.SysUserDept"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sys/sys-user-dept/update": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUserDept"
+                ],
+                "summary": "更新SysUserDept",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SysUserDeptDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.SysUserDept"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/sys/verify/code": {
             "post": {
                 "description": "验证码校验",
@@ -2844,10 +3094,6 @@ const docTemplate = `{
                 },
                 "gender": {
                     "description": "性别 1 男 2女  3 未知",
-                    "type": "string"
-                },
-                "lastName": {
-                    "description": "姓",
                     "type": "string"
                 },
                 "name": {
@@ -3481,6 +3727,48 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.SysUserDeptDto": {
+            "type": "object",
+            "properties": {
+                "deptId": {
+                    "description": "部门id",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "postTag": {
+                    "description": "职位标签 1主管 2副主管 3员工",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态 1正常",
+                    "type": "integer"
+                },
+                "userId": {
+                    "description": "上级部门",
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.SysUserDeptGetPageReq": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "size": {
+                    "description": "每页大小",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态 1正常",
+                    "type": "integer"
+                }
+            }
+        },
         "dto.UserinfoResp": {
             "type": "object",
             "properties": {
@@ -3653,27 +3941,23 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "deptName": {
+                    "description": "部门名称",
                     "type": "string"
                 },
                 "deptPath": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "leader": {
+                    "description": "路径",
                     "type": "string"
                 },
                 "parentId": {
+                    "description": "上级部门",
                     "type": "integer"
                 },
-                "phone": {
-                    "type": "string"
-                },
                 "sort": {
+                    "description": "排序",
                     "type": "integer"
                 },
                 "status": {
+                    "description": "状态",
                     "type": "integer"
                 },
                 "updateBy": {
@@ -3989,6 +4273,47 @@ const docTemplate = `{
                 "updatedAt": {
                     "description": "最后更新时间",
                     "type": "string"
+                }
+            }
+        },
+        "models.SysUserDept": {
+            "type": "object",
+            "properties": {
+                "createBy": {
+                    "description": "创建者",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "deptId": {
+                    "description": "部门id",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "postTag": {
+                    "description": "职位标签 1主管 2副主管 3员工",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态 1正常",
+                    "type": "integer"
+                },
+                "updateBy": {
+                    "description": "更新者",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "最后更新时间",
+                    "type": "string"
+                },
+                "userId": {
+                    "description": "上级部门",
+                    "type": "integer"
                 }
             }
         },
