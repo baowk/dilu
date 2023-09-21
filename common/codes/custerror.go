@@ -14,5 +14,5 @@ func ErrInvalidParameter(reqId string, cause error) errs.IError {
 
 func ErrNotFound(id, kind, reqId string, cause error) errs.IError {
 	data := map[string]interface{}{"kind": kind, "id": id}
-	return errs.ErrWithData(NotFound, reqId, cause, data)
+	return errs.ErrWithData(NotFound_404, reqId, cause, data)
 }

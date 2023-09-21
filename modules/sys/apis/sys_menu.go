@@ -1,6 +1,8 @@
 package apis
 
 import (
+	"dilu/common/codes"
+	"dilu/common/middleware"
 	"dilu/modules/sys/models"
 	"dilu/modules/sys/service"
 	"dilu/modules/sys/service/dto"
@@ -137,4 +139,35 @@ func (e *SysMenuApi) Del(c *gin.Context) {
 		return
 	}
 	e.Ok(c)
+}
+
+// GetMenus 获取菜单
+// @Summary 获取菜单
+// @Tags SysMenu
+// @Accept application/json
+// @Product application/json
+// @Success 200 {object} base.Resp{data=[]models.SysMenu} "{"code": 200, "data": [...]}"
+// @Router /api/v1/sys/sys-menu/list [post]
+// @Security Bearer
+func (e *SysMenuApi) GetMenus(c *gin.Context) {
+	roleId := middleware.GetRoleId(c)
+	if roleId < 1 {
+		e.Code(c, codes.AuthorizationError_403)
+		return
+	}
+	list := make([]models.SysMenu, 10)
+	if err := service.SerSysMenu.GetSysMenuByRole(roleId, &list); err != nil {
+		e.Error(c, err)
+		return
+	}
+	e.Ok(c, list)
+}
+
+func (e *SysMenuApi) GetUserMenus(c *gin.Context) {
+	uid := middleware.GetUserId(c)
+	if uid < 1 {
+		e.Code(c, codes.InvalidToken_401)
+		return
+	}
+
 }

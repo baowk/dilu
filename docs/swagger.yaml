@@ -2360,6 +2360,27 @@ paths:
       summary: 获取接口列表
       tags:
       - SysMenu
+  /api/v1/sys/sys-menu/list:
+    post:
+      consumes:
+      - application/json
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.SysMenu'
+                  type: array
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取菜单
+      tags:
+      - SysMenu
   /api/v1/sys/sys-menu/page:
     post:
       consumes:

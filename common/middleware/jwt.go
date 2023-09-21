@@ -43,7 +43,7 @@ func JwtHandler() gin.HandlerFunc {
 			now := time.Now()
 			diff := exp.Time.Sub(now)
 			refreshTTL := time.Duration(core.Cfg.JWT.Refresh) * time.Minute
-			fmt.Println(diff.Seconds(), refreshTTL)
+			//fmt.Println(diff.Seconds(), refreshTTL)
 			if diff < refreshTTL {
 				exp := time.Now().Add(time.Duration(core.Cfg.JWT.Expires) * time.Minute)
 				customClaims.ExpiresAt(exp)
@@ -54,6 +54,7 @@ func JwtHandler() gin.HandlerFunc {
 		}
 
 		c.Set("a_uid", customClaims.UserId)
+		c.Set("a_rid", customClaims.RoleId)
 		c.Set("a_mobile", customClaims.Phone)
 		c.Set("a_nickname", customClaims.Nickname)
 		c.Set("jwt_data", customClaims.JwtData)
@@ -65,6 +66,17 @@ func GetUserId(c *gin.Context) int {
 	uid := c.GetInt("a_uid")
 	if uid == 0 {
 		suid := c.GetHeader("a_uid")
+		if suid != "" {
+			uid, _ = strconv.Atoi(suid)
+		}
+	}
+	return uid
+}
+
+func GetRoleId(c *gin.Context) int {
+	uid := c.GetInt("a_rid")
+	if uid == 0 {
+		suid := c.GetHeader("a_rid")
 		if suid != "" {
 			uid, _ = strconv.Atoi(suid)
 		}
