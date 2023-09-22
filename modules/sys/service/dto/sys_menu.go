@@ -112,6 +112,22 @@ func (s *SysMenuUpdateReq) GetId() interface{} {
 	return s.Id
 }
 
+type MenuVo struct {
+	Name      string    `json:"name"`
+	Component string    `json:"component"`
+	FullPath  string    `json:"fullPath"`
+	Meta      RouteMeta `json:"meta"`
+	Children  []MenuVo  `json:"children"`
+}
+
+type RouteMeta struct {
+	OrderNo  int    `json:"orderNo"`
+	Title    string `json:"title"`
+	Icon     string `json:"icon"`
+	HideMenu bool   `json:"hideMenu"`
+	IsLink   bool   `json:"isLink"`
+}
+
 type SysMenuGetReq struct {
 	Id int `uri:"id"`
 }

@@ -6,31 +6,31 @@ import (
 )
 
 const (
-	SUCCESS            = 200   //成功
-	FAILURE            = 500   //失败
-	InvalidToken_401   = 401   //没有登录
-	AuthorizationError = 403   //没有权限
-	NotFound           = 404   //资源不存在
-	UserNotExist       = 1027  //当前账号不存在，请先注册
-	UserLock           = 1028  //当前账号被冻结
-	PwdNotExist        = 1029  //尚未设置密码，请选择验证码登录
-	ThirdNotScan       = 1055  //未收到扫描信息
-	ThirdExpire        = 1056  //已过期
-	InvalidParameter   = 10000 //参数错误
-	ErrRePassword      = 10001 //重复密码不一致
-	ErrPasswordFMT     = 10002 //密码长度必须6位
-	ErrMobileOrEmail   = 10003 //必须手机号或者邮箱注册
-	ErrParams          = 10004 //参数错误
-	ErrVerifyCode      = 10005 //验证码错误
-	ErrBind            = 10008 //绑定失败
-	ErrUserExist       = 10011 //账号已经注册，请直接登录
-	ErrPwd             = 10012 //密码错误
-	ErrUsernameOrPwd   = 10013 //账号或密码错误
-	RequestsFrequently = 10102 //请求太频繁
-	CaptchaErr         = 10103 //获取验证码失败
-	CaptchaVerifyErr   = 10104 //验证码
-	PhoneExistErr      = 10201 //手机号已存在
-	EmailExistErr      = 10202 //邮箱已存在
+	SUCCESS                = 200   //成功
+	FAILURE                = 500   //失败
+	InvalidToken_401       = 401   //没有登录
+	AuthorizationError_403 = 403   //没有权限
+	NotFound_404           = 404   //资源不存在
+	UserNotExist           = 1027  //当前账号不存在，请先注册
+	UserLock               = 1028  //当前账号被冻结
+	PwdNotExist            = 1029  //尚未设置密码，请选择验证码登录
+	ThirdNotScan           = 1055  //未收到扫描信息
+	ThirdExpire            = 1056  //已过期
+	InvalidParameter       = 10000 //参数错误
+	ErrRePassword          = 10001 //重复密码不一致
+	ErrPasswordFMT         = 10002 //密码长度必须6位
+	ErrMobileOrEmail       = 10003 //必须手机号或者邮箱注册
+	ErrParams              = 10004 //参数错误
+	ErrVerifyCode          = 10005 //验证码错误
+	ErrBind                = 10008 //绑定失败
+	ErrUserExist           = 10011 //账号已经注册，请直接登录
+	ErrPwd                 = 10012 //密码错误
+	ErrUsernameOrPwd       = 10013 //账号或密码错误
+	RequestsFrequently     = 10102 //请求太频繁
+	CaptchaErr             = 10103 //获取验证码失败
+	CaptchaVerifyErr       = 10104 //验证码
+	PhoneExistErr          = 10201 //手机号已存在
+	EmailExistErr          = 10202 //邮箱已存在
 )
 
 const (

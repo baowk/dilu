@@ -228,36 +228,34 @@ func (e *SysMenu) SetLabel() (m []dto.MenuLabel, err error) {
 }
 
 // GetSysMenuByRoleName 左侧菜单
-func (e *SysMenu) GetSysMenuByRoleName(roleName ...string) ([]models.SysMenu, error) {
-	var MenuList []models.SysMenu
-	// var role models.SysRole
-	// var err error
-	// admin := false
-	// for _, s := range roleName {
-	// 	if s == "admin" {
-	// 		admin = true
-	// 	}
-	// }
+func (e *SysMenu) GetSysMenuByRole(roleId int, list *[]models.SysMenu) error {
+	var role models.SysRole
+	var err error
+	admin := false
 
-	// if len(roleName) > 0 && admin {
-	// 	var data []models.SysMenu
-	// 	err = core.DB().Where(" menu_type in ('M','C')").
-	// 		Order("sort").
-	// 		Find(&data).
-	// 		Error
-	// 	MenuList = data
-	// } else {
-	// 	err = core.DB().Model(&role).Preload("SysMenu", func(db *gorm.DB) *gorm.DB {
-	// 		return db.Where(" menu_type in ('M','C')").Order("sort")
-	// 	}).Where("role_name in ?", roleName).Find(&role).
-	// 		Error
-	// 	MenuList = *role.SysMenu
-	// }
+	if roleId == 1 {
+		admin = true
+	}
 
-	// if err != nil {
-	// 	core.Log.Error("sys_menu", zap.Error(err))
-	// }
-	return MenuList, nil
+	if roleId > 0 && admin {
+		var data []models.SysMenu
+		err = core.DB().Where(" menu_type in ('M','C')").
+			Order("sort").
+			Find(&data).
+			Error
+		*list = data
+	} else {
+		err = core.DB().Model(&role).Preload("SysMenu", func(db *gorm.DB) *gorm.DB {
+			return db.Where(" menu_type in ('M','C')").Order("sort")
+		}).Where("role_id = ?", roleId).Find(&role).
+			Error
+		*list = *role.SysMenu
+	}
+
+	if err != nil {
+		core.Log.Error("sys_menu", zap.Error(err))
+	}
+	return nil
 }
 
 // menuLabelCall 递归构造组织数据
