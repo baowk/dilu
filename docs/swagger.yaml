@@ -76,9 +76,6 @@ definitions:
       gender:
         description: 性别 1 男 2女  3 未知
         type: string
-      lastName:
-        description: 姓
-        type: string
       name:
         description: 名
         type: string
@@ -530,6 +527,36 @@ definitions:
         description: 状态
         type: integer
     type: object
+  dto.SysUserDeptDto:
+    properties:
+      deptId:
+        description: 部门id
+        type: integer
+      id:
+        description: 主键
+        type: integer
+      postTag:
+        description: 职位标签 1主管 2副主管 3员工
+        type: integer
+      status:
+        description: 状态 1正常
+        type: integer
+      userId:
+        description: 上级部门
+        type: integer
+    type: object
+  dto.SysUserDeptGetPageReq:
+    properties:
+      page:
+        description: 页码
+        type: integer
+      size:
+        description: 每页大小
+        type: integer
+      status:
+        description: 状态 1正常
+        type: integer
+    type: object
   dto.UserinfoResp:
     properties:
       avatar:
@@ -656,20 +683,19 @@ definitions:
         description: 主键
         type: integer
       deptName:
+        description: 部门名称
         type: string
       deptPath:
-        type: string
-      email:
-        type: string
-      leader:
+        description: 路径
         type: string
       parentId:
+        description: 上级部门
         type: integer
-      phone:
-        type: string
       sort:
+        description: 排序
         type: integer
       status:
+        description: 状态
         type: integer
       updateBy:
         description: 更新者
@@ -900,6 +926,36 @@ definitions:
       updatedAt:
         description: 最后更新时间
         type: string
+    type: object
+  models.SysUserDept:
+    properties:
+      createBy:
+        description: 创建者
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      deptId:
+        description: 部门id
+        type: integer
+      id:
+        description: 主键
+        type: integer
+      postTag:
+        description: 职位标签 1主管 2副主管 3员工
+        type: integer
+      status:
+        description: 状态 1正常
+        type: integer
+      updateBy:
+        description: 更新者
+        type: integer
+      updatedAt:
+        description: 最后更新时间
+        type: string
+      userId:
+        description: 上级部门
+        type: integer
     type: object
   tools.GenColumn:
     properties:
@@ -1616,7 +1672,7 @@ paths:
       tags:
       - sso wechat mp
   /api/v1/sys/myUserinfo:
-    post:
+    get:
       description: 获取个人信息
       responses:
         "200":
@@ -2637,6 +2693,143 @@ paths:
       summary: 更新SysRole
       tags:
       - SysRole
+  /api/v1/sys/sys-user-dept/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysUserDeptDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysUserDept'
+              type: object
+      security:
+      - Bearer: []
+      summary: 创建SysUserDept
+      tags:
+      - SysUserDept
+  /api/v1/sys/sys-user-dept/del:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqIds'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysUserDept'
+              type: object
+      security:
+      - Bearer: []
+      summary: 删除SysUserDept
+      tags:
+      - SysUserDept
+  /api/v1/sys/sys-user-dept/get:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqId'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysUserDept'
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取SysUserDept
+      tags:
+      - SysUserDept
+  /api/v1/sys/sys-user-dept/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysUserDeptGetPageReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/base.PageResp'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/models.SysUserDept'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - Bearer: []
+      summary: Page接口
+      tags:
+      - SysUserDept
+  /api/v1/sys/sys-user-dept/update:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysUserDeptDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysUserDept'
+              type: object
+      security:
+      - Bearer: []
+      summary: 更新SysUserDept
+      tags:
+      - SysUserDept
   /api/v1/sys/verify/code:
     post:
       consumes:
