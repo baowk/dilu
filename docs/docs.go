@@ -10,7 +10,11 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "contact": {
+            "name": "baowk",
+            "url": "https://github.com/baowk/dilu",
+            "email": "baowk1024@gmail.com"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",

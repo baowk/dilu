@@ -1682,7 +1682,10 @@ definitions:
         type: string
     type: object
 info:
-  contact: {}
+  contact:
+    email: baowk1024@gmail.com
+    name: baowk
+    url: https://github.com/baowk/dilu
   description: 致力于做一个开发快速，运行稳定的框架
   title: Dilu API
   version: V0.0.1

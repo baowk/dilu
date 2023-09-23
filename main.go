@@ -2,7 +2,6 @@ package main
 
 import (
 	"dilu/cmd"
-	_ "dilu/common/consts"
 )
 
 //go:generate go env -w GO111MODULE=on
@@ -14,6 +13,9 @@ import (
 // @title Dilu API
 // @version V0.0.1
 // @description 致力于做一个开发快速，运行稳定的框架
+// @contact.name   baowk
+// @contact.url    https://github.com/baowk/dilu
+// @contact.email  baowk1024@gmail.com
 // @securityDefinitions.apikey Bearer
 // @in header
 // @name Authorization

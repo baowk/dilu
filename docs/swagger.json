@@ -3,7 +3,11 @@
     "info": {
         "description": "致力于做一个开发快速，运行稳定的框架",
         "title": "Dilu API",
-        "contact": {},
+        "contact": {
+            "name": "baowk",
+            "url": "https://github.com/baowk/dilu",
+            "email": "baowk1024@gmail.com"
+        },
         "version": "V0.0.1"
     },
     "paths": {
