@@ -18,7 +18,7 @@ var ApiSysUserDept = SysUserDeptApi{}
 
 // QueryPage 获取SysUserDept列表
 // @Summary Page接口
-// @Tags SysUserDept
+// @Tags sys-SysUserDept
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysUserDeptGetPageReq true "body"
@@ -48,7 +48,7 @@ func (e *SysUserDeptApi) QueryPage(c *gin.Context) {
 
 // Get 获取SysUserDept
 // @Summary 获取SysUserDept
-// @Tags SysUserDept
+// @Tags sys-SysUserDept
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqId true "body"
@@ -71,7 +71,7 @@ func (e *SysUserDeptApi) Get(c *gin.Context) {
 
 // Create 创建SysUserDept
 // @Summary 创建SysUserDept
-// @Tags SysUserDept
+// @Tags sys-SysUserDept
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysUserDeptDto true "body"
@@ -95,7 +95,7 @@ func (e *SysUserDeptApi) Create(c *gin.Context) {
 
 // Update 更新SysUserDept
 // @Summary 更新SysUserDept
-// @Tags SysUserDept
+// @Tags sys-SysUserDept
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysUserDeptDto true "body"
@@ -119,7 +119,7 @@ func (e *SysUserDeptApi) Update(c *gin.Context) {
 
 // Del 删除SysUserDept
 // @Summary 删除SysUserDept
-// @Tags SysUserDept
+// @Tags sys-SysUserDept
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqIds true "body"

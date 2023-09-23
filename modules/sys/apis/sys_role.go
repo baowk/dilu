@@ -18,7 +18,7 @@ var ApiSysRole = SysRoleApi{}
 
 // QueryPage 获取SysRole列表
 // @Summary Page接口
-// @Tags SysRole
+// @Tags sys-SysRole
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysRoleGetPageReq true "body"
@@ -48,7 +48,7 @@ func (e *SysRoleApi) QueryPage(c *gin.Context) {
 
 // Get 获取SysRole
 // @Summary 获取SysRole
-// @Tags SysRole
+// @Tags sys-SysRole
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqId true "body"
@@ -71,7 +71,7 @@ func (e *SysRoleApi) Get(c *gin.Context) {
 
 // Create 创建SysRole
 // @Summary 创建SysRole
-// @Tags SysRole
+// @Tags sys-SysRole
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysRoleDto true "body"
@@ -95,7 +95,7 @@ func (e *SysRoleApi) Create(c *gin.Context) {
 
 // Update 更新SysRole
 // @Summary 更新SysRole
-// @Tags SysRole
+// @Tags sys-SysRole
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysRoleDto true "body"
@@ -119,7 +119,7 @@ func (e *SysRoleApi) Update(c *gin.Context) {
 
 // Del 删除SysRole
 // @Summary 删除SysRole
-// @Tags SysRole
+// @Tags sys-SysRole
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqIds true "body"

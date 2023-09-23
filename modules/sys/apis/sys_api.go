@@ -18,7 +18,7 @@ var SysApiA = SysApiApi{}
 
 // QueryPage 获取接口列表列表
 // @Summary Page接口
-// @Tags SysApi
+// @Tags sys-SysApi
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysApiGetPageReq true "body"
@@ -48,7 +48,7 @@ func (e *SysApiApi) QueryPage(c *gin.Context) {
 
 // Get 获取接口列表
 // @Summary 获取接口列表
-// @Tags SysApi
+// @Tags sys-SysApi
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqId true "body"
@@ -71,7 +71,7 @@ func (e *SysApiApi) Get(c *gin.Context) {
 
 // Create 创建接口列表
 // @Summary 创建接口列表
-// @Tags SysApi
+// @Tags sys-SysApi
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysApiDto true "body"
@@ -95,7 +95,7 @@ func (e *SysApiApi) Create(c *gin.Context) {
 
 // Update 更新接口列表
 // @Summary 更新接口列表
-// @Tags SysApi
+// @Tags sys-SysApi
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysApiDto true "body"
@@ -119,7 +119,7 @@ func (e *SysApiApi) Update(c *gin.Context) {
 
 // Del 删除接口列表
 // @Summary 删除接口列表
-// @Tags SysApi
+// @Tags sys-SysApi
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqIds true "body"

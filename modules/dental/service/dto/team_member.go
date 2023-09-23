@@ -9,7 +9,7 @@ type TeamMemberGetPageReq struct {
 	Status       int `json:"status" form:"status"` //状态
 }
 
-// 团队成员
+// TeamMember
 type TeamMemberDto struct {
 	Id     int    `json:"id"`     //主键
 	UserId int    `json:"userId"` //用户id

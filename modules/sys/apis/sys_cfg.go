@@ -18,7 +18,7 @@ var ApiSysCfg = SysCfgApi{}
 
 // QueryPage 获取系统配置项列表
 // @Summary Page接口
-// @Tags SysCfg
+// @Tags sys-SysCfg
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysCfgGetPageReq true "body"
@@ -48,7 +48,7 @@ func (e *SysCfgApi) QueryPage(c *gin.Context) {
 
 // Get 获取系统配置项
 // @Summary 获取系统配置项
-// @Tags SysCfg
+// @Tags sys-SysCfg
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqId true "body"
@@ -71,7 +71,7 @@ func (e *SysCfgApi) Get(c *gin.Context) {
 
 // Create 创建系统配置项
 // @Summary 创建系统配置项
-// @Tags SysCfg
+// @Tags sys-SysCfg
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysCfgDto true "body"
@@ -95,7 +95,7 @@ func (e *SysCfgApi) Create(c *gin.Context) {
 
 // Update 更新系统配置项
 // @Summary 更新系统配置项
-// @Tags SysCfg
+// @Tags sys-SysCfg
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysCfgDto true "body"
@@ -119,7 +119,7 @@ func (e *SysCfgApi) Update(c *gin.Context) {
 
 // Del 删除系统配置项
 // @Summary 删除系统配置项
-// @Tags SysCfg
+// @Tags sys-SysCfg
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqIds true "body"

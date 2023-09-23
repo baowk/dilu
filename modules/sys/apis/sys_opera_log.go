@@ -18,7 +18,7 @@ var ApiSysOperaLog = SysOperaLogApi{}
 
 // QueryPage 获取SysOperaLog列表
 // @Summary Page接口
-// @Tags SysOperaLog
+// @Tags sys-SysOperaLog
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysOperaLogGetPageReq true "body"
@@ -48,7 +48,7 @@ func (e *SysOperaLogApi) QueryPage(c *gin.Context) {
 
 // Get 获取SysOperaLog
 // @Summary 获取SysOperaLog
-// @Tags SysOperaLog
+// @Tags sys-SysOperaLog
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqId true "body"
@@ -71,7 +71,7 @@ func (e *SysOperaLogApi) Get(c *gin.Context) {
 
 // Create 创建SysOperaLog
 // @Summary 创建SysOperaLog
-// @Tags SysOperaLog
+// @Tags sys-SysOperaLog
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysOperaLogDto true "body"
@@ -95,7 +95,7 @@ func (e *SysOperaLogApi) Create(c *gin.Context) {
 
 // Update 更新SysOperaLog
 // @Summary 更新SysOperaLog
-// @Tags SysOperaLog
+// @Tags sys-SysOperaLog
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysOperaLogDto true "body"
@@ -119,7 +119,7 @@ func (e *SysOperaLogApi) Update(c *gin.Context) {
 
 // Del 删除SysOperaLog
 // @Summary 删除SysOperaLog
-// @Tags SysOperaLog
+// @Tags sys-SysOperaLog
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqIds true "body"

@@ -10,7 +10,7 @@ type EventDayStGetPageReq struct {
 	base.ReqPage `search:"-"`
 }
 
-// 每日明细统计
+// EventDaySt
 type EventDayStDto struct {
 	Id               int       `json:"id"`               //主键
 	Day              time.Time `json:"day"`              //时间

@@ -26,7 +26,7 @@ type Wechat struct {
 // MPCallback 微信公众号回调函数
 // @Summary 微信公众号回调函数
 // @Description 微信公众号回调函数
-// @Tags sso wechat mp
+// @Tags sys-sso wechat mp
 // @Accept application/json
 // @Product application/json
 // @Success 200 {object} string
@@ -71,7 +71,7 @@ func (e *Wechat) MPCallback(c *gin.Context) {
 // GetMpQrcode 获取公众号二维码
 // @Summary 获取公众号二维码
 // @Description 获取公众号二维码
-// @Tags sso wechat mp
+// @Tags sys-sso wechat mp
 // @Accept application/json
 // @Product application/json
 // @Success 200 {object} base.Resp{data=wechat.QrCodeResp} "{"code": 200, "data": [...]}"
@@ -95,7 +95,7 @@ func (e *Wechat) GetMpQrcode(c *gin.Context) {
 // LoginMp  轮询用户登录成功与否
 // @Summary  轮询用户登录成功与否
 // @Description 获取公众号二维码
-// @Tags sso wechat mp
+// @Tags sys-sso wechat mp
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.MpSceneReq true "data"

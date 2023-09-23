@@ -16,9 +16,9 @@ type TargetTaskApi struct {
 
 var ApiTargetTask = TargetTaskApi{}
 
-// QueryPage 获取月目标设定列表
+// QueryPage 获取TargetTask列表
 // @Summary Page接口
-// @Tags TargetTask
+// @Tags dental-TargetTask
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.TargetTaskGetPageReq true "body"
@@ -46,9 +46,9 @@ func (e *TargetTaskApi) QueryPage(c *gin.Context) {
 	e.Page(c, list, total, req.GetPage(), req.GetSize())
 }
 
-// Get 获取月目标设定
-// @Summary 获取月目标设定
-// @Tags TargetTask
+// Get 获取TargetTask
+// @Summary 获取TargetTask
+// @Tags dental-TargetTask
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqId true "body"
@@ -69,9 +69,9 @@ func (e *TargetTaskApi) Get(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Create 创建月目标设定
-// @Summary 创建月目标设定
-// @Tags TargetTask
+// Create 创建TargetTask
+// @Summary 创建TargetTask
+// @Tags dental-TargetTask
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.TargetTaskDto true "body"
@@ -93,9 +93,9 @@ func (e *TargetTaskApi) Create(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Update 更新月目标设定
-// @Summary 更新月目标设定
-// @Tags TargetTask
+// Update 更新TargetTask
+// @Summary 更新TargetTask
+// @Tags dental-TargetTask
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.TargetTaskDto true "body"
@@ -117,9 +117,9 @@ func (e *TargetTaskApi) Update(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Del 删除月目标设定
-// @Summary 删除月目标设定
-// @Tags TargetTask
+// Del 删除TargetTask
+// @Summary 删除TargetTask
+// @Tags dental-TargetTask
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqIds true "body"

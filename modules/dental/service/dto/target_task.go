@@ -8,7 +8,7 @@ type TargetTaskGetPageReq struct {
 	base.ReqPage `search:"-"`
 }
 
-// 月目标设定
+// TargetTask
 type TargetTaskDto struct {
 	Id             int `json:"id"`             //主键
 	Month          int `json:"month"`          //月

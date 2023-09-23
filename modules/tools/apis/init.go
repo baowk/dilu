@@ -1,8 +1,11 @@
 package apis
 
 import (
+	dm "dilu/modules/dental/models"
 	"dilu/modules/sys/models"
+
 	"dilu/modules/tools/models/tools"
+	"dilu/modules/tools/service"
 	"fmt"
 	"text/template"
 
@@ -25,7 +28,12 @@ func (Init) Init(c *gin.Context) {
 
 func (Init) DoInit(c *gin.Context) {
 	fmt.Println("开始运行初始化")
-	err := core.DB().AutoMigrate(
+
+	service.ImportSql("resources/dbs/dilu-db.sql", "sys")
+	service.ImportSql("resources/dbs/dental-db.sql", "dental")
+
+	result := "执行成功"
+	if err := core.DB().AutoMigrate(
 		&models.SysEmail{},
 		&models.SysSms{},
 		&models.SysApi{},
@@ -40,10 +48,19 @@ func (Init) DoInit(c *gin.Context) {
 		&tools.GenColumn{},
 		&tools.GenTable{},
 		&models.SysUserDept{},
-	)
-	result := "执行成功"
-	if err != nil {
-		result = "执行失败"
+	); err != nil {
+		result = "sys执行失败"
+	}
+	if err := core.Db("dental").AutoMigrate(
+		&dm.Bill{},
+		&dm.Customer{},
+		&dm.EventDaySt{},
+		&dm.SummaryPlanDay{},
+		&dm.TeamMember{},
+		&dm.Team{},
+		&dm.TargetTask{},
+	); err != nil {
+		result = "dental执行失败"
 	}
 	t1, err := template.ParseFiles("modules/tools/apis/tmpls/result.html")
 	if err != nil {

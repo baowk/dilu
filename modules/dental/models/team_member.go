@@ -4,11 +4,11 @@ import (
 	"time"
 )
 
-// 团队成员
+// TeamMember
 type TeamMember struct {
 	Id        int       `json:"id" gorm:"type:int unsigned;primaryKey;autoIncrement;comment:主键"` //主键
-	UserId    int       `json:"userId" gorm:"type:int;comment:用户id"`                             //用户id
-	TeamId    int       `json:"teamId" gorm:"type:int;comment:团队id"`                             //团队id
+	UserId    int       `json:"userId" gorm:"type:bigint;comment:用户id"`                          //用户id
+	TeamId    int       `json:"teamId" gorm:"type:bigint;comment:团队id"`                          //团队id
 	Name      string    `json:"name" gorm:"type:varchar(32);comment:姓名"`                         //姓名
 	Phone     string    `json:"phone" gorm:"type:varchar(11);comment:电话"`                        //电话
 	Gender    int       `json:"gender" gorm:"type:tinyint;comment:性别"`                           //性别

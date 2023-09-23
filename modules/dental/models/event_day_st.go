@@ -4,19 +4,19 @@ import (
 	"time"
 )
 
-// 每日明细统计
+// EventDaySt
 type EventDaySt struct {
 	Id               int       `json:"id" gorm:"type:int unsigned;primaryKey;autoIncrement;comment:主键"` //主键
 	Day              time.Time `json:"day" gorm:"type:datetime;comment:时间"`                             //时间
-	TeamId           int       `json:"teamId" gorm:"type:int;comment:团队id"`                             //团队id
-	UserId           int       `json:"userId" gorm:"type:int;comment:用户id"`                             //用户id
-	NewCustomerCnt   int       `json:"newCustomerCnt" gorm:"type:int;comment:留存"`                       //留存
-	FirstDiagnosis   int       `json:"firstDiagnosis" gorm:"type:int;comment:初诊"`                       //初诊
-	FurtherDiagnosis int       `json:"furtherDiagnosis" gorm:"type:int;comment:复诊"`                     //复诊
-	Deal             int       `json:"deal" gorm:"type:int;comment:成交"`                                 //成交
+	TeamId           int       `json:"teamId" gorm:"type:bigint;comment:团队id"`                          //团队id
+	UserId           int       `json:"userId" gorm:"type:bigint;comment:用户id"`                          //用户id
+	NewCustomerCnt   int       `json:"newCustomerCnt" gorm:"type:bigint;comment:留存"`                    //留存
+	FirstDiagnosis   int       `json:"firstDiagnosis" gorm:"type:bigint;comment:初诊"`                    //初诊
+	FurtherDiagnosis int       `json:"furtherDiagnosis" gorm:"type:bigint;comment:复诊"`                  //复诊
+	Deal             int       `json:"deal" gorm:"type:bigint;comment:成交"`                              //成交
 	Rest             int       `json:"rest" gorm:"type:tinyint;comment:休息"`                             //休息
-	CreatedAt        int       `json:"createdAt" gorm:"type:int;comment:创建时间"`                          //创建时间
-	UpdatedAt        int       `json:"updatedAt" gorm:"type:int;comment:更新时间"`                          //更新时间
+	CreatedAt        int       `json:"createdAt" gorm:"type:bigint;comment:创建时间"`                       //创建时间
+	UpdatedAt        int       `json:"updatedAt" gorm:"type:bigint;comment:更新时间"`                       //更新时间
 }
 
 func (EventDaySt) TableName() string {

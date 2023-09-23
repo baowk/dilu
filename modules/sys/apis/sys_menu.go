@@ -20,7 +20,7 @@ var SysMenuA = SysMenuApi{}
 
 // QueryPage 获取接口列表列表
 // @Summary Page接口
-// @Tags SysMenu
+// @Tags sys-SysMenu
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysApiGetPageReq true "body"
@@ -50,7 +50,7 @@ func (e *SysMenuApi) QueryPage(c *gin.Context) {
 
 // Get 获取接口列表
 // @Summary 获取接口列表
-// @Tags SysMenu
+// @Tags sys-SysMenu
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysMenuGetReq true "body"
@@ -73,7 +73,7 @@ func (e *SysMenuApi) Get(c *gin.Context) {
 
 // Create 创建接口列表
 // @Summary 创建接口列表
-// @Tags SysMenu
+// @Tags sys-SysMenu
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysApiDto true "body"
@@ -97,7 +97,7 @@ func (e *SysMenuApi) Create(c *gin.Context) {
 
 // Update 更新接口列表
 // @Summary 更新接口列表
-// @Tags SysMenu
+// @Tags sys-SysMenu
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysApiDto true "body"
@@ -121,7 +121,7 @@ func (e *SysMenuApi) Update(c *gin.Context) {
 
 // Del 删除接口列表
 // @Summary 删除接口列表
-// @Tags SysMenu
+// @Tags sys-SysMenu
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqIds true "body"
@@ -143,7 +143,7 @@ func (e *SysMenuApi) Del(c *gin.Context) {
 
 // GetMenus 获取菜单
 // @Summary 获取菜单
-// @Tags SysMenu
+// @Tags sys-SysMenu
 // @Accept application/json
 // @Product application/json
 // @Success 200 {object} base.Resp{data=[]models.SysMenu} "{"code": 200, "data": [...]}"

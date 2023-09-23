@@ -18,7 +18,7 @@ var ApiSysDept = SysDeptApi{}
 
 // QueryPage 获取SysDept列表
 // @Summary Page接口
-// @Tags SysDept
+// @Tags sys-SysDept
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysDeptGetPageReq true "body"
@@ -48,7 +48,7 @@ func (e *SysDeptApi) QueryPage(c *gin.Context) {
 
 // Get 获取SysDept
 // @Summary 获取SysDept
-// @Tags SysDept
+// @Tags sys-SysDept
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqId true "body"
@@ -71,7 +71,7 @@ func (e *SysDeptApi) Get(c *gin.Context) {
 
 // Create 创建SysDept
 // @Summary 创建SysDept
-// @Tags SysDept
+// @Tags sys-SysDept
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysDeptDto true "body"
@@ -95,7 +95,7 @@ func (e *SysDeptApi) Create(c *gin.Context) {
 
 // Update 更新SysDept
 // @Summary 更新SysDept
-// @Tags SysDept
+// @Tags sys-SysDept
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysDeptDto true "body"
@@ -119,7 +119,7 @@ func (e *SysDeptApi) Update(c *gin.Context) {
 
 // Del 删除SysDept
 // @Summary 删除SysDept
-// @Tags SysDept
+// @Tags sys-SysDept
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqIds true "body"

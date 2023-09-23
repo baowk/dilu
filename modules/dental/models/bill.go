@@ -4,17 +4,17 @@ import (
 	"time"
 )
 
-// 账单
+// Bill
 type Bill struct {
 	Id             int       `json:"id" gorm:"type:int unsigned;primaryKey;autoIncrement;comment:主键"` //主键
 	No             string    `json:"no" gorm:"type:varchar(20);comment:订单号"`                          //订单号
-	CustomerId     int       `json:"customerId" gorm:"type:int;comment:顾客"`                           //顾客
-	UserId         int       `json:"userId" gorm:"type:int;comment:用户id"`                             //用户id
-	TeamId         int       `json:"teamId" gorm:"type:int;comment:团队id"`                             //团队id
+	CustomerId     int       `json:"customerId" gorm:"type:bigint;comment:顾客"`                        //顾客
+	UserId         int       `json:"userId" gorm:"type:bigint;comment:用户id"`                          //用户id
+	TeamId         int       `json:"teamId" gorm:"type:bigint;comment:团队id"`                          //团队id
 	Total          string    `json:"total" gorm:"type:decimal(10,2);comment:金额"`                      //金额
 	RealTotal      string    `json:"realTotal" gorm:"type:decimal(10,2);comment:折后金额"`                //折后金额
 	PaidTotal      string    `json:"paidTotal" gorm:"type:decimal(10,2);comment:已支付金额"`               //已支付金额
-	LinkId         int       `json:"linkId" gorm:"type:int;comment:关联订单"`                             //关联订单
+	LinkId         int       `json:"linkId" gorm:"type:bigint;comment:关联订单"`                          //关联订单
 	TradeAt        time.Time `json:"tradeAt" gorm:"type:datetime;comment:交易日期"`                       //交易日期
 	TradeStatus    int       `json:"tradeStatus" gorm:"type:tinyint;comment:交易类型 1 成交 2补尾款 3退款"`      //交易类型 1 成交 2补尾款 3退款
 	DentalCount    int       `json:"dentalCount" gorm:"type:tinyint;comment:颗数"`                      //颗数

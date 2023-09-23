@@ -16,9 +16,9 @@ type CustomerApi struct {
 
 var ApiCustomer = CustomerApi{}
 
-// QueryPage 获取客户列表
+// QueryPage 获取Customer列表
 // @Summary Page接口
-// @Tags Customer
+// @Tags dental-Customer
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.CustomerGetPageReq true "body"
@@ -46,9 +46,9 @@ func (e *CustomerApi) QueryPage(c *gin.Context) {
 	e.Page(c, list, total, req.GetPage(), req.GetSize())
 }
 
-// Get 获取客户
-// @Summary 获取客户
-// @Tags Customer
+// Get 获取Customer
+// @Summary 获取Customer
+// @Tags dental-Customer
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqId true "body"
@@ -69,9 +69,9 @@ func (e *CustomerApi) Get(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Create 创建客户
-// @Summary 创建客户
-// @Tags Customer
+// Create 创建Customer
+// @Summary 创建Customer
+// @Tags dental-Customer
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.CustomerDto true "body"
@@ -93,9 +93,9 @@ func (e *CustomerApi) Create(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Update 更新客户
-// @Summary 更新客户
-// @Tags Customer
+// Update 更新Customer
+// @Summary 更新Customer
+// @Tags dental-Customer
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.CustomerDto true "body"
@@ -117,9 +117,9 @@ func (e *CustomerApi) Update(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Del 删除客户
-// @Summary 删除客户
-// @Tags Customer
+// Del 删除Customer
+// @Summary 删除Customer
+// @Tags dental-Customer
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqIds true "body"

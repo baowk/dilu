@@ -16,9 +16,9 @@ type BillApi struct {
 
 var ApiBill = BillApi{}
 
-// QueryPage 获取账单列表
+// QueryPage 获取Bill列表
 // @Summary Page接口
-// @Tags Bill
+// @Tags dental-Bill
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.BillGetPageReq true "body"
@@ -46,9 +46,9 @@ func (e *BillApi) QueryPage(c *gin.Context) {
 	e.Page(c, list, total, req.GetPage(), req.GetSize())
 }
 
-// Get 获取账单
-// @Summary 获取账单
-// @Tags Bill
+// Get 获取Bill
+// @Summary 获取Bill
+// @Tags dental-Bill
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqId true "body"
@@ -69,9 +69,9 @@ func (e *BillApi) Get(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Create 创建账单
-// @Summary 创建账单
-// @Tags Bill
+// Create 创建Bill
+// @Summary 创建Bill
+// @Tags dental-Bill
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.BillDto true "body"
@@ -93,9 +93,9 @@ func (e *BillApi) Create(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Update 更新账单
-// @Summary 更新账单
-// @Tags Bill
+// Update 更新Bill
+// @Summary 更新Bill
+// @Tags dental-Bill
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.BillDto true "body"
@@ -117,9 +117,9 @@ func (e *BillApi) Update(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Del 删除账单
-// @Summary 删除账单
-// @Tags Bill
+// Del 删除Bill
+// @Summary 删除Bill
+// @Tags dental-Bill
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqIds true "body"

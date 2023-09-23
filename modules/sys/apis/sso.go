@@ -30,7 +30,7 @@ type SSO struct {
 // SendCode 发送邮箱或者短信验证码
 // @Summary 发送邮箱或者短信验证码
 // @Description 发送邮箱或者短信验证码
-// @Tags sso
+// @Tags sys-sso
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.CodeSendReq true "data"
@@ -85,7 +85,7 @@ func (e *SSO) SendCode(c *gin.Context) {
 // Register 用户注册
 // @Summary 用户注册
 // @Description 用户注册
-// @Tags sso
+// @Tags sys-sso
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.RegisterReq true "data"
@@ -145,7 +145,7 @@ func (e *SSO) Register(c *gin.Context) {
 // VerifyCode 验证码校验
 // @Summary 验证码校验
 // @Description 验证码校验
-// @Tags sso
+// @Tags sys-sso
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.VerifyCodeReq true "data"
@@ -184,7 +184,7 @@ func (e *SSO) VerifyCode(c *gin.Context) {
 // Login 用户登录
 // @Summary 用户登录
 // @Description 用户登录
-// @Tags sso
+// @Tags sys-sso
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.LoginReq true "data"
@@ -244,7 +244,7 @@ func (e *SSO) Login(c *gin.Context) {
 // ForgetPwd 忘记密码
 // @Summary 忘记密码
 // @Description 忘记密码
-// @Tags sso
+// @Tags sys-sso
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.ForgetPwdReq true "data"
@@ -298,7 +298,7 @@ func (e *SSO) ForgetPwd(c *gin.Context) {
 // GetUserInfo 获取用户信息
 // @Summary 获取用户信息
 // @Description 获取用户信息
-// @Tags sso
+// @Tags sys-sso
 // @Param data body base.ReqId true "data"
 // @Success 200 {object} base.Resp{data=dto.UserinfoResp} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/getUserinfo [post]
@@ -330,7 +330,7 @@ func (e *SSO) GetUserInfo(c *gin.Context) {
 // GetUserInfo 获取个人信息
 // @Summary 获取个人信息
 // @Description 获取个人信息
-// @Tags sso
+// @Tags sys-sso
 // @Success 200 {object} base.Resp{data=dto.MyUserinfoResp} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/myUserinfo [get]
 // @Security Bearer
@@ -359,7 +359,7 @@ func (e *SSO) MyUserInfo(c *gin.Context) {
 // ChangePwd 修改密码
 // @Summary 修改密码
 // @Description 修改密码
-// @Tags sso
+// @Tags sys-sso
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.ChangePwdReq true "data"
@@ -390,7 +390,7 @@ func (e *SSO) ChangePwd(c *gin.Context) {
 // Bind 绑定手机号或者邮箱
 // @Summary 绑定手机号或者邮箱
 // @Description 绑定手机号或者邮箱
-// @Tags sso
+// @Tags sys-sso
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.BindReq true "data"
@@ -441,7 +441,7 @@ func (e *SSO) Bind(c *gin.Context) {
 // ChangeUserinfo 修改用户信息
 // @Summary 修改用户信息
 // @Description 修改用户信息
-// @Tags sso
+// @Tags sys-sso
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.ChangeUserinfoReq true "data"
@@ -473,7 +473,7 @@ func (e *SSO) ChangeUserinfo(c *gin.Context) {
 // Logout 退出登录
 // @Summary 退出登录
 // @Description 退出登录（调用后清空本地token）
-// @Tags sso
+// @Tags sys-sso
 // @Success 200 {object} base.Resp{} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/auth/logout [post]
 // @Security Bearer
@@ -486,7 +486,7 @@ func (e *SSO) Logout(c *gin.Context) {
 // // LoginByWechat 微信登录
 // // @Summary 微信登录
 // // @Description 微信登录
-// // @Tags sso
+// // @Tags sys-sso
 // // @Accept application/json
 // // @Product application/json
 // // @Param data body dto.LoginWechatReq true "data"
@@ -519,7 +519,7 @@ func (e *SSO) Logout(c *gin.Context) {
 // // GeDingCfg 获取钉钉登录配置信息
 // // @Summary 获取钉钉登录配置信息
 // // @Description 获取钉钉登录配置信息
-// // @Tags sso
+// // @Tags sys-sso
 // // @Success 200 {object} base.Resp{data=dto.DingCfgResp} "{"code": 200, "data": [...]}"
 // // @Router /api/v1/sys/getDingCfg [post]
 // func (e *SSO) GetDingCfg(c *gin.Context) {
@@ -540,7 +540,7 @@ func (e *SSO) Logout(c *gin.Context) {
 // // LoginByDing 钉钉登录
 // // @Summary 钉钉
 // // @Description 钉钉登录
-// // @Tags sso
+// // @Tags sys-sso
 // // @Accept application/json
 // // @Product application/json
 // // @Param data body dto.LoginDingReq true "data"
@@ -574,7 +574,7 @@ func (e *SSO) Logout(c *gin.Context) {
 // // BindDing 绑定钉钉
 // // @Summary 绑定钉钉
 // // @Description 绑定钉钉
-// // @Tags sso
+// // @Tags sys-sso
 // // @Accept application/json
 // // @Product application/json
 // // @Param data body dto.LoginDingReq true "data"
@@ -610,7 +610,7 @@ func (e *SSO) Logout(c *gin.Context) {
 // // BindWechat 绑定微信
 // // @Summary 绑定微信
 // // @Description 绑定微信
-// // @Tags sso
+// // @Tags sys-sso
 // // @Accept application/json
 // // @Product application/json
 // // @Param data body dto.LoginWechatReq true "data"

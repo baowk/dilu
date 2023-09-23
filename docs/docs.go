@@ -373,6 +373,1756 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/dental/bill/create": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-Bill"
+                ],
+                "summary": "创建Bill",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.BillDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Bill"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/bill/del": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-Bill"
+                ],
+                "summary": "删除Bill",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqIds"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Bill"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/bill/get": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-Bill"
+                ],
+                "summary": "获取Bill",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqId"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Bill"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/bill/page": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-Bill"
+                ],
+                "summary": "Page接口",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.BillGetPageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/base.PageResp"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/models.Bill"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/bill/update": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-Bill"
+                ],
+                "summary": "更新Bill",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.BillDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Bill"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/customer/create": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-Customer"
+                ],
+                "summary": "创建Customer",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CustomerDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Customer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/customer/del": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-Customer"
+                ],
+                "summary": "删除Customer",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqIds"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Customer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/customer/get": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-Customer"
+                ],
+                "summary": "获取Customer",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqId"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Customer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/customer/page": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-Customer"
+                ],
+                "summary": "Page接口",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CustomerGetPageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/base.PageResp"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/models.Customer"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/customer/update": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-Customer"
+                ],
+                "summary": "更新Customer",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CustomerDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Customer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/event-day-st/create": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-EventDaySt"
+                ],
+                "summary": "创建EventDaySt",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.EventDayStDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.EventDaySt"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/event-day-st/del": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-EventDaySt"
+                ],
+                "summary": "删除EventDaySt",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqIds"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.EventDaySt"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/event-day-st/get": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-EventDaySt"
+                ],
+                "summary": "获取EventDaySt",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqId"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.EventDaySt"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/event-day-st/page": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-EventDaySt"
+                ],
+                "summary": "Page接口",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.EventDayStGetPageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/base.PageResp"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/models.EventDaySt"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/event-day-st/update": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-EventDaySt"
+                ],
+                "summary": "更新EventDaySt",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.EventDayStDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.EventDaySt"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/summary-plan-day/create": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-SummaryPlanDay"
+                ],
+                "summary": "创建SummaryPlanDay",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SummaryPlanDayDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.SummaryPlanDay"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/summary-plan-day/del": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-SummaryPlanDay"
+                ],
+                "summary": "删除SummaryPlanDay",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqIds"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.SummaryPlanDay"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/summary-plan-day/get": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-SummaryPlanDay"
+                ],
+                "summary": "获取SummaryPlanDay",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqId"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.SummaryPlanDay"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/summary-plan-day/page": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-SummaryPlanDay"
+                ],
+                "summary": "Page接口",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SummaryPlanDayGetPageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/base.PageResp"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/models.SummaryPlanDay"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/summary-plan-day/update": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-SummaryPlanDay"
+                ],
+                "summary": "更新SummaryPlanDay",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SummaryPlanDayDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.SummaryPlanDay"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/target-task/create": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-TargetTask"
+                ],
+                "summary": "创建TargetTask",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TargetTaskDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.TargetTask"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/target-task/del": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-TargetTask"
+                ],
+                "summary": "删除TargetTask",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqIds"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.TargetTask"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/target-task/get": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-TargetTask"
+                ],
+                "summary": "获取TargetTask",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqId"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.TargetTask"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/target-task/page": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-TargetTask"
+                ],
+                "summary": "Page接口",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TargetTaskGetPageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/base.PageResp"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/models.TargetTask"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/target-task/update": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-TargetTask"
+                ],
+                "summary": "更新TargetTask",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TargetTaskDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.TargetTask"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/team-member/create": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-TeamMember"
+                ],
+                "summary": "创建TeamMember",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TeamMemberDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.TeamMember"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/team-member/del": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-TeamMember"
+                ],
+                "summary": "删除TeamMember",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqIds"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.TeamMember"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/team-member/get": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-TeamMember"
+                ],
+                "summary": "获取TeamMember",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqId"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.TeamMember"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/team-member/page": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-TeamMember"
+                ],
+                "summary": "Page接口",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TeamMemberGetPageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/base.PageResp"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/models.TeamMember"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/team-member/update": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-TeamMember"
+                ],
+                "summary": "更新TeamMember",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TeamMemberDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.TeamMember"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/team/create": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-Team"
+                ],
+                "summary": "创建Team",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TeamDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Team"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/team/del": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-Team"
+                ],
+                "summary": "删除Team",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqIds"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Team"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/team/get": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-Team"
+                ],
+                "summary": "获取Team",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqId"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Team"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/team/page": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-Team"
+                ],
+                "summary": "Page接口",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TeamGetPageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/base.PageResp"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/models.Team"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/team/update": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-Team"
+                ],
+                "summary": "更新Team",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TeamDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Team"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/sys/auth/bind": {
             "post": {
                 "security": [
@@ -385,7 +2135,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "sso"
+                    "sys-sso"
                 ],
                 "summary": "绑定手机号或者邮箱",
                 "parameters": [
@@ -421,7 +2171,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "sso"
+                    "sys-sso"
                 ],
                 "summary": "修改用户信息",
                 "parameters": [
@@ -454,7 +2204,7 @@ const docTemplate = `{
                 ],
                 "description": "退出登录（调用后清空本地token）",
                 "tags": [
-                    "sso"
+                    "sys-sso"
                 ],
                 "summary": "退出登录",
                 "responses": {
@@ -471,7 +2221,7 @@ const docTemplate = `{
             "get": {
                 "description": "获取验证码",
                 "tags": [
-                    "sso"
+                    "sys-sso"
                 ],
                 "summary": "获取验证码",
                 "responses": {
@@ -511,7 +2261,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "sso"
+                    "sys-sso"
                 ],
                 "summary": "修改密码",
                 "parameters": [
@@ -539,7 +2289,7 @@ const docTemplate = `{
             "get": {
                 "description": "获取钉钉回调",
                 "tags": [
-                    "sso ding"
+                    "sys-sso ding"
                 ],
                 "summary": "获取钉钉回调",
                 "responses": {
@@ -571,7 +2321,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "sso"
+                    "sys-sso"
                 ],
                 "summary": "忘记密码",
                 "parameters": [
@@ -599,7 +2349,7 @@ const docTemplate = `{
             "post": {
                 "description": "获取钉钉登录配置信息",
                 "tags": [
-                    "sso ding"
+                    "sys-sso ding"
                 ],
                 "summary": "获取钉钉登录配置信息",
                 "responses": {
@@ -628,7 +2378,7 @@ const docTemplate = `{
             "post": {
                 "description": "获取用户信息",
                 "tags": [
-                    "sso"
+                    "sys-sso"
                 ],
                 "summary": "获取用户信息",
                 "parameters": [
@@ -671,7 +2421,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "sso"
+                    "sys-sso"
                 ],
                 "summary": "用户登录",
                 "parameters": [
@@ -714,7 +2464,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "sso ding"
+                    "sys-sso ding"
                 ],
                 "summary": "钉钉",
                 "parameters": [
@@ -757,7 +2507,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "sso wechat mp"
+                    "sys-sso wechat mp"
                 ],
                 "summary": "微信公众号回调函数",
                 "responses": {
@@ -777,7 +2527,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "sso wechat mp"
+                    "sys-sso wechat mp"
                 ],
                 "summary": "轮询用户登录成功与否",
                 "parameters": [
@@ -820,7 +2570,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "sso wechat mp"
+                    "sys-sso wechat mp"
                 ],
                 "summary": "获取公众号二维码",
                 "responses": {
@@ -854,7 +2604,7 @@ const docTemplate = `{
                 ],
                 "description": "获取个人信息",
                 "tags": [
-                    "sso"
+                    "sys-sso"
                 ],
                 "summary": "获取个人信息",
                 "responses": {
@@ -886,7 +2636,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "sso"
+                    "sys-sso"
                 ],
                 "summary": "用户注册",
                 "parameters": [
@@ -929,7 +2679,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "sso"
+                    "sys-sso"
                 ],
                 "summary": "发送邮箱或者短信验证码",
                 "parameters": [
@@ -964,7 +2714,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysApi"
+                    "sys-SysApi"
                 ],
                 "summary": "创建接口列表",
                 "parameters": [
@@ -1011,7 +2761,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysApi"
+                    "sys-SysApi"
                 ],
                 "summary": "删除接口列表",
                 "parameters": [
@@ -1058,7 +2808,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysApi"
+                    "sys-SysApi"
                 ],
                 "summary": "获取接口列表",
                 "parameters": [
@@ -1105,7 +2855,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysApi"
+                    "sys-SysApi"
                 ],
                 "summary": "Page接口",
                 "parameters": [
@@ -1167,7 +2917,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysApi"
+                    "sys-SysApi"
                 ],
                 "summary": "更新接口列表",
                 "parameters": [
@@ -1214,7 +2964,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysCfg"
+                    "sys-SysCfg"
                 ],
                 "summary": "创建系统配置项",
                 "parameters": [
@@ -1261,7 +3011,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysCfg"
+                    "sys-SysCfg"
                 ],
                 "summary": "删除系统配置项",
                 "parameters": [
@@ -1308,7 +3058,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysCfg"
+                    "sys-SysCfg"
                 ],
                 "summary": "获取系统配置项",
                 "parameters": [
@@ -1355,7 +3105,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysCfg"
+                    "sys-SysCfg"
                 ],
                 "summary": "Page接口",
                 "parameters": [
@@ -1417,7 +3167,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysCfg"
+                    "sys-SysCfg"
                 ],
                 "summary": "更新系统配置项",
                 "parameters": [
@@ -1464,7 +3214,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysDept"
+                    "sys-SysDept"
                 ],
                 "summary": "创建SysDept",
                 "parameters": [
@@ -1511,7 +3261,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysDept"
+                    "sys-SysDept"
                 ],
                 "summary": "删除SysDept",
                 "parameters": [
@@ -1558,7 +3308,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysDept"
+                    "sys-SysDept"
                 ],
                 "summary": "获取SysDept",
                 "parameters": [
@@ -1605,7 +3355,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysDept"
+                    "sys-SysDept"
                 ],
                 "summary": "Page接口",
                 "parameters": [
@@ -1667,7 +3417,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysDept"
+                    "sys-SysDept"
                 ],
                 "summary": "更新SysDept",
                 "parameters": [
@@ -1714,7 +3464,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysJob"
+                    "sys-SysJob"
                 ],
                 "summary": "创建SysJob",
                 "parameters": [
@@ -1761,7 +3511,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysJob"
+                    "sys-SysJob"
                 ],
                 "summary": "删除SysJob",
                 "parameters": [
@@ -1808,7 +3558,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysJob"
+                    "sys-SysJob"
                 ],
                 "summary": "获取SysJob",
                 "parameters": [
@@ -1855,7 +3605,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysJob"
+                    "sys-SysJob"
                 ],
                 "summary": "Page接口",
                 "parameters": [
@@ -1917,7 +3667,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysJob"
+                    "sys-SysJob"
                 ],
                 "summary": "更新SysJob",
                 "parameters": [
@@ -1964,7 +3714,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysMenu"
+                    "sys-SysMenu"
                 ],
                 "summary": "创建接口列表",
                 "parameters": [
@@ -2011,7 +3761,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysMenu"
+                    "sys-SysMenu"
                 ],
                 "summary": "删除接口列表",
                 "parameters": [
@@ -2058,7 +3808,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysMenu"
+                    "sys-SysMenu"
                 ],
                 "summary": "获取接口列表",
                 "parameters": [
@@ -2105,7 +3855,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysMenu"
+                    "sys-SysMenu"
                 ],
                 "summary": "获取菜单",
                 "responses": {
@@ -2144,7 +3894,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysMenu"
+                    "sys-SysMenu"
                 ],
                 "summary": "Page接口",
                 "parameters": [
@@ -2206,7 +3956,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysMenu"
+                    "sys-SysMenu"
                 ],
                 "summary": "更新接口列表",
                 "parameters": [
@@ -2253,7 +4003,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysOperaLog"
+                    "sys-SysOperaLog"
                 ],
                 "summary": "创建SysOperaLog",
                 "parameters": [
@@ -2300,7 +4050,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysOperaLog"
+                    "sys-SysOperaLog"
                 ],
                 "summary": "删除SysOperaLog",
                 "parameters": [
@@ -2347,7 +4097,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysOperaLog"
+                    "sys-SysOperaLog"
                 ],
                 "summary": "获取SysOperaLog",
                 "parameters": [
@@ -2394,7 +4144,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysOperaLog"
+                    "sys-SysOperaLog"
                 ],
                 "summary": "Page接口",
                 "parameters": [
@@ -2456,7 +4206,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysOperaLog"
+                    "sys-SysOperaLog"
                 ],
                 "summary": "更新SysOperaLog",
                 "parameters": [
@@ -2503,7 +4253,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysRole"
+                    "sys-SysRole"
                 ],
                 "summary": "创建SysRole",
                 "parameters": [
@@ -2550,7 +4300,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysRole"
+                    "sys-SysRole"
                 ],
                 "summary": "删除SysRole",
                 "parameters": [
@@ -2597,7 +4347,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysRole"
+                    "sys-SysRole"
                 ],
                 "summary": "获取SysRole",
                 "parameters": [
@@ -2644,7 +4394,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysRole"
+                    "sys-SysRole"
                 ],
                 "summary": "Page接口",
                 "parameters": [
@@ -2706,7 +4456,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysRole"
+                    "sys-SysRole"
                 ],
                 "summary": "更新SysRole",
                 "parameters": [
@@ -2753,7 +4503,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysUserDept"
+                    "sys-SysUserDept"
                 ],
                 "summary": "创建SysUserDept",
                 "parameters": [
@@ -2800,7 +4550,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysUserDept"
+                    "sys-SysUserDept"
                 ],
                 "summary": "删除SysUserDept",
                 "parameters": [
@@ -2847,7 +4597,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysUserDept"
+                    "sys-SysUserDept"
                 ],
                 "summary": "获取SysUserDept",
                 "parameters": [
@@ -2894,7 +4644,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysUserDept"
+                    "sys-SysUserDept"
                 ],
                 "summary": "Page接口",
                 "parameters": [
@@ -2956,7 +4706,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "SysUserDept"
+                    "sys-SysUserDept"
                 ],
                 "summary": "更新SysUserDept",
                 "parameters": [
@@ -2999,7 +4749,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "sso"
+                    "sys-sso"
                 ],
                 "summary": "验证码校验",
                 "parameters": [
@@ -3086,6 +4836,104 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.BillDto": {
+            "type": "object",
+            "properties": {
+                "brand": {
+                    "description": "品牌",
+                    "type": "integer"
+                },
+                "customerId": {
+                    "description": "顾客",
+                    "type": "integer"
+                },
+                "dentalCount": {
+                    "description": "颗数",
+                    "type": "integer"
+                },
+                "doctor": {
+                    "description": "医生",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "implant": {
+                    "description": "是否已种",
+                    "type": "integer"
+                },
+                "implantDate": {
+                    "description": "植入日期",
+                    "type": "string"
+                },
+                "implantedCount": {
+                    "description": "已种颗数",
+                    "type": "integer"
+                },
+                "linkId": {
+                    "description": "关联订单",
+                    "type": "integer"
+                },
+                "no": {
+                    "description": "订单号",
+                    "type": "string"
+                },
+                "pack": {
+                    "description": "1 普通 2 半口 3 全口",
+                    "type": "integer"
+                },
+                "paidTotal": {
+                    "description": "已支付金额",
+                    "type": "string"
+                },
+                "paybackDate": {
+                    "description": "预定回款日期",
+                    "type": "string"
+                },
+                "realTotal": {
+                    "description": "折后金额",
+                    "type": "string"
+                },
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
+                "total": {
+                    "description": "金额",
+                    "type": "string"
+                },
+                "tradeAt": {
+                    "description": "交易日期",
+                    "type": "string"
+                },
+                "tradeStatus": {
+                    "description": "交易类型 1 成交 2补尾款 3退款",
+                    "type": "integer"
+                },
+                "userId": {
+                    "description": "用户id",
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.BillGetPageReq": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "size": {
+                    "description": "每页大小",
+                    "type": "integer"
+                },
+                "tradeStatus": {
+                    "description": "交易类型 1 成交 2补尾款 3退款",
+                    "type": "integer"
+                }
+            }
+        },
         "dto.BindReq": {
             "type": "object",
             "properties": {
@@ -3166,6 +5014,60 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.CustomerDto": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "description": "地址",
+                    "type": "string"
+                },
+                "birthday": {
+                    "description": "生日",
+                    "type": "string"
+                },
+                "gender": {
+                    "description": "性别",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "姓名",
+                    "type": "string"
+                },
+                "phone": {
+                    "description": "手机号",
+                    "type": "string"
+                },
+                "remark": {
+                    "description": "描述",
+                    "type": "string"
+                },
+                "salesId": {
+                    "description": "销售人员",
+                    "type": "integer"
+                },
+                "wechat": {
+                    "description": "微信号",
+                    "type": "string"
+                }
+            }
+        },
+        "dto.CustomerGetPageReq": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "size": {
+                    "description": "每页大小",
+                    "type": "integer"
+                }
+            }
+        },
         "dto.DingCfgResp": {
             "type": "object",
             "properties": {
@@ -3180,6 +5082,60 @@ const docTemplate = `{
                 "state": {
                     "description": "状态码",
                     "type": "string"
+                }
+            }
+        },
+        "dto.EventDayStDto": {
+            "type": "object",
+            "properties": {
+                "day": {
+                    "description": "时间",
+                    "type": "string"
+                },
+                "deal": {
+                    "description": "成交",
+                    "type": "integer"
+                },
+                "firstDiagnosis": {
+                    "description": "初诊",
+                    "type": "integer"
+                },
+                "furtherDiagnosis": {
+                    "description": "复诊",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "newCustomerCnt": {
+                    "description": "留存",
+                    "type": "integer"
+                },
+                "rest": {
+                    "description": "休息",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
+                "userId": {
+                    "description": "用户id",
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.EventDayStGetPageReq": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "size": {
+                    "description": "每页大小",
+                    "type": "integer"
                 }
             }
         },
@@ -3395,6 +5351,48 @@ const docTemplate = `{
                 "uuid": {
                     "description": "微信或者钉钉第一次登录绑定用",
                     "type": "string"
+                }
+            }
+        },
+        "dto.SummaryPlanDayDto": {
+            "type": "object",
+            "properties": {
+                "day": {
+                    "description": "天",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "plan": {
+                    "description": "明日计划",
+                    "type": "string"
+                },
+                "summary": {
+                    "description": "今日总结",
+                    "type": "string"
+                },
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
+                "userId": {
+                    "description": "用户id",
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.SummaryPlanDayGetPageReq": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "size": {
+                    "description": "每页大小",
+                    "type": "integer"
                 }
             }
         },
@@ -3808,6 +5806,152 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.TargetTaskDto": {
+            "type": "object",
+            "properties": {
+                "deal": {
+                    "description": "成交任务",
+                    "type": "integer"
+                },
+                "firstDiagnosis": {
+                    "description": "导诊任务",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "month": {
+                    "description": "月",
+                    "type": "integer"
+                },
+                "newCustomerCnt": {
+                    "description": "留存任务",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
+                "userId": {
+                    "description": "用户id",
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.TargetTaskGetPageReq": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "size": {
+                    "description": "每页大小",
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.TeamDto": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "团队名",
+                    "type": "string"
+                },
+                "owner": {
+                    "description": "团队拥有者",
+                    "type": "integer"
+                },
+                "parentId": {
+                    "description": "上级团队",
+                    "type": "integer"
+                },
+                "path": {
+                    "description": "团队路径",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "状态",
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.TeamGetPageReq": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "size": {
+                    "description": "每页大小",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态",
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.TeamMemberDto": {
+            "type": "object",
+            "properties": {
+                "gender": {
+                    "description": "性别",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "姓名",
+                    "type": "string"
+                },
+                "phone": {
+                    "description": "电话",
+                    "type": "string"
+                },
+                "role": {
+                    "description": "角色 1主管 2副主管 4普通",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
+                "userId": {
+                    "description": "用户id",
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.TeamMemberGetPageReq": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "size": {
+                    "description": "每页大小",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态",
+                    "type": "integer"
+                }
+            }
+        },
         "dto.UserinfoResp": {
             "type": "object",
             "properties": {
@@ -3879,6 +6023,222 @@ const docTemplate = `{
                 "username": {
                     "description": "手机号或者邮箱",
                     "type": "string"
+                }
+            }
+        },
+        "models.Bill": {
+            "type": "object",
+            "properties": {
+                "brand": {
+                    "description": "品牌",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "customerId": {
+                    "description": "顾客",
+                    "type": "integer"
+                },
+                "dentalCount": {
+                    "description": "颗数",
+                    "type": "integer"
+                },
+                "doctor": {
+                    "description": "医生",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "implant": {
+                    "description": "是否已种",
+                    "type": "integer"
+                },
+                "implantDate": {
+                    "description": "植入日期",
+                    "type": "string"
+                },
+                "implantedCount": {
+                    "description": "已种颗数",
+                    "type": "integer"
+                },
+                "linkId": {
+                    "description": "关联订单",
+                    "type": "integer"
+                },
+                "no": {
+                    "description": "订单号",
+                    "type": "string"
+                },
+                "pack": {
+                    "description": "1 普通 2 半口 3 全口",
+                    "type": "integer"
+                },
+                "paidTotal": {
+                    "description": "已支付金额",
+                    "type": "string"
+                },
+                "paybackDate": {
+                    "description": "预定回款日期",
+                    "type": "string"
+                },
+                "realTotal": {
+                    "description": "折后金额",
+                    "type": "string"
+                },
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
+                "total": {
+                    "description": "金额",
+                    "type": "string"
+                },
+                "tradeAt": {
+                    "description": "交易日期",
+                    "type": "string"
+                },
+                "tradeStatus": {
+                    "description": "交易类型 1 成交 2补尾款 3退款",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                },
+                "userId": {
+                    "description": "用户id",
+                    "type": "integer"
+                }
+            }
+        },
+        "models.Customer": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "description": "地址",
+                    "type": "string"
+                },
+                "birthday": {
+                    "description": "生日",
+                    "type": "string"
+                },
+                "gender": {
+                    "description": "性别",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "姓名",
+                    "type": "string"
+                },
+                "phone": {
+                    "description": "手机号",
+                    "type": "string"
+                },
+                "remark": {
+                    "description": "描述",
+                    "type": "string"
+                },
+                "salesId": {
+                    "description": "销售人员",
+                    "type": "integer"
+                },
+                "wechat": {
+                    "description": "微信号",
+                    "type": "string"
+                }
+            }
+        },
+        "models.EventDaySt": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "integer"
+                },
+                "day": {
+                    "description": "时间",
+                    "type": "string"
+                },
+                "deal": {
+                    "description": "成交",
+                    "type": "integer"
+                },
+                "firstDiagnosis": {
+                    "description": "初诊",
+                    "type": "integer"
+                },
+                "furtherDiagnosis": {
+                    "description": "复诊",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "newCustomerCnt": {
+                    "description": "留存",
+                    "type": "integer"
+                },
+                "rest": {
+                    "description": "休息",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "integer"
+                },
+                "userId": {
+                    "description": "用户id",
+                    "type": "integer"
+                }
+            }
+        },
+        "models.SummaryPlanDay": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "day": {
+                    "description": "天",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "plan": {
+                    "description": "明日计划",
+                    "type": "string"
+                },
+                "summary": {
+                    "description": "今日总结",
+                    "type": "string"
+                },
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                },
+                "userId": {
+                    "description": "用户id",
+                    "type": "integer"
                 }
             }
         },
@@ -4352,6 +6712,121 @@ const docTemplate = `{
                 },
                 "userId": {
                     "description": "上级部门",
+                    "type": "integer"
+                }
+            }
+        },
+        "models.TargetTask": {
+            "type": "object",
+            "properties": {
+                "deal": {
+                    "description": "成交任务",
+                    "type": "integer"
+                },
+                "firstDiagnosis": {
+                    "description": "导诊任务",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "month": {
+                    "description": "月",
+                    "type": "integer"
+                },
+                "newCustomerCnt": {
+                    "description": "留存任务",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
+                "userId": {
+                    "description": "用户id",
+                    "type": "integer"
+                }
+            }
+        },
+        "models.Team": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "团队名",
+                    "type": "string"
+                },
+                "owner": {
+                    "description": "团队拥有者",
+                    "type": "integer"
+                },
+                "parentId": {
+                    "description": "上级团队",
+                    "type": "integer"
+                },
+                "path": {
+                    "description": "团队路径",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "状态",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "models.TeamMember": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "gender": {
+                    "description": "性别",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "姓名",
+                    "type": "string"
+                },
+                "phone": {
+                    "description": "电话",
+                    "type": "string"
+                },
+                "role": {
+                    "description": "角色 1主管 2副主管 4普通",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                },
+                "userId": {
+                    "description": "用户id",
                     "type": "integer"
                 }
             }

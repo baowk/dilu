@@ -11,7 +11,7 @@ type BillGetPageReq struct {
 	TradeStatus  int `json:"tradeStatus" form:"tradeStatus"` //交易类型 1 成交 2补尾款 3退款
 }
 
-// 账单
+// Bill
 type BillDto struct {
 	Id             int       `json:"id"`             //主键
 	No             string    `json:"no"`             //订单号

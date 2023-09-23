@@ -8,7 +8,7 @@ type CustomerGetPageReq struct {
 	base.ReqPage `search:"-"`
 }
 
-// 客户
+// Customer
 type CustomerDto struct {
 	Id       int    `json:"id"`       //主键
 	Name     string `json:"name"`     //姓名

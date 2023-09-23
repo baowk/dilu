@@ -1,6 +1,6 @@
 package models
 
-//客户
+//Customer
 type Customer struct {
 	Id       int    `json:"id" gorm:"type:int unsigned;primaryKey;autoIncrement;comment:主键"` //主键
 	Name     string `json:"name" gorm:"type:varchar(32);comment:姓名"`                         //姓名
@@ -10,7 +10,7 @@ type Customer struct {
 	Gender   int    `json:"gender" gorm:"type:tinyint;comment:性别"`                           //性别
 	Address  string `json:"address" gorm:"type:varchar(255);comment:地址"`                     //地址
 	Remark   string `json:"remark" gorm:"type:varchar(255);comment:描述"`                      //描述
-	SalesId  int    `json:"salesId" gorm:"type:int;comment:销售人员"`                            //销售人员
+	SalesId  int    `json:"salesId" gorm:"type:bigint;comment:销售人员"`                         //销售人员
 }
 
 func (Customer) TableName() string {

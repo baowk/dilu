@@ -1,14 +1,14 @@
 package models
 
-//月目标设定
+//TargetTask
 type TargetTask struct {
 	Id             int `json:"id" gorm:"type:int unsigned;primaryKey;autoIncrement;comment:主键"` //主键
-	Month          int `json:"month" gorm:"type:int;comment:月"`                                 //月
-	TeamId         int `json:"teamId" gorm:"type:int;comment:团队id"`                             //团队id
-	UserId         int `json:"userId" gorm:"type:int;comment:用户id"`                             //用户id
-	NewCustomerCnt int `json:"newCustomerCnt" gorm:"type:int;comment:留存任务"`                     //留存任务
-	FirstDiagnosis int `json:"firstDiagnosis" gorm:"type:int;comment:导诊任务"`                     //导诊任务
-	Deal           int `json:"deal" gorm:"type:int;comment:成交任务"`                               //成交任务
+	Month          int `json:"month" gorm:"type:bigint;comment:月"`                              //月
+	TeamId         int `json:"teamId" gorm:"type:bigint;comment:团队id"`                          //团队id
+	UserId         int `json:"userId" gorm:"type:bigint;comment:用户id"`                          //用户id
+	NewCustomerCnt int `json:"newCustomerCnt" gorm:"type:bigint;comment:留存任务"`                  //留存任务
+	FirstDiagnosis int `json:"firstDiagnosis" gorm:"type:bigint;comment:导诊任务"`                  //导诊任务
+	Deal           int `json:"deal" gorm:"type:bigint;comment:成交任务"`                            //成交任务
 }
 
 func (TargetTask) TableName() string {

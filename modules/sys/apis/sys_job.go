@@ -18,7 +18,7 @@ var ApiSysJob = SysJobApi{}
 
 // QueryPage 获取SysJob列表
 // @Summary Page接口
-// @Tags SysJob
+// @Tags sys-SysJob
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysJobGetPageReq true "body"
@@ -48,7 +48,7 @@ func (e *SysJobApi) QueryPage(c *gin.Context) {
 
 // Get 获取SysJob
 // @Summary 获取SysJob
-// @Tags SysJob
+// @Tags sys-SysJob
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqId true "body"
@@ -71,7 +71,7 @@ func (e *SysJobApi) Get(c *gin.Context) {
 
 // Create 创建SysJob
 // @Summary 创建SysJob
-// @Tags SysJob
+// @Tags sys-SysJob
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysJobDto true "body"
@@ -95,7 +95,7 @@ func (e *SysJobApi) Create(c *gin.Context) {
 
 // Update 更新SysJob
 // @Summary 更新SysJob
-// @Tags SysJob
+// @Tags sys-SysJob
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysJobDto true "body"
@@ -119,7 +119,7 @@ func (e *SysJobApi) Update(c *gin.Context) {
 
 // Del 删除SysJob
 // @Summary 删除SysJob
-// @Tags SysJob
+// @Tags sys-SysJob
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqIds true "body"

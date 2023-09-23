@@ -26,7 +26,7 @@ type CaptchaApi struct {
 // GenerateCaptchaHandler 获取验证码
 // @Summary 获取验证码
 // @Description 获取验证码
-// @Tags sso
+// @Tags sys-sso
 // @Success 200 {object} base.Resp{data=map[string]string} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/captcha [get]
 func (e CaptchaApi) GenerateCaptchaHandler(c *gin.Context) {

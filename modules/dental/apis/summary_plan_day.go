@@ -16,9 +16,9 @@ type SummaryPlanDayApi struct {
 
 var ApiSummaryPlanDay = SummaryPlanDayApi{}
 
-// QueryPage 获取每日总结计划列表
+// QueryPage 获取SummaryPlanDay列表
 // @Summary Page接口
-// @Tags SummaryPlanDay
+// @Tags dental-SummaryPlanDay
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SummaryPlanDayGetPageReq true "body"
@@ -46,9 +46,9 @@ func (e *SummaryPlanDayApi) QueryPage(c *gin.Context) {
 	e.Page(c, list, total, req.GetPage(), req.GetSize())
 }
 
-// Get 获取每日总结计划
-// @Summary 获取每日总结计划
-// @Tags SummaryPlanDay
+// Get 获取SummaryPlanDay
+// @Summary 获取SummaryPlanDay
+// @Tags dental-SummaryPlanDay
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqId true "body"
@@ -69,9 +69,9 @@ func (e *SummaryPlanDayApi) Get(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Create 创建每日总结计划
-// @Summary 创建每日总结计划
-// @Tags SummaryPlanDay
+// Create 创建SummaryPlanDay
+// @Summary 创建SummaryPlanDay
+// @Tags dental-SummaryPlanDay
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SummaryPlanDayDto true "body"
@@ -93,9 +93,9 @@ func (e *SummaryPlanDayApi) Create(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Update 更新每日总结计划
-// @Summary 更新每日总结计划
-// @Tags SummaryPlanDay
+// Update 更新SummaryPlanDay
+// @Summary 更新SummaryPlanDay
+// @Tags dental-SummaryPlanDay
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SummaryPlanDayDto true "body"
@@ -117,9 +117,9 @@ func (e *SummaryPlanDayApi) Update(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Del 删除每日总结计划
-// @Summary 删除每日总结计划
-// @Tags SummaryPlanDay
+// Del 删除SummaryPlanDay
+// @Summary 删除SummaryPlanDay
+// @Tags dental-SummaryPlanDay
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqIds true "body"

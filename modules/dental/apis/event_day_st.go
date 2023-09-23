@@ -16,9 +16,9 @@ type EventDayStApi struct {
 
 var ApiEventDaySt = EventDayStApi{}
 
-// QueryPage 获取每日明细统计列表
+// QueryPage 获取EventDaySt列表
 // @Summary Page接口
-// @Tags EventDaySt
+// @Tags dental-EventDaySt
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.EventDayStGetPageReq true "body"
@@ -46,9 +46,9 @@ func (e *EventDayStApi) QueryPage(c *gin.Context) {
 	e.Page(c, list, total, req.GetPage(), req.GetSize())
 }
 
-// Get 获取每日明细统计
-// @Summary 获取每日明细统计
-// @Tags EventDaySt
+// Get 获取EventDaySt
+// @Summary 获取EventDaySt
+// @Tags dental-EventDaySt
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqId true "body"
@@ -69,9 +69,9 @@ func (e *EventDayStApi) Get(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Create 创建每日明细统计
-// @Summary 创建每日明细统计
-// @Tags EventDaySt
+// Create 创建EventDaySt
+// @Summary 创建EventDaySt
+// @Tags dental-EventDaySt
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.EventDayStDto true "body"
@@ -93,9 +93,9 @@ func (e *EventDayStApi) Create(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Update 更新每日明细统计
-// @Summary 更新每日明细统计
-// @Tags EventDaySt
+// Update 更新EventDaySt
+// @Summary 更新EventDaySt
+// @Tags dental-EventDaySt
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.EventDayStDto true "body"
@@ -117,9 +117,9 @@ func (e *EventDayStApi) Update(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Del 删除每日明细统计
-// @Summary 删除每日明细统计
-// @Tags EventDaySt
+// Del 删除EventDaySt
+// @Summary 删除EventDaySt
+// @Tags dental-EventDaySt
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqIds true "body"

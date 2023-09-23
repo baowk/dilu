@@ -16,9 +16,9 @@ type TeamMemberApi struct {
 
 var ApiTeamMember = TeamMemberApi{}
 
-// QueryPage 获取团队成员列表
+// QueryPage 获取TeamMember列表
 // @Summary Page接口
-// @Tags TeamMember
+// @Tags dental-TeamMember
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.TeamMemberGetPageReq true "body"
@@ -46,9 +46,9 @@ func (e *TeamMemberApi) QueryPage(c *gin.Context) {
 	e.Page(c, list, total, req.GetPage(), req.GetSize())
 }
 
-// Get 获取团队成员
-// @Summary 获取团队成员
-// @Tags TeamMember
+// Get 获取TeamMember
+// @Summary 获取TeamMember
+// @Tags dental-TeamMember
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqId true "body"
@@ -69,9 +69,9 @@ func (e *TeamMemberApi) Get(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Create 创建团队成员
-// @Summary 创建团队成员
-// @Tags TeamMember
+// Create 创建TeamMember
+// @Summary 创建TeamMember
+// @Tags dental-TeamMember
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.TeamMemberDto true "body"
@@ -93,9 +93,9 @@ func (e *TeamMemberApi) Create(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Update 更新团队成员
-// @Summary 更新团队成员
-// @Tags TeamMember
+// Update 更新TeamMember
+// @Summary 更新TeamMember
+// @Tags dental-TeamMember
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.TeamMemberDto true "body"
@@ -117,9 +117,9 @@ func (e *TeamMemberApi) Update(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Del 删除团队成员
-// @Summary 删除团队成员
-// @Tags TeamMember
+// Del 删除TeamMember
+// @Summary 删除TeamMember
+// @Tags dental-TeamMember
 // @Accept application/json
 // @Product application/json
 // @Param data body base.ReqIds true "body"

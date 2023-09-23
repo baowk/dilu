@@ -33,7 +33,7 @@ type Ding struct {
 // GeDingCfg 获取钉钉登录配置信息
 // @Summary 获取钉钉登录配置信息
 // @Description 获取钉钉登录配置信息
-// @Tags sso ding
+// @Tags sys-sso ding
 // @Success 200 {object} base.Resp{data=dto.DingCfgResp} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/getDingCfg [post]
 func (e Ding) GetDingCfg(c *gin.Context) {
@@ -49,7 +49,7 @@ func (e Ding) GetDingCfg(c *gin.Context) {
 // GeDingCfg 获取钉钉回调
 // @Summary 获取钉钉回调
 // @Description 获取钉钉回调
-// @Tags sso ding
+// @Tags sys-sso ding
 // @Success 200 {object} base.Resp{data=dto.DingCfgResp} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/ding/callback [get]
 func (e Ding) DingCallback(c *gin.Context) {
@@ -73,7 +73,7 @@ func (e Ding) DingCallback(c *gin.Context) {
 // LoginByDing 钉钉登录
 // @Summary 钉钉
 // @Description 钉钉登录
-// @Tags sso ding
+// @Tags sys-sso ding
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.LoginDingReq true "data"

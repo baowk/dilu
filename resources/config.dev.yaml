@@ -35,7 +35,7 @@ dbcfg: # 数据库配置
 # prefix: 日志前缀
   dbs:      
     - dental:    #子配置会继承父配置
-        dns: root:123456@tcp(127.0.0.1:3306)/ya-db?charset=utf8&parseTime=True&loc=Local&timeout=1000ms  # 数据库连接字符串
+        dns: root:123456@tcp(127.0.0.1:3306)/dental-db?charset=utf8&parseTime=True&loc=Local&timeout=1000ms  # 数据库连接字符串
 #       disable: true
 #       driver: mysql          
 #       prefix: 日志前缀
