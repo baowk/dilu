@@ -44,11 +44,14 @@ func run() {
 	}
 	v.WatchConfig()
 	v.OnConfigChange(func(e fsnotify.Event) {
-		fmt.Println("config file changed:", e.Name)
+		fmt.Println("config file changed:", e.String())
 		if err = v.Unmarshal(&core.Cfg); err != nil {
 			fmt.Println(err)
 		}
-		v.Sub("extend").Unmarshal(&config.Ext)
+		extend := v.Sub("extend")
+		if extend != nil {
+			extend.Unmarshal(config.Ext)
+		}
 	})
 	if err = v.Unmarshal(&core.Cfg); err != nil {
 		fmt.Println(err)

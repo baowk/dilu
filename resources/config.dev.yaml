@@ -61,9 +61,9 @@ extend:             # 扩展项（此处没有提供具体说明）
     app-secret:
     crop-id:
   wechat-mp:
-    app-id:
-    app-secret:
-    wx-token:
-    encoding-aes-key:
+    app-id: 
+    app-secret: 
+    wx-token: 
+    encoding-aes-key: 
     
     
