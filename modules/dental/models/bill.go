@@ -6,27 +6,31 @@ import (
 
 // Bill
 type Bill struct {
-	Id             int       `json:"id" gorm:"type:int unsigned;primaryKey;autoIncrement;comment:主键"` //主键
-	No             string    `json:"no" gorm:"type:varchar(20);comment:订单号"`                          //订单号
-	CustomerId     int       `json:"customerId" gorm:"type:bigint;comment:顾客"`                        //顾客
-	UserId         int       `json:"userId" gorm:"type:bigint;comment:用户id"`                          //用户id
-	TeamId         int       `json:"teamId" gorm:"type:bigint;comment:团队id"`                          //团队id
-	Total          string    `json:"total" gorm:"type:decimal(10,2);comment:金额"`                      //金额
-	RealTotal      string    `json:"realTotal" gorm:"type:decimal(10,2);comment:折后金额"`                //折后金额
-	PaidTotal      string    `json:"paidTotal" gorm:"type:decimal(10,2);comment:已支付金额"`               //已支付金额
-	LinkId         int       `json:"linkId" gorm:"type:bigint;comment:关联订单"`                          //关联订单
-	TradeAt        time.Time `json:"tradeAt" gorm:"type:datetime;comment:交易日期"`                       //交易日期
-	TradeStatus    int       `json:"tradeStatus" gorm:"type:tinyint;comment:交易类型 1 成交 2补尾款 3退款"`      //交易类型 1 成交 2补尾款 3退款
-	DentalCount    int       `json:"dentalCount" gorm:"type:tinyint;comment:颗数"`                      //颗数
-	Brand          int       `json:"brand" gorm:"type:tinyint;comment:品牌"`                            //品牌
-	ImplantedCount int       `json:"implantedCount" gorm:"type:tinyint;comment:已种颗数"`                 //已种颗数
-	Implant        int       `json:"implant" gorm:"type:tinyint;comment:是否已种"`                        //是否已种
-	ImplantDate    time.Time `json:"implantDate" gorm:"type:datetime;comment:植入日期"`                   //植入日期
-	Doctor         string    `json:"doctor" gorm:"type:varchar(32);comment:医生"`                       //医生
-	Pack           int       `json:"pack" gorm:"type:tinyint;comment:1 普通 2 半口 3 全口"`                 //1 普通 2 半口 3 全口
-	PaybackDate    time.Time `json:"paybackDate" gorm:"type:datetime;comment:预定回款日期"`                 //预定回款日期
-	CreatedAt      time.Time `json:"createdAt" gorm:"type:datetime;comment:创建时间"`                     //创建时间
-	UpdatedAt      time.Time `json:"updatedAt" gorm:"type:datetime;comment:更新时间"`                     //更新时间
+	Id             int       `json:"id" gorm:"type:int unsigned;primaryKey;autoIncrement;comment:主键"`    //主键
+	No             string    `json:"no" gorm:"type:varchar(20);comment:订单号"`                             //订单号
+	CustomerId     int       `json:"customerId" gorm:"type:int unsigned;comment:顾客"`                     //顾客
+	UserId         int       `json:"userId" gorm:"type:int unsigned;comment:用户id"`                       //用户id
+	TeamId         int       `json:"teamId" gorm:"type:int unsigned;comment:团队id"`                       //团队id
+	Total          string    `json:"total" gorm:"type:decimal(10,2);comment:金额"`                         //金额
+	RealTotal      string    `json:"realTotal" gorm:"type:decimal(10,2);comment:折后金额"`                   //折后金额
+	PaidTotal      string    `json:"paidTotal" gorm:"type:decimal(10,2);comment:已支付金额"`                  //已支付金额
+	LinkId         int       `json:"linkId" gorm:"type:int unsigned;comment:关联订单"`                       //关联订单
+	TradeAt        time.Time `json:"tradeAt" gorm:"type:datetime;default:(-);comment:交易日期"`              //交易日期
+	TradeStatus    int       `json:"tradeStatus" gorm:"type:tinyint;comment:交易类型1 成交 2补尾款  3补上月欠款 10退款"` //交易类型 1 成交 2补尾款  3补上月欠款 10退款
+	DentalCount    int       `json:"dentalCount" gorm:"type:tinyint;comment:颗数"`                         //颗数
+	Brand          int       `json:"brand" gorm:"type:tinyint;comment:品牌"`                               //品牌
+	ImplantedCount int       `json:"implantedCount" gorm:"type:tinyint;comment:已种颗数"`                    //已种颗数
+	Implant        int       `json:"implant" gorm:"type:tinyint;comment:是否已种"`                           //是否已种
+	ImplantDate    time.Time `json:"implantDate" gorm:"type:datetime;default:(-);comment:植入日期"`          //植入日期
+	Doctor         string    `json:"doctor" gorm:"type:varchar(32);comment:医生"`                          //医生
+	Pack           int       `json:"pack" gorm:"type:tinyint;comment:1 普通 2 半口 3 全口"`                    //1 普通 2 半口 3 全口
+	PaybackDate    time.Time `json:"paybackDate" gorm:"type:datetime;default:(-);comment:预定回款日期"`        //预定回款日期
+	Tags           string    `json:"tags" gorm:"type:varchar(255);comment:标签"`                           //标签
+	PrjName        string    `json:"prjName" gorm:"type:varchar(255);comment:项目"`                        //种植项目
+	OtherPrj       string    `json:"otherPrj" gorm:"type:varchar(255);comment:其他项目"`                     //其他项目
+	Remark         string    `json:"remark" gorm:"type:varchar(255);comment:备注"`                         //备注
+	CreatedAt      time.Time `json:"createdAt" gorm:"type:datetime;comment:创建时间"`                        //创建时间
+	UpdatedAt      time.Time `json:"updatedAt" gorm:"type:datetime;comment:更新时间"`                        //更新时间
 }
 
 func (Bill) TableName() string {

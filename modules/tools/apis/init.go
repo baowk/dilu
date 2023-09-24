@@ -5,7 +5,6 @@ import (
 	"dilu/modules/sys/models"
 
 	"dilu/modules/tools/models/tools"
-	"dilu/modules/tools/service"
 	"fmt"
 	"text/template"
 
@@ -29,8 +28,8 @@ func (Init) Init(c *gin.Context) {
 func (Init) DoInit(c *gin.Context) {
 	fmt.Println("开始运行初始化")
 
-	service.ImportSql("resources/dbs/dilu-db.sql", "sys")
-	service.ImportSql("resources/dbs/dental-db.sql", "dental")
+	// service.ImportSql("resources/dbs/dilu-db.sql", "sys")
+	// service.ImportSql("resources/dbs/dental-db.sql", "dental")
 
 	result := "执行成功"
 	if err := core.DB().AutoMigrate(

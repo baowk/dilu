@@ -8,8 +8,13 @@ func ErrSys(cause error) errs.IError {
 	return errs.Err(FAILURE, "", cause)
 }
 
-func ErrInvalidParameter(reqId string, cause error) errs.IError {
-	return errs.Err(InvalidParameter, reqId, cause)
+// func ErrInvalidParameter(reqId string, cause error) errs.IError {
+// 	return errs.Err(InvalidParameter, reqId, cause)
+// }
+
+func ErrInvalidParameter(reqId string, msg string) errs.IError {
+	data := map[string]interface{}{"msg": msg}
+	return errs.ErrWithData(InvalidParameter, reqId, nil, data)
 }
 
 func ErrNotFound(id, kind, reqId string, cause error) errs.IError {

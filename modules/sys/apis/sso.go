@@ -43,7 +43,7 @@ func (e *SSO) SendCode(c *gin.Context) {
 	}
 
 	if req.Code == "" || req.UUID == "" {
-		e.Err(c, codes.ErrInvalidParameter(e.GetReqId(c), nil))
+		e.Err(c, codes.ErrInvalidParameter(e.GetReqId(c), "code or uuid is all nil"))
 		return
 	}
 

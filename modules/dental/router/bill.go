@@ -1,8 +1,9 @@
 package router
 
 import (
-	"dilu/modules/dental/apis"
 	"dilu/common/middleware"
+	"dilu/modules/dental/apis"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,5 +20,6 @@ func registerBillRouter(v1 *gin.RouterGroup) {
 		r.POST("/update", apis.ApiBill.Update)
 		r.POST("/page", apis.ApiBill.QueryPage)
 		r.POST("/del", apis.ApiBill.Del)
+		r.POST("identify", apis.ApiBill.Identify)
 	}
 }

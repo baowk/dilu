@@ -18,5 +18,6 @@ type CustomerDto struct {
 	Gender   int    `json:"gender"`   //性别
 	Address  string `json:"address"`  //地址
 	Remark   string `json:"remark"`   //描述
-	SalesId  int    `json:"salesId"`  //销售人员
+	UserId   int    `json:"userId"`   //用户id
+	TeamId   int    `json:"teamId"`   //团队id
 }

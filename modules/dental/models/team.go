@@ -7,10 +7,10 @@ import (
 // Team
 type Team struct {
 	Id        int       `json:"id" gorm:"type:int unsigned;primaryKey;autoIncrement;comment:主键"` //主键
-	ParentId  int       `json:"parentId" gorm:"type:bigint;comment:上级团队"`                        //上级团队
+	ParentId  int       `json:"parentId" gorm:"type:int unsigned;index;comment:上级团队"`            //上级团队
 	Path      string    `json:"path" gorm:"type:varchar(255);comment:团队路径"`                      //团队路径
 	Name      string    `json:"name" gorm:"type:varchar(32);comment:团队名"`                        //团队名
-	Owner     int       `json:"owner" gorm:"type:bigint;comment:团队拥有者"`                          //团队拥有者
+	Owner     int       `json:"owner" gorm:"type:int unsigned;comment:团队拥有者"`                    //团队拥有者
 	Status    int       `json:"status" gorm:"type:tinyint;comment:状态"`                           //状态
 	CreatedAt time.Time `json:"createdAt" gorm:"type:datetime;comment:创建时间"`                     //创建时间
 	UpdatedAt time.Time `json:"updatedAt" gorm:"type:datetime;comment:更新时间"`                     //更新时间

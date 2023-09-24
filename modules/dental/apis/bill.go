@@ -74,19 +74,18 @@ func (e *BillApi) Get(c *gin.Context) {
 // @Tags dental-Bill
 // @Accept application/json
 // @Product application/json
-// @Param data body dto.BillDto true "body"
+// @Param data body dto.IdentifyBillDto true "body"
 // @Success 200 {object} base.Resp{data=models.Bill} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/bill/create [post]
 // @Security Bearer
 func (e *BillApi) Create(c *gin.Context) {
-	var req dto.BillDto
+	var req dto.IdentifyBillDto
 	if err := c.ShouldBind(&req); err != nil {
 		e.Error(c, err)
 		return
 	}
 	var data models.Bill
-	copier.Copy(&data, req)
-	if err := service.SerBill.Create(&data); err != nil {
+	if err := service.SerBill.CreateBill(e.GetReqId(c), req, &data); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -137,4 +136,26 @@ func (e *BillApi) Del(c *gin.Context) {
 		return
 	}
 	e.Ok(c)
+}
+
+// Identify 智能识别
+// @Summary 智能识别
+// @Tags dental-Bill
+// @Accept application/json
+// @Product application/json
+// @Param data body dto.BillTmplReq true "body"
+// @Success 200 {object} base.Resp{data=dto.IdentifyBillDto} "{"code": 200, "data": [...]}"
+// @Router /api/v1/dental/bill/identify [post]
+// @Security Bearer
+func (e *BillApi) Identify(c *gin.Context) {
+	var req dto.BillTmplReq
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
+	var ib dto.IdentifyBillDto
+	if err := service.SerBill.Identify(req, &ib); err != nil {
+		e.Err(c, err)
+	}
+	e.Ok(c, ib)
 }

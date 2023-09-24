@@ -1,16 +1,25 @@
 package models
 
+import "time"
+
 //Customer
 type Customer struct {
-	Id       int    `json:"id" gorm:"type:int unsigned;primaryKey;autoIncrement;comment:主键"` //主键
-	Name     string `json:"name" gorm:"type:varchar(32);comment:姓名"`                         //姓名
-	Birthday string `json:"birthday" gorm:"type:date;comment:生日"`                            //生日
-	Phone    string `json:"phone" gorm:"type:varchar(11);comment:手机号"`                       //手机号
-	Wechat   string `json:"wechat" gorm:"type:varchar(64);comment:微信号"`                      //微信号
-	Gender   int    `json:"gender" gorm:"type:tinyint;comment:性别"`                           //性别
-	Address  string `json:"address" gorm:"type:varchar(255);comment:地址"`                     //地址
-	Remark   string `json:"remark" gorm:"type:varchar(255);comment:描述"`                      //描述
-	SalesId  int    `json:"salesId" gorm:"type:bigint;comment:销售人员"`                         //销售人员
+	Id          int       `json:"id" gorm:"type:int unsigned;primaryKey;autoIncrement;comment:主键"` //主键
+	Name        string    `json:"name" gorm:"type:varchar(32);comment:姓名"`                         //姓名
+	Phone       string    `json:"phone" gorm:"type:varchar(11);comment:手机号"`                       //手机号
+	Wechat      string    `json:"wechat" gorm:"type:varchar(64);comment:微信号"`                      //微信号
+	Gender      int       `json:"gender" gorm:"type:tinyint;comment:性别"`                           //性别
+	Age         int       `json:"age" gorm:"type:tinyint unsigned;comment:年龄"`                     //年龄
+	Birthday    int       `json:"birthday" gorm:"type:int;comment:生日"`                             //生日
+	Source      string    `json:"source" gorm:"type:varchar(64);comment:来源"`                       //来源
+	Address     string    `json:"address" gorm:"type:varchar(255);comment:地址"`                     //地址
+	Remark      string    `json:"remark" gorm:"type:varchar(255);comment:描述"`                      //描述
+	UserId      int       `json:"userId" gorm:"type:int unsigned;index;comment:用户id"`              //用户id
+	TeamId      int       `json:"teamId" gorm:"type:int unsigned;index;comment:团队id"`              //团队id
+	Inviter     int       `json:"inviter" gorm:"type:int unsigned;comment:邀请人"`                    //邀请人
+	InviterName string    `json:"inviterName" gorm:"type:varchar(32);comment:邀请人名"`                //邀请人名
+	CreatedAt   time.Time `json:"createdAt" gorm:"type:datetime;comment:创建时间"`                     //创建时间
+	UpdatedAt   time.Time `json:"updatedAt" gorm:"type:datetime;comment:更新时间"`                     //更新时间
 }
 
 func (Customer) TableName() string {
@@ -29,7 +38,7 @@ func (e *Customer) SetName(name string) *Customer {
 	e.Name = name
 	return e
 }
-func (e *Customer) SetBirthday(birthday string) *Customer {
+func (e *Customer) SetBirthday(birthday int) *Customer {
 	e.Birthday = birthday
 	return e
 }
@@ -51,9 +60,5 @@ func (e *Customer) SetAddress(address string) *Customer {
 }
 func (e *Customer) SetRemark(remark string) *Customer {
 	e.Remark = remark
-	return e
-}
-func (e *Customer) SetSalesId(salesId int) *Customer {
-	e.SalesId = salesId
 	return e
 }

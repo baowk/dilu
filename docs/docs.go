@@ -398,7 +398,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.BillDto"
+                            "$ref": "#/definitions/dto.IdentifyBillDto"
                         }
                     }
                 ],
@@ -509,6 +509,53 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/models.Bill"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/bill/identify": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-Bill"
+                ],
+                "summary": "智能识别",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.BillTmplReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.IdentifyBillDto"
                                         }
                                     }
                                 }
@@ -4938,6 +4985,19 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.BillTmplReq": {
+            "type": "object",
+            "properties": {
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
+                "text": {
+                    "description": "文本",
+                    "type": "string"
+                }
+            }
+        },
         "dto.BindReq": {
             "type": "object",
             "properties": {
@@ -5049,8 +5109,12 @@ const docTemplate = `{
                     "description": "描述",
                     "type": "string"
                 },
-                "salesId": {
-                    "description": "销售人员",
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
+                "userId": {
+                    "description": "用户id",
                     "type": "integer"
                 },
                 "wechat": {
@@ -5094,7 +5158,7 @@ const docTemplate = `{
             "properties": {
                 "day": {
                     "description": "时间",
-                    "type": "string"
+                    "type": "integer"
                 },
                 "deal": {
                     "description": "成交",
@@ -5110,6 +5174,10 @@ const docTemplate = `{
                 },
                 "id": {
                     "description": "主键",
+                    "type": "integer"
+                },
+                "invitation": {
+                    "description": "明日邀约",
                     "type": "integer"
                 },
                 "newCustomerCnt": {
@@ -5157,6 +5225,119 @@ const docTemplate = `{
                 "username": {
                     "description": "手机号|邮箱",
                     "type": "string"
+                }
+            }
+        },
+        "dto.IdentifyBillDto": {
+            "type": "object",
+            "properties": {
+                "brand": {
+                    "description": "品牌",
+                    "type": "integer"
+                },
+                "brandName": {
+                    "description": "品牌名",
+                    "type": "string"
+                },
+                "customerId": {
+                    "description": "顾客",
+                    "type": "integer"
+                },
+                "customerName": {
+                    "description": "顾客姓名",
+                    "type": "string"
+                },
+                "debts": {
+                    "description": "欠款",
+                    "type": "string"
+                },
+                "dentalCount": {
+                    "description": "颗数",
+                    "type": "integer"
+                },
+                "doctor": {
+                    "description": "医生",
+                    "type": "string"
+                },
+                "extensions": {
+                    "description": "延期情况",
+                    "type": "string"
+                },
+                "implant": {
+                    "description": "是否已种",
+                    "type": "integer"
+                },
+                "implantDate": {
+                    "description": "植入日期",
+                    "type": "string"
+                },
+                "implantedCount": {
+                    "description": "已种颗数",
+                    "type": "integer"
+                },
+                "inviter": {
+                    "description": "邀请人id",
+                    "type": "integer"
+                },
+                "inviterName": {
+                    "description": "邀请人名",
+                    "type": "string"
+                },
+                "linkId": {
+                    "description": "关联订单",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "用户名",
+                    "type": "string"
+                },
+                "otherPrj": {
+                    "description": "其他项目",
+                    "type": "string"
+                },
+                "pack": {
+                    "description": "1 普通 2 半口 3 全口",
+                    "type": "integer"
+                },
+                "paidTotal": {
+                    "description": "已支付金额",
+                    "type": "string"
+                },
+                "paybackDate": {
+                    "description": "预定回款日期",
+                    "type": "string"
+                },
+                "prjName": {
+                    "description": "种植项目",
+                    "type": "string"
+                },
+                "realTotal": {
+                    "description": "折后金额",
+                    "type": "string"
+                },
+                "remark": {
+                    "description": "备注",
+                    "type": "string"
+                },
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
+                "total": {
+                    "description": "金额",
+                    "type": "string"
+                },
+                "tradeAt": {
+                    "description": "交易日期",
+                    "type": "string"
+                },
+                "tradeStatus": {
+                    "description": "交易类型 1 成交 2补尾款 3退款",
+                    "type": "integer"
+                },
+                "userId": {
+                    "description": "用户id",
+                    "type": "integer"
                 }
             }
         },
@@ -6093,6 +6274,14 @@ const docTemplate = `{
                     "description": "折后金额",
                     "type": "string"
                 },
+                "remark": {
+                    "description": "备注",
+                    "type": "string"
+                },
+                "tags": {
+                    "description": "标签",
+                    "type": "string"
+                },
                 "teamId": {
                     "description": "团队id",
                     "type": "integer"
@@ -6126,8 +6315,16 @@ const docTemplate = `{
                     "description": "地址",
                     "type": "string"
                 },
+                "age": {
+                    "description": "年龄",
+                    "type": "integer"
+                },
                 "birthday": {
                     "description": "生日",
+                    "type": "string"
+                },
+                "createdAt": {
+                    "description": "创建时间",
                     "type": "string"
                 },
                 "gender": {
@@ -6137,6 +6334,14 @@ const docTemplate = `{
                 "id": {
                     "description": "主键",
                     "type": "integer"
+                },
+                "inviter": {
+                    "description": "邀请人",
+                    "type": "integer"
+                },
+                "inviterName": {
+                    "description": "邀请人名",
+                    "type": "string"
                 },
                 "name": {
                     "description": "姓名",
@@ -6150,8 +6355,20 @@ const docTemplate = `{
                     "description": "描述",
                     "type": "string"
                 },
-                "salesId": {
-                    "description": "销售人员",
+                "source": {
+                    "description": "来源",
+                    "type": "string"
+                },
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                },
+                "userId": {
+                    "description": "用户id",
                     "type": "integer"
                 },
                 "wechat": {
@@ -6169,7 +6386,7 @@ const docTemplate = `{
                 },
                 "day": {
                     "description": "时间",
-                    "type": "string"
+                    "type": "integer"
                 },
                 "deal": {
                     "description": "成交",
@@ -6185,6 +6402,10 @@ const docTemplate = `{
                 },
                 "id": {
                     "description": "主键",
+                    "type": "integer"
+                },
+                "invitation": {
+                    "description": "明日邀约",
                     "type": "integer"
                 },
                 "newCustomerCnt": {
@@ -6818,7 +7039,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "status": {
-                    "description": "状态",
+                    "description": "状态 1 在职 2离职",
                     "type": "integer"
                 },
                 "teamId": {
