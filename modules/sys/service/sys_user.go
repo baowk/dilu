@@ -303,8 +303,24 @@ func (e *SysUser) loginOK(u *models.SysUser, need int) (dto.LoginOK, errs.IError
 		return lok, errs.Err(codes.FAILURE, "", err)
 	}
 	lok.Expire = exp
-	lok.Token = token
+	lok.AccessToken = token
 	lok.Need = need
+	if u.RoleId != 0 {
+		lok.Roles = []string{strconv.Itoa(u.RoleId)}
+	}
+
+	if u.Nickname != "" {
+		lok.Username = u.Nickname
+	} else if u.Username != "" {
+		lok.Username = u.Username
+	} else if u.Phone != "" {
+		lok.Username = u.Phone
+	} else if u.Email != "" {
+		lok.Username = u.Email
+	}
+	claims.ExpiresAt(exp.Add(time.Hour * 24 * 7))
+	refT, _ := middleware.Generate(claims, core.Cfg.JWT.SignKey)
+	lok.RefreshToken = refT
 	return lok, nil
 }
 
@@ -594,7 +610,7 @@ func needMobile(platform, id int, lod *dto.LoginOK) error {
 		return err
 	}
 	lod.Need = 1
-	lod.Token = enS
+	lod.AccessToken = enS
 	return nil
 }
 

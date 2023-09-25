@@ -56,9 +56,12 @@ type LoginDingReq struct {
 }
 
 type LoginOK struct {
-	Token  string    `json:"token" comment:"token"`                                                      //返回token
-	Expire time.Time `json:"expire" comment:"有效期"`                                                       //token有效期
-	Need   int       `json:"need" comment:"（0|1|2）0：已绑定 1：需要绑定账号token 是一个加密串，走login接口在uuid上带上 2：需要设置密码"` //（0|1|2）0：已绑定 1：需要绑定账号 token 是一个加密串，走login接口在uuid上带上 2：需要设置密码
+	AccessToken  string    `json:"accessToken"`  //返回token
+	Expire       time.Time `json:"expires"`      //有效期
+	Username     string    `json:"username"`     //token有效期
+	Roles        []string  `json:"roles"`        //角色
+	RefreshToken string    `json:"refreshToken"` //刷新token
+	Need         int       `json:"need"`         //（0|1|2）0：已绑定 1：需要绑定账号 token 是一个加密串，走login接口在uuid上带上 2：需要设置密码
 }
 
 type CodeSendReq struct {

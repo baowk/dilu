@@ -223,6 +223,9 @@ func menuToVo(menu models.SysMenu) dto.MenuVo {
 	if !menu.NoCache {
 		meta.KeepAlive = true
 	}
+	if menu.Sort > 0 {
+		meta.Rank = menu.Sort
+	}
 	vo := dto.MenuVo{
 		Name:      menu.MenuName,
 		Meta:      meta,

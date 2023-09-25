@@ -443,22 +443,6 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 		menuPid = Mmenu.MenuId
 	}
 
-	Cmenu := models.SysMenu{}
-	Cmenu.MenuName = tab.ClassName + "Manage"
-	Cmenu.Title = tab.TableComment
-	Cmenu.Icon = "pass"
-	Cmenu.Path = "/" + tab.PackageName + "/" + tab.MLTBName
-	Cmenu.MenuType = 2
-	Cmenu.Permission = tab.PackageName + ":" + tab.BusinessName + ":list"
-	Cmenu.ParentId = menuPid
-	Cmenu.NoCache = false
-	Cmenu.Component = "/" + tab.PackageName + "/" + tab.MLTBName + "/index"
-	Cmenu.Sort = 0
-	Cmenu.Hidden = false
-	Cmenu.CreateBy = 1
-	Cmenu.UpdateBy = 1
-	service.SerSysMenu.Insert(&Cmenu)
-
 	curPath := fmt.Sprintf("%s/%s/%s/page", tab.ApiRoot, tab.PackageName, tab.ModuleName)
 	where := map[string]any{
 		"path":   curPath,
@@ -471,6 +455,23 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 			SetStatus(3).SetTitle("分页获取" + tab.TableComment)
 		service.SerSysApi.Create(mApi)
 	}
+
+	Cmenu := models.SysMenu{}
+	Cmenu.MenuName = tab.ClassName + "Manage"
+	Cmenu.Title = "分页获取" + tab.TableComment
+	Cmenu.Icon = "pass"
+	Cmenu.Path = "/" + tab.PackageName + "/" + tab.MLTBName
+	Cmenu.MenuType = 2
+	Cmenu.Permission = tab.PackageName + ":" + tab.BusinessName + ":list"
+	Cmenu.ParentId = menuPid
+	Cmenu.NoCache = false
+	Cmenu.Component = "/" + tab.PackageName + "/" + tab.MLTBName + "/index"
+	Cmenu.Sort = 0
+	Cmenu.Hidden = false
+	Cmenu.CreateBy = 1
+	Cmenu.UpdateBy = 1
+	Cmenu.SysApi = []models.SysApi{*mApi}
+	service.SerSysMenu.Insert(&Cmenu)
 
 	curPath = fmt.Sprintf("%s/%s/%s/get", tab.ApiRoot, tab.PackageName, tab.ModuleName)
 	where["path"] = curPath
@@ -485,7 +486,7 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 
 	MList := models.SysMenu{}
 	MList.MenuName = ""
-	MList.Title = "分页获取" + tab.TableComment
+	MList.Title = tab.TableComment + "详情"
 	MList.Icon = ""
 	MList.Path = tab.TBName
 	MList.MenuType = 3
@@ -496,7 +497,7 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	MList.Hidden = false
 	MList.CreateBy = 1
 	MList.UpdateBy = 1
-	MList.SysApi = []models.SysApi{*mApi, *gApi}
+	MList.SysApi = []models.SysApi{*gApi}
 	service.SerSysMenu.Insert(&MList)
 
 	curPath = fmt.Sprintf("%s/%s/%s/create", tab.ApiRoot, tab.PackageName, tab.ModuleName)
