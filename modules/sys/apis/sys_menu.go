@@ -149,3 +149,25 @@ func (e *SysMenuApi) GetUserMenus(c *gin.Context) {
 	}
 	e.Ok(c, ms)
 }
+
+// GetUserPerms 获取用户权限
+// @Summary 获取用户权限
+// @Tags sys-SysMenu
+// @Accept application/json
+// @Product application/json
+// @Success 200 {object} base.Resp{data=[]string} "{"code": 200, "data": [...]}"
+// @Router /api/v1/sys/sys-menu/perms [post]
+// @Security Bearer
+func (e *SysMenuApi) GetUserPerms(c *gin.Context) {
+	role := middleware.GetRoleId(c)
+	if role < 1 {
+		e.Code(c, codes.InvalidToken_401)
+		return
+	}
+	var ms []string
+	if err := service.SerSysMenu.GetUserPerms(role, &ms); err != nil {
+		e.Error(c, err)
+		return
+	}
+	e.Ok(c, ms)
+}

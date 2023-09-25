@@ -21,5 +21,6 @@ func registerSysMenuRouter(v1 *gin.RouterGroup) {
 		r.POST("/all", apis.SysMenuA.GetMenus)
 		r.POST("/del", apis.SysMenuA.Del)
 		r.POST("/userMenus", apis.SysMenuA.GetUserMenus)
+		r.POST("/perms", apis.SysMenuA.GetUserPerms)
 	}
 }

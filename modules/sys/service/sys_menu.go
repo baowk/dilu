@@ -2,6 +2,7 @@ package service
 
 import (
 	"dilu/common/codes"
+	"fmt"
 	"strconv"
 
 	"github.com/baowk/dilu-core/core"
@@ -163,7 +164,7 @@ func (e *SysMenu) Remove(d *dto.SysMenuDeleteReq) (*SysMenu, errs.IError) {
 
 func (e *SysMenu) GetMenus(mvs *[]dto.MenuVo) errs.IError {
 	var ms []models.SysMenu
-	if err := core.DB().Find(&ms).Error; err != nil {
+	if err := core.DB().Where("menu_type < ?", 3).Find(&ms).Error; err != nil {
 		return codes.ErrSys(err)
 	}
 	*mvs = treeMenu(ms)
@@ -171,9 +172,14 @@ func (e *SysMenu) GetMenus(mvs *[]dto.MenuVo) errs.IError {
 }
 
 func (e *SysMenu) GetUserMenus(roleId int, mvs *[]dto.MenuVo) errs.IError {
-	sql := "Select * from sys_menu m,sys_role_menu r where role_id =? and m.menu_id = r.menu_id"
+	var sql string
+	if roleId == 1 {
+		sql = "Select * from sys_menu where menu_type < 3 "
+	} else {
+		sql = fmt.Sprintf("Select * from sys_menu m,sys_role_menu r where role_id =%d and menu_type < 3 and m.menu_id = r.menu_id", roleId)
+	}
 	var ms []models.SysMenu
-	if err := core.DB().Raw(sql, roleId).Find(&ms).Error; err != nil {
+	if err := core.DB().Raw(sql).Find(&ms).Error; err != nil {
 		return codes.ErrSys(err)
 	}
 	*mvs = treeMenu(ms)
@@ -225,4 +231,19 @@ func menuToVo(menu models.SysMenu) dto.MenuVo {
 		Id:        menu.MenuId,
 	}
 	return vo
+}
+
+func (e *SysMenu) GetUserPerms(roleId int, mvs *[]string) errs.IError {
+	var sql string
+	if roleId == 1 {
+		sql = "Select permission from sys_menu  where menu_type > 1 "
+	} else {
+		sql = fmt.Sprintf("Select permission from sys_menu m,sys_role_menu r where role_id = %d and menu_type > 1 and m.menu_id = r.menu_id", roleId)
+	}
+	var ms []string
+	if err := core.DB().Raw(sql).Find(&ms).Error; err != nil {
+		return codes.ErrSys(err)
+	}
+	*mvs = ms
+	return nil
 }
