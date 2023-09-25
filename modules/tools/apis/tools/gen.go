@@ -23,7 +23,6 @@ import (
 
 	"dilu/modules/sys/models"
 	"dilu/modules/sys/service"
-	"dilu/modules/sys/service/dto"
 	"dilu/modules/tools/models/tools"
 )
 
@@ -429,11 +428,11 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	tab.ApiRoot = cons.ApiRoot
 
 	if menuPid == 0 {
-		Mmenu := dto.SysMenuInsertReq{}
+		Mmenu := models.SysMenu{}
 		Mmenu.Title = tab.TableComment
 		Mmenu.Icon = "pass"
-		Mmenu.Path = "/" + tab.MLTBName
-		Mmenu.MenuType = "M"
+		Mmenu.Path = "/" + tab.PackageName
+		Mmenu.MenuType = 1
 		Mmenu.ParentId = 0
 		Mmenu.NoCache = false
 		Mmenu.Component = "Layout"
@@ -441,15 +440,15 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 		Mmenu.Hidden = false
 		Mmenu.CreateBy = 1
 		service.SerSysMenu.Insert(&Mmenu)
-		menuPid = Mmenu.Id
+		menuPid = Mmenu.MenuId
 	}
 
-	Cmenu := dto.SysMenuInsertReq{}
+	Cmenu := models.SysMenu{}
 	Cmenu.MenuName = tab.ClassName + "Manage"
 	Cmenu.Title = tab.TableComment
 	Cmenu.Icon = "pass"
 	Cmenu.Path = "/" + tab.PackageName + "/" + tab.MLTBName
-	Cmenu.MenuType = "C"
+	Cmenu.MenuType = 2
 	Cmenu.Permission = tab.PackageName + ":" + tab.BusinessName + ":list"
 	Cmenu.ParentId = menuPid
 	Cmenu.NoCache = false
@@ -460,24 +459,38 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	Cmenu.UpdateBy = 1
 	service.SerSysMenu.Insert(&Cmenu)
 
-	mApi := models.NewSysApi().SetMethod("POST").SetPermType("t").
-		SetPath(fmt.Sprintf("%s/%s/%s/page", tab.ApiRoot, tab.PackageName, tab.ModuleName)).
-		SetStatus(3).SetTitle("分页获取" + tab.TableComment)
-	service.SerSysApi.Create(mApi)
+	curPath := fmt.Sprintf("%s/%s/%s/page", tab.ApiRoot, tab.PackageName, tab.ModuleName)
+	where := map[string]any{
+		"path":   curPath,
+		"method": "POST",
+	}
+	mApi := models.NewSysApi()
+	service.SerSysApi.GetByWhere(where, mApi)
+	if mApi.Id == 0 {
+		mApi = mApi.SetMethod("POST").SetPermType("t").SetPath(curPath).
+			SetStatus(3).SetTitle("分页获取" + tab.TableComment)
+		service.SerSysApi.Create(mApi)
+	}
 
-	gApi := models.NewSysApi().SetMethod("POST").SetPermType("t").
-		SetPath(fmt.Sprintf("%s/%s/%s/get", tab.ApiRoot, tab.PackageName, tab.ModuleName)).
-		SetStatus(3).SetTitle("根据id获取" + tab.TableComment)
-	service.SerSysApi.Create(gApi)
+	curPath = fmt.Sprintf("%s/%s/%s/get", tab.ApiRoot, tab.PackageName, tab.ModuleName)
+	where["path"] = curPath
 
-	MList := dto.SysMenuInsertReq{}
+	gApi := models.NewSysApi()
+	service.SerSysApi.GetByWhere(where, gApi)
+	if gApi.Id == 0 {
+		gApi := gApi.SetMethod("POST").SetPermType("t").SetPath(curPath).
+			SetStatus(3).SetTitle("根据id获取" + tab.TableComment)
+		service.SerSysApi.Create(gApi)
+	}
+
+	MList := models.SysMenu{}
 	MList.MenuName = ""
 	MList.Title = "分页获取" + tab.TableComment
 	MList.Icon = ""
 	MList.Path = tab.TBName
-	MList.MenuType = "F"
+	MList.MenuType = 3
 	MList.Permission = tab.PackageName + ":" + tab.BusinessName + ":query"
-	MList.ParentId = Cmenu.Id
+	MList.ParentId = Cmenu.MenuId
 	MList.NoCache = false
 	MList.Sort = 0
 	MList.Hidden = false
@@ -486,19 +499,24 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	MList.SysApi = []models.SysApi{*mApi, *gApi}
 	service.SerSysMenu.Insert(&MList)
 
-	cApi := models.NewSysApi().SetMethod("POST").SetPermType("t").
-		SetPath(fmt.Sprintf("%s/%s/%s/create", tab.ApiRoot, tab.PackageName, tab.ModuleName)).
-		SetStatus(3).SetTitle("创建" + tab.TableComment)
-	service.SerSysApi.Create(cApi)
+	curPath = fmt.Sprintf("%s/%s/%s/create", tab.ApiRoot, tab.PackageName, tab.ModuleName)
+	where["path"] = curPath
+	cApi := models.NewSysApi()
+	service.SerSysApi.GetByWhere(where, cApi)
+	if cApi.Id == 0 {
+		cApi := cApi.SetMethod("POST").SetPermType("t").SetPath(curPath).
+			SetStatus(3).SetTitle("创建" + tab.TableComment)
+		service.SerSysApi.Create(cApi)
+	}
 
-	MCreate := dto.SysMenuInsertReq{}
+	MCreate := models.SysMenu{}
 	MCreate.MenuName = ""
 	MCreate.Title = "创建" + tab.TableComment
 	MCreate.Icon = ""
 	MCreate.Path = tab.TBName
-	MCreate.MenuType = "F"
+	MCreate.MenuType = 3
 	MCreate.Permission = tab.PackageName + ":" + tab.BusinessName + ":add"
-	MCreate.ParentId = Cmenu.Id
+	MCreate.ParentId = Cmenu.MenuId
 	MCreate.NoCache = false
 	MCreate.Sort = 0
 	MCreate.Hidden = false
@@ -507,19 +525,24 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	MCreate.SysApi = []models.SysApi{*cApi}
 	service.SerSysMenu.Insert(&MCreate)
 
-	uApi := models.NewSysApi().SetMethod("POST").SetPermType("t").
-		SetPath(fmt.Sprintf("%s/%s/%s/update", tab.ApiRoot, tab.PackageName, tab.ModuleName)).
-		SetStatus(3).SetTitle("修改" + tab.TableComment)
-	service.SerSysApi.Create(uApi)
+	curPath = fmt.Sprintf("%s/%s/%s/update", tab.ApiRoot, tab.PackageName, tab.ModuleName)
+	where["path"] = curPath
+	uApi := models.NewSysApi()
+	service.SerSysApi.GetByWhere(where, uApi)
+	if uApi.Id == 0 {
+		uApi = uApi.SetMethod("POST").SetPermType("t").SetPath(curPath).
+			SetStatus(3).SetTitle("修改" + tab.TableComment)
+		service.SerSysApi.Create(uApi)
+	}
 
-	MUpdate := dto.SysMenuInsertReq{}
+	MUpdate := models.SysMenu{}
 	MUpdate.MenuName = ""
 	MUpdate.Title = "修改" + tab.TableComment
 	MUpdate.Icon = ""
 	MUpdate.Path = tab.TBName
-	MUpdate.MenuType = "F"
+	MUpdate.MenuType = 3
 	MUpdate.Permission = tab.PackageName + ":" + tab.BusinessName + ":edit"
-	MUpdate.ParentId = Cmenu.Id
+	MUpdate.ParentId = Cmenu.MenuId
 	MUpdate.NoCache = false
 	MUpdate.Sort = 0
 	MUpdate.Hidden = false
@@ -528,25 +551,30 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	MUpdate.SysApi = []models.SysApi{*uApi}
 	service.SerSysMenu.Insert(&MUpdate)
 
-	dApi := models.NewSysApi().SetMethod("POST").SetPermType("t").
-		SetPath(fmt.Sprintf("%s/%s/%s/del", tab.ApiRoot, tab.PackageName, tab.ModuleName)).
-		SetStatus(3).SetTitle("删除" + tab.TableComment)
-	service.SerSysApi.Create(dApi)
+	curPath = fmt.Sprintf("%s/%s/%s/del", tab.ApiRoot, tab.PackageName, tab.ModuleName)
+	where["path"] = curPath
+	dApi := models.NewSysApi()
+	service.SerSysApi.GetByWhere(where, dApi)
+	if dApi.Id == 0 {
+		dApi = dApi.SetMethod("POST").SetPermType("t").SetPath(curPath).
+			SetStatus(3).SetTitle("删除" + tab.TableComment)
+		service.SerSysApi.Create(dApi)
+	}
 
-	MDelete := dto.SysMenuInsertReq{}
+	MDelete := models.SysMenu{}
 	MDelete.MenuName = ""
 	MDelete.Title = "删除" + tab.TableComment
 	MDelete.Icon = ""
 	MDelete.Path = tab.TBName
-	MDelete.MenuType = "F"
+	MDelete.MenuType = 3
 	MDelete.Permission = tab.PackageName + ":" + tab.BusinessName + ":remove"
-	MDelete.ParentId = Cmenu.Id
+	MDelete.ParentId = Cmenu.MenuId
 	MDelete.NoCache = false
 	MDelete.Sort = 0
 	MDelete.Hidden = false
 	MDelete.CreateBy = 1
 	MDelete.UpdateBy = 1
-	MUpdate.SysApi = []models.SysApi{*dApi}
+	MDelete.SysApi = []models.SysApi{*dApi}
 	service.SerSysMenu.Insert(&MDelete)
 
 	e.Ok(c, "数据生成成功！")

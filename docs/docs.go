@@ -3754,6 +3754,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/sys/sys-menu/all": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sys-SysMenu"
+                ],
+                "summary": "获取所有菜单",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.MenuVo"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/sys/sys-menu/create": {
             "post": {
                 "security": [
@@ -3895,107 +3934,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sys/sys-menu/list": {
-            "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "sys-SysMenu"
-                ],
-                "summary": "获取菜单",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.SysMenu"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/sys/sys-menu/page": {
-            "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "sys-SysMenu"
-                ],
-                "summary": "Page接口",
-                "parameters": [
-                    {
-                        "description": "body",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.SysApiGetPageReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/base.PageResp"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "list": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/models.SysMenu"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/sys/sys-menu/update": {
             "post": {
                 "security": [
@@ -4034,6 +3972,45 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/models.SysMenu"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sys/sys-menu/userMenus": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sys-SysMenu"
+                ],
+                "summary": "获取用户菜单",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.MenuVo"
+                                            }
                                         }
                                     }
                                 }
@@ -4829,7 +4806,7 @@ const docTemplate = `{
         "base.PageResp": {
             "type": "object",
             "properties": {
-                "list": {
+                "items": {
                     "description": "数据列表"
                 },
                 "page": {
@@ -4975,7 +4952,7 @@ const docTemplate = `{
                     "description": "页码",
                     "type": "integer"
                 },
-                "size": {
+                "pageSize": {
                     "description": "每页大小",
                     "type": "integer"
                 },
@@ -5130,7 +5107,7 @@ const docTemplate = `{
                     "description": "页码",
                     "type": "integer"
                 },
-                "size": {
+                "pageSize": {
                     "description": "每页大小",
                     "type": "integer"
                 }
@@ -5205,7 +5182,7 @@ const docTemplate = `{
                     "description": "页码",
                     "type": "integer"
                 },
-                "size": {
+                "pageSize": {
                     "description": "每页大小",
                     "type": "integer"
                 }
@@ -5319,6 +5296,10 @@ const docTemplate = `{
                     "description": "备注",
                     "type": "string"
                 },
+                "tags": {
+                    "description": "标签",
+                    "type": "string"
+                },
                 "teamId": {
                     "description": "团队id",
                     "type": "integer"
@@ -5332,7 +5313,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "tradeStatus": {
-                    "description": "交易类型 1 成交 2补尾款 3退款",
+                    "description": "交易类型 1 成交 2补尾款  3补上月欠款 10退款",
                     "type": "integer"
                 },
                 "userId": {
@@ -5412,6 +5393,36 @@ const docTemplate = `{
                 },
                 "uuid": {
                     "description": "微信或者钉钉第一次登录绑定用",
+                    "type": "string"
+                }
+            }
+        },
+        "dto.MenuVo": {
+            "type": "object",
+            "properties": {
+                "children": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.MenuVo"
+                    }
+                },
+                "component": {
+                    "description": "按需加载组件 可选",
+                    "type": "string"
+                },
+                "meta": {
+                    "$ref": "#/definitions/dto.RouteMeta"
+                },
+                "name": {
+                    "description": "路由名字（对应不要重复，和当前组件的name保持一致）必填",
+                    "type": "string"
+                },
+                "path": {
+                    "description": "路由地址 必填",
+                    "type": "string"
+                },
+                "redirect": {
+                    "description": "路由重定向 可选",
                     "type": "string"
                 }
             }
@@ -5539,6 +5550,43 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.RouteMeta": {
+            "type": "object",
+            "properties": {
+                "frameLoading": {
+                    "description": "iframe页是否开启首次加载动画（默认true）可选",
+                    "type": "boolean"
+                },
+                "frameSrc": {
+                    "description": "内嵌的iframe链接 可选",
+                    "type": "string"
+                },
+                "icon": {
+                    "description": "图标",
+                    "type": "string"
+                },
+                "keepAlive": {
+                    "description": "路由组件缓存（开启 true、关闭 false）可选",
+                    "type": "boolean"
+                },
+                "rank": {
+                    "description": "排序",
+                    "type": "integer"
+                },
+                "showLink": {
+                    "description": "是否显示 前端默认true，false在菜单列表中不显示",
+                    "type": "boolean"
+                },
+                "showParent": {
+                    "description": "是否显示父菜单",
+                    "type": "boolean"
+                },
+                "title": {
+                    "description": "菜单名称（兼容国际化、非国际化，如何用国际化的写法就必须在根目录的locales文件夹下对应添加） 必填",
+                    "type": "string"
+                }
+            }
+        },
         "dto.SummaryPlanDayDto": {
             "type": "object",
             "properties": {
@@ -5575,7 +5623,7 @@ const docTemplate = `{
                     "description": "页码",
                     "type": "integer"
                 },
-                "size": {
+                "pageSize": {
                     "description": "每页大小",
                     "type": "integer"
                 }
@@ -5621,7 +5669,7 @@ const docTemplate = `{
                     "description": "页码",
                     "type": "integer"
                 },
-                "size": {
+                "pageSize": {
                     "description": "每页大小",
                     "type": "integer"
                 },
@@ -5671,7 +5719,7 @@ const docTemplate = `{
                     "description": "页码",
                     "type": "integer"
                 },
-                "size": {
+                "pageSize": {
                     "description": "每页大小",
                     "type": "integer"
                 },
@@ -5721,7 +5769,7 @@ const docTemplate = `{
                     "description": "页码",
                     "type": "integer"
                 },
-                "size": {
+                "pageSize": {
                     "description": "每页大小",
                     "type": "integer"
                 },
@@ -5776,7 +5824,7 @@ const docTemplate = `{
                     "description": "页码",
                     "type": "integer"
                 },
-                "size": {
+                "pageSize": {
                     "description": "每页大小",
                     "type": "integer"
                 },
@@ -5881,7 +5929,7 @@ const docTemplate = `{
                     "description": "页码",
                     "type": "integer"
                 },
-                "size": {
+                "pageSize": {
                     "description": "每页大小",
                     "type": "integer"
                 },
@@ -5939,7 +5987,7 @@ const docTemplate = `{
                     "description": "页码",
                     "type": "integer"
                 },
-                "size": {
+                "pageSize": {
                     "description": "每页大小",
                     "type": "integer"
                 },
@@ -5981,7 +6029,7 @@ const docTemplate = `{
                     "description": "页码",
                     "type": "integer"
                 },
-                "size": {
+                "pageSize": {
                     "description": "每页大小",
                     "type": "integer"
                 },
@@ -6031,7 +6079,7 @@ const docTemplate = `{
                     "description": "页码",
                     "type": "integer"
                 },
-                "size": {
+                "pageSize": {
                     "description": "每页大小",
                     "type": "integer"
                 }
@@ -6073,7 +6121,7 @@ const docTemplate = `{
                     "description": "页码",
                     "type": "integer"
                 },
-                "size": {
+                "pageSize": {
                     "description": "每页大小",
                     "type": "integer"
                 },
@@ -6127,7 +6175,7 @@ const docTemplate = `{
                     "description": "页码",
                     "type": "integer"
                 },
-                "size": {
+                "pageSize": {
                     "description": "每页大小",
                     "type": "integer"
                 },
@@ -6258,6 +6306,10 @@ const docTemplate = `{
                     "description": "订单号",
                     "type": "string"
                 },
+                "otherPrj": {
+                    "description": "其他项目",
+                    "type": "string"
+                },
                 "pack": {
                     "description": "1 普通 2 半口 3 全口",
                     "type": "integer"
@@ -6268,6 +6320,10 @@ const docTemplate = `{
                 },
                 "paybackDate": {
                     "description": "预定回款日期",
+                    "type": "string"
+                },
+                "prjName": {
+                    "description": "种植项目",
                     "type": "string"
                 },
                 "realTotal": {
@@ -6295,7 +6351,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "tradeStatus": {
-                    "description": "交易类型 1 成交 2补尾款 3退款",
+                    "description": "交易类型 1 成交 2补尾款  3补上月欠款 10退款",
                     "type": "integer"
                 },
                 "updatedAt": {
@@ -6321,7 +6377,7 @@ const docTemplate = `{
                 },
                 "birthday": {
                     "description": "生日",
-                    "type": "string"
+                    "type": "integer"
                 },
                 "createdAt": {
                     "description": "创建时间",
@@ -6652,13 +6708,6 @@ const docTemplate = `{
         "models.SysMenu": {
             "type": "object",
             "properties": {
-                "children": {
-                    "description": "子菜单",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.SysMenu"
-                    }
-                },
                 "component": {
                     "description": "前端组件路径",
                     "type": "string"
@@ -6679,10 +6728,6 @@ const docTemplate = `{
                     "description": "图标",
                     "type": "string"
                 },
-                "is_select": {
-                    "description": "是否选中",
-                    "type": "boolean"
-                },
                 "menuId": {
                     "description": "主键",
                     "type": "integer"
@@ -6693,7 +6738,7 @@ const docTemplate = `{
                 },
                 "menuType": {
                     "description": "菜单类型",
-                    "type": "string"
+                    "type": "integer"
                 },
                 "noCache": {
                     "description": "是否缓存",

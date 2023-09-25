@@ -18,36 +18,6 @@ type SysMenuApi struct {
 
 var SysMenuA = SysMenuApi{}
 
-// QueryPage 获取接口列表列表
-// @Summary Page接口
-// @Tags sys-SysMenu
-// @Accept application/json
-// @Product application/json
-// @Param data body dto.SysApiGetPageReq true "body"
-// @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.SysMenu}} "{"code": 200, "data": [...]}"
-// @Router /api/v1/sys/sys-menu/page [post]
-// @Security Bearer
-func (e *SysMenuApi) QueryPage(c *gin.Context) {
-	var req dto.SysApiGetPageReq
-	if err := c.ShouldBind(&req); err != nil {
-		e.Error(c, err)
-		return
-	}
-	list := make([]models.SysMenu, 10)
-	var total int64
-
-	var model models.SysMenu
-	if err := copier.Copy(&model, req); err != nil {
-		e.Error(c, err)
-		return
-	}
-	if err := service.SerSysMenu.Page(model, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
-		e.Error(c, err)
-		return
-	}
-	e.Page(c, list, total, req.GetPage(), req.GetSize())
-}
-
 // Get 获取接口列表
 // @Summary 获取接口列表
 // @Tags sys-SysMenu
@@ -141,33 +111,41 @@ func (e *SysMenuApi) Del(c *gin.Context) {
 	e.Ok(c)
 }
 
-// GetMenus 获取菜单
-// @Summary 获取菜单
+// GetMenus 获取所有菜单
+// @Summary 获取所有菜单
 // @Tags sys-SysMenu
 // @Accept application/json
 // @Product application/json
-// @Success 200 {object} base.Resp{data=[]models.SysMenu} "{"code": 200, "data": [...]}"
-// @Router /api/v1/sys/sys-menu/list [post]
+// @Success 200 {object} base.Resp{data=[]dto.MenuVo} "{"code": 200, "data": [...]}"
+// @Router /api/v1/sys/sys-menu/all [post]
 // @Security Bearer
 func (e *SysMenuApi) GetMenus(c *gin.Context) {
-	roleId := middleware.GetRoleId(c)
-	if roleId < 1 {
-		e.Code(c, codes.AuthorizationError_403)
-		return
-	}
-	list := make([]models.SysMenu, 10)
-	if err := service.SerSysMenu.GetSysMenuByRole(roleId, &list); err != nil {
+	list := make([]dto.MenuVo, 10)
+	if err := service.SerSysMenu.GetMenus(&list); err != nil {
 		e.Error(c, err)
 		return
 	}
 	e.Ok(c, list)
 }
 
+// GetUserMenus 获取用户菜单
+// @Summary 获取用户菜单
+// @Tags sys-SysMenu
+// @Accept application/json
+// @Product application/json
+// @Success 200 {object} base.Resp{data=[]dto.MenuVo} "{"code": 200, "data": [...]}"
+// @Router /api/v1/sys/sys-menu/userMenus [post]
+// @Security Bearer
 func (e *SysMenuApi) GetUserMenus(c *gin.Context) {
-	uid := middleware.GetUserId(c)
-	if uid < 1 {
+	role := middleware.GetRoleId(c)
+	if role < 1 {
 		e.Code(c, codes.InvalidToken_401)
 		return
 	}
-
+	var ms []dto.MenuVo
+	if err := service.SerSysMenu.GetUserMenus(role, &ms); err != nil {
+		e.Error(c, err)
+		return
+	}
+	e.Ok(c, ms)
 }

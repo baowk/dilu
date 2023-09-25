@@ -36,30 +36,30 @@ type SysMenuInsertReq struct {
 	base.ControlBy
 }
 
-func (s *SysMenuInsertReq) Generate(model *models.SysMenu) {
-	if s.Id != 0 {
-		model.MenuId = s.Id
-	}
-	model.MenuName = s.MenuName
-	model.Title = s.Title
-	model.Icon = s.Icon
-	model.Path = s.Path
-	model.Paths = s.Paths
-	model.MenuType = s.MenuType
-	model.SysApi = s.SysApi
-	model.Permission = s.Permission
-	model.ParentId = s.ParentId
-	model.NoCache = s.NoCache
-	model.Component = s.Component
-	model.Sort = s.Sort
-	model.Hidden = s.Hidden
-	if s.CreateBy != 0 {
-		model.CreateBy = s.CreateBy
-	}
-	if s.UpdateBy != 0 {
-		model.UpdateBy = s.UpdateBy
-	}
-}
+// func (s *SysMenuInsertReq) Generate(model *models.SysMenu) {
+// 	if s.Id != 0 {
+// 		model.MenuId = s.Id
+// 	}
+// 	model.MenuName = s.MenuName
+// 	model.Title = s.Title
+// 	model.Icon = s.Icon
+// 	model.Path = s.Path
+// 	model.Paths = s.Paths
+// 	model.MenuType = s.MenuType
+// 	model.SysApi = s.SysApi
+// 	model.Permission = s.Permission
+// 	model.ParentId = s.ParentId
+// 	model.NoCache = s.NoCache
+// 	model.Component = s.Component
+// 	model.Sort = s.Sort
+// 	model.Hidden = s.Hidden
+// 	if s.CreateBy != 0 {
+// 		model.CreateBy = s.CreateBy
+// 	}
+// 	if s.UpdateBy != 0 {
+// 		model.UpdateBy = s.UpdateBy
+// 	}
+// }
 
 func (s *SysMenuInsertReq) GetId() interface{} {
 	return s.Id
@@ -84,48 +84,53 @@ type SysMenuUpdateReq struct {
 	base.ControlBy
 }
 
-func (s *SysMenuUpdateReq) Generate(model *models.SysMenu) {
-	if s.Id != 0 {
-		model.MenuId = s.Id
-	}
-	model.MenuName = s.MenuName
-	model.Title = s.Title
-	model.Icon = s.Icon
-	model.Path = s.Path
-	model.Paths = s.Paths
-	model.MenuType = s.MenuType
-	model.Permission = s.Permission
-	model.ParentId = s.ParentId
-	model.NoCache = s.NoCache
-	model.Component = s.Component
-	model.Sort = s.Sort
-	model.Hidden = s.Hidden
-	if s.CreateBy != 0 {
-		model.CreateBy = s.CreateBy
-	}
-	if s.UpdateBy != 0 {
-		model.UpdateBy = s.UpdateBy
-	}
-}
+// func (s *SysMenuUpdateReq) Generate(model *models.SysMenu) {
+// 	if s.Id != 0 {
+// 		model.MenuId = s.Id
+// 	}
+// 	model.MenuName = s.MenuName
+// 	model.Title = s.Title
+// 	model.Icon = s.Icon
+// 	model.Path = s.Path
+// 	model.Paths = s.Paths
+// 	model.MenuType = s.MenuType
+// 	model.Permission = s.Permission
+// 	model.ParentId = s.ParentId
+// 	model.NoCache = s.NoCache
+// 	model.Component = s.Component
+// 	model.Sort = s.Sort
+// 	model.Hidden = s.Hidden
+// 	if s.CreateBy != 0 {
+// 		model.CreateBy = s.CreateBy
+// 	}
+// 	if s.UpdateBy != 0 {
+// 		model.UpdateBy = s.UpdateBy
+// 	}
+// }
 
 func (s *SysMenuUpdateReq) GetId() interface{} {
 	return s.Id
 }
 
 type MenuVo struct {
-	Name      string    `json:"name"`
-	Component string    `json:"component"`
-	FullPath  string    `json:"fullPath"`
-	Meta      RouteMeta `json:"meta"`
-	Children  []MenuVo  `json:"children"`
+	Id        int       `json:"-"`
+	Path      string    `json:"path,omitempty"`      //路由地址 必填
+	Name      string    `json:"name,omitempty"`      //路由名字（对应不要重复，和当前组件的name保持一致）必填
+	Component string    `json:"component,omitempty"` //按需加载组件 可选
+	Redirect  string    `json:"redirect,omitempty"`  //路由重定向 可选
+	Meta      RouteMeta `json:"meta,omitempty"`
+	Children  []MenuVo  `json:"children,omitempty"`
 }
 
 type RouteMeta struct {
-	OrderNo  int    `json:"orderNo"`
-	Title    string `json:"title"`
-	Icon     string `json:"icon"`
-	HideMenu bool   `json:"hideMenu"`
-	IsLink   bool   `json:"isLink"`
+	Title        string `json:"title,omitempty"`        //菜单名称（兼容国际化、非国际化，如何用国际化的写法就必须在根目录的locales文件夹下对应添加） 必填
+	Icon         string `json:"icon,omitempty"`         //图标
+	ShowParent   bool   `json:"showParent,omitempty"`   //是否显示父菜单
+	Rank         int    `json:"rank,omitempty"`         //排序
+	KeepAlive    bool   `json:"keepAlive,omitempty"`    //路由组件缓存（开启 true、关闭 false）可选
+	ShowLink     bool   `json:"showLink,omitempty"`     //是否显示 前端默认true，false在菜单列表中不显示
+	FrameSrc     string `json:"frameSrc,omitempty"`     //内嵌的iframe链接 可选
+	FrameLoading bool   `json:"frameLoading,omitempty"` //iframe页是否开启首次加载动画（默认true）可选
 }
 
 type SysMenuGetReq struct {
@@ -143,12 +148,6 @@ type SysMenuDeleteReq struct {
 
 func (s *SysMenuDeleteReq) GetId() interface{} {
 	return s.Ids
-}
-
-type MenuLabel struct {
-	Id       int         `json:"id,omitempty" gorm:"-"`
-	Label    string      `json:"label,omitempty" gorm:"-"`
-	Children []MenuLabel `json:"children,omitempty" gorm:"-"`
 }
 
 type MenuRole struct {
