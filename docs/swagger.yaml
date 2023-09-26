@@ -3973,6 +3973,34 @@ paths:
       summary: 获取SysDept
       tags:
       - sys-SysDept
+  /api/v1/sys/sys-dept/list:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysDeptGetPageReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.SysDept'
+                  type: array
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取全部部门
+      tags:
+      - sys-SysDept
   /api/v1/sys/sys-dept/page:
     post:
       consumes:
@@ -4686,6 +4714,34 @@ paths:
       security:
       - Bearer: []
       summary: 获取SysRole
+      tags:
+      - sys-SysRole
+  /api/v1/sys/sys-role/list:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysRoleGetPageReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.SysRole'
+                  type: array
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取角色列表
       tags:
       - sys-SysRole
   /api/v1/sys/sys-role/page:

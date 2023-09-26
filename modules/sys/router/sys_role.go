@@ -1,8 +1,9 @@
 package router
 
 import (
-	"dilu/modules/sys/apis"
 	"dilu/common/middleware"
+	"dilu/modules/sys/apis"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,5 +20,6 @@ func registerSysRoleRouter(v1 *gin.RouterGroup) {
 		r.POST("/update", apis.ApiSysRole.Update)
 		r.POST("/page", apis.ApiSysRole.QueryPage)
 		r.POST("/del", apis.ApiSysRole.Del)
+		r.POST("/list", apis.ApiSysRole.List)
 	}
 }

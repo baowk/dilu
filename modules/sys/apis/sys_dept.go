@@ -52,7 +52,7 @@ func (e *SysDeptApi) QueryPage(c *gin.Context) {
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysDeptGetPageReq true "body"
-// @Success 200 {object} base.Resp{data=list=[]models.SysDept} "{"code": 200, "data": [...]}"
+// @Success 200 {object} base.Resp{data=[]models.SysDept} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-dept/list [post]
 // @Security Bearer
 func (e *SysDeptApi) List(c *gin.Context) {
