@@ -46,6 +46,30 @@ func (e *SysDeptApi) QueryPage(c *gin.Context) {
 	e.Page(c, list, total, req.GetPage(), req.GetSize())
 }
 
+// List 获取全部部门
+// @Summary 获取全部部门
+// @Tags sys-SysDept
+// @Accept application/json
+// @Product application/json
+// @Param data body dto.SysDeptGetPageReq true "body"
+// @Success 200 {object} base.Resp{data=list=[]models.SysDept} "{"code": 200, "data": [...]}"
+// @Router /api/v1/sys/sys-dept/list [post]
+// @Security Bearer
+func (e *SysDeptApi) List(c *gin.Context) {
+	// var req dto.SysDeptGetPageReq
+	// if err := c.ShouldBind(&req); err != nil {
+	// 	e.Error(c, err)
+	// 	return
+	// }
+	list := make([]models.SysDept, 10)
+
+	if err := service.SerSysDept.GetDepts(&list); err != nil {
+		e.Error(c, err)
+		return
+	}
+	e.Ok(c, list)
+}
+
 // Get 获取SysDept
 // @Summary 获取SysDept
 // @Tags sys-SysDept
