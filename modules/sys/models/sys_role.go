@@ -8,22 +8,22 @@ import (
 
 // SysRole
 type SysRole struct {
-	RoleId    int            `json:"roleId" gorm:"type:int unsigned;primaryKey;autoIncrement;comment:主键"` //主键
-	RoleName  string         `json:"roleName" gorm:"type:varchar(128);comment:角色名称"`                      //角色名称
-	Status    int            `json:"status" gorm:"type:tinyint;comment:状态"`                               //状态
-	RoleKey   string         `json:"roleKey" gorm:"type:varchar(128);comment:角色代码"`                       //角色代码
-	RoleSort  int            `json:"roleSort" gorm:"type:int unsigned;comment:排序"`                        //排序
-	Flag      string         `json:"flag" gorm:"type:varchar(128);comment:flag"`                          //flag
-	Remark    string         `json:"remark" gorm:"type:varchar(255);comment:备注"`                          //备注
-	Admin     int            `json:"admin" gorm:"type:tinyint(1);comment:管理员"`                            //管理员
-	DataScope string         `json:"dataScope" gorm:"type:varchar(128);comment:数据权限"`                     //数据权限
-	CreateBy  int            `json:"createBy" gorm:"type:int unsigned;comment:创建者"`                       //创建者
-	UpdateBy  int            `json:"updateBy" gorm:"type:int unsigned;comment:更新者"`                       //更新者
-	CreatedAt time.Time      `json:"createdAt" gorm:"type:datetime(3);comment:创建时间"`                      //创建时间
-	UpdatedAt time.Time      `json:"updatedAt" gorm:"type:datetime(3);comment:最后更新时间"`                    //最后更新时间
-	DeletedAt gorm.DeletedAt `json:"-" gorm:"index;comment:删除时间"`                                         //删除时间
+	Id        int            `json:"id" gorm:"type:int unsigned;primaryKey;autoIncrement;comment:主键"` //主键
+	Name      string         `json:"name" gorm:"type:varchar(128);comment:角色名称"`                      //角色名称
+	Status    int            `json:"status" gorm:"type:tinyint;comment:状态"`                           //状态
+	RoleKey   string         `json:"roleKey" gorm:"type:varchar(128);comment:角色代码"`                   //角色代码
+	RoleSort  int            `json:"roleSort" gorm:"type:int unsigned;comment:排序"`                    //排序
+	Flag      string         `json:"flag" gorm:"type:varchar(128);comment:flag"`                      //flag
+	Remark    string         `json:"remark" gorm:"type:varchar(255);comment:备注"`                      //备注
+	Admin     int            `json:"admin" gorm:"type:tinyint(1);comment:管理员"`                        //管理员
+	DataScope string         `json:"dataScope" gorm:"type:varchar(128);comment:数据权限"`                 //数据权限
+	CreateBy  int            `json:"createBy" gorm:"type:int unsigned;comment:创建者"`                   //创建者
+	UpdateBy  int            `json:"updateBy" gorm:"type:int unsigned;comment:更新者"`                   //更新者
+	CreatedAt time.Time      `json:"createdAt" gorm:"type:datetime(3);comment:创建时间"`                  //创建时间
+	UpdatedAt time.Time      `json:"updatedAt" gorm:"type:datetime(3);comment:最后更新时间"`                //最后更新时间
+	DeletedAt gorm.DeletedAt `json:"-" gorm:"index;comment:删除时间"`                                     //删除时间
 
-	SysMenu *[]SysMenu `json:"sysMenu" gorm:"many2many:sys_role_menu;foreignKey:RoleId;joinForeignKey:role_id;references:MenuId;joinReferences:menu_id;"`
+	SysMenu *[]SysMenu `json:"sysMenu" gorm:"many2many:sys_role_menu;foreignKey:Id;joinForeignKey:role_id;references:Id;joinReferences:menu_id;"`
 }
 
 func (SysRole) TableName() string {
@@ -34,12 +34,12 @@ func NewSysRole() *SysRole {
 	return &SysRole{}
 }
 
-func (e *SysRole) SetRoleId(roleId int) *SysRole {
-	e.RoleId = roleId
+func (e *SysRole) SetId(roleId int) *SysRole {
+	e.Id = roleId
 	return e
 }
-func (e *SysRole) SetRoleName(roleName string) *SysRole {
-	e.RoleName = roleName
+func (e *SysRole) SetName(roleName string) *SysRole {
+	e.Name = roleName
 	return e
 }
 func (e *SysRole) SetStatus(status int) *SysRole {

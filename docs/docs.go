@@ -3754,6 +3754,256 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/sys/sys-member/create": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sys-SysMember"
+                ],
+                "summary": "创建SysMember",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SysMemberDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.SysMember"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sys/sys-member/del": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sys-SysMember"
+                ],
+                "summary": "删除SysMember",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqIds"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.SysMember"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sys/sys-member/get": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sys-SysMember"
+                ],
+                "summary": "获取SysMember",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqId"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.SysMember"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sys/sys-member/page": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sys-SysMember"
+                ],
+                "summary": "Page接口",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SysMemberGetPageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/base.PageResp"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/models.SysMember"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sys/sys-member/update": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sys-SysMember"
+                ],
+                "summary": "更新SysMember",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SysMemberDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.SysMember"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/sys/sys-menu/all": {
             "post": {
                 "security": [
@@ -4559,7 +4809,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sys/sys-user-dept/create": {
+        "/api/v1/sys/sys-user/create": {
             "post": {
                 "security": [
                     {
@@ -4570,9 +4820,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "sys-SysUserDept"
+                    "sys-SysUser"
                 ],
-                "summary": "创建SysUserDept",
+                "summary": "创建SysUser",
                 "parameters": [
                     {
                         "description": "body",
@@ -4580,7 +4830,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.SysUserDeptDto"
+                            "$ref": "#/definitions/dto.SysUserDto"
                         }
                     }
                 ],
@@ -4596,7 +4846,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/models.SysUserDept"
+                                            "$ref": "#/definitions/models.SysUser"
                                         }
                                     }
                                 }
@@ -4606,7 +4856,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sys/sys-user-dept/del": {
+        "/api/v1/sys/sys-user/del": {
             "post": {
                 "security": [
                     {
@@ -4617,9 +4867,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "sys-SysUserDept"
+                    "sys-SysUser"
                 ],
-                "summary": "删除SysUserDept",
+                "summary": "删除SysUser",
                 "parameters": [
                     {
                         "description": "body",
@@ -4643,7 +4893,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/models.SysUserDept"
+                                            "$ref": "#/definitions/models.SysUser"
                                         }
                                     }
                                 }
@@ -4653,7 +4903,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sys/sys-user-dept/get": {
+        "/api/v1/sys/sys-user/get": {
             "post": {
                 "security": [
                     {
@@ -4664,9 +4914,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "sys-SysUserDept"
+                    "sys-SysUser"
                 ],
-                "summary": "获取SysUserDept",
+                "summary": "获取用户",
                 "parameters": [
                     {
                         "description": "body",
@@ -4690,7 +4940,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/models.SysUserDept"
+                                            "$ref": "#/definitions/models.SysUser"
                                         }
                                     }
                                 }
@@ -4700,7 +4950,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sys/sys-user-dept/page": {
+        "/api/v1/sys/sys-user/page": {
             "post": {
                 "security": [
                     {
@@ -4711,7 +4961,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "sys-SysUserDept"
+                    "sys-SysUser"
                 ],
                 "summary": "Page接口",
                 "parameters": [
@@ -4721,7 +4971,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.SysUserDeptGetPageReq"
+                            "$ref": "#/definitions/dto.SysUserGetPageReq"
                         }
                     }
                 ],
@@ -4747,7 +4997,7 @@ const docTemplate = `{
                                                         "list": {
                                                             "type": "array",
                                                             "items": {
-                                                                "$ref": "#/definitions/models.SysUserDept"
+                                                                "$ref": "#/definitions/models.SysUser"
                                                             }
                                                         }
                                                     }
@@ -4762,7 +5012,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/sys/sys-user-dept/update": {
+        "/api/v1/sys/sys-user/update": {
             "post": {
                 "security": [
                     {
@@ -4773,9 +5023,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "sys-SysUserDept"
+                    "sys-SysUser"
                 ],
-                "summary": "更新SysUserDept",
+                "summary": "更新SysUser",
                 "parameters": [
                     {
                         "description": "body",
@@ -4783,7 +5033,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.SysUserDeptDto"
+                            "$ref": "#/definitions/dto.SysUserDto"
                         }
                     }
                 ],
@@ -4799,7 +5049,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/models.SysUserDept"
+                                            "$ref": "#/definitions/models.SysUser"
                                         }
                                     }
                                 }
@@ -4845,14 +5095,14 @@ const docTemplate = `{
         "base.PageResp": {
             "type": "object",
             "properties": {
-                "items": {
-                    "description": "数据列表"
-                },
-                "page": {
+                "currentPage": {
                     "description": "当前第几页",
                     "type": "integer"
                 },
-                "size": {
+                "list": {
+                    "description": "数据列表"
+                },
+                "pageSize": {
                     "description": "分页大小",
                     "type": "integer"
                 },
@@ -5397,16 +5647,31 @@ const docTemplate = `{
         "dto.LoginOK": {
             "type": "object",
             "properties": {
-                "expire": {
-                    "description": "token有效期",
+                "accessToken": {
+                    "description": "返回token",
+                    "type": "string"
+                },
+                "expires": {
+                    "description": "有效期",
                     "type": "string"
                 },
                 "need": {
                     "description": "（0|1|2）0：已绑定 1：需要绑定账号 token 是一个加密串，走login接口在uuid上带上 2：需要设置密码",
                     "type": "integer"
                 },
-                "token": {
-                    "description": "返回token",
+                "refreshToken": {
+                    "description": "刷新token",
+                    "type": "string"
+                },
+                "roles": {
+                    "description": "角色",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "username": {
+                    "description": "token有效期",
                     "type": "string"
                 }
             }
@@ -5872,6 +6137,48 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.SysMemberDto": {
+            "type": "object",
+            "properties": {
+                "deptId": {
+                    "description": "部门id",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "postTag": {
+                    "description": "职位标签 1主管 2副主管 3员工",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态 1正常",
+                    "type": "integer"
+                },
+                "userId": {
+                    "description": "上级部门",
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.SysMemberGetPageReq": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "description": "每页大小",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态 1正常",
+                    "type": "integer"
+                }
+            }
+        },
         "dto.SysMenuGetReq": {
             "type": "object",
             "properties": {
@@ -6036,34 +6343,92 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.SysUserDeptDto": {
+        "dto.SysUserDto": {
             "type": "object",
             "properties": {
-                "deptId": {
-                    "description": "部门id",
-                    "type": "integer"
+                "avatar": {
+                    "description": "头像",
+                    "type": "string"
+                },
+                "bio": {
+                    "description": "签名",
+                    "type": "string"
+                },
+                "birthday": {
+                    "description": "生日",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "邮箱",
+                    "type": "string"
+                },
+                "gender": {
+                    "description": "性别 1男 2女 3未知",
+                    "type": "string"
                 },
                 "id": {
                     "description": "主键",
                     "type": "integer"
                 },
-                "postTag": {
-                    "description": "职位标签 1主管 2副主管 3员工",
+                "name": {
+                    "description": "姓名",
+                    "type": "string"
+                },
+                "nickname": {
+                    "description": "昵称",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "密码",
+                    "type": "string"
+                },
+                "phone": {
+                    "description": "手机号",
+                    "type": "string"
+                },
+                "post": {
+                    "description": "岗位",
+                    "type": "string"
+                },
+                "remark": {
+                    "description": "备注",
+                    "type": "string"
+                },
+                "roleId": {
+                    "description": "角色id",
                     "type": "integer"
                 },
                 "status": {
-                    "description": "状态 1正常",
+                    "description": "状态 1冻结 2正常 3默认",
                     "type": "integer"
                 },
-                "userId": {
-                    "description": "上级部门",
-                    "type": "integer"
+                "username": {
+                    "description": "用户名",
+                    "type": "string"
                 }
             }
         },
-        "dto.SysUserDeptGetPageReq": {
+        "dto.SysUserGetPageReq": {
             "type": "object",
             "properties": {
+                "createdAtOrder": {
+                    "type": "string"
+                },
+                "deptId": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "idOrder": {
+                    "type": "string"
+                },
+                "nickName": {
+                    "type": "string"
+                },
                 "page": {
                     "description": "页码",
                     "type": "integer"
@@ -6072,9 +6437,29 @@ const docTemplate = `{
                     "description": "每页大小",
                     "type": "integer"
                 },
+                "phone": {
+                    "type": "string"
+                },
+                "postId": {
+                    "type": "string"
+                },
+                "roleId": {
+                    "type": "string"
+                },
+                "sex": {
+                    "type": "string"
+                },
                 "status": {
-                    "description": "状态 1正常",
-                    "type": "integer"
+                    "type": "string"
+                },
+                "statusOrder": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "usernameOrder": {
+                    "type": "string"
                 }
             }
         },
@@ -6655,27 +7040,47 @@ const docTemplate = `{
                     "description": "创建时间",
                     "type": "string"
                 },
-                "deptId": {
+                "deptPath": {
+                    "description": "路径",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "邮箱",
+                    "type": "string"
+                },
+                "id": {
                     "description": "主键",
                     "type": "integer"
                 },
-                "deptName": {
+                "name": {
                     "description": "部门名称",
-                    "type": "string"
-                },
-                "deptPath": {
-                    "description": "路径",
                     "type": "string"
                 },
                 "parentId": {
                     "description": "上级部门",
                     "type": "integer"
                 },
+                "phone": {
+                    "description": "手机号",
+                    "type": "string"
+                },
+                "principal": {
+                    "description": "部门领导",
+                    "type": "string"
+                },
+                "remark": {
+                    "description": "备注",
+                    "type": "string"
+                },
                 "sort": {
                     "description": "排序",
                     "type": "integer"
                 },
                 "status": {
+                    "description": "状态",
+                    "type": "integer"
+                },
+                "type": {
                     "description": "状态",
                     "type": "integer"
                 },
@@ -6693,9 +7098,11 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "args": {
+                    "description": "参数",
                     "type": "string"
                 },
                 "concurrent": {
+                    "description": "并发",
                     "type": "integer"
                 },
                 "createBy": {
@@ -6707,31 +7114,39 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "cronExpression": {
+                    "description": "表达式",
                     "type": "string"
                 },
                 "entryId": {
+                    "description": "任务id",
                     "type": "integer"
                 },
-                "invokeTarget": {
-                    "type": "string"
-                },
-                "jobGroup": {
-                    "type": "string"
-                },
-                "jobId": {
+                "id": {
                     "description": "主键",
                     "type": "integer"
                 },
+                "invokeTarget": {
+                    "description": "调用目标",
+                    "type": "string"
+                },
+                "jobGroup": {
+                    "description": "组",
+                    "type": "string"
+                },
                 "jobName": {
+                    "description": "名称",
                     "type": "string"
                 },
                 "jobType": {
+                    "description": "类型",
                     "type": "integer"
                 },
                 "misfirePolicy": {
+                    "description": "策略",
                     "type": "integer"
                 },
                 "status": {
+                    "description": "状态",
                     "type": "integer"
                 },
                 "updateBy": {
@@ -6741,6 +7156,63 @@ const docTemplate = `{
                 "updatedAt": {
                     "description": "最后更新时间",
                     "type": "string"
+                }
+            }
+        },
+        "models.SysMember": {
+            "type": "object",
+            "properties": {
+                "createBy": {
+                    "description": "创建者",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "deptId": {
+                    "description": "部门id",
+                    "type": "integer"
+                },
+                "deptPath": {
+                    "description": "路径",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "姓名",
+                    "type": "string"
+                },
+                "nickname": {
+                    "description": "昵称",
+                    "type": "string"
+                },
+                "phone": {
+                    "description": "电话",
+                    "type": "string"
+                },
+                "postTag": {
+                    "description": "职位标签 1主管 2副主管 3员工",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态 1正常",
+                    "type": "integer"
+                },
+                "updateBy": {
+                    "description": "更新者",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "最后更新时间",
+                    "type": "string"
+                },
+                "userId": {
+                    "description": "用户id",
+                    "type": "integer"
                 }
             }
         },
@@ -6767,7 +7239,7 @@ const docTemplate = `{
                     "description": "图标",
                     "type": "string"
                 },
-                "menuId": {
+                "id": {
                     "description": "主键",
                     "type": "integer"
                 },
@@ -6944,20 +7416,20 @@ const docTemplate = `{
                     "description": "flag",
                     "type": "string"
                 },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "角色名称",
+                    "type": "string"
+                },
                 "remark": {
                     "description": "备注",
                     "type": "string"
                 },
-                "roleId": {
-                    "description": "主键",
-                    "type": "integer"
-                },
                 "roleKey": {
                     "description": "角色代码",
-                    "type": "string"
-                },
-                "roleName": {
-                    "description": "角色名称",
                     "type": "string"
                 },
                 "roleSort": {
@@ -6984,44 +7456,84 @@ const docTemplate = `{
                 }
             }
         },
-        "models.SysUserDept": {
+        "models.SysUser": {
             "type": "object",
             "properties": {
+                "avatar": {
+                    "description": "头像",
+                    "type": "string"
+                },
+                "bio": {
+                    "description": "签名",
+                    "type": "string"
+                },
+                "birthday": {
+                    "description": "生日",
+                    "type": "string"
+                },
                 "createBy": {
-                    "description": "创建者",
+                    "description": "创建者id",
                     "type": "integer"
                 },
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
                 },
-                "deptId": {
-                    "description": "部门id",
-                    "type": "integer"
+                "email": {
+                    "description": "邮箱",
+                    "type": "string"
+                },
+                "gender": {
+                    "description": "性别 1男 2女 3未知",
+                    "type": "string"
                 },
                 "id": {
                     "description": "主键",
                     "type": "integer"
                 },
-                "postTag": {
-                    "description": "职位标签 1主管 2副主管 3员工",
+                "name": {
+                    "description": "姓名",
+                    "type": "string"
+                },
+                "nickname": {
+                    "description": "昵称",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "密码",
+                    "type": "string"
+                },
+                "phone": {
+                    "description": "手机号",
+                    "type": "string"
+                },
+                "post": {
+                    "description": "岗位",
+                    "type": "string"
+                },
+                "remark": {
+                    "description": "备注",
+                    "type": "string"
+                },
+                "roleId": {
+                    "description": "角色id",
                     "type": "integer"
                 },
                 "status": {
-                    "description": "状态 1正常",
+                    "description": "状态 1冻结 2正常 3默认",
                     "type": "integer"
                 },
                 "updateBy": {
-                    "description": "更新者",
+                    "description": "更新者id",
                     "type": "integer"
                 },
                 "updatedAt": {
-                    "description": "最后更新时间",
+                    "description": "更新时间",
                     "type": "string"
                 },
-                "userId": {
-                    "description": "上级部门",
-                    "type": "integer"
+                "username": {
+                    "description": "用户名",
+                    "type": "string"
                 }
             }
         },

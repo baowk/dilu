@@ -108,11 +108,11 @@ func (e *SysMenu) initPaths(tx *gorm.DB, menu *models.SysMenu) error {
 			err = errors.New("父级paths异常，请尝试对当前节点父级菜单进行更新操作！")
 			return err
 		}
-		menu.Paths = parentMenu.Paths + "/" + strconv.Itoa(menu.MenuId)
+		menu.Paths = parentMenu.Paths + "/" + strconv.Itoa(menu.Id)
 	} else {
-		menu.Paths = "/0/" + strconv.Itoa(menu.MenuId)
+		menu.Paths = "/0/" + strconv.Itoa(menu.Id)
 	}
-	err = tx.Model(&data).Where("menu_id = ?", menu.MenuId).Update("paths", menu.Paths).Error
+	err = tx.Model(&data).Where("id = ?", menu.Id).Update("paths", menu.Paths).Error
 	return err
 }
 
@@ -129,7 +129,7 @@ func (e *SysMenu) initPaths(tx *gorm.DB, menu *models.SysMenu) error {
 // 	}()
 // 	var alist = make([]models.SysApi, 0)
 // 	var model = models.SysMenu{}
-// 	tx.Preload("SysApi").First(&model, c.MenuId())
+// 	tx.Preload("SysApi").First(&model, c.Id())
 // 	oldPath := model.Paths
 // 	tx.Where("id in ?", c.Apis).Find(&alist)
 
@@ -176,7 +176,7 @@ func (e *SysMenu) GetUserMenus(roleId int, mvs *[]dto.MenuVo) errs.IError {
 	if roleId == 1 {
 		sql = "Select * from sys_menu where menu_type < 3 "
 	} else {
-		sql = fmt.Sprintf("Select * from sys_menu m,sys_role_menu r where role_id =%d and menu_type < 3 and m.menu_id = r.menu_id", roleId)
+		sql = fmt.Sprintf("Select * from sys_menu m,sys_role_menu r where role_id =%d and menu_type < 3 and m.id = r.menu_id", roleId)
 	}
 	var ms []models.SysMenu
 	if err := core.DB().Raw(sql).Find(&ms).Error; err != nil {
@@ -231,7 +231,7 @@ func menuToVo(menu models.SysMenu) dto.MenuVo {
 		Meta:      meta,
 		Path:      menu.Path,
 		Component: menu.Component,
-		Id:        menu.MenuId,
+		Id:        menu.Id,
 	}
 	return vo
 }
@@ -241,7 +241,7 @@ func (e *SysMenu) GetUserPerms(roleId int, mvs *[]string) errs.IError {
 	if roleId == 1 {
 		sql = "Select permission from sys_menu  where menu_type > 1 "
 	} else {
-		sql = fmt.Sprintf("Select permission from sys_menu m,sys_role_menu r where role_id = %d and menu_type > 1 and m.menu_id = r.menu_id", roleId)
+		sql = fmt.Sprintf("Select permission from sys_menu m,sys_role_menu r where role_id = %d and menu_type > 1 and m.id = r.menu_id", roleId)
 	}
 	var ms []string
 	if err := core.DB().Raw(sql).Find(&ms).Error; err != nil {

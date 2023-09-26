@@ -4,11 +4,10 @@ import (
 	"github.com/baowk/dilu-core/core/base"
 )
 
-type SysUserDeptService struct {
+type SysMemberService struct {
 	*base.BaseService
 }
 
-var SerSysUserDept = SysUserDeptService{
+var SerSysMember = SysMemberService{
 	base.NewService("sys"),
 }
-

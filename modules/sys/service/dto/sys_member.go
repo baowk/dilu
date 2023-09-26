@@ -4,13 +4,13 @@ import (
 	"github.com/baowk/dilu-core/core/base"
 )
 
-type SysUserDeptGetPageReq struct {
+type SysMemberGetPageReq struct {
 	base.ReqPage `search:"-"`
 	Status       int `json:"status" form:"status"` //状态 1正常
 }
 
-// SysUserDept
-type SysUserDeptDto struct {
+// SysMember
+type SysMemberDto struct {
 	Id      int `json:"id"`      //主键
 	DeptId  int `json:"deptId"`  //部门id
 	UserId  int `json:"userId"`  //上级部门

@@ -46,7 +46,7 @@ func (Init) DoInit(c *gin.Context) {
 		&models.ThirdLogin{},
 		&tools.GenColumn{},
 		&tools.GenTable{},
-		&models.SysUserDept{},
+		&models.SysMember{},
 	); err != nil {
 		result = "sys执行失败"
 	}

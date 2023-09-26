@@ -1,12 +1,12 @@
 definitions:
   base.PageResp:
     properties:
-      items:
-        description: 数据列表
-      page:
+      currentPage:
         description: 当前第几页
         type: integer
-      size:
+      list:
+        description: 数据列表
+      pageSize:
         description: 分页大小
         type: integer
       total:
@@ -400,14 +400,25 @@ definitions:
     type: object
   dto.LoginOK:
     properties:
-      expire:
-        description: token有效期
+      accessToken:
+        description: 返回token
+        type: string
+      expires:
+        description: 有效期
         type: string
       need:
         description: （0|1|2）0：已绑定 1：需要绑定账号 token 是一个加密串，走login接口在uuid上带上 2：需要设置密码
         type: integer
-      token:
-        description: 返回token
+      refreshToken:
+        description: 刷新token
+        type: string
+      roles:
+        description: 角色
+        items:
+          type: string
+        type: array
+      username:
+        description: token有效期
         type: string
     type: object
   dto.LoginReq:
@@ -738,6 +749,36 @@ definitions:
       status:
         type: integer
     type: object
+  dto.SysMemberDto:
+    properties:
+      deptId:
+        description: 部门id
+        type: integer
+      id:
+        description: 主键
+        type: integer
+      postTag:
+        description: 职位标签 1主管 2副主管 3员工
+        type: integer
+      status:
+        description: 状态 1正常
+        type: integer
+      userId:
+        description: 上级部门
+        type: integer
+    type: object
+  dto.SysMemberGetPageReq:
+    properties:
+      page:
+        description: 页码
+        type: integer
+      pageSize:
+        description: 每页大小
+        type: integer
+      status:
+        description: 状态 1正常
+        type: integer
+    type: object
   dto.SysMenuGetReq:
     properties:
       id:
@@ -857,35 +898,90 @@ definitions:
         description: 状态
         type: integer
     type: object
-  dto.SysUserDeptDto:
+  dto.SysUserDto:
     properties:
-      deptId:
-        description: 部门id
-        type: integer
+      avatar:
+        description: 头像
+        type: string
+      bio:
+        description: 签名
+        type: string
+      birthday:
+        description: 生日
+        type: string
+      email:
+        description: 邮箱
+        type: string
+      gender:
+        description: 性别 1男 2女 3未知
+        type: string
       id:
         description: 主键
         type: integer
-      postTag:
-        description: 职位标签 1主管 2副主管 3员工
+      name:
+        description: 姓名
+        type: string
+      nickname:
+        description: 昵称
+        type: string
+      password:
+        description: 密码
+        type: string
+      phone:
+        description: 手机号
+        type: string
+      post:
+        description: 岗位
+        type: string
+      remark:
+        description: 备注
+        type: string
+      roleId:
+        description: 角色id
         type: integer
       status:
-        description: 状态 1正常
+        description: 状态 1冻结 2正常 3默认
         type: integer
-      userId:
-        description: 上级部门
-        type: integer
+      username:
+        description: 用户名
+        type: string
     type: object
-  dto.SysUserDeptGetPageReq:
+  dto.SysUserGetPageReq:
     properties:
+      createdAtOrder:
+        type: string
+      deptId:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      idOrder:
+        type: string
+      nickName:
+        type: string
       page:
         description: 页码
         type: integer
       pageSize:
         description: 每页大小
         type: integer
+      phone:
+        type: string
+      postId:
+        type: string
+      roleId:
+        type: string
+      sex:
+        type: string
       status:
-        description: 状态 1正常
-        type: integer
+        type: string
+      statusOrder:
+        type: string
+      username:
+        type: string
+      usernameOrder:
+        type: string
     type: object
   dto.TargetTaskDto:
     properties:
@@ -1309,22 +1405,37 @@ definitions:
       createdAt:
         description: 创建时间
         type: string
-      deptId:
-        description: 主键
-        type: integer
-      deptName:
-        description: 部门名称
-        type: string
       deptPath:
         description: 路径
+        type: string
+      email:
+        description: 邮箱
+        type: string
+      id:
+        description: 主键
+        type: integer
+      name:
+        description: 部门名称
         type: string
       parentId:
         description: 上级部门
         type: integer
+      phone:
+        description: 手机号
+        type: string
+      principal:
+        description: 部门领导
+        type: string
+      remark:
+        description: 备注
+        type: string
       sort:
         description: 排序
         type: integer
       status:
+        description: 状态
+        type: integer
+      type:
         description: 状态
         type: integer
       updateBy:
@@ -1337,8 +1448,10 @@ definitions:
   models.SysJob:
     properties:
       args:
+        description: 参数
         type: string
       concurrent:
+        description: 并发
         type: integer
       createBy:
         description: 创建者
@@ -1347,23 +1460,31 @@ definitions:
         description: 创建时间
         type: string
       cronExpression:
+        description: 表达式
         type: string
       entryId:
+        description: 任务id
         type: integer
-      invokeTarget:
-        type: string
-      jobGroup:
-        type: string
-      jobId:
+      id:
         description: 主键
         type: integer
+      invokeTarget:
+        description: 调用目标
+        type: string
+      jobGroup:
+        description: 组
+        type: string
       jobName:
+        description: 名称
         type: string
       jobType:
+        description: 类型
         type: integer
       misfirePolicy:
+        description: 策略
         type: integer
       status:
+        description: 状态
         type: integer
       updateBy:
         description: 更新者
@@ -1371,6 +1492,48 @@ definitions:
       updatedAt:
         description: 最后更新时间
         type: string
+    type: object
+  models.SysMember:
+    properties:
+      createBy:
+        description: 创建者
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      deptId:
+        description: 部门id
+        type: integer
+      deptPath:
+        description: 路径
+        type: string
+      id:
+        description: 主键
+        type: integer
+      name:
+        description: 姓名
+        type: string
+      nickname:
+        description: 昵称
+        type: string
+      phone:
+        description: 电话
+        type: string
+      postTag:
+        description: 职位标签 1主管 2副主管 3员工
+        type: integer
+      status:
+        description: 状态 1正常
+        type: integer
+      updateBy:
+        description: 更新者
+        type: integer
+      updatedAt:
+        description: 最后更新时间
+        type: string
+      userId:
+        description: 用户id
+        type: integer
     type: object
   models.SysMenu:
     properties:
@@ -1389,7 +1552,7 @@ definitions:
       icon:
         description: 图标
         type: string
-      menuId:
+      id:
         description: 主键
         type: integer
       menuName:
@@ -1520,17 +1683,17 @@ definitions:
       flag:
         description: flag
         type: string
+      id:
+        description: 主键
+        type: integer
+      name:
+        description: 角色名称
+        type: string
       remark:
         description: 备注
         type: string
-      roleId:
-        description: 主键
-        type: integer
       roleKey:
         description: 角色代码
-        type: string
-      roleName:
-        description: 角色名称
         type: string
       roleSort:
         description: 排序
@@ -1549,35 +1712,65 @@ definitions:
         description: 最后更新时间
         type: string
     type: object
-  models.SysUserDept:
+  models.SysUser:
     properties:
+      avatar:
+        description: 头像
+        type: string
+      bio:
+        description: 签名
+        type: string
+      birthday:
+        description: 生日
+        type: string
       createBy:
-        description: 创建者
+        description: 创建者id
         type: integer
       createdAt:
         description: 创建时间
         type: string
-      deptId:
-        description: 部门id
-        type: integer
+      email:
+        description: 邮箱
+        type: string
+      gender:
+        description: 性别 1男 2女 3未知
+        type: string
       id:
         description: 主键
         type: integer
-      postTag:
-        description: 职位标签 1主管 2副主管 3员工
+      name:
+        description: 姓名
+        type: string
+      nickname:
+        description: 昵称
+        type: string
+      password:
+        description: 密码
+        type: string
+      phone:
+        description: 手机号
+        type: string
+      post:
+        description: 岗位
+        type: string
+      remark:
+        description: 备注
+        type: string
+      roleId:
+        description: 角色id
         type: integer
       status:
-        description: 状态 1正常
+        description: 状态 1冻结 2正常 3默认
         type: integer
       updateBy:
-        description: 更新者
+        description: 更新者id
         type: integer
       updatedAt:
-        description: 最后更新时间
+        description: 更新时间
         type: string
-      userId:
-        description: 上级部门
-        type: integer
+      username:
+        description: 用户名
+        type: string
     type: object
   models.TargetTask:
     properties:
@@ -3976,6 +4169,143 @@ paths:
       summary: 更新SysJob
       tags:
       - sys-SysJob
+  /api/v1/sys/sys-member/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysMemberDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysMember'
+              type: object
+      security:
+      - Bearer: []
+      summary: 创建SysMember
+      tags:
+      - sys-SysMember
+  /api/v1/sys/sys-member/del:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqIds'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysMember'
+              type: object
+      security:
+      - Bearer: []
+      summary: 删除SysMember
+      tags:
+      - sys-SysMember
+  /api/v1/sys/sys-member/get:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqId'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysMember'
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取SysMember
+      tags:
+      - sys-SysMember
+  /api/v1/sys/sys-member/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysMemberGetPageReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/base.PageResp'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/models.SysMember'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - Bearer: []
+      summary: Page接口
+      tags:
+      - sys-SysMember
+  /api/v1/sys/sys-member/update:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysMemberDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysMember'
+              type: object
+      security:
+      - Bearer: []
+      summary: 更新SysMember
+      tags:
+      - sys-SysMember
   /api/v1/sys/sys-menu/all:
     post:
       consumes:
@@ -4417,7 +4747,7 @@ paths:
       summary: 更新SysRole
       tags:
       - sys-SysRole
-  /api/v1/sys/sys-user-dept/create:
+  /api/v1/sys/sys-user/create:
     post:
       consumes:
       - application/json
@@ -4427,7 +4757,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/dto.SysUserDeptDto'
+          $ref: '#/definitions/dto.SysUserDto'
       responses:
         "200":
           description: '{"code": 200, "data": [...]}'
@@ -4436,14 +4766,14 @@ paths:
             - $ref: '#/definitions/base.Resp'
             - properties:
                 data:
-                  $ref: '#/definitions/models.SysUserDept'
+                  $ref: '#/definitions/models.SysUser'
               type: object
       security:
       - Bearer: []
-      summary: 创建SysUserDept
+      summary: 创建SysUser
       tags:
-      - sys-SysUserDept
-  /api/v1/sys/sys-user-dept/del:
+      - sys-SysUser
+  /api/v1/sys/sys-user/del:
     post:
       consumes:
       - application/json
@@ -4462,14 +4792,14 @@ paths:
             - $ref: '#/definitions/base.Resp'
             - properties:
                 data:
-                  $ref: '#/definitions/models.SysUserDept'
+                  $ref: '#/definitions/models.SysUser'
               type: object
       security:
       - Bearer: []
-      summary: 删除SysUserDept
+      summary: 删除SysUser
       tags:
-      - sys-SysUserDept
-  /api/v1/sys/sys-user-dept/get:
+      - sys-SysUser
+  /api/v1/sys/sys-user/get:
     post:
       consumes:
       - application/json
@@ -4488,14 +4818,14 @@ paths:
             - $ref: '#/definitions/base.Resp'
             - properties:
                 data:
-                  $ref: '#/definitions/models.SysUserDept'
+                  $ref: '#/definitions/models.SysUser'
               type: object
       security:
       - Bearer: []
-      summary: 获取SysUserDept
+      summary: 获取用户
       tags:
-      - sys-SysUserDept
-  /api/v1/sys/sys-user-dept/page:
+      - sys-SysUser
+  /api/v1/sys/sys-user/page:
     post:
       consumes:
       - application/json
@@ -4505,7 +4835,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/dto.SysUserDeptGetPageReq'
+          $ref: '#/definitions/dto.SysUserGetPageReq'
       responses:
         "200":
           description: '{"code": 200, "data": [...]}'
@@ -4519,7 +4849,7 @@ paths:
                   - properties:
                       list:
                         items:
-                          $ref: '#/definitions/models.SysUserDept'
+                          $ref: '#/definitions/models.SysUser'
                         type: array
                     type: object
               type: object
@@ -4527,8 +4857,8 @@ paths:
       - Bearer: []
       summary: Page接口
       tags:
-      - sys-SysUserDept
-  /api/v1/sys/sys-user-dept/update:
+      - sys-SysUser
+  /api/v1/sys/sys-user/update:
     post:
       consumes:
       - application/json
@@ -4538,7 +4868,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/dto.SysUserDeptDto'
+          $ref: '#/definitions/dto.SysUserDto'
       responses:
         "200":
           description: '{"code": 200, "data": [...]}'
@@ -4547,13 +4877,13 @@ paths:
             - $ref: '#/definitions/base.Resp'
             - properties:
                 data:
-                  $ref: '#/definitions/models.SysUserDept'
+                  $ref: '#/definitions/models.SysUser'
               type: object
       security:
       - Bearer: []
-      summary: 更新SysUserDept
+      summary: 更新SysUser
       tags:
-      - sys-SysUserDept
+      - sys-SysUser
   /api/v1/sys/verify/code:
     post:
       consumes:

@@ -440,7 +440,7 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 		Mmenu.Hidden = false
 		Mmenu.CreateBy = 1
 		service.SerSysMenu.Insert(&Mmenu)
-		menuPid = Mmenu.MenuId
+		menuPid = Mmenu.Id
 	}
 
 	curPath := fmt.Sprintf("%s/%s/%s/page", tab.ApiRoot, tab.PackageName, tab.ModuleName)
@@ -458,7 +458,7 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 
 	Cmenu := models.SysMenu{}
 	Cmenu.MenuName = tab.ClassName + "Manage"
-	Cmenu.Title = "分页获取" + tab.TableComment
+	Cmenu.Title = tab.TableComment + "管理"
 	Cmenu.Icon = "pass"
 	Cmenu.Path = "/" + tab.PackageName + "/" + tab.MLTBName
 	Cmenu.MenuType = 2
@@ -488,10 +488,10 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	MList.MenuName = ""
 	MList.Title = tab.TableComment + "详情"
 	MList.Icon = ""
-	MList.Path = tab.TBName
+	MList.Path = tab.TBName + "_detail"
 	MList.MenuType = 3
 	MList.Permission = tab.PackageName + ":" + tab.BusinessName + ":query"
-	MList.ParentId = Cmenu.MenuId
+	MList.ParentId = Cmenu.Id
 	MList.NoCache = false
 	MList.Sort = 0
 	MList.Hidden = false
@@ -512,12 +512,12 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 
 	MCreate := models.SysMenu{}
 	MCreate.MenuName = ""
-	MCreate.Title = "创建" + tab.TableComment
+	MCreate.Title = tab.TableComment + "创建"
 	MCreate.Icon = ""
-	MCreate.Path = tab.TBName
+	MCreate.Path = tab.TBName + "_create"
 	MCreate.MenuType = 3
 	MCreate.Permission = tab.PackageName + ":" + tab.BusinessName + ":add"
-	MCreate.ParentId = Cmenu.MenuId
+	MCreate.ParentId = Cmenu.Id
 	MCreate.NoCache = false
 	MCreate.Sort = 0
 	MCreate.Hidden = false
@@ -538,12 +538,12 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 
 	MUpdate := models.SysMenu{}
 	MUpdate.MenuName = ""
-	MUpdate.Title = "修改" + tab.TableComment
+	MUpdate.Title = tab.TableComment + "修改"
 	MUpdate.Icon = ""
-	MUpdate.Path = tab.TBName
+	MUpdate.Path = tab.TBName + "_update"
 	MUpdate.MenuType = 3
 	MUpdate.Permission = tab.PackageName + ":" + tab.BusinessName + ":edit"
-	MUpdate.ParentId = Cmenu.MenuId
+	MUpdate.ParentId = Cmenu.Id
 	MUpdate.NoCache = false
 	MUpdate.Sort = 0
 	MUpdate.Hidden = false
@@ -564,12 +564,12 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 
 	MDelete := models.SysMenu{}
 	MDelete.MenuName = ""
-	MDelete.Title = "删除" + tab.TableComment
+	MDelete.Title = tab.TableComment + "删除"
 	MDelete.Icon = ""
-	MDelete.Path = tab.TBName
+	MDelete.Path = tab.TBName + "_del"
 	MDelete.MenuType = 3
 	MDelete.Permission = tab.PackageName + ":" + tab.BusinessName + ":remove"
-	MDelete.ParentId = Cmenu.MenuId
+	MDelete.ParentId = Cmenu.Id
 	MDelete.NoCache = false
 	MDelete.Sort = 0
 	MDelete.Hidden = false

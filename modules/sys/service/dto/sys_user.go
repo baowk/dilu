@@ -8,7 +8,7 @@ import (
 
 type SysUserGetPageReq struct {
 	base.ReqPage `search:"-"`
-	UserId       int    `form:"userId" search:"type:exact;column:user_id;table:sys_user" comment:"用户ID"`
+	Id           int    `form:"id" search:"type:exact;column:user_id;table:sys_user" comment:"用户ID"`
 	Username     string `form:"username" search:"type:contains;column:username;table:sys_user" comment:"用户名"`
 	NickName     string `form:"nickName" search:"type:contains;column:nick_name;table:sys_user" comment:"昵称"`
 	Phone        string `form:"phone" search:"type:contains;column:phone;table:sys_user" comment:"手机号"`
@@ -22,7 +22,7 @@ type SysUserGetPageReq struct {
 }
 
 type SysUserOrder struct {
-	UserIdOrder    string `search:"type:order;column:user_id;table:sys_user" form:"userIdOrder"`
+	IdOrder        string `search:"type:order;column:user_id;table:sys_user" form:"idOrder"`
 	UsernameOrder  string `search:"type:order;column:username;table:sys_user" form:"usernameOrder"`
 	StatusOrder    string `search:"type:order;column:status;table:sys_user" form:"statusOrder"`
 	CreatedAtOrder string `search:"type:order;column:created_at;table:sys_user" form:"createdAtOrder"`
@@ -37,58 +37,58 @@ func (m *SysUserGetPageReq) GetNeedSearch() interface{} {
 }
 
 type ResetSysUserPwdReq struct {
-	UserId   int    `json:"userId" comment:"用户ID" vd:"$>0"` // 用户ID
+	Id       int    `json:"id" comment:"用户ID" vd:"$>0"` // 用户ID
 	Password string `json:"password" comment:"密码" vd:"len($)>0"`
 	base.ControlBy
 }
 
 func (s *ResetSysUserPwdReq) GetId() interface{} {
-	return s.UserId
+	return s.Id
 }
 
 func (s *ResetSysUserPwdReq) Generate(model *models.SysUser) {
-	if s.UserId != 0 {
-		model.UserId = s.UserId
+	if s.Id != 0 {
+		model.Id = s.Id
 	}
 	model.Password = s.Password
 }
 
 type UpdateSysUserAvatarReq struct {
-	UserId int    `json:"userId" comment:"用户ID" vd:"len($)>0"` // 用户ID
+	Id     int    `json:"id" comment:"用户ID" vd:"len($)>0"` // 用户ID
 	Avatar string `json:"avatar" comment:"头像" vd:"len($)>0"`
 	base.ControlBy
 }
 
 func (s *UpdateSysUserAvatarReq) GetId() interface{} {
-	return s.UserId
+	return s.Id
 }
 
 func (s *UpdateSysUserAvatarReq) Generate(model *models.SysUser) {
-	if s.UserId != 0 {
-		model.UserId = s.UserId
+	if s.Id != 0 {
+		model.Id = s.Id
 	}
 	model.Avatar = s.Avatar
 }
 
 type UpdateSysUserStatusReq struct {
-	UserId int `json:"userId" comment:"用户ID" vd:"$>0"` // 用户ID
+	Id     int `json:"id" comment:"用户ID" vd:"$>0"` // 用户ID
 	Status int `json:"status" comment:"状态" vd:"len($)>0"`
 	base.ControlBy
 }
 
 func (s *UpdateSysUserStatusReq) GetId() interface{} {
-	return s.UserId
+	return s.Id
 }
 
 func (s *UpdateSysUserStatusReq) Generate(model *models.SysUser) {
-	if s.UserId != 0 {
-		model.UserId = s.UserId
+	if s.Id != 0 {
+		model.Id = s.Id
 	}
 	model.Status = s.Status
 }
 
 type SysUserInsertReq struct {
-	UserId   int    `json:"userId" comment:"用户ID"` // 用户ID
+	Id       int    `json:"id" comment:"用户ID"` // 用户ID
 	Username string `json:"username" comment:"用户名" vd:"len($)>0"`
 	Password string `json:"password" comment:"密码"`
 	Nickname string `json:"nickname" comment:"昵称" vd:"len($)>0"`
@@ -105,8 +105,8 @@ type SysUserInsertReq struct {
 }
 
 func (s *SysUserInsertReq) Generate(model *models.SysUser) {
-	if s.UserId != 0 {
-		model.UserId = s.UserId
+	if s.Id != 0 {
+		model.Id = s.Id
 	}
 	//model.Username = s.Username
 	model.Password = s.Password
@@ -123,11 +123,11 @@ func (s *SysUserInsertReq) Generate(model *models.SysUser) {
 }
 
 func (s *SysUserInsertReq) GetId() interface{} {
-	return s.UserId
+	return s.Id
 }
 
 type SysUserUpdateReq struct {
-	UserId   int    `json:"userId" comment:"用户ID"` // 用户ID
+	Id       int    `json:"id" comment:"用户ID"` // 用户ID
 	Username string `json:"username" comment:"用户名" vd:"len($)>0"`
 	Nickname string `json:"nickName" comment:"昵称" vd:"len($)>0"`
 	Phone    string `json:"phone" comment:"手机号" vd:"len($)>0"`
@@ -143,8 +143,8 @@ type SysUserUpdateReq struct {
 }
 
 func (s *SysUserUpdateReq) Generate(model *models.SysUser) {
-	if s.UserId != 0 {
-		model.UserId = s.UserId
+	if s.Id != 0 {
+		model.Id = s.Id
 	}
 	model.Nickname = s.Nickname
 	model.Phone = s.Phone
@@ -158,11 +158,29 @@ func (s *SysUserUpdateReq) Generate(model *models.SysUser) {
 }
 
 func (s *SysUserUpdateReq) GetId() interface{} {
-	return s.UserId
+	return s.Id
 }
 
 // PassWord 密码
 type PassWord struct {
 	NewPassword string `json:"newPassword" vd:"len($)>0"`
 	OldPassword string `json:"oldPassword" vd:"len($)>0"`
+}
+
+type SysUserDto struct {
+	Id       int    `json:"id"`       //主键
+	Username string `json:"username"` //用户名
+	Phone    string `json:"phone"`    //手机号
+	Email    string `json:"email"`    //邮箱
+	Password string `json:"password"` //密码
+	Nickname string `json:"nickname"` //昵称
+	Name     string `json:"name"`     //姓名
+	Avatar   string `json:"avatar"`   //头像
+	Bio      string `json:"bio"`      //签名
+	Birthday string `json:"birthday"` //生日
+	Gender   string `json:"gender"`   //性别 1男 2女 3未知
+	RoleId   int    `json:"roleId"`   //角色id
+	Post     string `json:"post"`     //岗位
+	Remark   string `json:"remark"`   //备注
+	Status   int    `json:"status"`   //状态 1冻结 2正常 3默认
 }

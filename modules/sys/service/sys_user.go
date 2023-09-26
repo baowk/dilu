@@ -43,11 +43,11 @@ func (e *SysUser) GetPage(c *dto.SysUserGetPageReq, list *[]models.SysUser, coun
 }
 
 // Get 获取SysUser对象
-func (e *SysUser) Get(userId int, model *models.SysUser) error {
+func (e *SysUser) Get(id int, model *models.SysUser) error {
 	var data models.SysUser
 
 	err := core.DB().Model(&data).Debug().
-		First(model, userId).Error
+		First(model, id).Error
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
 		err = errors.New("查看对象不存在或无权查看")
 		core.Log.Error("db error: %s", zap.Error(err))
@@ -98,7 +98,7 @@ func (e *SysUser) Update(c *dto.SysUserUpdateReq) error {
 
 	}
 	c.Generate(&model)
-	update := core.DB().Model(&model).Where("user_id = ?", &model.UserId).Omit("password", "salt").Updates(&model)
+	update := core.DB().Model(&model).Where("id = ?", &model.Id).Omit("password", "salt").Updates(&model)
 	if err = update.Error; err != nil {
 		core.Log.Error("db error: %s", zap.Error(err))
 		return err
@@ -124,7 +124,7 @@ func (e *SysUser) UpdateAvatar(c *dto.UpdateSysUserAvatarReq) error {
 		return errors.New("无权更新该数据")
 
 	}
-	err = core.DB().Table(model.TableName()).Where("user_id =? ", c.UserId).Updates(c).Error
+	err = core.DB().Table(model.TableName()).Where("id =? ", c.Id).Updates(c).Error
 	if err != nil {
 		core.Log.Error("Service UpdateSysUser error: %s", zap.Error(err))
 		return err
@@ -145,7 +145,7 @@ func (e *SysUser) UpdateStatus(c *dto.UpdateSysUserStatusReq) error {
 		return errors.New("无权更新该数据")
 
 	}
-	err = core.DB().Table(model.TableName()).Where("user_id =? ", c.UserId).Updates(c).Error
+	err = core.DB().Table(model.TableName()).Where("id =? ", c.Id).Updates(c).Error
 	if err != nil {
 		core.Log.Error("Service UpdateSysUser error: %s", zap.Error(err))
 		return err
@@ -175,11 +175,11 @@ func (e *SysUser) ResetPwd(c *dto.ResetSysUserPwdReq) error {
 }
 
 // Remove 删除SysUser
-func (e *SysUser) Remove(userId int) error {
+func (e *SysUser) Remove(id int) error {
 	var err error
 	var data models.SysUser
 
-	db := core.DB().Model(&data).Delete(&data, userId)
+	db := core.DB().Model(&data).Delete(&data, id)
 	if err = db.Error; err != nil {
 		core.Log.Error("Error found in  RemoveSysUser : %s", zap.Error(err))
 		return err
@@ -199,7 +199,7 @@ func (e *SysUser) UpdatePwd(id int, oldPassword, newPassword string) errs.IError
 	}
 	c := &models.SysUser{}
 
-	err = core.DB().Model(c).Select("UserId", "Password").
+	err = core.DB().Model(c).Select("Id", "Password").
 		First(c, id).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -212,7 +212,7 @@ func (e *SysUser) UpdatePwd(id int, oldPassword, newPassword string) errs.IError
 		return errs.ErrWithCode(codes.ErrPwd)
 	}
 	c.Password = newPassword
-	db := core.DB().Model(c).Where("user_id = ?", id).
+	db := core.DB().Model(c).Where("id = ?", id).
 		Select("Password", "Salt").
 		Updates(c)
 	if err = db.Error; err != nil {
@@ -293,7 +293,7 @@ func (e *SysUser) Register(loginType int, c *dto.RegisterReq, ip string) (dto.Lo
 
 func (e *SysUser) loginOK(u *models.SysUser, need int) (dto.LoginOK, errs.IError) {
 	exp := time.Now().Add(time.Duration(core.Cfg.JWT.Expires) * time.Minute)
-	claims := middleware.NewClaims(u.UserId, exp, core.Cfg.JWT.Issuer, core.Cfg.JWT.Subject)
+	claims := middleware.NewClaims(u.Id, exp, core.Cfg.JWT.Issuer, core.Cfg.JWT.Subject)
 	claims.Phone = u.Phone
 	claims.Nickname = u.Nickname
 	claims.RoleId = u.RoleId
@@ -389,7 +389,7 @@ func (e *SysUser) LoginCode(c *dto.LoginReq, ip string) (dto.LoginOK, errs.IErro
 	} else {
 		return lok, errs.ErrWithCode(codes.ErrMobileOrEmail)
 	}
-	if model.UserId == 0 {
+	if model.Id == 0 {
 		model.CreatedAt = time.Now()
 		model.UpdatedAt = model.CreatedAt
 		model.Nickname = name
@@ -456,7 +456,7 @@ func (e *SysUser) bindById(enCode string, user models.SysUser) error {
 		return errors.New("参数错误")
 	}
 
-	if err := SerThirdLogin.UpdateUserId(user.UserId, tlm); err != nil {
+	if err := SerThirdLogin.UpdateUserId(user.Id, tlm); err != nil {
 		return err
 	}
 	return nil
@@ -524,11 +524,11 @@ func (e *SysUser) LoginWechatMp(req dto.MpSceneReq, openId, ip string) (dto.Logi
 		needMobile(tl.Platform, tl.Id, &lok)
 		return lok, nil
 	} else {
-		if tl.UserId == 0 {
+		if tl.Id == 0 {
 			needMobile(tl.Platform, tl.Id, &lok)
 			return lok, nil
 		}
-		if err := e.Get(tl.UserId, &user); err != nil {
+		if err := e.Get(tl.Id, &user); err != nil {
 			return lok, codes.ErrSys(err)
 		}
 	}
@@ -537,22 +537,22 @@ func (e *SysUser) LoginWechatMp(req dto.MpSceneReq, openId, ip string) (dto.Logi
 }
 
 // 钉钉登录
-func (e *SysUser) LoginDing(c *dto.LoginDingReq, userId string) (dto.LoginOK, errs.IError) {
+func (e *SysUser) LoginDing(c *dto.LoginDingReq, id string) (dto.LoginOK, errs.IError) {
 	lok := dto.LoginOK{}
 
-	if userId == "" {
+	if id == "" {
 		return lok, errs.ErrWithCode(codes.ThirdNotScan)
 	}
 	var user models.SysUser
 	var tlModel models.ThirdLogin
-	if err := SerThirdLogin.GetTL(2, userId, "", &tlModel); err != nil {
+	if err := SerThirdLogin.GetTL(2, id, "", &tlModel); err != nil {
 		if !errors.Is(err, gorm.ErrRecordNotFound) {
 			return lok, codes.ErrSys(err)
 		}
 	}
 
 	if tlModel.Id < 1 {
-		tlModel.OpenId = userId
+		tlModel.OpenId = id
 		tlModel.Platform = 2
 		tlModel.CreatedAt = time.Now().Unix()
 		tlModel.UpdatedAt = tlModel.CreatedAt
@@ -562,11 +562,11 @@ func (e *SysUser) LoginDing(c *dto.LoginDingReq, userId string) (dto.LoginOK, er
 		needMobile(tlModel.Platform, tlModel.Id, &lok)
 		return lok, nil
 	} else {
-		if tlModel.UserId == 0 {
+		if tlModel.Id == 0 {
 			needMobile(tlModel.Platform, tlModel.Id, &lok)
 			return lok, nil
 		}
-		if err := e.Get(tlModel.UserId, &user); err != nil {
+		if err := e.Get(tlModel.Id, &user); err != nil {
 			return lok, codes.ErrSys(err)
 		}
 	}
@@ -615,11 +615,11 @@ func needMobile(platform, id int, lod *dto.LoginOK) error {
 }
 
 // 通过老密码修改
-func (e *SysUser) ChangePwdByOld(userId int, oldPwd, newPwd, inviteCode string) errs.IError {
+func (e *SysUser) ChangePwdByOld(id int, oldPwd, newPwd, inviteCode string) errs.IError {
 	var user models.SysUser
-	if userId != 0 {
-		if err := e.Get(userId, &user); err != nil {
-			return codes.ErrNotFound(strconv.Itoa(userId), "sysuser", "", err)
+	if id != 0 {
+		if err := e.Get(id, &user); err != nil {
+			return codes.ErrNotFound(strconv.Itoa(id), "sysuser", "", err)
 		}
 	}
 	enPwd, err := user.GenPwd(newPwd)
@@ -643,10 +643,10 @@ func (e *SysUser) ChangePwdByOld(userId int, oldPwd, newPwd, inviteCode string) 
 }
 
 // 通过老密码修改
-func (e *SysUser) Bind(userId int, c *dto.BindReq) error {
+func (e *SysUser) Bind(id int, c *dto.BindReq) error {
 	var user models.SysUser
-	if userId != 0 {
-		if err := e.Get(userId, &user); err != nil {
+	if id != 0 {
+		if err := e.Get(id, &user); err != nil {
 			return errors.New("用户不存在")
 		}
 	}
@@ -684,10 +684,10 @@ func (e *SysUser) Bind(userId int, c *dto.BindReq) error {
 }
 
 // 通过老密码修改
-func (e *SysUser) ChangeUserinfo(userId int, c *dto.ChangeUserinfoReq) error {
+func (e *SysUser) ChangeUserinfo(id int, c *dto.ChangeUserinfoReq) error {
 	var user models.SysUser
-	if userId != 0 {
-		if err := e.Get(userId, &user); err != nil {
+	if id != 0 {
+		if err := e.Get(id, &user); err != nil {
 			return errors.New("用户不存在")
 		}
 	} else {
