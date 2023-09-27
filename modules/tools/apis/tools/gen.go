@@ -218,7 +218,7 @@ func (e *Gen) NOMethodsGen(c *gin.Context, tab tools.GenTable, force bool) {
 	_ = files.PathCreate(ROOT + tab.PackageName + "/router/")
 	_ = files.PathCreate(ROOT + tab.PackageName + "/service/dto/")
 	_ = files.PathCreate(FrontPath + "/api/" + tab.PackageName + "/")
-	err := files.PathCreate(FrontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/")
+	err := files.PathCreate(FrontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/utils")
 	if err != nil {
 		core.Log.Error("Gen", zap.Error(err))
 		e.Error(c, err)
@@ -228,6 +228,7 @@ func (e *Gen) NOMethodsGen(c *gin.Context, tab tools.GenTable, force bool) {
 	m := map[string]string{}
 	m["modName"] = tab.PackageName
 
+	//路由
 	cmdApi := "cmd/start/" + tab.PackageName + ".go"
 	if files.CheckExist(cmdApi) || force {
 		rt1, err := template.ParseFiles("resources/template/cmd_api.template")
@@ -256,6 +257,8 @@ func (e *Gen) NOMethodsGen(c *gin.Context, tab tools.GenTable, force bool) {
 		}
 		files.FileCreate(rb2, baseRouter)
 	}
+
+	//golang
 
 	modelgo := ROOT + tab.PackageName + "/models/" + tab.TBName + ".go"
 	if files.CheckExist(modelgo) || force {
@@ -306,38 +309,6 @@ func (e *Gen) NOMethodsGen(c *gin.Context, tab tools.GenTable, force bool) {
 		files.FileCreate(b3, routergo)
 	}
 
-	js := FrontPath + "/api/" + tab.PackageName + "/" + tab.MLTBName + ".js"
-	if files.CheckExist(js) || force {
-		t4, err := template.ParseFiles(basePath + "js.go.template")
-		if err != nil {
-			core.Log.Error("Gen", zap.Error(err))
-			e.Error(c, err)
-			return
-		}
-		var b4 bytes.Buffer
-		err = t4.Execute(&b4, tab)
-		if err != nil {
-			core.Log.Error("gen err", zap.Error(err))
-		}
-		files.FileCreate(b4, js)
-	}
-
-	vue := FrontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/index.vue"
-	if files.CheckExist(vue) || force {
-		t5, err := template.ParseFiles(basePath + "vue.go.template")
-		if err != nil {
-			core.Log.Error("Gen", zap.Error(err))
-			e.Error(c, err)
-			return
-		}
-		var b5 bytes.Buffer
-		err = t5.Execute(&b5, tab)
-		if err != nil {
-			core.Log.Error("gen err", zap.Error(err))
-		}
-		files.FileCreate(b5, vue)
-	}
-
 	dto := ROOT + tab.PackageName + "/service/dto/" + tab.TBName + ".go"
 	if files.CheckExist(dto) || force {
 		t6, err := template.ParseFiles(basePath + "dto.go.template")
@@ -368,6 +339,103 @@ func (e *Gen) NOMethodsGen(c *gin.Context, tab tools.GenTable, force bool) {
 			core.Log.Error("gen err", zap.Error(err))
 		}
 		files.FileCreate(b7, service)
+	}
+
+	//前端部分
+	js := FrontPath + "/api/" + tab.PackageName + "/" + tab.MLTBName + ".ts"
+	if files.CheckExist(js) || force {
+		t4, err := template.ParseFiles(basePath + "vue/api.ts.template")
+		if err != nil {
+			core.Log.Error("Gen", zap.Error(err))
+			e.Error(c, err)
+			return
+		}
+		var b4 bytes.Buffer
+		err = t4.Execute(&b4, tab)
+		if err != nil {
+			core.Log.Error("gen err", zap.Error(err))
+		}
+		files.FileCreate(b4, js)
+	}
+
+	vue := FrontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/index.vue"
+	if files.CheckExist(vue) || force {
+		t5, err := template.ParseFiles(basePath + "vue/index.vue.template")
+		if err != nil {
+			core.Log.Error("Gen", zap.Error(err))
+			e.Error(c, err)
+			return
+		}
+		var b5 bytes.Buffer
+		err = t5.Execute(&b5, tab)
+		if err != nil {
+			core.Log.Error("gen err", zap.Error(err))
+		}
+		files.FileCreate(b5, vue)
+	}
+
+	form := FrontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/form.vue"
+	if files.CheckExist(form) || force {
+		t5, err := template.ParseFiles(basePath + "vue/form.vue.template")
+		if err != nil {
+			core.Log.Error("Gen", zap.Error(err))
+			e.Error(c, err)
+			return
+		}
+		var b5 bytes.Buffer
+		err = t5.Execute(&b5, tab)
+		if err != nil {
+			core.Log.Error("gen err", zap.Error(err))
+		}
+		files.FileCreate(b5, form)
+	}
+
+	hook := FrontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/utils/hook.tsx"
+	if files.CheckExist(hook) || force {
+		t5, err := template.ParseFiles(basePath + "vue/utils/hook.tsx.template")
+		if err != nil {
+			core.Log.Error("Gen", zap.Error(err))
+			e.Error(c, err)
+			return
+		}
+		var b5 bytes.Buffer
+		err = t5.Execute(&b5, tab)
+		if err != nil {
+			core.Log.Error("gen err", zap.Error(err))
+		}
+		files.FileCreate(b5, hook)
+	}
+
+	rule := FrontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/utils/rule.ts"
+	if files.CheckExist(rule) || force {
+		t5, err := template.ParseFiles(basePath + "vue/utils/rule.ts.template")
+		if err != nil {
+			core.Log.Error("Gen", zap.Error(err))
+			e.Error(c, err)
+			return
+		}
+		var b5 bytes.Buffer
+		err = t5.Execute(&b5, tab)
+		if err != nil {
+			core.Log.Error("gen err", zap.Error(err))
+		}
+		files.FileCreate(b5, rule)
+	}
+
+	types := FrontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/utils/types.ts"
+	if files.CheckExist(types) || force {
+		t5, err := template.ParseFiles(basePath + "vue/utils/types.ts.template")
+		if err != nil {
+			core.Log.Error("Gen", zap.Error(err))
+			e.Error(c, err)
+			return
+		}
+		var b5 bytes.Buffer
+		err = t5.Execute(&b5, tab)
+		if err != nil {
+			core.Log.Error("gen err", zap.Error(err))
+		}
+		files.FileCreate(b5, types)
 	}
 
 }
