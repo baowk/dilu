@@ -5,9 +5,16 @@ import { {{.ClassName}}FormProps } from "@/api/{{.PackageName}}/{{.ModuleName}}"
 
 const props = withDefaults(defineProps<{{.ClassName}}FormProps>(), {
   formInline: () => ({
-    name: "",
-    code: "",
-    remark: ""
+   {{- range .Columns }}
+    {{- if eq .JsonField "createdAt" }}
+    {{- else if eq .JsonField "updatedAt" }}
+    {{- else if eq .JsonField "deletedAt" }}
+    {{- else if eq .JsonField "createBy" }}
+    {{- else if eq .JsonField "updateBy" }}
+    {{- else }}
+    {{ .JsonField }}: {{if eq .GoType "int" -}}0{{ else }}null{{- end }},
+    {{- end}}
+  {{- end }}
   })
 });
 
@@ -34,15 +41,15 @@ defineExpose({ getRef });
     {{- else if eq .JsonField "deletedAt" }}
     {{- else if eq .JsonField "createBy" }}
     {{- else if eq .JsonField "updateBy" }}
-    {{- else }}
+    {{- else -}}
     <el-form-item label="{{.ColumnComment}}" prop="{{.JsonField}}">
       <el-input
-        v-model="newFormInline.{{.JsonField}}"
+        v-model{{- if eq .GoType "int" }}.number{{- end }}="newFormInline.{{.JsonField}}"
         clearable
         placeholder="请输入{{.ColumnComment}}"
       />
     </el-form-item>
-    {{end}}
+    {{- end}}
   {{ end }}
   </el-form>
 </template>

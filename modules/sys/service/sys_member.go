@@ -11,3 +11,4 @@ type SysMemberService struct {
 var SerSysMember = SysMemberService{
 	base.NewService("sys"),
 }
+

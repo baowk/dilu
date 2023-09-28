@@ -110,7 +110,7 @@ func (e *{{.ClassName}}Api) Update(c *gin.Context) {
 	}
 	var data models.{{.ClassName}}
 	copier.Copy(&data, req)
-	if err := service.Ser{{.ClassName}}.Save(&data); err != nil {
+	if err := service.Ser{{.ClassName}}.UpdateById(&data); err != nil {
 		e.Error(c, err)
 		return
 	}
