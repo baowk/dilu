@@ -45,7 +45,6 @@ type GenTable struct {
 	Params    Params      `gorm:"-" json:"params"`
 	Columns   []GenColumn `gorm:"-" json:"columns"`
 	ApiRoot   string      `gorm:"-" json:"apiRoot"`
-
 	//models.BaseModel
 }
 

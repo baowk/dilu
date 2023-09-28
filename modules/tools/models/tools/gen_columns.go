@@ -43,7 +43,7 @@ type GenColumn struct {
 	FkLabelName        string      `gorm:"size:255;" json:"fkLabelName"`
 	CreateBy           int         `gorm:"column:create_by;size:20;" json:"createBy"`
 	UpdateBy           int         `gorm:"column:update_By;size:20;" json:"updateBy"`
-
+	TsType             string      `gorm:"-" json:"tsType"`
 	base.ModelTime
 }
 

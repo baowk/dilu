@@ -17,7 +17,7 @@ type {{.ClassName}}Api struct {
 var Api{{.ClassName}} = {{.ClassName}}Api{}
 
 // QueryPage 获取{{.TableComment}}列表
-// @Summary Page接口
+// @Summary 获取{{.TableComment}}列表
 // @Tags {{.PackageName}}-{{.ClassName}}
 // @Accept application/json
 // @Product application/json

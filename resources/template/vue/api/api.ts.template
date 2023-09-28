@@ -1,0 +1,59 @@
+import { http } from "@/utils/http";
+import { Result, PageResult } from "@/api/common";
+import {{.ClassName}} from "@/api/{{.PackageName}}/{{.ModuleName}}.d";
+
+
+/** 获取{{.TableComment}}管理列表 */
+export const get{{.ClassName}}List = (data?: object) => {
+  return http.request<Result<PageResult<{{.ClassName}}>>>(
+    "post",
+    "{{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/page",
+    {
+      data
+    }
+  );
+};
+
+/** 获取{{.TableComment}} */
+export const get{{.ClassName}} = (data?: object) => {
+  return http.request<Result<{{.ClassName}}>>(
+    "post",
+    "{{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/get",
+    {
+      data
+    }
+  );
+};
+
+/** 创建{{.TableComment}} */
+export const create{{.ClassName}} = (data?: object) => {
+  return http.request<Result<{{.ClassName}}>>(
+    "post",
+    "{{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/create",
+    {
+      data
+    }
+  );
+};
+
+/** 更新{{.TableComment}} */
+export const update{{.ClassName}} = (data?: object) => {
+  return http.request<Result<{{.ClassName}}>>(
+    "post",
+    "{{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/update",
+    {
+      data
+    }
+  );
+};
+
+/** 删除{{.TableComment}} */
+export const del{{.ClassName}} = (data?: object) => {
+  return http.request<Result<{{.ClassName}}>>(
+    "post",
+    "{{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/del",
+    {
+      data
+    }
+  );
+};
