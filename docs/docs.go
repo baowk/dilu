@@ -155,7 +155,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
+                        "description": "{\"code\": 200, \"message\": \"添加成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -3817,7 +3817,7 @@ const docTemplate = `{
                 "tags": [
                     "sys-SysMember"
                 ],
-                "summary": "创建SysMember",
+                "summary": "创建成员",
                 "parameters": [
                     {
                         "description": "body",
@@ -3864,7 +3864,7 @@ const docTemplate = `{
                 "tags": [
                     "sys-SysMember"
                 ],
-                "summary": "删除SysMember",
+                "summary": "删除成员",
                 "parameters": [
                     {
                         "description": "body",
@@ -3911,7 +3911,7 @@ const docTemplate = `{
                 "tags": [
                     "sys-SysMember"
                 ],
-                "summary": "获取SysMember",
+                "summary": "获取成员",
                 "parameters": [
                     {
                         "description": "body",
@@ -3958,7 +3958,7 @@ const docTemplate = `{
                 "tags": [
                     "sys-SysMember"
                 ],
-                "summary": "Page接口",
+                "summary": "获取成员列表",
                 "parameters": [
                     {
                         "description": "body",
@@ -4020,7 +4020,7 @@ const docTemplate = `{
                 "tags": [
                     "sys-SysMember"
                 ],
-                "summary": "更新SysMember",
+                "summary": "更新成员",
                 "parameters": [
                     {
                         "description": "body",
@@ -6244,9 +6244,25 @@ const docTemplate = `{
                     "description": "部门id",
                     "type": "integer"
                 },
+                "deptPath": {
+                    "description": "部门路径",
+                    "type": "string"
+                },
                 "id": {
                     "description": "主键",
                     "type": "integer"
+                },
+                "name": {
+                    "description": "姓名",
+                    "type": "string"
+                },
+                "nickname": {
+                    "description": "昵称",
+                    "type": "string"
+                },
+                "phone": {
+                    "description": "电话",
+                    "type": "string"
                 },
                 "postTag": {
                     "description": "职位标签 1主管 2副主管 3员工",
@@ -6257,7 +6273,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "userId": {
-                    "description": "上级部门",
+                    "description": "用户id",
                     "type": "integer"
                 }
             }
@@ -7275,7 +7291,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "deptPath": {
-                    "description": "路径",
+                    "description": "部门路径",
                     "type": "string"
                 },
                 "id": {
@@ -7866,6 +7882,9 @@ const docTemplate = `{
                 },
                 "tableId": {
                     "type": "integer"
+                },
+                "tsType": {
+                    "type": "string"
                 },
                 "updateBy": {
                     "type": "integer"
