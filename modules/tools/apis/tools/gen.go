@@ -31,7 +31,7 @@ type Gen struct {
 }
 
 var (
-	FrontPath = "../vue"
+	FrontPath = "../dilu-admin/src"
 )
 
 // Preview
@@ -155,7 +155,6 @@ func (e *Gen) Preview(c *gin.Context) {
 // @Param tableId path int true "tableId"
 // @Param force path string false "force"
 // @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
-// @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
 // @Router /api/tools/gen/code/{tableId}/{force} [get]
 func (e *Gen) GenCode(c *gin.Context) {
 	table := tools.GenTable{}
@@ -164,15 +163,15 @@ func (e *Gen) GenCode(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	force, err := strconv.ParseBool(c.Param("force"))
-	if err != nil {
-		force = false
-	}
-	fmt.Println(force)
-	if err != nil {
-		core.Log.Error("Gen", zap.Error(err))
-		e.Error(c, err)
-		return
+
+	force := false
+	strF := c.Param("force")
+	if strF != "" {
+		force, err = strconv.ParseBool(strF)
+		if err != nil {
+			force = false
+			err = nil
+		}
 	}
 
 	table.TableId = id
@@ -254,7 +253,7 @@ func (e *Gen) NOMethodsGen(c *gin.Context, tab tools.GenTable, force bool) {
 		}
 		var rb1 bytes.Buffer
 		if err = rt1.Execute(&rb1, m); err != nil {
-			fmt.Println(err)
+			core.Log.Error("Gen", zap.Error(err))
 		}
 		files.FileCreate(rb1, cmdApi)
 	}
@@ -269,7 +268,7 @@ func (e *Gen) NOMethodsGen(c *gin.Context, tab tools.GenTable, force bool) {
 		var rb2 bytes.Buffer
 		err = rt2.Execute(&rb2, m)
 		if err != nil {
-			fmt.Println(err)
+			core.Log.Error("Gen", zap.Error(err))
 		}
 		files.FileCreate(rb2, baseRouter)
 	}
@@ -374,21 +373,21 @@ func (e *Gen) NOMethodsGen(c *gin.Context, tab tools.GenTable, force bool) {
 		files.FileCreate(b4, js)
 	}
 
-	types := FrontPath + "/api/" + tab.PackageName + "/" + tab.MLTBName + ".d.ts"
-	if files.CheckExist(types) || force {
-		t5, err := template.ParseFiles(basePath + "vue/api/types.ts.template")
-		if err != nil {
-			core.Log.Error("Gen", zap.Error(err))
-			e.Error(c, err)
-			return
-		}
-		var b5 bytes.Buffer
-		err = t5.Execute(&b5, tab)
-		if err != nil {
-			core.Log.Error("gen err", zap.Error(err))
-		}
-		files.FileCreate(b5, types)
-	}
+	// types := FrontPath + "/api/" + tab.PackageName + "/" + tab.MLTBName + ".d.ts"
+	// if files.CheckExist(types) || force {
+	// 	t5, err := template.ParseFiles(basePath + "vue/api/types.ts.template")
+	// 	if err != nil {
+	// 		core.Log.Error("Gen", zap.Error(err))
+	// 		e.Error(c, err)
+	// 		return
+	// 	}
+	// 	var b5 bytes.Buffer
+	// 	err = t5.Execute(&b5, tab)
+	// 	if err != nil {
+	// 		core.Log.Error("gen err", zap.Error(err))
+	// 	}
+	// 	files.FileCreate(b5, types)
+	// }
 
 	vue := FrontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/index.vue"
 	if files.CheckExist(vue) || force {
@@ -682,7 +681,7 @@ func (e *Gen) GenApis(c *gin.Context) {
 	}
 	basePath, err := jsonparser.GetString(data, "basePath")
 	if err != nil {
-		fmt.Println(err)
+		core.Log.Error("Gen", zap.Error(err))
 		basePath = ""
 	}
 	db := core.DB()

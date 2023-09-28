@@ -1,10 +1,11 @@
 import { http } from "@/utils/http";
 import { Result, PageResult } from "@/api/common";
-import {{.ClassName}} from "@/api/{{.PackageName}}/{{.ModuleName}}.d";
+//import { {{.ClassName}} } from "@/api/{{.PackageName}}/{{.ModuleName}}.d";
 
+//Api 
 
 /** 获取{{.TableComment}}管理列表 */
-export const get{{.ClassName}}List = (data?: object) => {
+export const get{{.ClassName}}Page = (data?: object) => {
   return http.request<Result<PageResult<{{.ClassName}}>>>(
     "post",
     "{{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/page",
@@ -16,44 +17,58 @@ export const get{{.ClassName}}List = (data?: object) => {
 
 /** 获取{{.TableComment}} */
 export const get{{.ClassName}} = (data?: object) => {
-  return http.request<Result<{{.ClassName}}>>(
-    "post",
-    "{{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/get",
-    {
-      data
-    }
-  );
+  return http.request<Result<{{.ClassName}}>>("post", "{{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/get", {
+    data
+  });
 };
 
 /** 创建{{.TableComment}} */
 export const create{{.ClassName}} = (data?: object) => {
-  return http.request<Result<{{.ClassName}}>>(
-    "post",
-    "{{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/create",
-    {
-      data
-    }
-  );
+  return http.request<Result<{{.ClassName}}>>("post", "{{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/create", {
+    data
+  });
 };
 
 /** 更新{{.TableComment}} */
 export const update{{.ClassName}} = (data?: object) => {
-  return http.request<Result<{{.ClassName}}>>(
-    "post",
-    "{{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/update",
-    {
-      data
-    }
-  );
+  return http.request<Result<{{.ClassName}}>>("post", "{{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/update",{
+    data
+  });
 };
 
 /** 删除{{.TableComment}} */
 export const del{{.ClassName}} = (data?: object) => {
-  return http.request<Result<{{.ClassName}}>>(
-    "post",
-    "{{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/del",
-    {
-      data
-    }
-  );
+  return http.request<Result<{{.ClassName}}>>("post", "{{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/del",{
+    data
+  });
 };
+
+//Model
+
+/** {{.TableComment}} */
+interface {{.ClassName}} {
+  {{ range .Columns}}
+  /** {{.ColumnComment}} */
+  {{.JsonField}}: {{.TsType}};
+  {{- end }}
+}
+
+
+interface {{.ClassName}}FormItemProps {
+  {{ range .Columns}}
+  {{- if eq .JsonField "createdAt" }}
+  {{- else if eq .JsonField "updatedAt" }}
+  {{- else if eq .JsonField "deletedAt" }}
+  {{- else if eq .JsonField "createBy" }}
+  {{- else if eq .JsonField "updateBy" }}
+  {{- else }}
+  /** {{.ColumnComment}} */
+  {{.JsonField}}: {{.TsType}};
+  {{end}}
+  {{- end }}
+}
+interface {{.ClassName}}FormProps {
+  formInline: {{.ClassName}}FormItemProps;
+}
+
+export type { {{.ClassName}}FormItemProps, {{.ClassName}}FormProps, {{.ClassName}} };

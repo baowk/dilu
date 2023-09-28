@@ -16,8 +16,8 @@ type SysMemberApi struct {
 
 var ApiSysMember = SysMemberApi{}
 
-// QueryPage 获取SysMember列表
-// @Summary Page接口
+// QueryPage 获取成员列表
+// @Summary 获取成员列表
 // @Tags sys-SysMember
 // @Accept application/json
 // @Product application/json
@@ -46,8 +46,8 @@ func (e *SysMemberApi) QueryPage(c *gin.Context) {
 	e.Page(c, list, total, req.GetPage(), req.GetSize())
 }
 
-// Get 获取SysMember
-// @Summary 获取SysMember
+// Get 获取成员
+// @Summary 获取成员
 // @Tags sys-SysMember
 // @Accept application/json
 // @Product application/json
@@ -69,8 +69,8 @@ func (e *SysMemberApi) Get(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Create 创建SysMember
-// @Summary 创建SysMember
+// Create 创建成员
+// @Summary 创建成员
 // @Tags sys-SysMember
 // @Accept application/json
 // @Product application/json
@@ -93,8 +93,8 @@ func (e *SysMemberApi) Create(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Update 更新SysMember
-// @Summary 更新SysMember
+// Update 更新成员
+// @Summary 更新成员
 // @Tags sys-SysMember
 // @Accept application/json
 // @Product application/json
@@ -117,8 +117,8 @@ func (e *SysMemberApi) Update(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Del 删除SysMember
-// @Summary 删除SysMember
+// Del 删除成员
+// @Summary 删除成员
 // @Tags sys-SysMember
 // @Accept application/json
 // @Product application/json

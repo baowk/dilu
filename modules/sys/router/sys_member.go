@@ -1,9 +1,8 @@
 package router
 
 import (
-	"dilu/common/middleware"
 	"dilu/modules/sys/apis"
-
+	"dilu/common/middleware"
 	"github.com/gin-gonic/gin"
 )
 

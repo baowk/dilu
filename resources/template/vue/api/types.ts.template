@@ -21,4 +21,4 @@ interface FormProps {
   formInline: FormItemProps;
 }
 
-export type { FormItemProps, FormProps,{{.TableComment}} };
+export type { FormItemProps, FormProps, {{.ClassName}} };

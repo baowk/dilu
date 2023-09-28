@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { formRules } from "./utils/rule";
-import { FormProps } from "./utils/types";
+import { {{.ClassName}}FormProps } from "@/api/{{.PackageName}}/{{.ModuleName}}";
 
-const props = withDefaults(defineProps<FormProps>(), {
+const props = withDefaults(defineProps<{{.ClassName}}FormProps>(), {
   formInline: () => ({
     name: "",
     code: "",
@@ -28,28 +28,21 @@ defineExpose({ getRef });
     :rules="formRules"
     label-width="82px"
   >
-    <el-form-item label="角色名称" prop="name">
+  {{ range .Columns}}
+    {{- if eq .JsonField "createdAt" }}
+    {{- else if eq .JsonField "updatedAt" }}
+    {{- else if eq .JsonField "deletedAt" }}
+    {{- else if eq .JsonField "createBy" }}
+    {{- else if eq .JsonField "updateBy" }}
+    {{- else }}
+    <el-form-item label="{{.ColumnComment}}" prop="{{.JsonField}}">
       <el-input
-        v-model="newFormInline.name"
+        v-model="newFormInline.{{.JsonField}}"
         clearable
-        placeholder="请输入角色名称"
+        placeholder="请输入{{.ColumnComment}}"
       />
     </el-form-item>
-
-    <el-form-item label="角色标识" prop="code">
-      <el-input
-        v-model="newFormInline.code"
-        clearable
-        placeholder="请输入角色标识"
-      />
-    </el-form-item>
-
-    <el-form-item label="备注">
-      <el-input
-        v-model="newFormInline.remark"
-        placeholder="请输入备注信息"
-        type="textarea"
-      />
-    </el-form-item>
+    {{end}}
+  {{ end }}
   </el-form>
 </template>

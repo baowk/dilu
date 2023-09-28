@@ -1,19 +1,26 @@
 import dayjs from "dayjs";
 import editForm from "../form.vue";
 import { message } from "@/utils/message";
-import { getRoleList } from "@/api/system";
+import { get{{.ClassName}}Page } from "@/api/{{.PackageName}}/{{.ModuleName}}";
 import { ElMessageBox } from "element-plus";
 import { usePublicHooks } from "@/utils/hooks";
 import { addDialog } from "@/components/ReDialog";
-import { type FormItemProps } from "../utils/types";
+import { type {{.ClassName}}FormItemProps } from "@/api/{{.PackageName}}/{{.ModuleName}}";
 import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
 
 export function useRole() {
   const form = reactive({
-    name: "",
-    code: "",
-    status: 0
+  {{- range .Columns }}
+    {{- if eq .JsonField "createdAt" }}
+    {{- else if eq .JsonField "updatedAt" }}
+    {{- else if eq .JsonField "deletedAt" }}
+    {{- else if eq .JsonField "createBy" }}
+    {{- else if eq .JsonField "updateBy" }}
+    {{- else }}
+    {{ .JsonField }}: {{- if eq .GoType "int" }} 0 {{ else }} "" {{- end }} ,
+    {{- end}}
+  {{- end }}
   });
   const formRef = ref();
   const dataList = ref([]);
@@ -27,51 +34,19 @@ export function useRole() {
     background: true
   });
   const columns: TableColumnList = [
+  {{ range .Columns }}
+    {{- if .IsList }}
     {
-      label: "角色编号",
-      prop: "id",
-      minWidth: 100
-    },
-    {
-      label: "角色名称",
-      prop: "name",
-      minWidth: 120
-    },
-    {
-      label: "角色标识",
-      prop: "code",
-      minWidth: 150
-    },
-    {
-      label: "状态",
-      minWidth: 130,
-      cellRenderer: scope => (
-        <el-switch
-          size={scope.props.size === "small" ? "small" : "default"}
-          loading={switchLoadMap.value[scope.index]?.loading}
-          v-model={scope.row.status}
-          active-value={1}
-          inactive-value={0}
-          active-text="已启用"
-          inactive-text="已停用"
-          inline-prompt
-          style={switchStyle.value}
-          onChange={() => onChange(scope as any)}
-        />
-      )
-    },
-    {
-      label: "备注",
-      prop: "remark",
-      minWidth: 150
-    },
-    {
-      label: "创建时间",
-      minWidth: 180,
-      prop: "createTime",
+      label: "{{.ColumnComment}}",
+      prop: "{{.JsonField}}",
+      minWidth: 120{{- if eq .GoType "time.Time" -}},{{- end -}}
+      {{- if eq .GoType "time.Time"}}
       formatter: ({ createTime }) =>
         dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
+      {{- end }}
     },
+    {{- end }}
+  {{- end }}
     {
       label: "操作",
       fixed: "right",
@@ -123,7 +98,7 @@ export function useRole() {
   }
 
   function handleDelete(row) {
-    message(`您删除了角色名称为${row.name}的这条数据`, { type: "success" });
+    message(`您删除了{{.TableComment}}名称为${row.name}的这条数据`, { type: "success" });
     onSearch();
   }
 
@@ -141,7 +116,7 @@ export function useRole() {
 
   async function onSearch() {
     loading.value = true;
-    const { data } = await getRoleList(toRaw(form));
+    const { data } = await get{{.ClassName}}Page(toRaw(form));
     dataList.value = data.list;
     pagination.total = data.total;
     pagination.pageSize = data.pageSize;
@@ -158,14 +133,21 @@ export function useRole() {
     onSearch();
   };
 
-  function openDialog(title = "新增", row?: FormItemProps) {
+  function openDialog(title = "新增", row?: {{.ClassName}}FormItemProps) {
     addDialog({
-      title: `${title}角色`,
+      title: `${title}{{.TableComment}}`,
       props: {
         formInline: {
-          name: row?.name ?? "",
-          code: row?.code ?? "",
-          remark: row?.remark ?? ""
+      {{- range .Columns }}
+        {{- if eq .JsonField "createdAt" }}
+        {{- else if eq .JsonField "updatedAt" }}
+        {{- else if eq .JsonField "deletedAt" }}
+        {{- else if eq .JsonField "createBy" }}
+        {{- else if eq .JsonField "updateBy" }}
+        {{- else }}
+          {{ .JsonField }}: row?.{{ .JsonField }} ?? {{- if eq .GoType "int" }} 0 {{ else }} "" {{- end }} ,
+        {{- end}}
+      {{- end }}
         }
       },
       width: "40%",
@@ -175,9 +157,9 @@ export function useRole() {
       contentRenderer: () => h(editForm, { ref: formRef }),
       beforeSure: (done, { options }) => {
         const FormRef = formRef.value.getRef();
-        const curData = options.props.formInline as FormItemProps;
+        const curData = options.props.formInline as {{.ClassName}}FormItemProps;
         function chores() {
-          message(`您${title}了角色名称为${curData.name}的这条数据`, {
+          message(`您${title}了{{.TableComment}}名称为${curData.name}的这条数据`, {
             type: "success"
           });
           done(); // 关闭弹框
