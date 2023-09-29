@@ -775,6 +775,9 @@ definitions:
       status:
         description: 状态 1正常
         type: integer
+      teamId:
+        description: 团队id
+        type: integer
       userId:
         description: 用户id
         type: integer
@@ -910,6 +913,33 @@ definitions:
         description: 状态
         type: integer
     type: object
+  dto.SysTeamDto:
+    properties:
+      id:
+        description: 主键
+        type: integer
+      name:
+        description: 团队名
+        type: string
+      owner:
+        description: 团队拥有者
+        type: integer
+      status:
+        description: 状态
+        type: integer
+    type: object
+  dto.SysTeamGetPageReq:
+    properties:
+      page:
+        description: 页码
+        type: integer
+      pageSize:
+        description: 每页大小
+        type: integer
+      status:
+        description: 状态
+        type: integer
+    type: object
   dto.SysUserDto:
     properties:
       avatar:
@@ -1026,78 +1056,6 @@ definitions:
         type: integer
       pageSize:
         description: 每页大小
-        type: integer
-    type: object
-  dto.TeamDto:
-    properties:
-      id:
-        description: 主键
-        type: integer
-      name:
-        description: 团队名
-        type: string
-      owner:
-        description: 团队拥有者
-        type: integer
-      parentId:
-        description: 上级团队
-        type: integer
-      path:
-        description: 团队路径
-        type: string
-      status:
-        description: 状态
-        type: integer
-    type: object
-  dto.TeamGetPageReq:
-    properties:
-      page:
-        description: 页码
-        type: integer
-      pageSize:
-        description: 每页大小
-        type: integer
-      status:
-        description: 状态
-        type: integer
-    type: object
-  dto.TeamMemberDto:
-    properties:
-      gender:
-        description: 性别
-        type: integer
-      id:
-        description: 主键
-        type: integer
-      name:
-        description: 姓名
-        type: string
-      phone:
-        description: 电话
-        type: string
-      role:
-        description: 角色 1主管 2副主管 4普通
-        type: integer
-      status:
-        description: 状态
-        type: integer
-      teamId:
-        description: 团队id
-        type: integer
-      userId:
-        description: 用户id
-        type: integer
-    type: object
-  dto.TeamMemberGetPageReq:
-    properties:
-      page:
-        description: 页码
-        type: integer
-      pageSize:
-        description: 每页大小
-        type: integer
-      status:
-        description: 状态
         type: integer
     type: object
   dto.UserinfoResp:
@@ -1537,6 +1495,9 @@ definitions:
       status:
         description: 状态 1正常
         type: integer
+      teamId:
+        description: 团队id
+        type: integer
       updateBy:
         description: 更新者
         type: integer
@@ -1724,6 +1685,27 @@ definitions:
         description: 最后更新时间
         type: string
     type: object
+  models.SysTeam:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        description: 主键
+        type: integer
+      name:
+        description: 团队名
+        type: string
+      owner:
+        description: 团队拥有者
+        type: integer
+      status:
+        description: 状态
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
   models.SysUser:
     properties:
       avatar:
@@ -1804,66 +1786,6 @@ definitions:
       teamId:
         description: 团队id
         type: integer
-      userId:
-        description: 用户id
-        type: integer
-    type: object
-  models.Team:
-    properties:
-      createdAt:
-        description: 创建时间
-        type: string
-      id:
-        description: 主键
-        type: integer
-      name:
-        description: 团队名
-        type: string
-      owner:
-        description: 团队拥有者
-        type: integer
-      parentId:
-        description: 上级团队
-        type: integer
-      path:
-        description: 团队路径
-        type: string
-      status:
-        description: 状态
-        type: integer
-      updatedAt:
-        description: 更新时间
-        type: string
-    type: object
-  models.TeamMember:
-    properties:
-      createdAt:
-        description: 创建时间
-        type: string
-      gender:
-        description: 性别
-        type: integer
-      id:
-        description: 主键
-        type: integer
-      name:
-        description: 姓名
-        type: string
-      phone:
-        description: 电话
-        type: string
-      role:
-        description: 角色 1主管 2副主管 4普通
-        type: integer
-      status:
-        description: 状态 1 在职 2离职
-        type: integer
-      teamId:
-        description: 团队id
-        type: integer
-      updatedAt:
-        description: 更新时间
-        type: string
       userId:
         description: 用户id
         type: integer
@@ -3020,280 +2942,6 @@ paths:
       summary: 更新TargetTask
       tags:
       - dental-TargetTask
-  /api/v1/dental/team-member/create:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.TeamMemberDto'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.TeamMember'
-              type: object
-      security:
-      - Bearer: []
-      summary: 创建TeamMember
-      tags:
-      - dental-TeamMember
-  /api/v1/dental/team-member/del:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/base.ReqIds'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.TeamMember'
-              type: object
-      security:
-      - Bearer: []
-      summary: 删除TeamMember
-      tags:
-      - dental-TeamMember
-  /api/v1/dental/team-member/get:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/base.ReqId'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.TeamMember'
-              type: object
-      security:
-      - Bearer: []
-      summary: 获取TeamMember
-      tags:
-      - dental-TeamMember
-  /api/v1/dental/team-member/page:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.TeamMemberGetPageReq'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  allOf:
-                  - $ref: '#/definitions/base.PageResp'
-                  - properties:
-                      list:
-                        items:
-                          $ref: '#/definitions/models.TeamMember'
-                        type: array
-                    type: object
-              type: object
-      security:
-      - Bearer: []
-      summary: Page接口
-      tags:
-      - dental-TeamMember
-  /api/v1/dental/team-member/update:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.TeamMemberDto'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.TeamMember'
-              type: object
-      security:
-      - Bearer: []
-      summary: 更新TeamMember
-      tags:
-      - dental-TeamMember
-  /api/v1/dental/team/create:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.TeamDto'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.Team'
-              type: object
-      security:
-      - Bearer: []
-      summary: 创建Team
-      tags:
-      - dental-Team
-  /api/v1/dental/team/del:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/base.ReqIds'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.Team'
-              type: object
-      security:
-      - Bearer: []
-      summary: 删除Team
-      tags:
-      - dental-Team
-  /api/v1/dental/team/get:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/base.ReqId'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.Team'
-              type: object
-      security:
-      - Bearer: []
-      summary: 获取Team
-      tags:
-      - dental-Team
-  /api/v1/dental/team/page:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.TeamGetPageReq'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  allOf:
-                  - $ref: '#/definitions/base.PageResp'
-                  - properties:
-                      list:
-                        items:
-                          $ref: '#/definitions/models.Team'
-                        type: array
-                    type: object
-              type: object
-      security:
-      - Bearer: []
-      summary: Page接口
-      tags:
-      - dental-Team
-  /api/v1/dental/team/update:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.TeamDto'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.Team'
-              type: object
-      security:
-      - Bearer: []
-      summary: 更新Team
-      tags:
-      - dental-Team
   /api/v1/sys/auth/bind:
     post:
       consumes:
@@ -4234,7 +3882,7 @@ paths:
               type: object
       security:
       - Bearer: []
-      summary: 创建成员
+      summary: 创建会员
       tags:
       - sys-SysMember
   /api/v1/sys/sys-member/del:
@@ -4260,7 +3908,7 @@ paths:
               type: object
       security:
       - Bearer: []
-      summary: 删除成员
+      summary: 删除会员
       tags:
       - sys-SysMember
   /api/v1/sys/sys-member/get:
@@ -4286,7 +3934,7 @@ paths:
               type: object
       security:
       - Bearer: []
-      summary: 获取成员
+      summary: 获取会员
       tags:
       - sys-SysMember
   /api/v1/sys/sys-member/page:
@@ -4319,7 +3967,7 @@ paths:
               type: object
       security:
       - Bearer: []
-      summary: 获取成员列表
+      summary: 获取会员列表
       tags:
       - sys-SysMember
   /api/v1/sys/sys-member/update:
@@ -4345,7 +3993,7 @@ paths:
               type: object
       security:
       - Bearer: []
-      summary: 更新成员
+      summary: 更新会员
       tags:
       - sys-SysMember
   /api/v1/sys/sys-menu/all:
@@ -4817,6 +4465,143 @@ paths:
       summary: 更新SysRole
       tags:
       - sys-SysRole
+  /api/v1/sys/sys-team/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysTeamDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysTeam'
+              type: object
+      security:
+      - Bearer: []
+      summary: 创建团队
+      tags:
+      - sys-SysTeam
+  /api/v1/sys/sys-team/del:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqIds'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysTeam'
+              type: object
+      security:
+      - Bearer: []
+      summary: 删除团队
+      tags:
+      - sys-SysTeam
+  /api/v1/sys/sys-team/get:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqId'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysTeam'
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取团队
+      tags:
+      - sys-SysTeam
+  /api/v1/sys/sys-team/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysTeamGetPageReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/base.PageResp'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/models.SysTeam'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取团队列表
+      tags:
+      - sys-SysTeam
+  /api/v1/sys/sys-team/update:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysTeamDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysTeam'
+              type: object
+      security:
+      - Bearer: []
+      summary: 更新团队
+      tags:
+      - sys-SysTeam
   /api/v1/sys/sys-user/create:
     post:
       consumes:

@@ -4,11 +4,11 @@ import (
 	"github.com/baowk/dilu-core/core/base"
 )
 
-type TeamService struct {
+type SysTeamService struct {
 	*base.BaseService
 }
 
-var SerTeam = TeamService{
-	base.NewService("dental"),
+var SerSysTeam = SysTeamService{
+	base.NewService("sys"),
 }
 

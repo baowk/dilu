@@ -47,6 +47,7 @@ func (Init) DoInit(c *gin.Context) {
 		&tools.GenColumn{},
 		&tools.GenTable{},
 		&models.SysMember{},
+		&models.SysTeam{},
 	); err != nil {
 		result = "sys执行失败"
 	}
@@ -55,8 +56,6 @@ func (Init) DoInit(c *gin.Context) {
 		&dm.Customer{},
 		&dm.EventDaySt{},
 		&dm.SummaryPlanDay{},
-		&dm.TeamMember{},
-		&dm.Team{},
 		&dm.TargetTask{},
 	); err != nil {
 		result = "dental执行失败"

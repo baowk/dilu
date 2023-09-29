@@ -5,6 +5,8 @@ import (
 	"dilu/modules/dental/enums"
 	"dilu/modules/dental/models"
 	"dilu/modules/dental/service/dto"
+	smodles "dilu/modules/sys/models"
+	"dilu/modules/sys/service"
 	"fmt"
 	"strconv"
 	"strings"
@@ -32,16 +34,16 @@ func (s *BillService) CreateBill(reqId string, bill dto.IdentifyBillDto, dbill *
 	if bill.UserId < 1 {
 		return codes.ErrInvalidParameter(reqId, "userId is nil")
 	}
-	var team models.Team
-	if err := SerTeam.Get(bill.TeamId, &team); err != nil {
+	var team smodles.SysTeam
+	if err := service.SerSysTeam.Get(bill.TeamId, &team); err != nil {
 		return codes.ErrNotFound(strconv.Itoa(bill.TeamId), "team", reqId, err)
 	}
-	var teamM models.TeamMember
-	tmWhere := models.TeamMember{
+	var teamM smodles.SysMember
+	tmWhere := smodles.SysMember{
 		TeamId: bill.TeamId,
 		UserId: bill.UserId,
 	}
-	if err := SerTeamMember.GetByWhere(tmWhere, &teamM); err != nil {
+	if err := service.SerSysMember.GetByWhere(tmWhere, &teamM); err != nil {
 		return codes.ErrNotFound(fmt.Sprintf("%d-%d", bill.TeamId, bill.UserId), "teamMember", reqId, err)
 	}
 	if bill.CustomerId < 1 {
@@ -220,11 +222,11 @@ func (s *BillService) Identify(req dto.BillTmplReq, bill *dto.IdentifyBillDto) e
 	} else {
 		bill.Pack = 1
 	}
-	memWhere := models.TeamMember{
+	memWhere := smodles.SysMember{
 		TeamId: req.TeamId,
 		Name:   bill.Name,
 	}
-	var members []models.TeamMember
+	var members []smodles.SysMember
 	if err := s.GetByWhere(memWhere, &members); err != nil {
 		core.Log.Error("获取咨询师错误", zap.Error(err))
 	}

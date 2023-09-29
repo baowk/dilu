@@ -55,16 +55,16 @@ interface {{.ClassName}} {
 
 
 interface {{.ClassName}}FormItemProps {
-  {{ range .Columns}}
-  {{- if eq .JsonField "createdAt" }}
-  {{- else if eq .JsonField "updatedAt" }}
-  {{- else if eq .JsonField "deletedAt" }}
-  {{- else if eq .JsonField "createBy" }}
-  {{- else if eq .JsonField "updateBy" }}
+  {{ range .Columns -}}
+  {{- if eq .JsonField "createdAt" -}}
+  {{- else if eq .JsonField "updatedAt" -}}
+  {{- else if eq .JsonField "deletedAt" -}}
+  {{- else if eq .JsonField "createBy" -}}
+  {{- else if eq .JsonField "updateBy" -}}
   {{- else }}
   /** {{.ColumnComment}} */
   {{.JsonField}}: {{.TsType}};
-  {{end}}
+  {{- end -}}
   {{- end }}
 }
 interface {{.ClassName}}FormProps {
