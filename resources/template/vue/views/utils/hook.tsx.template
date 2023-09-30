@@ -159,11 +159,6 @@ export function useRole() {
     });
   }
 
-  /** 菜单权限 */
-  function handleMenu() {
-    message("等菜单管理页面开发后完善");
-  }
-
   /** 数据权限 可自行开发 */
   // function handleDatabase() {}
 
@@ -180,7 +175,6 @@ export function useRole() {
     onSearch,
     resetForm,
     openDialog,
-    handleMenu,
     handleDelete,
     handleSizeChange,
     handleCurrentChange,
