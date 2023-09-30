@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useRole } from "./utils/hook";
+import { use{{.ClassName}} } from "./utils/hook";
 import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 
@@ -29,7 +29,7 @@ const {
   handleSizeChange,
   handleCurrentChange,
   handleSelectionChange
-} = useRole();
+} = use{{.ClassName}}();
 </script>
 
 <template>

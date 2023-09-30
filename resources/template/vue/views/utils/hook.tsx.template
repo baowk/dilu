@@ -9,7 +9,7 @@ import { type {{.ClassName}}FormItemProps } from "@/api/{{.PackageName}}/{{.Modu
 import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
 
-export function useRole() {
+export function use{{.ClassName}}() {
   const form = reactive({
   {{- range .Columns }}
     {{- if eq .JsonField "createdAt" }}
