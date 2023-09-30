@@ -437,21 +437,21 @@ func (e *Gen) NOMethodsGen(c *gin.Context, tab tools.GenTable, force bool) {
 		files.FileCreate(b5, hook)
 	}
 
-	rule := FrontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/utils/rule.ts"
-	if files.CheckExist(rule) || force {
-		t5, err := template.ParseFiles(basePath + "vue/views/utils/rule.ts.template")
-		if err != nil {
-			core.Log.Error("Gen", zap.Error(err))
-			e.Error(c, err)
-			return
-		}
-		var b5 bytes.Buffer
-		err = t5.Execute(&b5, tab)
-		if err != nil {
-			core.Log.Error("gen err", zap.Error(err))
-		}
-		files.FileCreate(b5, rule)
-	}
+	// rule := FrontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/utils/rule.ts"
+	// if files.CheckExist(rule) || force {
+	// 	t5, err := template.ParseFiles(basePath + "vue/views/utils/rule.ts.template")
+	// 	if err != nil {
+	// 		core.Log.Error("Gen", zap.Error(err))
+	// 		e.Error(c, err)
+	// 		return
+	// 	}
+	// 	var b5 bytes.Buffer
+	// 	err = t5.Execute(&b5, tab)
+	// 	if err != nil {
+	// 		core.Log.Error("gen err", zap.Error(err))
+	// 	}
+	// 	files.FileCreate(b5, rule)
+	// }
 
 }
 

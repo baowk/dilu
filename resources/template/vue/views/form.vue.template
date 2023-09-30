@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { formRules } from "./utils/rule";
+import { ref, reactive } from "vue";
+import type { FormRules } from "element-plus";
 import { {{.ClassName}}FormProps } from "@/api/{{.PackageName}}/{{.ModuleName}}";
 
 const props = withDefaults(defineProps<{{.ClassName}}FormProps>(), {
@@ -16,6 +16,11 @@ const props = withDefaults(defineProps<{{.ClassName}}FormProps>(), {
     {{- end}}
   {{- end }}
   })
+});
+
+/** 自定义表单规则校验 */
+const formRules = reactive(<FormRules>{
+  name: [{ required: true, message: "名称为必填项", trigger: "blur" }]
 });
 
 const ruleFormRef = ref();

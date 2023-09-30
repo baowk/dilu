@@ -11,6 +11,7 @@ type Bill struct {
 	CustomerId     int       `json:"customerId" gorm:"type:int unsigned;comment:顾客"`                     //顾客
 	UserId         int       `json:"userId" gorm:"type:int unsigned;comment:用户id"`                       //用户id
 	TeamId         int       `json:"teamId" gorm:"type:int unsigned;comment:团队id"`                       //团队id
+	DeptPath       string    `json:"deptPath" gorm:"type:varchar(255);comment:部门路径"`                     //路径
 	Total          string    `json:"total" gorm:"type:decimal(10,2);comment:金额"`                         //金额
 	RealTotal      string    `json:"realTotal" gorm:"type:decimal(10,2);comment:折后金额"`                   //折后金额
 	PaidTotal      string    `json:"paidTotal" gorm:"type:decimal(10,2);comment:已支付金额"`                  //已支付金额

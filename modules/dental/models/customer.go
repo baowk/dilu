@@ -16,6 +16,7 @@ type Customer struct {
 	Remark      string    `json:"remark" gorm:"type:varchar(255);comment:描述"`                      //描述
 	UserId      int       `json:"userId" gorm:"type:int unsigned;index;comment:用户id"`              //用户id
 	TeamId      int       `json:"teamId" gorm:"type:int unsigned;index;comment:团队id"`              //团队id
+	DeptPath    string    `json:"deptPath" gorm:"type:varchar(255);comment:部门路径"`                  //路径
 	Inviter     int       `json:"inviter" gorm:"type:int unsigned;comment:邀请人"`                    //邀请人
 	InviterName string    `json:"inviterName" gorm:"type:varchar(32);comment:邀请人名"`                //邀请人名
 	CreatedAt   time.Time `json:"createdAt" gorm:"type:datetime;comment:创建时间"`                     //创建时间

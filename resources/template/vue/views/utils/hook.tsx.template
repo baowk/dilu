@@ -114,7 +114,7 @@ export function useRole() {
       {{- end }}
         }
       },
-      width: "40%",
+      width: "48%",
       draggable: true,
       fullscreenIcon: true,
       closeOnClickModal: false,

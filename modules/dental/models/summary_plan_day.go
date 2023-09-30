@@ -10,6 +10,7 @@ type SummaryPlanDay struct {
 	Day       int       `json:"day" gorm:"type:int unsigned;comment:天"`                          //天
 	TeamId    int       `json:"teamId" gorm:"type:int unsigned;comment:团队id"`                    //团队id
 	UserId    int       `json:"userId" gorm:"type:int unsigned;comment:用户id"`                    //用户id
+	DeptPath  string    `json:"deptPath" gorm:"type:varchar(255);comment:部门路径"`                  //路径
 	Summary   string    `json:"summary" gorm:"type:text;comment:今日总结"`                           //今日总结
 	Plan      string    `json:"plan" gorm:"type:text;comment:明日计划"`                              //明日计划
 	CreatedAt time.Time `json:"createdAt" gorm:"type:datetime;comment:创建时间"`                     //创建时间
