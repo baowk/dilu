@@ -1578,7 +1578,7 @@ const docTemplate = `{
                 "tags": [
                     "dental-TargetTask"
                 ],
-                "summary": "Page接口",
+                "summary": "获取TargetTask列表",
                 "parameters": [
                     {
                         "description": "body",
@@ -6035,6 +6035,14 @@ const docTemplate = `{
         "dto.SysMemberGetPageReq": {
             "type": "object",
             "properties": {
+                "deptPath": {
+                    "description": "部门路径",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "名字",
+                    "type": "string"
+                },
                 "page": {
                     "description": "页码",
                     "type": "integer"
@@ -6043,8 +6051,16 @@ const docTemplate = `{
                     "description": "每页大小",
                     "type": "integer"
                 },
+                "phone": {
+                    "description": "手机号",
+                    "type": "string"
+                },
                 "status": {
                     "description": "状态 1正常",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "description": "团队id",
                     "type": "integer"
                 }
             }
@@ -6351,14 +6367,11 @@ const docTemplate = `{
                 "postId": {
                     "type": "string"
                 },
-                "roleId": {
-                    "type": "string"
-                },
                 "sex": {
                     "type": "string"
                 },
                 "status": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "statusOrder": {
                     "type": "string"
@@ -6374,9 +6387,21 @@ const docTemplate = `{
         "dto.TargetTaskDto": {
             "type": "object",
             "properties": {
+                "day": {
+                    "description": "时间:202310",
+                    "type": "integer"
+                },
+                "dayType": {
+                    "description": "时间类型:月 30,周 7",
+                    "type": "integer"
+                },
                 "deal": {
                     "description": "成交任务",
                     "type": "integer"
+                },
+                "deptPath": {
+                    "description": "部门路径",
+                    "type": "string"
                 },
                 "firstDiagnosis": {
                     "description": "导诊任务",
@@ -6384,10 +6409,6 @@ const docTemplate = `{
                 },
                 "id": {
                     "description": "主键",
-                    "type": "integer"
-                },
-                "month": {
-                    "description": "月",
                     "type": "integer"
                 },
                 "newCustomerCnt": {
@@ -6498,6 +6519,10 @@ const docTemplate = `{
                     "description": "品牌",
                     "type": "integer"
                 },
+                "createBy": {
+                    "description": "创建者id",
+                    "type": "integer"
+                },
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
@@ -6509,6 +6534,10 @@ const docTemplate = `{
                 "dentalCount": {
                     "description": "颗数",
                     "type": "integer"
+                },
+                "deptPath": {
+                    "description": "路径",
+                    "type": "string"
                 },
                 "doctor": {
                     "description": "医生",
@@ -6586,6 +6615,10 @@ const docTemplate = `{
                     "description": "交易类型 1 成交 2补尾款  3补上月欠款 10退款",
                     "type": "integer"
                 },
+                "updateBy": {
+                    "description": "更新者id",
+                    "type": "integer"
+                },
                 "updatedAt": {
                     "description": "更新时间",
                     "type": "string"
@@ -6611,8 +6644,16 @@ const docTemplate = `{
                     "description": "生日",
                     "type": "integer"
                 },
+                "createBy": {
+                    "description": "创建者id",
+                    "type": "integer"
+                },
                 "createdAt": {
                     "description": "创建时间",
+                    "type": "string"
+                },
+                "deptPath": {
+                    "description": "路径",
                     "type": "string"
                 },
                 "gender": {
@@ -6651,6 +6692,10 @@ const docTemplate = `{
                     "description": "团队id",
                     "type": "integer"
                 },
+                "updateBy": {
+                    "description": "更新者id",
+                    "type": "integer"
+                },
                 "updatedAt": {
                     "description": "更新时间",
                     "type": "string"
@@ -6668,9 +6713,13 @@ const docTemplate = `{
         "models.EventDaySt": {
             "type": "object",
             "properties": {
+                "createBy": {
+                    "description": "创建者id",
+                    "type": "integer"
+                },
                 "createdAt": {
                     "description": "创建时间",
-                    "type": "integer"
+                    "type": "string"
                 },
                 "day": {
                     "description": "时间",
@@ -6679,6 +6728,10 @@ const docTemplate = `{
                 "deal": {
                     "description": "成交",
                     "type": "integer"
+                },
+                "deptPath": {
+                    "description": "路径",
+                    "type": "string"
                 },
                 "firstDiagnosis": {
                     "description": "初诊",
@@ -6708,9 +6761,13 @@ const docTemplate = `{
                     "description": "团队id",
                     "type": "integer"
                 },
+                "updateBy": {
+                    "description": "更新者id",
+                    "type": "integer"
+                },
                 "updatedAt": {
                     "description": "更新时间",
-                    "type": "integer"
+                    "type": "string"
                 },
                 "userId": {
                     "description": "用户id",
@@ -6721,6 +6778,10 @@ const docTemplate = `{
         "models.SummaryPlanDay": {
             "type": "object",
             "properties": {
+                "createBy": {
+                    "description": "创建者id",
+                    "type": "integer"
+                },
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
@@ -6728,6 +6789,10 @@ const docTemplate = `{
                 "day": {
                     "description": "天",
                     "type": "integer"
+                },
+                "deptPath": {
+                    "description": "路径",
+                    "type": "string"
                 },
                 "id": {
                     "description": "主键",
@@ -6743,6 +6808,10 @@ const docTemplate = `{
                 },
                 "teamId": {
                     "description": "团队id",
+                    "type": "integer"
+                },
+                "updateBy": {
+                    "description": "更新者id",
                     "type": "integer"
                 },
                 "updatedAt": {
@@ -6888,6 +6957,10 @@ const docTemplate = `{
                     "description": "状态",
                     "type": "integer"
                 },
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
                 "type": {
                     "description": "状态",
                     "type": "integer"
@@ -6970,6 +7043,10 @@ const docTemplate = `{
         "models.SysMember": {
             "type": "object",
             "properties": {
+                "birthday": {
+                    "description": "生日",
+                    "type": "string"
+                },
                 "createBy": {
                     "description": "创建者",
                     "type": "integer"
@@ -6984,6 +7061,14 @@ const docTemplate = `{
                 },
                 "deptPath": {
                     "description": "部门路径",
+                    "type": "string"
+                },
+                "entryTime": {
+                    "description": "入职时间",
+                    "type": "string"
+                },
+                "gender": {
+                    "description": "性别 1男 2女 3未知",
                     "type": "string"
                 },
                 "id": {
@@ -7381,9 +7466,29 @@ const docTemplate = `{
         "models.TargetTask": {
             "type": "object",
             "properties": {
+                "createBy": {
+                    "description": "创建者",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "day": {
+                    "description": "时间:202310",
+                    "type": "integer"
+                },
+                "dayType": {
+                    "description": "时间类型:月 30,周 7",
+                    "type": "integer"
+                },
                 "deal": {
                     "description": "成交任务",
                     "type": "integer"
+                },
+                "deptPath": {
+                    "description": "部门路径",
+                    "type": "string"
                 },
                 "firstDiagnosis": {
                     "description": "导诊任务",
@@ -7393,10 +7498,6 @@ const docTemplate = `{
                     "description": "主键",
                     "type": "integer"
                 },
-                "month": {
-                    "description": "月",
-                    "type": "integer"
-                },
                 "newCustomerCnt": {
                     "description": "留存任务",
                     "type": "integer"
@@ -7404,6 +7505,14 @@ const docTemplate = `{
                 "teamId": {
                     "description": "团队id",
                     "type": "integer"
+                },
+                "updateBy": {
+                    "description": "更新者",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
                 },
                 "userId": {
                     "description": "用户id",

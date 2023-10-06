@@ -15,6 +15,8 @@ type SummaryPlanDay struct {
 	Plan      string    `json:"plan" gorm:"type:text;comment:明日计划"`                              //明日计划
 	CreatedAt time.Time `json:"createdAt" gorm:"type:datetime;comment:创建时间"`                     //创建时间
 	UpdatedAt time.Time `json:"updatedAt" gorm:"type:datetime;comment:更新时间"`                     //更新时间
+	CreateBy  int       `json:"createBy" gorm:"type:int unsigned;index;comment:创建者"`             //创建者id
+	UpdateBy  int       `json:"updateBy" gorm:"type:int unsigned;index;comment:更新者"`             //更新者id
 }
 
 func (SummaryPlanDay) TableName() string {

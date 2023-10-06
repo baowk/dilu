@@ -17,7 +17,7 @@ type TargetTaskApi struct {
 var ApiTargetTask = TargetTaskApi{}
 
 // QueryPage 获取TargetTask列表
-// @Summary Page接口
+// @Summary 获取TargetTask列表
 // @Tags dental-TargetTask
 // @Accept application/json
 // @Product application/json
@@ -110,7 +110,7 @@ func (e *TargetTaskApi) Update(c *gin.Context) {
 	}
 	var data models.TargetTask
 	copier.Copy(&data, req)
-	if err := service.SerTargetTask.Save(&data); err != nil {
+	if err := service.SerTargetTask.UpdateById(&data); err != nil {
 		e.Error(c, err)
 		return
 	}

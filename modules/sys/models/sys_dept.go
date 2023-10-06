@@ -19,6 +19,7 @@ type SysDept struct {
 	Sort      int            `json:"sort" gorm:"type:tinyint;comment:排序"`                             //排序
 	Status    int            `json:"status" gorm:"type:tinyint;comment:状态"`                           //状态
 	Remark    string         `json:"remark" gorm:"type:varchar(255);comment:备注"`                      //备注
+	TeamId    int            `json:"teamId" gorm:"type:int unsigned;comment:团队id"`                    //团队id
 	CreateBy  int            `json:"createBy" gorm:"type:int unsigned;comment:创建者"`                   //创建者
 	UpdateBy  int            `json:"updateBy" gorm:"type:int unsigned;comment:更新者"`                   //更新者
 	CreatedAt time.Time      `json:"createdAt" gorm:"type:datetime(3);comment:创建时间"`                  //创建时间

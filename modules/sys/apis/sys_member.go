@@ -34,12 +34,7 @@ func (e *SysMemberApi) QueryPage(c *gin.Context) {
 	list := make([]models.SysMember, 10)
 	var total int64
 
-	var model models.SysMember
-	if err := copier.Copy(&model, req); err != nil {
-		e.Error(c, err)
-		return
-	}
-	if err := service.SerSysMember.Page(model, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
+	if err := service.SerSysMember.Query(req, &list, &total); err != nil {
 		e.Error(c, err)
 		return
 	}
