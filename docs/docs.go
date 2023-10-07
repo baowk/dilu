@@ -3445,6 +3445,95 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/sys/sys-member/myInfo": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sys-SysMember"
+                ],
+                "summary": "获取我的信息",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqId"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.TeamMemberResp"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sys/sys-member/myTeams": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sys-SysMember"
+                ],
+                "summary": "获取加入的团队",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.TeamMemberResp"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/sys/sys-member/page": {
             "post": {
                 "security": [
@@ -6438,6 +6527,67 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.TeamMemberResp": {
+            "type": "object",
+            "properties": {
+                "birthday": {
+                    "description": "入职时间",
+                    "type": "string"
+                },
+                "deptId": {
+                    "description": "部门id",
+                    "type": "integer"
+                },
+                "deptPath": {
+                    "description": "部门路径",
+                    "type": "string"
+                },
+                "entryTime": {
+                    "description": "入职时间",
+                    "type": "string"
+                },
+                "gender": {
+                    "description": "性别",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "姓名",
+                    "type": "string"
+                },
+                "nickname": {
+                    "description": "昵称",
+                    "type": "string"
+                },
+                "owner": {
+                    "description": "团队拥有者id",
+                    "type": "integer"
+                },
+                "phone": {
+                    "description": "电话",
+                    "type": "string"
+                },
+                "postId": {
+                    "description": "职位标签 1主管 2副主管 3员工",
+                    "type": "integer"
+                },
+                "role_id": {
+                    "description": "角色id",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
+                "teamName": {
+                    "description": "团队名",
+                    "type": "string"
+                },
+                "userId": {
+                    "description": "用户id",
+                    "type": "integer"
+                }
+            }
+        },
         "dto.UserinfoResp": {
             "type": "object",
             "properties": {
@@ -7087,12 +7237,20 @@ const docTemplate = `{
                     "description": "电话",
                     "type": "string"
                 },
-                "postTag": {
-                    "description": "职位标签 1主管 2副主管 3员工",
+                "postId": {
+                    "description": "职位 1 系统超管 2 团队拥有者 4主管 8副主管 16员工",
+                    "type": "integer"
+                },
+                "retireTime": {
+                    "description": "离职时间",
+                    "type": "string"
+                },
+                "roleId": {
+                    "description": "部门id",
                     "type": "integer"
                 },
                 "status": {
-                    "description": "状态 1正常",
+                    "description": "状态 1正常 2离职",
                     "type": "integer"
                 },
                 "teamId": {
@@ -7293,24 +7451,12 @@ const docTemplate = `{
         "models.SysRole": {
             "type": "object",
             "properties": {
-                "admin": {
-                    "description": "管理员",
-                    "type": "integer"
-                },
                 "createBy": {
                     "description": "创建者",
                     "type": "integer"
                 },
                 "createdAt": {
                     "description": "创建时间",
-                    "type": "string"
-                },
-                "dataScope": {
-                    "description": "数据权限",
-                    "type": "string"
-                },
-                "flag": {
-                    "description": "flag",
                     "type": "string"
                 },
                 "id": {
@@ -7342,6 +7488,10 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/models.SysMenu"
                     }
+                },
+                "team_id": {
+                    "description": "团队",
+                    "type": "integer"
                 },
                 "updateBy": {
                     "description": "更新者",
@@ -7397,10 +7547,6 @@ const docTemplate = `{
                     "description": "生日",
                     "type": "string"
                 },
-                "createBy": {
-                    "description": "创建者id",
-                    "type": "integer"
-                },
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
@@ -7416,6 +7562,10 @@ const docTemplate = `{
                 "id": {
                     "description": "主键",
                     "type": "integer"
+                },
+                "lockTime": {
+                    "description": "锁定结束时间",
+                    "type": "string"
                 },
                 "name": {
                     "description": "姓名",
@@ -7433,20 +7583,16 @@ const docTemplate = `{
                     "description": "手机号",
                     "type": "string"
                 },
-                "post": {
-                    "description": "岗位",
-                    "type": "string"
+                "postId": {
+                    "description": "职位id",
+                    "type": "integer"
                 },
                 "remark": {
                     "description": "备注",
                     "type": "string"
                 },
-                "roleId": {
-                    "description": "角色id",
-                    "type": "integer"
-                },
                 "status": {
-                    "description": "状态 1冻结 2正常 3默认",
+                    "description": "状态 1正常",
                     "type": "integer"
                 },
                 "updateBy": {

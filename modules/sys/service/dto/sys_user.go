@@ -103,24 +103,6 @@ type SysUserInsertReq struct {
 	base.ControlBy
 }
 
-func (s *SysUserInsertReq) Generate(model *models.SysUser) {
-	if s.Id != 0 {
-		model.Id = s.Id
-	}
-	//model.Username = s.Username
-	model.Password = s.Password
-	model.Nickname = s.Nickname
-	model.Phone = s.Phone
-	model.RoleId = s.RoleId
-	model.Avatar = s.Avatar
-	model.Gender = s.Gender
-	model.Email = s.Email
-	model.Post = s.Post
-	model.Remark = s.Remark
-	model.Status = s.Status
-	model.CreateBy = s.CreateBy
-}
-
 func (s *SysUserInsertReq) GetId() interface{} {
 	return s.Id
 }
@@ -139,21 +121,6 @@ type SysUserUpdateReq struct {
 	Remark   string `json:"remark" comment:"备注"`
 	Status   int    `json:"status" comment:"状态" default:"1"`
 	base.ControlBy
-}
-
-func (s *SysUserUpdateReq) Generate(model *models.SysUser) {
-	if s.Id != 0 {
-		model.Id = s.Id
-	}
-	model.Nickname = s.Nickname
-	model.Phone = s.Phone
-	model.RoleId = s.RoleId
-	model.Avatar = s.Avatar
-	model.Gender = s.Gender
-	model.Email = s.Email
-	model.Post = s.Post
-	model.Remark = s.Remark
-	model.Status = s.Status
 }
 
 func (s *SysUserUpdateReq) GetId() interface{} {

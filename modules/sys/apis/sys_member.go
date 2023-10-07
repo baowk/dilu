@@ -1,6 +1,8 @@
 package apis
 
 import (
+	"dilu/common/codes"
+	"dilu/common/middleware"
 	"dilu/modules/sys/models"
 	"dilu/modules/sys/service"
 	"dilu/modules/sys/service/dto"
@@ -39,6 +41,56 @@ func (e *SysMemberApi) QueryPage(c *gin.Context) {
 		return
 	}
 	e.Page(c, list, total, req.GetPage(), req.GetSize())
+}
+
+// MyTeams 获取加入的团队
+// @Summary 获取加入的团队
+// @Tags sys-SysMember
+// @Accept application/json
+// @Product application/json
+// @Success 200 {object} base.Resp{data=[]dto.TeamMemberResp} "{"code": 200, "data": [...]}"
+// @Router /api/v1/sys/sys-member/myTeams [post]
+// @Security Bearer
+func (e *SysMemberApi) MyTeams(c *gin.Context) {
+	uid := middleware.GetUserId(c)
+	if uid < 1 {
+		e.Code(c, codes.InvalidToken_401)
+		return
+	}
+	var list []dto.TeamMemberResp
+	if err := service.SerSysMember.GetUserTeams(uid, &list); err != nil {
+		e.Error(c, err)
+		return
+	}
+	e.Ok(c, list)
+}
+
+// MyInfo 获取我的信息
+// @Summary 获取我的信息
+// @Tags sys-SysMember
+// @Accept application/json
+// @Product application/json
+// @Param data body base.ReqId true "body"
+// @Success 200 {object} base.Resp{data=[]dto.TeamMemberResp} "{"code": 200, "data": [...]}"
+// @Router /api/v1/sys/sys-member/myInfo [post]
+// @Security Bearer
+func (e *SysMemberApi) MyInfo(c *gin.Context) {
+	var req base.ReqId
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
+	uid := middleware.GetUserId(c)
+	if uid < 1 {
+		e.Code(c, codes.InvalidToken_401)
+		return
+	}
+	var data dto.TeamMemberResp
+	if err := service.SerSysMember.GetTeamUser(req.Id, uid, &data); err != nil {
+		e.Error(c, err)
+		return
+	}
+	e.Ok(c, data)
 }
 
 // Get 获取会员

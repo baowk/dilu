@@ -60,56 +60,56 @@ func (e *SysUser) Get(id int, model *models.SysUser) error {
 	return nil
 }
 
-// Insert 创建SysUser对象
-func (e *SysUser) Insert(c *dto.SysUserInsertReq) error {
-	var err error
-	var data models.SysUser
-	var i int64
-	err = core.DB().Model(&data).Where("username = ?", c.Username).Count(&i).Error
-	if err != nil {
-		core.Log.Error("db error: %s", zap.Error(err))
-		return err
-	}
-	if i > 0 {
-		err := errors.New("用户名已存在！")
-		core.Log.Error("db error: %s", zap.Error(err))
-		return err
-	}
-	c.Generate(&data)
-	err = core.DB().Create(&data).Error
-	if err != nil {
-		core.Log.Error("db error: %s", zap.Error(err))
-		return err
-	}
-	return nil
-}
+// // Insert 创建SysUser对象
+// func (e *SysUser) Insert(c *dto.SysUserInsertReq) error {
+// 	var err error
+// 	var data models.SysUser
+// 	var i int64
+// 	err = core.DB().Model(&data).Where("username = ?", c.Username).Count(&i).Error
+// 	if err != nil {
+// 		core.Log.Error("db error: %s", zap.Error(err))
+// 		return err
+// 	}
+// 	if i > 0 {
+// 		err := errors.New("用户名已存在！")
+// 		core.Log.Error("db error: %s", zap.Error(err))
+// 		return err
+// 	}
+// 	c.Generate(&data)
+// 	err = core.DB().Create(&data).Error
+// 	if err != nil {
+// 		core.Log.Error("db error: %s", zap.Error(err))
+// 		return err
+// 	}
+// 	return nil
+// }
 
-// Update 修改SysUser对象
-func (e *SysUser) Update(c *dto.SysUserUpdateReq) error {
-	var err error
-	var model models.SysUser
-	db := core.DB().First(&model, c.GetId())
-	if err = db.Error; err != nil {
-		core.Log.Error("Service UpdateSysUser error: %s", zap.Error(err))
-		return err
-	}
-	if db.RowsAffected == 0 {
-		return errors.New("无权更新该数据")
+// // Update 修改SysUser对象
+// func (e *SysUser) Update(c *dto.SysUserUpdateReq) error {
+// 	var err error
+// 	var model models.SysUser
+// 	db := core.DB().First(&model, c.GetId())
+// 	if err = db.Error; err != nil {
+// 		core.Log.Error("Service UpdateSysUser error: %s", zap.Error(err))
+// 		return err
+// 	}
+// 	if db.RowsAffected == 0 {
+// 		return errors.New("无权更新该数据")
 
-	}
-	c.Generate(&model)
-	update := core.DB().Model(&model).Where("id = ?", &model.Id).Omit("password", "salt").Updates(&model)
-	if err = update.Error; err != nil {
-		core.Log.Error("db error: %s", zap.Error(err))
-		return err
-	}
-	if update.RowsAffected == 0 {
-		err = errors.New("update userinfo error")
-		core.Log.Warn("db update error")
-		return err
-	}
-	return nil
-}
+// 	}
+// 	c.Generate(&model)
+// 	update := core.DB().Model(&model).Where("id = ?", &model.Id).Omit("password", "salt").Updates(&model)
+// 	if err = update.Error; err != nil {
+// 		core.Log.Error("db error: %s", zap.Error(err))
+// 		return err
+// 	}
+// 	if update.RowsAffected == 0 {
+// 		err = errors.New("update userinfo error")
+// 		core.Log.Warn("db update error")
+// 		return err
+// 	}
+// 	return nil
+// }
 
 // UpdateAvatar 更新用户头像
 func (e *SysUser) UpdateAvatar(c *dto.UpdateSysUserAvatarReq) error {
@@ -296,7 +296,7 @@ func (e *SysUser) loginOK(u *models.SysUser, need int) (dto.LoginOK, errs.IError
 	claims := middleware.NewClaims(u.Id, exp, core.Cfg.JWT.Issuer, core.Cfg.JWT.Subject)
 	claims.Phone = u.Phone
 	claims.Nickname = u.Nickname
-	claims.RoleId = u.RoleId
+	claims.RoleId = u.PostId
 	token, err := middleware.Generate(claims, core.Cfg.JWT.SignKey)
 	lok := dto.LoginOK{}
 	if err != nil {
@@ -305,8 +305,8 @@ func (e *SysUser) loginOK(u *models.SysUser, need int) (dto.LoginOK, errs.IError
 	lok.Expire = exp
 	lok.AccessToken = token
 	lok.Need = need
-	if u.RoleId != 0 {
-		lok.Roles = []string{strconv.Itoa(u.RoleId)}
+	if u.PostId != 0 {
+		lok.Roles = []string{strconv.Itoa(u.PostId)}
 	}
 
 	if u.Nickname != "" {
