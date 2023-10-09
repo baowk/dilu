@@ -7,7 +7,6 @@ import (
 	"dilu/modules/sys/service"
 	"dilu/modules/sys/service/dto"
 	"errors"
-	"fmt"
 
 	"github.com/baowk/dilu-core/common/utils/ips"
 	"github.com/baowk/dilu-core/common/utils/regexps"
@@ -107,26 +106,21 @@ func (e *SSO) Register(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(req.Username)
-
 	loginType := 1
 	//是否手机
 	if regexps.CheckMobile(req.Username) {
-		fmt.Println("1")
 		if !service.SerSms.Verify(req.Username, req.Code) {
 			e.Code(c, codes.ErrVerifyCode)
 			return
 		}
 		loginType = 1
 	} else if regexps.CheckEmail(req.Username) { //是否邮箱
-		fmt.Println("2")
 		if !service.SerEmail.Verify(req.Username, req.Code) {
 			e.Code(c, codes.ErrVerifyCode)
 			return
 		}
 		loginType = 2
 	} else {
-		fmt.Println("3")
 		e.Code(c, codes.ErrMobileOrEmail)
 		return
 	}

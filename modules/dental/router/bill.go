@@ -13,7 +13,7 @@ func init() {
 
 // 默认需登录认证的路由
 func registerBillRouter(v1 *gin.RouterGroup) {
-	r := v1.Group("bill").Use(middleware.JwtHandler())
+	r := v1.Group("bill").Use(middleware.JwtHandler()).Use(middleware.PermHandler())
 	{
 		r.POST("/get", apis.ApiBill.Get)
 		r.POST("/create", apis.ApiBill.Create)
