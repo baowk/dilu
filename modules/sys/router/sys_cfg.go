@@ -1,8 +1,9 @@
 package router
 
 import (
-	"dilu/modules/sys/apis"
 	"dilu/common/middleware"
+	"dilu/modules/sys/apis"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,7 +13,7 @@ func init() {
 
 // 默认需登录认证的路由
 func registerSysCfgRouter(v1 *gin.RouterGroup) {
-	r := v1.Group("sys-cfg").Use(middleware.JwtHandler())
+	r := v1.Group("sys-cfg").Use(middleware.JwtHandler()).Use(middleware.PermHandler())
 	{
 		r.POST("/get", apis.ApiSysCfg.Get)
 		r.POST("/create", apis.ApiSysCfg.Create)

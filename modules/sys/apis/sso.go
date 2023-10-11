@@ -2,7 +2,7 @@ package apis
 
 import (
 	"dilu/common/codes"
-	"dilu/common/middleware"
+	"dilu/common/utils"
 	"dilu/modules/sys/models"
 	"dilu/modules/sys/service"
 	"dilu/modules/sys/service/dto"
@@ -329,7 +329,7 @@ func (e *SSO) GetUserInfo(c *gin.Context) {
 // @Router /api/v1/sys/myUserinfo [get]
 // @Security Bearer
 func (e *SSO) MyUserInfo(c *gin.Context) {
-	uid := middleware.GetUserId(c)
+	uid := utils.GetUserId(c)
 	if uid == 0 {
 		e.Code(c, codes.InvalidToken_401)
 		return
@@ -367,7 +367,7 @@ func (e *SSO) ChangePwd(c *gin.Context) {
 		e.Code(c, codes.ErrPasswordFMT)
 		return
 	}
-	uid := middleware.GetUserId(c)
+	uid := utils.GetUserId(c)
 	if uid == 0 {
 		e.Code(c, codes.InvalidToken_401)
 		return
@@ -398,7 +398,7 @@ func (e *SSO) Bind(c *gin.Context) {
 		return
 	}
 
-	uid := middleware.GetUserId(c)
+	uid := utils.GetUserId(c)
 	if uid == 0 {
 		e.Code(c, codes.InvalidToken_401)
 		return
@@ -449,7 +449,7 @@ func (e *SSO) ChangeUserinfo(c *gin.Context) {
 		return
 	}
 
-	uid := middleware.GetUserId(c)
+	uid := utils.GetUserId(c)
 	if uid == 0 {
 		e.Code(c, codes.InvalidToken_401)
 		return

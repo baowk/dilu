@@ -2,12 +2,15 @@ package service
 
 import (
 	"dilu/common/codes"
+	"dilu/common/utils"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/base"
 	"github.com/baowk/dilu-core/core/errs"
+	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
@@ -162,24 +165,91 @@ func (e *SysMenu) Remove(d *dto.SysMenuDeleteReq) (*SysMenu, errs.IError) {
 	return e, nil
 }
 
-func (e *SysMenu) GetMenus(mvs *[]dto.MenuVo) errs.IError {
-	var ms []models.SysMenu
-	if err := core.DB().Where("menu_type < ?", 3).Find(&ms).Error; err != nil {
-		return codes.ErrSys(err)
+// func (e *SysMenu) GetMenus(mvs *[]dto.MenuVo) errs.IError {
+// 	var ms []models.SysMenu
+// 	if err := core.DB().Where("menu_type < ?", 3).Find(&ms).Error; err != nil {
+// 		return codes.ErrSys(err)
+// 	}
+// 	*mvs = treeMenu(ms)
+// 	return nil
+// }
+
+func (e *SysMenu) GetRoles(c *gin.Context) (platform, teamId int, roles []int, ierr errs.IError) {
+	role := utils.GetRoleId(c)
+	platform = 2
+	if role != 0 { //超管
+		platform = 1
+		if role > 0 {
+			roles = append(roles, role)
+		}
+	} else { //团队菜单
+		teamId = utils.GetTeamId(c)
+		if teamId < 1 {
+			ierr = codes.Err403(errors.New("团队id不存在"))
+			return
+		}
+		var tu dto.TeamMemberResp
+		if err := SerSysMember.GetTeamUser(teamId, utils.GetUserId(c), &tu); err != nil {
+			ierr = codes.Err403(err)
+			return
+		}
+		if tu.Roles == "" {
+			ierr = codes.Err403(nil)
+			return
+		}
+		if !strings.Contains(tu.Roles, "-1") {
+			arr := strings.Split(tu.Roles, ",")
+			for _, sid := range arr {
+				id, err := strconv.Atoi(sid)
+				if err != nil {
+					return
+				}
+				roles = append(roles, id)
+			}
+		}
 	}
-	*mvs = treeMenu(ms)
-	return nil
+	return
 }
 
-func (e *SysMenu) GetUserMenus(roleId int, mvs *[]dto.MenuVo) errs.IError {
-	var sql string
-	if roleId == 1 {
-		sql = "Select * from sys_menu where menu_type < 3 "
+func (e *SysMenu) CanAccess(c *gin.Context, apiId int) error {
+	platform, _, roles, err := e.GetRoles(c)
+	if err != nil {
+		return err
+	}
+	var ids []int
+
+	if len(roles) > 0 {
+		if err := e.DB().Raw("select sys_api_id from sys_menu_api_rule r,sys_role_menu rm  where  rm.role_id in ? and rm.menu_id = r.sys_menu_id", roles).
+			Find(&ids).Error; err != nil {
+			return err
+		}
 	} else {
-		sql = fmt.Sprintf("Select * from sys_menu m,sys_role_menu r where role_id =%d and menu_type < 3 and m.id = r.menu_id", roleId)
+		if err := e.DB().Raw("select sys_api_id from sys_menu_api_rule r,sys_menu m  where m.platform_type >= ? and m.id = r.sys_menu_id", platform).
+			Find(&ids).Error; err != nil {
+			return err
+		}
+	}
+
+	for _, id := range ids {
+		if id == apiId {
+			return nil
+		}
+	}
+	return codes.Err403(nil)
+}
+
+func (e *SysMenu) GetUserMenus(c *gin.Context, mvs *[]dto.MenuVo) errs.IError {
+	platform, _, roles, err := e.GetRoles(c)
+	if err != nil {
+		return err
+	}
+	db := e.DB().Where("menu_type < ?", 3).Where("platform_type >= ?", platform)
+	if len(roles) > 0 {
+		db.Joins(" left join sys_role_menu on sys_role_menu.menu_id = sys_menu.id").
+			Where("sys_role_menu.role_id in ?", roles)
 	}
 	var ms []models.SysMenu
-	if err := core.DB().Raw(sql).Find(&ms).Error; err != nil {
+	if err := db.Find(&ms).Error; err != nil {
 		return codes.ErrSys(err)
 	}
 	*mvs = treeMenu(ms)

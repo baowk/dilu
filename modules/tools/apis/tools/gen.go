@@ -522,6 +522,7 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 		Mmenu.Sort = 0
 		Mmenu.Hidden = false
 		Mmenu.CreateBy = 1
+		Mmenu.PlatformType = 2
 		service.SerSysMenu.Insert(&Mmenu)
 		menuPid = Mmenu.Id
 	}
@@ -534,7 +535,7 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	mApi := models.NewSysApi()
 	service.SerSysApi.GetByWhere(where, mApi)
 	if mApi.Id == 0 {
-		mApi = mApi.SetMethod("POST").SetPermType("t").SetPath(curPath).
+		mApi = mApi.SetMethod("POST").SetPermType(3).SetPath(curPath).
 			SetStatus(3).SetTitle("分页获取" + tab.TableComment)
 		service.SerSysApi.Create(mApi)
 	}
@@ -553,6 +554,7 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	Cmenu.Hidden = false
 	Cmenu.CreateBy = 1
 	Cmenu.UpdateBy = 1
+	Cmenu.PlatformType = 2
 	Cmenu.SysApi = []models.SysApi{*mApi}
 	service.SerSysMenu.Insert(&Cmenu)
 
@@ -562,7 +564,7 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	gApi := models.NewSysApi()
 	service.SerSysApi.GetByWhere(where, gApi)
 	if gApi.Id == 0 {
-		gApi := gApi.SetMethod("POST").SetPermType("t").SetPath(curPath).
+		gApi := gApi.SetMethod("POST").SetPermType(3).SetPath(curPath).
 			SetStatus(3).SetTitle("根据id获取" + tab.TableComment)
 		service.SerSysApi.Create(gApi)
 	}
@@ -580,6 +582,7 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	MList.Hidden = false
 	MList.CreateBy = 1
 	MList.UpdateBy = 1
+	MList.PlatformType = 2
 	MList.SysApi = []models.SysApi{*gApi}
 	service.SerSysMenu.Insert(&MList)
 
@@ -588,7 +591,7 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	cApi := models.NewSysApi()
 	service.SerSysApi.GetByWhere(where, cApi)
 	if cApi.Id == 0 {
-		cApi := cApi.SetMethod("POST").SetPermType("t").SetPath(curPath).
+		cApi := cApi.SetMethod("POST").SetPermType(3).SetPath(curPath).
 			SetStatus(3).SetTitle("创建" + tab.TableComment)
 		service.SerSysApi.Create(cApi)
 	}
@@ -606,6 +609,7 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	MCreate.Hidden = false
 	MCreate.CreateBy = 1
 	MCreate.UpdateBy = 1
+	MCreate.PlatformType = 2
 	MCreate.SysApi = []models.SysApi{*cApi}
 	service.SerSysMenu.Insert(&MCreate)
 
@@ -614,7 +618,7 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	uApi := models.NewSysApi()
 	service.SerSysApi.GetByWhere(where, uApi)
 	if uApi.Id == 0 {
-		uApi = uApi.SetMethod("POST").SetPermType("t").SetPath(curPath).
+		uApi = uApi.SetMethod("POST").SetPermType(3).SetPath(curPath).
 			SetStatus(3).SetTitle("修改" + tab.TableComment)
 		service.SerSysApi.Create(uApi)
 	}
@@ -632,6 +636,7 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	MUpdate.Hidden = false
 	MUpdate.CreateBy = 1
 	MUpdate.UpdateBy = 1
+	MUpdate.PlatformType = 2
 	MUpdate.SysApi = []models.SysApi{*uApi}
 	service.SerSysMenu.Insert(&MUpdate)
 
@@ -640,7 +645,7 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	dApi := models.NewSysApi()
 	service.SerSysApi.GetByWhere(where, dApi)
 	if dApi.Id == 0 {
-		dApi = dApi.SetMethod("POST").SetPermType("t").SetPath(curPath).
+		dApi = dApi.SetMethod("POST").SetPermType(3).SetPath(curPath).
 			SetStatus(3).SetTitle("删除" + tab.TableComment)
 		service.SerSysApi.Create(dApi)
 	}
@@ -658,6 +663,7 @@ func (e *Gen) GenMenuAndApi(c *gin.Context) {
 	MDelete.Hidden = false
 	MDelete.CreateBy = 1
 	MDelete.UpdateBy = 1
+	MDelete.PlatformType = 2
 	MDelete.SysApi = []models.SysApi{*dApi}
 	service.SerSysMenu.Insert(&MDelete)
 
@@ -698,10 +704,10 @@ func (e *Gen) GenApis(c *gin.Context) {
 					apiTitle, _ = jsonparser.GetString(value, "description")
 				}
 
-				pt := "n"
+				pt := 1
 				if token, _, _, err := jsonparser.Get(value, "security"); err == nil {
 					if len(token) > 0 {
-						pt = "t"
+						pt = 2
 					}
 				}
 

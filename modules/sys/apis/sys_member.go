@@ -2,7 +2,7 @@ package apis
 
 import (
 	"dilu/common/codes"
-	"dilu/common/middleware"
+	"dilu/common/utils"
 	"dilu/modules/sys/models"
 	"dilu/modules/sys/service"
 	"dilu/modules/sys/service/dto"
@@ -23,6 +23,7 @@ var ApiSysMember = SysMemberApi{}
 // @Tags sys-SysMember
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "teamId"
 // @Param data body dto.SysMemberGetPageReq true "body"
 // @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.SysMember}} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-member/page [post]
@@ -52,7 +53,7 @@ func (e *SysMemberApi) QueryPage(c *gin.Context) {
 // @Router /api/v1/sys/sys-member/myTeams [post]
 // @Security Bearer
 func (e *SysMemberApi) MyTeams(c *gin.Context) {
-	uid := middleware.GetUserId(c)
+	uid := utils.GetUserId(c)
 	if uid < 1 {
 		e.Code(c, codes.InvalidToken_401)
 		return
@@ -80,7 +81,7 @@ func (e *SysMemberApi) MyInfo(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	uid := middleware.GetUserId(c)
+	uid := utils.GetUserId(c)
 	if uid < 1 {
 		e.Code(c, codes.InvalidToken_401)
 		return

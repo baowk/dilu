@@ -13,7 +13,7 @@ func init() {
 
 // 默认需登录认证的路由
 func registerSysUserRouter(v1 *gin.RouterGroup) {
-	r := v1.Group("sys-user").Use(middleware.JwtHandler())
+	r := v1.Group("sys-user").Use(middleware.JwtHandler()).Use(middleware.PermHandler())
 	{
 		r.POST("/get", apis.ApiSysUser.Get)
 		r.POST("/create", apis.ApiSysUser.Create)

@@ -9,7 +9,7 @@ import (
 
 	"dilu/common/codes"
 	"dilu/common/consts"
-	"dilu/common/middleware"
+	"dilu/common/utils"
 	"dilu/modules/sys/models"
 	"dilu/modules/sys/service/dto"
 
@@ -293,11 +293,11 @@ func (e *SysUser) Register(loginType int, c *dto.RegisterReq, ip string) (dto.Lo
 
 func (e *SysUser) loginOK(u *models.SysUser, need int) (dto.LoginOK, errs.IError) {
 	exp := time.Now().Add(time.Duration(core.Cfg.JWT.Expires) * time.Minute)
-	claims := middleware.NewClaims(u.Id, exp, core.Cfg.JWT.Issuer, core.Cfg.JWT.Subject)
+	claims := utils.NewClaims(u.Id, exp, core.Cfg.JWT.Issuer, core.Cfg.JWT.Subject)
 	claims.Phone = u.Phone
 	claims.Nickname = u.Nickname
-	claims.RoleId = u.PostId
-	token, err := middleware.Generate(claims, core.Cfg.JWT.SignKey)
+	claims.RoleId = u.PlatformRoleId
+	token, err := utils.Generate(claims, core.Cfg.JWT.SignKey)
 	lok := dto.LoginOK{}
 	if err != nil {
 		return lok, errs.Err(codes.FAILURE, "", err)
@@ -305,8 +305,8 @@ func (e *SysUser) loginOK(u *models.SysUser, need int) (dto.LoginOK, errs.IError
 	lok.Expire = exp
 	lok.AccessToken = token
 	lok.Need = need
-	if u.PostId != 0 {
-		lok.Roles = []string{strconv.Itoa(u.PostId)}
+	if u.PlatformRoleId != 0 {
+		lok.Roles = []string{strconv.Itoa(u.PlatformRoleId)}
 	}
 
 	if u.Nickname != "" {
@@ -319,7 +319,7 @@ func (e *SysUser) loginOK(u *models.SysUser, need int) (dto.LoginOK, errs.IError
 		lok.Username = u.Email
 	}
 	claims.ExpiresAt(exp.Add(time.Hour * 24 * 7))
-	refT, _ := middleware.Generate(claims, core.Cfg.JWT.SignKey)
+	refT, _ := utils.Generate(claims, core.Cfg.JWT.SignKey)
 	lok.RefreshToken = refT
 	return lok, nil
 }

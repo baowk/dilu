@@ -1,37 +1,31 @@
 package enums
 
-type RoleType struct {
+type PostType struct {
 	Id   int
 	Name string
 	Key  string
 }
 
-var SuperAdmin = RoleType{
-	Id:   1,
-	Name: "超级管理",
-	Key:  "SuperAdmin",
+var Admin = PostType{
+	Id:   -1,
+	Name: "超管",
+	Key:  "Admin",
 }
 
-var TeamOwner = RoleType{
+var DeptHead = PostType{
 	Id:   2,
-	Name: "团队创始人",
-	Key:  "TeamOwner",
-}
-
-var DeptHead = RoleType{
-	Id:   4,
 	Name: "部门主管",
 	Key:  "DeptHead",
 }
 
-var DeptDeputy = RoleType{
-	Id:   8,
+var DeptDeputy = PostType{
+	Id:   4,
 	Name: "部门副管",
 	Key:  "DeptDeputy",
 }
 
-var Staff = RoleType{
-	Id:   16,
+var Staff = PostType{
+	Id:   8,
 	Name: "职员",
 	Key:  "Staff",
 }

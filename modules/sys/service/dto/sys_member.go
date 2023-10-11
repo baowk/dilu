@@ -40,8 +40,8 @@ type TeamMemberResp struct {
 	DeptPath  string    `json:"deptPath"`  //部门路径
 	DeptId    int       `json:"deptId"`    //部门id
 	PostId    int       `json:"postId"`    //职位标签 1主管 2副主管 3员工
-	RoleId    int       `json:"role_id"`   //角色id
+	Roles     string    `json:"roles"`     //角色id
 	Gender    int       `json:"gender"`    //性别
 	EntryTime time.Time `json:"entryTime"` //入职时间
-	Birthday  time.Time `json:"birthday"`  //入职时间
+	Birthday  time.Time `json:"birthday"`  //生日时间
 }

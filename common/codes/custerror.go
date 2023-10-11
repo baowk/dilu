@@ -8,6 +8,14 @@ func ErrSys(cause error) errs.IError {
 	return errs.Err(FAILURE, "", cause)
 }
 
+func Err401(cause error) errs.IError {
+	return errs.Err(InvalidToken_401, "", cause)
+}
+
+func Err403(cause error) errs.IError {
+	return errs.Err(AuthorizationError_403, "", cause)
+}
+
 // func ErrInvalidParameter(reqId string, cause error) errs.IError {
 // 	return errs.Err(InvalidParameter, reqId, cause)
 // }

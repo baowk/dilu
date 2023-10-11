@@ -1077,7 +1077,7 @@ definitions:
   dto.TeamMemberResp:
     properties:
       birthday:
-        description: 入职时间
+        description: 生日时间
         type: string
       deptId:
         description: 部门id
@@ -1106,9 +1106,9 @@ definitions:
       postId:
         description: 职位标签 1主管 2副主管 3员工
         type: integer
-      role_id:
+      roles:
         description: 角色id
-        type: integer
+        type: string
       teamId:
         description: 团队id
         type: integer
@@ -1416,16 +1416,13 @@ definitions:
         description: 请求地址
         type: string
       permType:
-        description: 权限类型（n：无需任何认证 t:须token p：须权限）
-        type: string
+        description: 权限类型（1：无需认证 2:须token 3：须鉴权）
+        type: integer
       status:
         description: 状态 3 DEF 2 OK 1 del
         type: integer
       title:
         description: 标题
-        type: string
-      type:
-        description: 接口类型
         type: string
       updateBy:
         description: 更新者
@@ -1604,9 +1601,9 @@ definitions:
       retireTime:
         description: 离职时间
         type: string
-      roleId:
-        description: 部门id
-        type: integer
+      roles:
+        description: 角色id,分割
+        type: string
       status:
         description: 状态 1正常 2离职
         type: integer
@@ -1664,6 +1661,9 @@ definitions:
       permission:
         description: 权限
         type: string
+      platformType:
+        description: 平台类型 1 平台管理 2团队管理
+        type: integer
       sort:
         description: 排序
         type: integer
@@ -1853,8 +1853,8 @@ definitions:
       phone:
         description: 手机号
         type: string
-      postId:
-        description: 职位id
+      platformRoleId:
+        description: 平台角色ID 大于0为平台账户,0为团队账户
         type: integer
       remark:
         description: 备注
@@ -4115,6 +4115,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: teamId
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -4169,27 +4173,6 @@ paths:
       summary: 更新会员
       tags:
       - sys-SysMember
-  /api/v1/sys/sys-menu/all:
-    post:
-      consumes:
-      - application/json
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/dto.MenuVo'
-                  type: array
-              type: object
-      security:
-      - Bearer: []
-      summary: 获取所有菜单
-      tags:
-      - sys-SysMenu
   /api/v1/sys/sys-menu/create:
     post:
       consumes:
@@ -4319,6 +4302,11 @@ paths:
     post:
       consumes:
       - application/json
+      parameters:
+      - description: teamId
+        in: header
+        name: teamId
+        type: integer
       responses:
         "200":
           description: '{"code": 200, "data": [...]}'

@@ -3550,6 +3550,12 @@ const docTemplate = `{
                 "summary": "获取会员列表",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "teamId",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -3634,45 +3640,6 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/models.SysMember"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/sys/sys-menu/all": {
-            "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "sys-SysMenu"
-                ],
-                "summary": "获取所有菜单",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/dto.MenuVo"
-                                            }
                                         }
                                     }
                                 }
@@ -3923,6 +3890,14 @@ const docTemplate = `{
                     "sys-SysMenu"
                 ],
                 "summary": "获取用户菜单",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "teamId",
+                        "name": "teamId",
+                        "in": "header"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "{\"code\": 200, \"data\": [...]}",
@@ -6531,7 +6506,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "birthday": {
-                    "description": "入职时间",
+                    "description": "生日时间",
                     "type": "string"
                 },
                 "deptId": {
@@ -6570,9 +6545,9 @@ const docTemplate = `{
                     "description": "职位标签 1主管 2副主管 3员工",
                     "type": "integer"
                 },
-                "role_id": {
+                "roles": {
                     "description": "角色id",
-                    "type": "integer"
+                    "type": "string"
                 },
                 "teamId": {
                     "description": "团队id",
@@ -6990,8 +6965,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "permType": {
-                    "description": "权限类型（n：无需任何认证 t:须token p：须权限）",
-                    "type": "string"
+                    "description": "权限类型（1：无需认证 2:须token 3：须鉴权）",
+                    "type": "integer"
                 },
                 "status": {
                     "description": "状态 3 DEF 2 OK 1 del",
@@ -6999,10 +6974,6 @@ const docTemplate = `{
                 },
                 "title": {
                     "description": "标题",
-                    "type": "string"
-                },
-                "type": {
-                    "description": "接口类型",
                     "type": "string"
                 },
                 "updateBy": {
@@ -7245,9 +7216,9 @@ const docTemplate = `{
                     "description": "离职时间",
                     "type": "string"
                 },
-                "roleId": {
-                    "description": "部门id",
-                    "type": "integer"
+                "roles": {
+                    "description": "角色id,分割",
+                    "type": "string"
                 },
                 "status": {
                     "description": "状态 1正常 2离职",
@@ -7325,6 +7296,10 @@ const docTemplate = `{
                 "permission": {
                     "description": "权限",
                     "type": "string"
+                },
+                "platformType": {
+                    "description": "平台类型 1 平台管理 2团队管理",
+                    "type": "integer"
                 },
                 "sort": {
                     "description": "排序",
@@ -7583,8 +7558,8 @@ const docTemplate = `{
                     "description": "手机号",
                     "type": "string"
                 },
-                "postId": {
-                    "description": "职位id",
+                "platformRoleId": {
+                    "description": "平台角色ID 大于0为平台账户,0为团队账户",
                     "type": "integer"
                 },
                 "remark": {
