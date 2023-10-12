@@ -21,6 +21,7 @@ var Api{{.ClassName}} = {{.ClassName}}Api{}
 // @Tags {{.PackageName}}-{{.ClassName}}
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.{{.ClassName}}GetPageReq true "body"
 // @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.{{.ClassName}}}} "{"code": 200, "data": [...]}"
 // @Router {{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/page [post]
@@ -51,6 +52,7 @@ func (e *{{.ClassName}}Api) QueryPage(c *gin.Context) {
 // @Tags {{.PackageName}}-{{.ClassName}}
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqId true "body"
 // @Success 200 {object} base.Resp{data=models.{{.ClassName}}} "{"code": 200, "data": [...]}"
 // @Router {{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/get [post]
@@ -74,6 +76,7 @@ func (e *{{.ClassName}}Api) Get(c *gin.Context) {
 // @Tags {{.PackageName}}-{{.ClassName}}
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.{{.ClassName}}Dto true "body"
 // @Success 200 {object} base.Resp{data=models.{{.ClassName}}} "{"code": 200, "data": [...]}"
 // @Router {{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/create [post]
@@ -98,6 +101,7 @@ func (e *{{.ClassName}}Api) Create(c *gin.Context) {
 // @Tags {{.PackageName}}-{{.ClassName}}
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.{{.ClassName}}Dto true "body"
 // @Success 200 {object} base.Resp{data=models.{{.ClassName}}} "{"code": 200, "data": [...]}"
 // @Router {{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/update [post]
@@ -122,6 +126,7 @@ func (e *{{.ClassName}}Api) Update(c *gin.Context) {
 // @Tags {{.PackageName}}-{{.ClassName}}
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqIds true "body"
 // @Success 200 {object} base.Resp{data=models.{{.ClassName}}} "{"code": 200, "data": [...]}"
 // @Router {{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/del [post]
