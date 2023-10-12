@@ -3988,6 +3988,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -4014,6 +4018,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -4040,6 +4048,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -4066,12 +4078,10 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/base.ReqId'
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       responses:
         "200":
           description: '{"code": 200, "data": [...]}'
@@ -4115,7 +4125,7 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: teamId
+      - description: 团队id
         in: header
         name: teamId
         type: integer
@@ -4152,6 +4162,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data

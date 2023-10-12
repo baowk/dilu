@@ -133,7 +133,7 @@ func (e *SysMenuApi) Del(c *gin.Context) {
 // @Tags sys-SysMenu
 // @Accept application/json
 // @Product application/json
-// @Param teamId header int false "teamId"
+// @Param teamId header int false "团队id"
 // @Success 200 {object} base.Resp{data=[]dto.MenuVo} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-menu/userMenus [post]
 // @Security Bearer

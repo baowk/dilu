@@ -23,7 +23,7 @@ var ApiSysMember = SysMemberApi{}
 // @Tags sys-SysMember
 // @Accept application/json
 // @Product application/json
-// @Param teamId header int false "teamId"
+// @Param teamId header int false "团队id"
 // @Param data body dto.SysMemberGetPageReq true "body"
 // @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.SysMember}} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-member/page [post]
@@ -33,6 +33,15 @@ func (e *SysMemberApi) QueryPage(c *gin.Context) {
 	if err := c.ShouldBind(&req); err != nil {
 		e.Error(c, err)
 		return
+	}
+	teamId := utils.GetTeamId(c)
+	if teamId > 0 {
+		if req.TeamId > 0 && teamId != req.TeamId {
+			e.Code(c, codes.AuthorizationError_403)
+			return
+		} else {
+			req.TeamId = teamId
+		}
 	}
 	list := make([]models.SysMember, 10)
 	var total int64
@@ -71,25 +80,28 @@ func (e *SysMemberApi) MyTeams(c *gin.Context) {
 // @Tags sys-SysMember
 // @Accept application/json
 // @Product application/json
-// @Param data body base.ReqId true "body"
+// @Param teamId header int false "团队id"
 // @Success 200 {object} base.Resp{data=[]dto.TeamMemberResp} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-member/myInfo [post]
 // @Security Bearer
 func (e *SysMemberApi) MyInfo(c *gin.Context) {
-	var req base.ReqId
-	if err := c.ShouldBind(&req); err != nil {
-		e.Error(c, err)
-		return
-	}
 	uid := utils.GetUserId(c)
 	if uid < 1 {
 		e.Code(c, codes.InvalidToken_401)
 		return
 	}
 	var data dto.TeamMemberResp
-	if err := service.SerSysMember.GetTeamUser(req.Id, uid, &data); err != nil {
-		e.Error(c, err)
-		return
+	teamId := utils.GetTeamId(c)
+	if teamId == 0 && utils.GetRoleId(c) != 0 {
+		data.TeamName = "Dilu后台管理"
+		data.UserId = uid
+		data.Nickname = utils.GetNickname(c)
+		data.Phone = utils.GetPhone(c)
+	} else {
+		if err := service.SerSysMember.GetTeamUser(teamId, uid, &data); err != nil {
+			e.Error(c, err)
+			return
+		}
 	}
 	e.Ok(c, data)
 }
@@ -99,6 +111,7 @@ func (e *SysMemberApi) MyInfo(c *gin.Context) {
 // @Tags sys-SysMember
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqId true "body"
 // @Success 200 {object} base.Resp{data=models.SysMember} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-member/get [post]
@@ -122,6 +135,7 @@ func (e *SysMemberApi) Get(c *gin.Context) {
 // @Tags sys-SysMember
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.SysMemberDto true "body"
 // @Success 200 {object} base.Resp{data=models.SysMember} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-member/create [post]
@@ -146,6 +160,7 @@ func (e *SysMemberApi) Create(c *gin.Context) {
 // @Tags sys-SysMember
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.SysMemberDto true "body"
 // @Success 200 {object} base.Resp{data=models.SysMember} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-member/update [post]
@@ -170,6 +185,7 @@ func (e *SysMemberApi) Update(c *gin.Context) {
 // @Tags sys-SysMember
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqIds true "body"
 // @Success 200 {object} base.Resp{data=models.SysMember} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-member/del [post]

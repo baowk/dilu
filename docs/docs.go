@@ -3320,6 +3320,12 @@ const docTemplate = `{
                 "summary": "创建会员",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -3366,6 +3372,12 @@ const docTemplate = `{
                 ],
                 "summary": "删除会员",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -3414,6 +3426,12 @@ const docTemplate = `{
                 "summary": "获取会员",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -3461,13 +3479,10 @@ const docTemplate = `{
                 "summary": "获取我的信息",
                 "parameters": [
                     {
-                        "description": "body",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/base.ReqId"
-                        }
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
                     }
                 ],
                 "responses": {
@@ -3551,7 +3566,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "teamId",
+                        "description": "团队id",
                         "name": "teamId",
                         "in": "header"
                     },
@@ -3617,6 +3632,12 @@ const docTemplate = `{
                 ],
                 "summary": "更新会员",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
