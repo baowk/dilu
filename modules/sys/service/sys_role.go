@@ -1,6 +1,7 @@
 package service
 
 import (
+	//"github.com/acmestack/gorm-plus/gplus"
 	"github.com/baowk/dilu-core/core/base"
 )
 
@@ -12,3 +13,12 @@ var SerSysRole = SysRoleService{
 	base.NewService("sys"),
 }
 
+// func (s *SysRoleService) Query(teamId int) ([]*models.SysRole, error) {
+// 	q, t := gplus.NewQuery[models.SysRole]()
+// 	q.Eq(t.Status, 1).Eq(t.TeamId, teamId)
+// 	list, rdb := gplus.SelectList[models.SysRole](q)
+// 	if rdb.Error != nil {
+// 		return nil, rdb.Error
+// 	}
+// 	return list, nil
+// }

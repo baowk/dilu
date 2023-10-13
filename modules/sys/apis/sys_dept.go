@@ -21,6 +21,7 @@ var ApiSysDept = SysDeptApi{}
 // @Tags sys-SysDept
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.SysDeptGetPageReq true "body"
 // @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.SysDept}} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-dept/page [post]
@@ -51,6 +52,7 @@ func (e *SysDeptApi) QueryPage(c *gin.Context) {
 // @Tags sys-SysDept
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.SysDeptGetPageReq true "body"
 // @Success 200 {object} base.Resp{data=[]models.SysDept} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-dept/list [post]
@@ -75,6 +77,7 @@ func (e *SysDeptApi) List(c *gin.Context) {
 // @Tags sys-SysDept
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqId true "body"
 // @Success 200 {object} base.Resp{data=models.SysDept} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-dept/get [post]
@@ -98,6 +101,7 @@ func (e *SysDeptApi) Get(c *gin.Context) {
 // @Tags sys-SysDept
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.SysDeptDto true "body"
 // @Success 200 {object} base.Resp{data=models.SysDept} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-dept/create [post]
@@ -122,6 +126,7 @@ func (e *SysDeptApi) Create(c *gin.Context) {
 // @Tags sys-SysDept
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.SysDeptDto true "body"
 // @Success 200 {object} base.Resp{data=models.SysDept} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-dept/update [post]
@@ -146,6 +151,7 @@ func (e *SysDeptApi) Update(c *gin.Context) {
 // @Tags sys-SysDept
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqIds true "body"
 // @Success 200 {object} base.Resp{data=models.SysDept} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-dept/del [post]

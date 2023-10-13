@@ -393,6 +393,12 @@ const docTemplate = `{
                 "summary": "创建Bill",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -439,6 +445,12 @@ const docTemplate = `{
                 ],
                 "summary": "删除Bill",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -487,6 +499,12 @@ const docTemplate = `{
                 "summary": "获取Bill",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -534,6 +552,12 @@ const docTemplate = `{
                 "summary": "智能识别",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -580,6 +604,12 @@ const docTemplate = `{
                 ],
                 "summary": "Page接口",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -643,6 +673,12 @@ const docTemplate = `{
                 "summary": "更新Bill",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -689,6 +725,12 @@ const docTemplate = `{
                 ],
                 "summary": "创建Customer",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -737,6 +779,12 @@ const docTemplate = `{
                 "summary": "删除Customer",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -784,6 +832,12 @@ const docTemplate = `{
                 "summary": "获取Customer",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -830,6 +884,12 @@ const docTemplate = `{
                 ],
                 "summary": "Page接口",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -893,6 +953,12 @@ const docTemplate = `{
                 "summary": "更新Customer",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -939,6 +1005,12 @@ const docTemplate = `{
                 ],
                 "summary": "创建EventDaySt",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -987,6 +1059,12 @@ const docTemplate = `{
                 "summary": "删除EventDaySt",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -1034,6 +1112,12 @@ const docTemplate = `{
                 "summary": "获取EventDaySt",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -1080,6 +1164,12 @@ const docTemplate = `{
                 ],
                 "summary": "Page接口",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -1143,6 +1233,12 @@ const docTemplate = `{
                 "summary": "更新EventDaySt",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -1189,6 +1285,12 @@ const docTemplate = `{
                 ],
                 "summary": "创建SummaryPlanDay",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -1237,6 +1339,12 @@ const docTemplate = `{
                 "summary": "删除SummaryPlanDay",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -1284,6 +1392,12 @@ const docTemplate = `{
                 "summary": "获取SummaryPlanDay",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -1330,6 +1444,12 @@ const docTemplate = `{
                 ],
                 "summary": "Page接口",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -1393,6 +1513,12 @@ const docTemplate = `{
                 "summary": "更新SummaryPlanDay",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -1439,6 +1565,12 @@ const docTemplate = `{
                 ],
                 "summary": "创建TargetTask",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -1487,6 +1619,12 @@ const docTemplate = `{
                 "summary": "删除TargetTask",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -1534,6 +1672,12 @@ const docTemplate = `{
                 "summary": "获取TargetTask",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -1580,6 +1724,12 @@ const docTemplate = `{
                 ],
                 "summary": "获取TargetTask列表",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -1642,6 +1792,12 @@ const docTemplate = `{
                 ],
                 "summary": "更新TargetTask",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -2770,6 +2926,12 @@ const docTemplate = `{
                 "summary": "创建SysDept",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -2816,6 +2978,12 @@ const docTemplate = `{
                 ],
                 "summary": "删除SysDept",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -2864,6 +3032,12 @@ const docTemplate = `{
                 "summary": "获取SysDept",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -2910,6 +3084,12 @@ const docTemplate = `{
                 ],
                 "summary": "获取全部部门",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -2960,6 +3140,12 @@ const docTemplate = `{
                 ],
                 "summary": "Page接口",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -3023,6 +3209,12 @@ const docTemplate = `{
                 "summary": "更新SysDept",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -3069,6 +3261,12 @@ const docTemplate = `{
                 ],
                 "summary": "创建SysJob",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -3117,6 +3315,12 @@ const docTemplate = `{
                 "summary": "删除SysJob",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -3164,6 +3368,12 @@ const docTemplate = `{
                 "summary": "获取SysJob",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -3210,6 +3420,12 @@ const docTemplate = `{
                 ],
                 "summary": "Page接口",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -3272,6 +3488,12 @@ const docTemplate = `{
                 ],
                 "summary": "更新SysJob",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -3914,7 +4136,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "teamId",
+                        "description": "团队id",
                         "name": "teamId",
                         "in": "header"
                     }
@@ -3959,6 +4181,12 @@ const docTemplate = `{
                 ],
                 "summary": "创建SysOperaLog",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -4007,6 +4235,12 @@ const docTemplate = `{
                 "summary": "删除SysOperaLog",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -4054,6 +4288,12 @@ const docTemplate = `{
                 "summary": "获取SysOperaLog",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -4100,6 +4340,12 @@ const docTemplate = `{
                 ],
                 "summary": "Page接口",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -4163,6 +4409,12 @@ const docTemplate = `{
                 "summary": "更新SysOperaLog",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -4209,6 +4461,12 @@ const docTemplate = `{
                 ],
                 "summary": "创建SysRole",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -4257,6 +4515,12 @@ const docTemplate = `{
                 "summary": "删除SysRole",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -4304,6 +4568,12 @@ const docTemplate = `{
                 "summary": "获取SysRole",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -4350,6 +4620,12 @@ const docTemplate = `{
                 ],
                 "summary": "获取角色列表",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -4400,6 +4676,12 @@ const docTemplate = `{
                 ],
                 "summary": "Page接口",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -4463,6 +4745,12 @@ const docTemplate = `{
                 "summary": "更新SysRole",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -4509,6 +4797,12 @@ const docTemplate = `{
                 ],
                 "summary": "创建团队",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -4557,6 +4851,12 @@ const docTemplate = `{
                 "summary": "删除团队",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -4604,6 +4904,12 @@ const docTemplate = `{
                 "summary": "获取团队",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
                         "description": "body",
                         "name": "data",
                         "in": "body",
@@ -4650,6 +4956,12 @@ const docTemplate = `{
                 ],
                 "summary": "获取团队列表",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -4712,6 +5024,12 @@ const docTemplate = `{
                 ],
                 "summary": "更新团队",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",

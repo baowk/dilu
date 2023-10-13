@@ -21,6 +21,7 @@ var ApiCustomer = CustomerApi{}
 // @Tags dental-Customer
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.CustomerGetPageReq true "body"
 // @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.Customer}} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/customer/page [post]
@@ -51,6 +52,7 @@ func (e *CustomerApi) QueryPage(c *gin.Context) {
 // @Tags dental-Customer
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqId true "body"
 // @Success 200 {object} base.Resp{data=models.Customer} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/customer/get [post]
@@ -74,6 +76,7 @@ func (e *CustomerApi) Get(c *gin.Context) {
 // @Tags dental-Customer
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.CustomerDto true "body"
 // @Success 200 {object} base.Resp{data=models.Customer} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/customer/create [post]
@@ -98,6 +101,7 @@ func (e *CustomerApi) Create(c *gin.Context) {
 // @Tags dental-Customer
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.CustomerDto true "body"
 // @Success 200 {object} base.Resp{data=models.Customer} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/customer/update [post]
@@ -122,6 +126,7 @@ func (e *CustomerApi) Update(c *gin.Context) {
 // @Tags dental-Customer
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqIds true "body"
 // @Success 200 {object} base.Resp{data=models.Customer} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/customer/del [post]

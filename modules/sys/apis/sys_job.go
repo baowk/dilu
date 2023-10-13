@@ -21,6 +21,7 @@ var ApiSysJob = SysJobApi{}
 // @Tags sys-SysJob
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.SysJobGetPageReq true "body"
 // @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.SysJob}} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-job/page [post]
@@ -51,6 +52,7 @@ func (e *SysJobApi) QueryPage(c *gin.Context) {
 // @Tags sys-SysJob
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqId true "body"
 // @Success 200 {object} base.Resp{data=models.SysJob} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-job/get [post]
@@ -74,6 +76,7 @@ func (e *SysJobApi) Get(c *gin.Context) {
 // @Tags sys-SysJob
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.SysJobDto true "body"
 // @Success 200 {object} base.Resp{data=models.SysJob} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-job/create [post]
@@ -98,6 +101,7 @@ func (e *SysJobApi) Create(c *gin.Context) {
 // @Tags sys-SysJob
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.SysJobDto true "body"
 // @Success 200 {object} base.Resp{data=models.SysJob} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-job/update [post]
@@ -122,6 +126,7 @@ func (e *SysJobApi) Update(c *gin.Context) {
 // @Tags sys-SysJob
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqIds true "body"
 // @Success 200 {object} base.Resp{data=models.SysJob} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-job/del [post]

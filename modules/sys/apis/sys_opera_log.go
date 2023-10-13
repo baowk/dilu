@@ -21,6 +21,7 @@ var ApiSysOperaLog = SysOperaLogApi{}
 // @Tags sys-SysOperaLog
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.SysOperaLogGetPageReq true "body"
 // @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.SysOperaLog}} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-opera-log/page [post]
@@ -51,6 +52,7 @@ func (e *SysOperaLogApi) QueryPage(c *gin.Context) {
 // @Tags sys-SysOperaLog
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqId true "body"
 // @Success 200 {object} base.Resp{data=models.SysOperaLog} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-opera-log/get [post]
@@ -74,6 +76,7 @@ func (e *SysOperaLogApi) Get(c *gin.Context) {
 // @Tags sys-SysOperaLog
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.SysOperaLogDto true "body"
 // @Success 200 {object} base.Resp{data=models.SysOperaLog} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-opera-log/create [post]
@@ -98,6 +101,7 @@ func (e *SysOperaLogApi) Create(c *gin.Context) {
 // @Tags sys-SysOperaLog
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.SysOperaLogDto true "body"
 // @Success 200 {object} base.Resp{data=models.SysOperaLog} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-opera-log/update [post]
@@ -122,6 +126,7 @@ func (e *SysOperaLogApi) Update(c *gin.Context) {
 // @Tags sys-SysOperaLog
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqIds true "body"
 // @Success 200 {object} base.Resp{data=models.SysOperaLog} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-opera-log/del [post]

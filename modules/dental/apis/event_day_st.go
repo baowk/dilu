@@ -21,6 +21,7 @@ var ApiEventDaySt = EventDayStApi{}
 // @Tags dental-EventDaySt
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.EventDayStGetPageReq true "body"
 // @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.EventDaySt}} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/event-day-st/page [post]
@@ -51,6 +52,7 @@ func (e *EventDayStApi) QueryPage(c *gin.Context) {
 // @Tags dental-EventDaySt
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqId true "body"
 // @Success 200 {object} base.Resp{data=models.EventDaySt} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/event-day-st/get [post]
@@ -74,6 +76,7 @@ func (e *EventDayStApi) Get(c *gin.Context) {
 // @Tags dental-EventDaySt
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.EventDayStDto true "body"
 // @Success 200 {object} base.Resp{data=models.EventDaySt} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/event-day-st/create [post]
@@ -98,6 +101,7 @@ func (e *EventDayStApi) Create(c *gin.Context) {
 // @Tags dental-EventDaySt
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.EventDayStDto true "body"
 // @Success 200 {object} base.Resp{data=models.EventDaySt} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/event-day-st/update [post]
@@ -122,6 +126,7 @@ func (e *EventDayStApi) Update(c *gin.Context) {
 // @Tags dental-EventDaySt
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqIds true "body"
 // @Success 200 {object} base.Resp{data=models.EventDaySt} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/event-day-st/del [post]

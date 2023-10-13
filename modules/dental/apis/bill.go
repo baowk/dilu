@@ -21,6 +21,7 @@ var ApiBill = BillApi{}
 // @Tags dental-Bill
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.BillGetPageReq true "body"
 // @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.Bill}} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/bill/page [post]
@@ -51,6 +52,7 @@ func (e *BillApi) QueryPage(c *gin.Context) {
 // @Tags dental-Bill
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqId true "body"
 // @Success 200 {object} base.Resp{data=models.Bill} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/bill/get [post]
@@ -74,6 +76,7 @@ func (e *BillApi) Get(c *gin.Context) {
 // @Tags dental-Bill
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.IdentifyBillDto true "body"
 // @Success 200 {object} base.Resp{data=models.Bill} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/bill/create [post]
@@ -97,6 +100,7 @@ func (e *BillApi) Create(c *gin.Context) {
 // @Tags dental-Bill
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.BillDto true "body"
 // @Success 200 {object} base.Resp{data=models.Bill} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/bill/update [post]
@@ -121,6 +125,7 @@ func (e *BillApi) Update(c *gin.Context) {
 // @Tags dental-Bill
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqIds true "body"
 // @Success 200 {object} base.Resp{data=models.Bill} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/bill/del [post]
@@ -143,6 +148,7 @@ func (e *BillApi) Del(c *gin.Context) {
 // @Tags dental-Bill
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.BillTmplReq true "body"
 // @Success 200 {object} base.Resp{data=dto.IdentifyBillDto} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/bill/identify [post]

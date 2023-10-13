@@ -21,6 +21,7 @@ var ApiSysRole = SysRoleApi{}
 // @Tags sys-SysRole
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.SysRoleGetPageReq true "body"
 // @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.SysRole}} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-role/page [post]
@@ -51,6 +52,7 @@ func (e *SysRoleApi) QueryPage(c *gin.Context) {
 // @Tags sys-SysRole
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.SysRoleGetPageReq true "body"
 // @Success 200 {object} base.Resp{data=[]models.SysRole} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-role/list [post]
@@ -73,6 +75,7 @@ func (e *SysRoleApi) List(c *gin.Context) {
 // @Tags sys-SysRole
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqId true "body"
 // @Success 200 {object} base.Resp{data=models.SysRole} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-role/get [post]
@@ -96,6 +99,7 @@ func (e *SysRoleApi) Get(c *gin.Context) {
 // @Tags sys-SysRole
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.SysRoleDto true "body"
 // @Success 200 {object} base.Resp{data=models.SysRole} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-role/create [post]
@@ -120,6 +124,7 @@ func (e *SysRoleApi) Create(c *gin.Context) {
 // @Tags sys-SysRole
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.SysRoleDto true "body"
 // @Success 200 {object} base.Resp{data=models.SysRole} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-role/update [post]
@@ -144,6 +149,7 @@ func (e *SysRoleApi) Update(c *gin.Context) {
 // @Tags sys-SysRole
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqIds true "body"
 // @Success 200 {object} base.Resp{data=models.SysRole} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-role/del [post]

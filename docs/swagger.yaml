@@ -2360,6 +2360,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -2386,6 +2390,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -2412,6 +2420,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -2438,6 +2450,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -2464,6 +2480,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -2497,6 +2517,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -2523,6 +2547,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -2549,6 +2577,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -2575,6 +2607,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -2601,6 +2637,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -2634,6 +2674,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -2660,6 +2704,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -2686,6 +2734,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -2712,6 +2764,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -2738,6 +2794,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -2771,6 +2831,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -2797,6 +2861,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -2823,6 +2891,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -2849,6 +2921,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -2875,6 +2951,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -2908,6 +2988,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -2934,6 +3018,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -2960,6 +3048,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -2986,6 +3078,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -3012,6 +3108,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -3045,6 +3145,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -3686,6 +3790,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -3712,6 +3820,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -3738,6 +3850,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -3764,6 +3880,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -3792,6 +3912,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -3825,6 +3949,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -3851,6 +3979,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -3877,6 +4009,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -3903,6 +4039,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -3929,6 +4069,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -3962,6 +4106,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -4317,7 +4465,7 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: teamId
+      - description: 团队id
         in: header
         name: teamId
         type: integer
@@ -4343,6 +4491,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -4369,6 +4521,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -4395,6 +4551,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -4421,6 +4581,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -4454,6 +4618,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -4480,6 +4648,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -4506,6 +4678,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -4532,6 +4708,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -4558,6 +4738,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -4586,6 +4770,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -4619,6 +4807,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -4645,6 +4837,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -4671,6 +4867,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -4697,6 +4897,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -4723,6 +4927,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -4756,6 +4964,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data

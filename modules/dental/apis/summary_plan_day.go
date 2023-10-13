@@ -21,6 +21,7 @@ var ApiSummaryPlanDay = SummaryPlanDayApi{}
 // @Tags dental-SummaryPlanDay
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.SummaryPlanDayGetPageReq true "body"
 // @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.SummaryPlanDay}} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/summary-plan-day/page [post]
@@ -51,6 +52,7 @@ func (e *SummaryPlanDayApi) QueryPage(c *gin.Context) {
 // @Tags dental-SummaryPlanDay
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqId true "body"
 // @Success 200 {object} base.Resp{data=models.SummaryPlanDay} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/summary-plan-day/get [post]
@@ -74,6 +76,7 @@ func (e *SummaryPlanDayApi) Get(c *gin.Context) {
 // @Tags dental-SummaryPlanDay
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.SummaryPlanDayDto true "body"
 // @Success 200 {object} base.Resp{data=models.SummaryPlanDay} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/summary-plan-day/create [post]
@@ -98,6 +101,7 @@ func (e *SummaryPlanDayApi) Create(c *gin.Context) {
 // @Tags dental-SummaryPlanDay
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.SummaryPlanDayDto true "body"
 // @Success 200 {object} base.Resp{data=models.SummaryPlanDay} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/summary-plan-day/update [post]
@@ -122,6 +126,7 @@ func (e *SummaryPlanDayApi) Update(c *gin.Context) {
 // @Tags dental-SummaryPlanDay
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqIds true "body"
 // @Success 200 {object} base.Resp{data=models.SummaryPlanDay} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/summary-plan-day/del [post]

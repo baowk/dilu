@@ -21,6 +21,7 @@ var ApiTargetTask = TargetTaskApi{}
 // @Tags dental-TargetTask
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.TargetTaskGetPageReq true "body"
 // @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.TargetTask}} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/target-task/page [post]
@@ -51,6 +52,7 @@ func (e *TargetTaskApi) QueryPage(c *gin.Context) {
 // @Tags dental-TargetTask
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqId true "body"
 // @Success 200 {object} base.Resp{data=models.TargetTask} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/target-task/get [post]
@@ -74,6 +76,7 @@ func (e *TargetTaskApi) Get(c *gin.Context) {
 // @Tags dental-TargetTask
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.TargetTaskDto true "body"
 // @Success 200 {object} base.Resp{data=models.TargetTask} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/target-task/create [post]
@@ -98,6 +101,7 @@ func (e *TargetTaskApi) Create(c *gin.Context) {
 // @Tags dental-TargetTask
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.TargetTaskDto true "body"
 // @Success 200 {object} base.Resp{data=models.TargetTask} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/target-task/update [post]
@@ -122,6 +126,7 @@ func (e *TargetTaskApi) Update(c *gin.Context) {
 // @Tags dental-TargetTask
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqIds true "body"
 // @Success 200 {object} base.Resp{data=models.TargetTask} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/target-task/del [post]
