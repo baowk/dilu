@@ -1,9 +1,12 @@
 package apis
 
 import (
+	"dilu/common/utils"
 	"dilu/modules/dental/models"
 	"dilu/modules/dental/service"
 	"dilu/modules/dental/service/dto"
+	"strconv"
+	"time"
 
 	"github.com/baowk/dilu-core/core/base"
 	"github.com/gin-gonic/gin"
@@ -89,7 +92,19 @@ func (e *EventDayStApi) Create(c *gin.Context) {
 	}
 	var data models.EventDaySt
 	copier.Copy(&data, req)
-	if err := service.SerEventDaySt.Create(&data); err != nil {
+	if req.Day == "" {
+		req.Day = time.Now().Format("20060102")
+	}
+	d, err := strconv.Atoi(req.Day)
+	if err != nil {
+		e.Error(c, err)
+		return
+	}
+	data.Day = d
+	teamId := utils.GetTeamId(c)
+	userId := utils.GetUserId(c)
+
+	if err := service.SerEventDaySt.Create(teamId, userId, e.GetReqId(c), &data); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -114,7 +129,18 @@ func (e *EventDayStApi) Update(c *gin.Context) {
 	}
 	var data models.EventDaySt
 	copier.Copy(&data, req)
-	if err := service.SerEventDaySt.Save(&data); err != nil {
+	if req.Day == "" {
+		req.Day = time.Now().Format("20060102")
+	}
+	d, err := strconv.Atoi(req.Day)
+	if err != nil {
+		e.Error(c, err)
+		return
+	}
+	data.Day = d
+	teamId := utils.GetTeamId(c)
+	userId := utils.GetUserId(c)
+	if err := service.SerEventDaySt.Update(teamId, userId, e.GetReqId(c), &data); err != nil {
 		e.Error(c, err)
 		return
 	}

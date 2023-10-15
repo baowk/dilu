@@ -53,3 +53,11 @@ func (e *SysMemberService) GetTeamUser(teamId, uid int, teamMember *dto.TeamMemb
 			and m.team_id = t.id order by m.updated_at desc`
 	return core.DB().Raw(sql, teamId, uid).Find(teamMember).Error
 }
+
+func (e *SysMemberService) GetMembers(teamId int, name string, members *[]models.SysMember) error {
+	where := models.SysMember{
+		TeamId: teamId,
+		Name:   name,
+	}
+	return e.GetByWhere(where, members)
+}

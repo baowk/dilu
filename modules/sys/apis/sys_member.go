@@ -43,6 +43,14 @@ func (e *SysMemberApi) QueryPage(c *gin.Context) {
 			req.TeamId = teamId
 		}
 	}
+
+	// uid := utils.GetUserId(c)
+	// var tu dto.TeamMemberResp
+	// if err := service.SerSysMember.GetTeamUser(req.TeamId, uid, &tu); err != nil {
+	// 	e.Error(c, err)
+	// 	return
+	// }
+
 	list := make([]models.SysMember, 10)
 	var total int64
 

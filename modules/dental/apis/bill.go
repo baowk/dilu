@@ -1,6 +1,7 @@
 package apis
 
 import (
+	"dilu/common/utils"
 	"dilu/modules/dental/models"
 	"dilu/modules/dental/service"
 	"dilu/modules/dental/service/dto"
@@ -87,6 +88,7 @@ func (e *BillApi) Create(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
+	req.TeamId = utils.GetTeamId(c)
 	var data models.Bill
 	if err := service.SerBill.CreateBill(e.GetReqId(c), req, &data); err != nil {
 		e.Error(c, err)
@@ -158,6 +160,9 @@ func (e *BillApi) Identify(c *gin.Context) {
 	if err := c.ShouldBind(&req); err != nil {
 		e.Error(c, err)
 		return
+	}
+	if req.TeamId == 0 {
+		req.TeamId = utils.GetTeamId(c)
 	}
 	var ib dto.IdentifyBillDto
 	if err := service.SerBill.Identify(req, &ib); err != nil {

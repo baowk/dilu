@@ -112,6 +112,9 @@ func (s *BillService) Identify(req dto.BillTmplReq, bill *dto.IdentifyBillDto) e
 	(*bill).TeamId = req.TeamId
 	arr := strings.Split(req.Text, "\n")
 	for _, v := range arr {
+		if strings.Trim(v, " ") == "" {
+			continue
+		}
 		for _, key := range enums.Counselor {
 			if strings.Contains(v, key) {
 				(*bill).Name = getVal(v)
@@ -222,13 +225,11 @@ func (s *BillService) Identify(req dto.BillTmplReq, bill *dto.IdentifyBillDto) e
 	} else {
 		bill.Pack = 1
 	}
-	memWhere := smodles.SysMember{
-		TeamId: req.TeamId,
-		Name:   bill.Name,
-	}
+
 	var members []smodles.SysMember
-	if err := s.GetByWhere(memWhere, &members); err != nil {
+	if err := service.SerSysMember.GetMembers(req.TeamId, bill.Name, &members); err != nil {
 		core.Log.Error("获取咨询师错误", zap.Error(err))
+		return errs.Err(codes.FAILURE, "", err)
 	}
 	if len(members) > 0 {
 		(*bill).UserId = members[0].UserId
@@ -262,6 +263,12 @@ func (s *BillService) Identify(req dto.BillTmplReq, bill *dto.IdentifyBillDto) e
 				break
 			}
 		}
+	}
+	if bill.RealTotal == "" && bill.PaidTotal != "" {
+		(*bill).RealTotal = bill.PaidTotal
+	}
+	if bill.PaidTotal == "" && bill.RealTotal != "" {
+		(*bill).PaidTotal = bill.RealTotal
 	}
 	return nil
 }
