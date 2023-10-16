@@ -5,7 +5,6 @@ import (
 	"dilu/modules/dental/models"
 	"dilu/modules/dental/service"
 	"dilu/modules/dental/service/dto"
-	"strconv"
 	"time"
 
 	"github.com/baowk/dilu-core/core/base"
@@ -92,15 +91,10 @@ func (e *EventDayStApi) Create(c *gin.Context) {
 	}
 	var data models.EventDaySt
 	copier.Copy(&data, req)
-	if req.Day == "" {
-		req.Day = time.Now().Format("20060102")
+	if req.Day.IsZero() {
+		req.Day = time.Now()
 	}
-	d, err := strconv.Atoi(req.Day)
-	if err != nil {
-		e.Error(c, err)
-		return
-	}
-	data.Day = d
+	data.Day = req.Day
 	teamId := utils.GetTeamId(c)
 	userId := utils.GetUserId(c)
 
@@ -129,15 +123,10 @@ func (e *EventDayStApi) Update(c *gin.Context) {
 	}
 	var data models.EventDaySt
 	copier.Copy(&data, req)
-	if req.Day == "" {
-		req.Day = time.Now().Format("20060102")
+	if req.Day.IsZero() {
+		req.Day = time.Now()
 	}
-	d, err := strconv.Atoi(req.Day)
-	if err != nil {
-		e.Error(c, err)
-		return
-	}
-	data.Day = d
+	data.Day = req.Day
 	teamId := utils.GetTeamId(c)
 	userId := utils.GetUserId(c)
 	if err := service.SerEventDaySt.Update(teamId, userId, e.GetReqId(c), &data); err != nil {

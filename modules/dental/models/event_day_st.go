@@ -5,7 +5,7 @@ import "time"
 // EventDaySt
 type EventDaySt struct {
 	Id               int       `json:"id" gorm:"type:int unsigned;primaryKey;autoIncrement;comment:主键"` //主键
-	Day              int       `json:"day" gorm:"type:int unsigned;comment:时间"`                         //时间
+	Day              time.Time `json:"day" gorm:"type:date;comment:时间"`                                 //时间
 	TeamId           int       `json:"teamId" gorm:"type:int unsigned;comment:团队id"`                    //团队id
 	UserId           int       `json:"userId" gorm:"type:int unsigned;comment:用户id"`                    //用户id
 	DeptPath         string    `json:"deptPath" gorm:"type:varchar(255);comment:部门路径"`                  //路径
@@ -33,7 +33,7 @@ func (e *EventDaySt) SetId(id int) *EventDaySt {
 	e.Id = id
 	return e
 }
-func (e *EventDaySt) SetDay(day int) *EventDaySt {
+func (e *EventDaySt) SetDay(day time.Time) *EventDaySt {
 	e.Day = day
 	return e
 }

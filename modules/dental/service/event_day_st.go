@@ -46,5 +46,5 @@ func (s *EventDayStService) Update(teamId, userId int, reqId string, data *model
 	}
 	data.DeptPath = tu.DeptPath
 	data.UpdateBy = userId
-	return s.BaseService.Save(data)
+	return s.BaseService.UpdateById(data)
 }
