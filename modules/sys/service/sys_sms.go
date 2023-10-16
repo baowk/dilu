@@ -5,6 +5,7 @@ import (
 	"dilu/modules/sys/models"
 	"time"
 
+	"github.com/baowk/dilu-core/common/consts"
 	"github.com/baowk/dilu-core/common/utils"
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/base"
@@ -16,7 +17,7 @@ type SysSms struct {
 }
 
 var SerSms = SysSms{
-	base.NewService("sys"),
+	base.NewService(consts.DB_DEF),
 }
 
 func (e *SysSms) Send(phone string) error {

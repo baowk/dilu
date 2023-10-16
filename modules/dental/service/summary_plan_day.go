@@ -1,6 +1,8 @@
 package service
 
 import (
+	"dilu/common/consts"
+
 	"github.com/baowk/dilu-core/core/base"
 )
 
@@ -9,6 +11,5 @@ type SummaryPlanDayService struct {
 }
 
 var SerSummaryPlanDay = SummaryPlanDayService{
-	base.NewService("dental"),
+	base.NewService(consts.DB_CRM),
 }
-

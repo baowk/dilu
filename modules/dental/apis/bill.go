@@ -5,6 +5,7 @@ import (
 	"dilu/modules/dental/models"
 	"dilu/modules/dental/service"
 	"dilu/modules/dental/service/dto"
+	"time"
 
 	"github.com/baowk/dilu-core/core/base"
 	"github.com/gin-gonic/gin"
@@ -169,4 +170,69 @@ func (e *BillApi) Identify(c *gin.Context) {
 		e.Err(c, err)
 	}
 	e.Ok(c, ib)
+}
+
+// StDay 日统计
+// @Summary 日统计
+// @Tags dental-Bill
+// @Accept application/json
+// @Product application/json
+// @Param teamId header int false "团队id"
+// @Param data body dto.StDayReq true "body"
+// @Success 200 {object} base.Resp{data=string} "{"code": 200, "data": [...]}"
+// @Router /api/v1/dental/st/day [post]
+// @Security Bearer
+func (e *BillApi) StDay(c *gin.Context) {
+	var req dto.StDayReq
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
+	if req.Day.IsZero() {
+		req.Day = time.Now()
+	}
+	teamId := utils.GetTeamId(c)
+	if teamId > 0 {
+		req.TeamId = teamId
+	}
+	text, err := service.SerBill.StDay(req.TeamId, req.UserId, req.DeptPath, req.Day, e.GetReqId(c))
+	if err != nil {
+		e.Error(c, err)
+	} else {
+		e.Ok(c, text)
+	}
+}
+
+// StMonth 月统计
+// @Summary 月统计
+// @Tags dental-Bill
+// @Accept application/json
+// @Product application/json
+// @Param teamId header int false "团队id"
+// @Param data body dto.StDayReq true "body"
+// @Success 200 {object} base.Resp{data=string} "{"code": 200, "data": [...]}"
+// @Router /api/v1/dental/st/month [post]
+// @Security Bearer
+func (e *BillApi) StMonth(c *gin.Context) {
+	var req dto.StDayReq
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
+	if req.Day.IsZero() {
+		req.Day = time.Now()
+	}
+	teamId := utils.GetTeamId(c)
+	if teamId > 0 {
+		req.TeamId = teamId
+	}
+	if req.UserId == 0 {
+		req.UserId = utils.GetUserId(c)
+	}
+	text, err := service.SerBill.StMonth(req.TeamId, req.UserId, req.DeptPath, req.Day, e.GetReqId(c))
+	if err != nil {
+		e.Error(c, err)
+	} else {
+		e.Ok(c, text)
+	}
 }

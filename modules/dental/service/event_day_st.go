@@ -1,6 +1,7 @@
 package service
 
 import (
+	"dilu/common/consts"
 	"dilu/modules/dental/models"
 	"dilu/modules/sys/service"
 	"dilu/modules/sys/service/dto"
@@ -13,7 +14,7 @@ type EventDayStService struct {
 }
 
 var SerEventDaySt = EventDayStService{
-	base.NewService("dental"),
+	base.NewService(consts.DB_CRM),
 }
 
 func (s *EventDayStService) Create(teamId, userId int, reqId string, data *models.EventDaySt) error {

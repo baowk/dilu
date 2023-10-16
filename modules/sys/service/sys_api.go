@@ -8,6 +8,8 @@ import (
 	"time"
 
 	"github.com/baowk/dilu-core/core/base"
+
+	coreConst "github.com/baowk/dilu-core/common/consts"
 )
 
 type SysApiService struct {
@@ -15,7 +17,7 @@ type SysApiService struct {
 }
 
 var SerSysApi = SysApiService{
-	base.NewService("sys"),
+	base.NewService(coreConst.DB_DEF),
 }
 
 func (s *SysApiService) GetByType(permType int, list *[]models.SysApi) error {

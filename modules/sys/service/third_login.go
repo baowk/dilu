@@ -4,6 +4,7 @@ import (
 	"dilu/modules/sys/models"
 	"time"
 
+	"github.com/baowk/dilu-core/common/consts"
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/base"
 	"github.com/pkg/errors"
@@ -16,7 +17,7 @@ type ThirdLogin struct {
 }
 
 var SerThirdLogin = ThirdLogin{
-	base.NewService("sys"),
+	base.NewService(consts.DB_DEF),
 }
 
 // Insert 创建ThirdLogin对象

@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/baowk/dilu-core/common/consts"
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/base"
 	"github.com/baowk/dilu-core/core/errs"
@@ -24,7 +25,7 @@ type SysMenu struct {
 }
 
 var SerSysMenu = SysMenu{
-	base.NewService("sys"),
+	base.NewService(consts.DB_DEF),
 }
 
 // GetPage 获取SysMenu列表

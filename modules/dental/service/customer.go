@@ -2,6 +2,7 @@ package service
 
 import (
 	"dilu/common/codes"
+	"dilu/common/consts"
 	"dilu/modules/dental/models"
 
 	"github.com/baowk/dilu-core/core/base"
@@ -13,7 +14,7 @@ type CustomerService struct {
 }
 
 var SerCustomer = CustomerService{
-	base.NewService("dental"),
+	base.NewService(consts.DB_CRM),
 }
 
 func (s *CustomerService) GetByUserIdAndName(userId, teamId int, name string, customer *[]models.Customer) errs.IError {

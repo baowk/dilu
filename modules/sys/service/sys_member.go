@@ -4,6 +4,7 @@ import (
 	"dilu/modules/sys/models"
 	"dilu/modules/sys/service/dto"
 
+	"github.com/baowk/dilu-core/common/consts"
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/base"
 )
@@ -13,7 +14,7 @@ type SysMemberService struct {
 }
 
 var SerSysMember = SysMemberService{
-	base.NewService("sys"),
+	base.NewService(consts.DB_DEF),
 }
 
 func (e *SysMemberService) Query(req dto.SysMemberGetPageReq, list *[]models.SysMember, total *int64) error {

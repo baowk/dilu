@@ -13,6 +13,8 @@ import (
 	"dilu/modules/sys/models"
 	"dilu/modules/sys/service/dto"
 
+	coreConst "github.com/baowk/dilu-core/common/consts"
+
 	"github.com/baowk/dilu-core/common/utils/cryptos"
 	"github.com/baowk/dilu-core/common/utils/regexps"
 	"github.com/baowk/dilu-core/core"
@@ -27,7 +29,7 @@ type SysUser struct {
 }
 
 var SerSysUser = SysUser{
-	base.NewService("sys"),
+	base.NewService(coreConst.DB_DEF),
 }
 
 // GetPage 获取SysUser列表

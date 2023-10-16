@@ -2,6 +2,7 @@ package service
 
 import (
 	//"github.com/acmestack/gorm-plus/gplus"
+	"github.com/baowk/dilu-core/common/consts"
 	"github.com/baowk/dilu-core/core/base"
 )
 
@@ -10,7 +11,7 @@ type SysRoleService struct {
 }
 
 var SerSysRole = SysRoleService{
-	base.NewService("sys"),
+	base.NewService(consts.DB_DEF),
 }
 
 // func (s *SysRoleService) Query(teamId int) ([]*models.SysRole, error) {

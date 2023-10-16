@@ -1270,6 +1270,112 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/dental/st/day": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-Bill"
+                ],
+                "summary": "日统计",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.StDayReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/dental/st/month": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-Bill"
+                ],
+                "summary": "月统计",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.StDayReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/dental/summary-plan-day/create": {
             "post": {
                 "security": [
@@ -5677,7 +5783,7 @@ const docTemplate = `{
             "properties": {
                 "day": {
                     "description": "时间",
-                    "type": "integer"
+                    "type": "string"
                 },
                 "deal": {
                     "description": "成交",
@@ -6141,6 +6247,23 @@ const docTemplate = `{
                 "title": {
                     "description": "菜单名称（兼容国际化、非国际化，如何用国际化的写法就必须在根目录的locales文件夹下对应添加） 必填",
                     "type": "string"
+                }
+            }
+        },
+        "dto.StDayReq": {
+            "type": "object",
+            "properties": {
+                "day": {
+                    "type": "string"
+                },
+                "deptPath": {
+                    "type": "string"
+                },
+                "teamId": {
+                    "type": "integer"
+                },
+                "userId": {
+                    "type": "integer"
                 }
             }
         },
@@ -7041,7 +7164,7 @@ const docTemplate = `{
                 },
                 "paidTotal": {
                     "description": "已支付金额",
-                    "type": "string"
+                    "type": "number"
                 },
                 "paybackDate": {
                     "description": "预定回款日期",
@@ -7053,7 +7176,7 @@ const docTemplate = `{
                 },
                 "realTotal": {
                     "description": "折后金额",
-                    "type": "string"
+                    "type": "number"
                 },
                 "remark": {
                     "description": "备注",
@@ -7069,7 +7192,7 @@ const docTemplate = `{
                 },
                 "total": {
                     "description": "金额",
-                    "type": "string"
+                    "type": "number"
                 },
                 "tradeAt": {
                     "description": "交易日期",

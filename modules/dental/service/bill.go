@@ -2,11 +2,14 @@ package service
 
 import (
 	"dilu/common/codes"
+	"dilu/common/consts"
+	"dilu/common/utils"
 	"dilu/modules/dental/enums"
 	"dilu/modules/dental/models"
 	"dilu/modules/dental/service/dto"
 	smodles "dilu/modules/sys/models"
 	"dilu/modules/sys/service"
+	sdto "dilu/modules/sys/service/dto"
 	"fmt"
 	"strconv"
 	"strings"
@@ -16,6 +19,7 @@ import (
 	"github.com/baowk/dilu-core/core/base"
 	"github.com/baowk/dilu-core/core/errs"
 	"github.com/jinzhu/copier"
+	"github.com/shopspring/decimal"
 	"go.uber.org/zap"
 )
 
@@ -24,7 +28,138 @@ type BillService struct {
 }
 
 var SerBill = BillService{
-	base.NewService("dental"),
+	base.NewService(consts.DB_CRM),
+}
+
+var (
+	DAY_TMPL = `今日初诊数：%d
+	今日成交患者：%d
+	今日成交流水：%s
+	今日实收流水：%s
+	今日欠款:%s
+	总成交：%s
+	总实收：%s`
+
+	DAY_TOTAL_TMPL = `{day}
+	汇报人:{username}
+	本月团队任务:%s
+	人员数量:%d
+	今日留存信息:%d
+	今日邀约到诊:%d
+	今日成交患者:%d
+	今日种植颗数:%d
+	明日邀约患者:%d
+	本月留存患者数:%d
+	本月初诊患者数:%d
+	本月成交患者数:%d
+	本月患者成交率:%s
+	种植颗数:%d
+	延期颗数:%d
+	成交总流水:%s
+	总欠款金额:%s
+	本月实收:%s
+	今日实收:%s
+	实收率:%s
+	团队人效:%s
+	收回上月欠款:%s
+	上月延期种植:%d
+	本月时间进度:%s
+	本月任务达成率:%s
+	
+	今日工作汇报
+	%s
+	
+	今日留存:%d
+	%s
+	
+	明日工作计划
+	%s`
+
+	DAY_MEMBER_TMPL = `%s:留存%d初诊%d复诊%d成交%d`
+)
+
+func (s *BillService) StDay(teamId, userId int, deptPath string, day time.Time, reqId string) (string, error) {
+	if teamId < 1 {
+		return "", codes.ErrInvalidParameter(reqId, "teamId is nil")
+	}
+	today := utils.GetZoreTime(day)
+	end := today.Add(24 * time.Hour)
+	begin := utils.GetMonthFirstDay(day)
+
+	db := s.DB().Where("team_id = ?", teamId).Where("trade_at >=?", begin).
+		Where("trade_at < ?", end)
+	if userId > 0 {
+		db.Where("user_id = ?", userId)
+	} else if deptPath != "" {
+		db.Where("dept_path like ?", deptPath+"%s")
+	}
+	var list []models.Bill
+	if err := db.Find(&list).Error; err != nil {
+		return "", err
+	}
+	var tDeal, tPaid, deal, paid, debt decimal.Decimal
+	var firstCnt, dealCnt int
+	for _, b := range list {
+		if b.TradeStatus == 1 {
+			tDeal = tDeal.Add(b.RealTotal)
+			tPaid = tPaid.Add(b.PaidTotal)
+			if b.TradeAt.After(today) {
+				deal = deal.Add(b.RealTotal)
+				paid = paid.Add(b.PaidTotal)
+				debt = debt.Add(b.RealTotal.Sub(b.PaidTotal))
+				dealCnt += 1
+			}
+		} else if b.TradeStatus == 2 {
+			tPaid = tPaid.Add(b.PaidTotal)
+			if b.TradeAt.After(today) {
+				paid = paid.Add(b.PaidTotal)
+			}
+		} else if b.TradeStatus == 3 {
+			tPaid = tPaid.Add(b.PaidTotal)
+			if b.TradeAt.After(today) {
+				paid = paid.Add(b.PaidTotal)
+			}
+		} else if b.TradeStatus == 10 {
+			tPaid = tPaid.Sub(b.PaidTotal)
+			if b.TradeAt.After(today) {
+				paid = paid.Sub(b.PaidTotal)
+			}
+		}
+	}
+	//SerEventDaySt.
+	return fmt.Sprintf(DAY_TMPL, firstCnt, dealCnt, deal.StringFixedBank(0), paid.StringFixedBank(0), debt.StringFixedBank(0), tDeal.StringFixedBank(0), tPaid.StringFixedBank(0)), nil
+}
+
+func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time, reqId string) (string, error) {
+	if teamId < 1 {
+		return "", codes.ErrInvalidParameter(reqId, "teamId is nil")
+	}
+	today := utils.GetZoreTime(day)
+	end := today.Add(24 * time.Hour)
+	begin := utils.GetMonthFirstDay(day)
+
+	db := s.DB().Where("team_id = ?", teamId).Where("trade_at >=?", begin).
+		Where("trade_at < ?", end)
+	if userId > 0 {
+		db.Where("user_id = ?", userId)
+	} else if deptPath != "" {
+		db.Where("dept_path like ?", deptPath+"%s")
+	}
+	var list []models.Bill
+	if err := db.Find(&list).Error; err != nil {
+		return "", err
+	}
+	dayFmt := day.Format("2006年01月03日")
+	var build strings.Builder
+	build.WriteString(dayFmt)
+	build.WriteString("\n\t")
+	var tu sdto.TeamMemberResp
+	service.SerSysMember.GetTeamUser(teamId, userId, &tu)
+	build.WriteString("汇报人:")
+	build.WriteString(tu.Name)
+	build.WriteString("\n\t")
+
+	return build.String(), nil
 }
 
 func (s *BillService) CreateBill(reqId string, bill dto.IdentifyBillDto, dbill *models.Bill) errs.IError {
@@ -76,7 +211,7 @@ func (s *BillService) CreateBill(reqId string, bill dto.IdentifyBillDto, dbill *
 	if err := copier.Copy(dbill, bill); err != nil {
 		return codes.ErrSys(err)
 	}
-	if dbill.Total == "" {
+	if dbill.Total.IsZero() {
 		dbill.Total = dbill.RealTotal
 	}
 	dbill.CreatedAt = time.Now()

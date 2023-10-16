@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/baowk/dilu-core/common/consts"
 	"github.com/baowk/dilu-core/common/utils"
 	"github.com/baowk/dilu-core/common/utils/email"
 	"github.com/baowk/dilu-core/core"
@@ -17,7 +18,7 @@ type SysEmail struct {
 }
 
 var SerEmail = SysEmail{
-	base.NewService("sys"),
+	base.NewService(consts.DB_DEF),
 }
 
 var mail_tmp = `

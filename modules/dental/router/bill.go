@@ -22,4 +22,9 @@ func registerBillRouter(v1 *gin.RouterGroup) {
 		r.POST("/del", apis.ApiBill.Del)
 		r.POST("identify", apis.ApiBill.Identify)
 	}
+	r1 := v1.Group("st").Use(middleware.JwtHandler()).Use(middleware.PermHandler())
+	{
+		r1.POST("day", apis.ApiBill.StDay)
+		r1.POST("month", apis.ApiBill.StMonth)
+	}
 }

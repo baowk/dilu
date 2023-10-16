@@ -3,6 +3,7 @@ package service
 import (
 	"dilu/modules/sys/models"
 
+	"github.com/baowk/dilu-core/common/consts"
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/base"
 )
@@ -12,7 +13,7 @@ type SysDeptService struct {
 }
 
 var SerSysDept = SysDeptService{
-	base.NewService("sys"),
+	base.NewService(consts.DB_DEF),
 }
 
 func (s *SysDeptService) GetDepts(list *[]models.SysDept) error {

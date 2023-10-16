@@ -237,7 +237,7 @@ definitions:
     properties:
       day:
         description: 时间
-        type: integer
+        type: string
       deal:
         description: 成交
         type: integer
@@ -576,6 +576,17 @@ definitions:
       title:
         description: 菜单名称（兼容国际化、非国际化，如何用国际化的写法就必须在根目录的locales文件夹下对应添加） 必填
         type: string
+    type: object
+  dto.StDayReq:
+    properties:
+      day:
+        type: string
+      deptPath:
+        type: string
+      teamId:
+        type: integer
+      userId:
+        type: integer
     type: object
   dto.SummaryPlanDayDto:
     properties:
@@ -1222,7 +1233,7 @@ definitions:
         type: integer
       paidTotal:
         description: 已支付金额
-        type: string
+        type: number
       paybackDate:
         description: 预定回款日期
         type: string
@@ -1231,7 +1242,7 @@ definitions:
         type: string
       realTotal:
         description: 折后金额
-        type: string
+        type: number
       remark:
         description: 备注
         type: string
@@ -1243,7 +1254,7 @@ definitions:
         type: integer
       total:
         description: 金额
-        type: string
+        type: number
       tradeAt:
         description: 交易日期
         type: string
@@ -2856,6 +2867,66 @@ paths:
       summary: 更新EventDaySt
       tags:
       - dental-EventDaySt
+  /api/v1/dental/st/day:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.StDayReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Bearer: []
+      summary: 日统计
+      tags:
+      - dental-Bill
+  /api/v1/dental/st/month:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.StDayReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Bearer: []
+      summary: 月统计
+      tags:
+      - dental-Bill
   /api/v1/dental/summary-plan-day/create:
     post:
       consumes:

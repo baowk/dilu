@@ -69,3 +69,10 @@ type BillTmplReq struct {
 	Text   string `json:"text"`   //文本
 	TeamId int    `json:"teamId"` //团队id
 }
+
+type StDayReq struct {
+	TeamId   int       `json:"teamId"`
+	UserId   int       `json:"userId"`
+	DeptPath string    `json:"deptPath"`
+	Day      time.Time `json:"day"`
+}
