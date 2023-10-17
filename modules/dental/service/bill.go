@@ -163,6 +163,44 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	if err := db.Find(&list).Error; err != nil {
 		return "", err
 	}
+
+	var tmDeal, tPaid, tDebt, deal, paid, debt, befPaid decimal.Decimal
+	var dealCnt, dCnt, iCnt, tdCnt, tiCnt int
+	for _, b := range list {
+		dCnt += b.DentalCount
+		iCnt += b.ImplantedCount
+		if b.TradeType == 1 {
+			tmDeal = tmDeal.Add(b.RealTotal)
+			tPaid = tPaid.Add(b.PaidTotal)
+			tDebt = tDebt.Add(b.RealTotal.Sub(b.PaidTotal))
+			if b.TradeAt.After(today) {
+				deal = deal.Add(b.RealTotal)
+				paid = paid.Add(b.PaidTotal)
+				debt = debt.Add(b.RealTotal.Sub(b.PaidTotal))
+				dealCnt += 1
+				tdCnt += b.DentalCount
+				tiCnt += b.ImplantedCount
+			}
+		} else if b.TradeType == 2 {
+			tPaid = tPaid.Add(b.PaidTotal)
+			tDebt = tDebt.Sub(b.PaidTotal)
+			if b.TradeAt.After(today) {
+				paid = paid.Add(b.PaidTotal)
+			}
+		} else if b.TradeType == 3 {
+			tPaid = tPaid.Add(b.PaidTotal)
+			befPaid = befPaid.Add(b.PaidTotal)
+			if b.TradeAt.After(today) {
+				paid = paid.Add(b.PaidTotal)
+			}
+		} else if b.TradeType == 10 {
+			tPaid = tPaid.Sub(b.PaidTotal)
+			if b.TradeAt.After(today) {
+				paid = paid.Sub(b.PaidTotal)
+			}
+		}
+	}
+
 	dayFmt := day.Format("2006年01月03日")
 	build := utils.NewSB()
 	build.Append(dayFmt).Append("\n\t")
@@ -182,7 +220,7 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 			memberLen++
 		}
 	}
-	build.Append("本月团队任务:").Append(utils.MoneyFmt(float64(totalDeal))).
+	build.Append("本月团队任务:").Append(utils.MoneyFmt(float64(totalDeal))).Append("\n\t").
 		Append("人员数量:").Append(strconv.Itoa(memberLen)).Append("\n\t")
 
 	var edList []models.EventDaySt
@@ -225,8 +263,36 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	build.Append("今日留存信息:").Append(strconv.Itoa(dayNc)).Append("\n\t")
 	build.Append("今日邀约到诊:").Append(strconv.Itoa(dayNc)).Append("\n\t")
 	build.Append("今日成交患者:").Append(strconv.Itoa(dayNc)).Append("\n\t")
+	build.Append("今日种植颗数:").Append(strconv.Itoa(tdCnt)).Append("\n\t")
+	build.Append("明日邀约患者:").Append(strconv.Itoa(dayIv)).Append("\n\t")
+	build.Append("本月留存患者数:").Append(strconv.Itoa(tNc)).Append("\n\t")
+	build.Append("本月初诊患者数:").Append(strconv.Itoa(tFirD)).Append("\n\t")
+	build.Append("本月成交患者数:").Append(strconv.Itoa(tDeal)).Append("\n\t")
+	f := fmt.Sprintf("%d%%", tDeal*100/tNc)
+	build.Append("本月患者成交率:").Append(f).Append("\n\t")
 
-	build.Append("今日留存:")
+	build.Append("种植颗数:").Append(strconv.Itoa(dCnt)).Append("\n\t")
+	build.Append("延期颗数:").Append(strconv.Itoa(dCnt - iCnt)).Append("\n\t")
+	build.Append("成交总流水:").Append(tmDeal.StringFixedBank(0)).Append("\n\t")
+	build.Append("总欠款金额:").Append(tDebt.StringFixedBank(0)).Append("\n\t")
+	build.Append("本月实收:").Append(tPaid.StringFixedBank(0)).Append("\n\t")
+	build.Append("今日实收:").Append(paid.StringFixedBank(0)).Append("\n\t")
+	build.Append("实收率:").Append(fmt.Sprintf("%.2f%%", tPaid.Div(tmDeal).InexactFloat64())).Append("\n\t")
+	build.Append("团队人效:").Append(tPaid.Div(decimal.NewFromInt(int64(memberLen))).StringFixedBank(0)).Append("\n\t")
+	build.Append("收回上月欠款:").Append(befPaid.StringFixedBank(0)).Append("\n\t")
+	build.Append("上月延期种植:").Append(strconv.Itoa(dayNc)).Append("\n\t") //TODO
+	build.Append("本月时间进度:").Append(strconv.Itoa(dayNc)).Append("\n\t") //TODO
+	tp := fmt.Sprintf("%f%%", tPaid.Div(tmDeal).InexactFloat64())
+	build.Append("本月任务达成率:").Append(tp).Append("\n\t")
+
+	build.Append("\n\t").Append("今日工作汇报").Append("\n\t")
+	build.Append("今日工作汇报").Append("\n\t") //TODO
+
+	build.Append("\n\t").Append("今日留存:").Append(strconv.Itoa(dayNc)).Append("\n\t") //TODO
+	build.Append(stDay.String()).Append("\n\t")
+
+	build.Append("明日工作计划").Append("\n\t")
+	build.Append("zzz") //TODO
 
 	return build.String(), nil
 }

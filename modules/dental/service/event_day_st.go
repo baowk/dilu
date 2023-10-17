@@ -51,8 +51,8 @@ func (s *EventDayStService) Update(teamId, userId int, reqId string, data *model
 }
 
 func (s *EventDayStService) GetList(teamId, userId int, deptPath string, begin, end time.Time, list *[]models.EventDaySt) error {
-	db := s.DB().Where("team_id = ?", teamId).Where("trade_at >=?", begin).
-		Where("trade_at < ?", end)
+	db := s.DB().Where("team_id = ?", teamId).Where("day >=?", begin).
+		Where("day < ?", end)
 	if userId > 0 {
 		db.Where("user_id = ?", userId)
 	} else if deptPath != "" {
