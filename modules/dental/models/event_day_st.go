@@ -14,7 +14,7 @@ type EventDaySt struct {
 	FurtherDiagnosis int       `json:"furtherDiagnosis" gorm:"type:int unsigned;comment:复诊"`            //复诊
 	Deal             int       `json:"deal" gorm:"type:int unsigned;comment:成交"`                        //成交
 	Invitation       int       `json:"invitation" gorm:"type:int unsigned;comment:明日邀约"`                //明日邀约
-	Rest             int       `json:"rest" gorm:"type:tinyint;comment:休息"`                             //休息
+	Rest             int       `json:"rest" gorm:"type:tinyint;comment: 1上班 2休息"`                       //1上班 2休息
 	CreatedAt        time.Time `json:"createdAt" gorm:"type:datetime;comment:创建时间"`                     //创建时间
 	UpdatedAt        time.Time `json:"updatedAt" gorm:"type:datetime;comment:更新时间"`                     //更新时间
 	CreateBy         int       `json:"createBy" gorm:"type:int unsigned;index;comment:创建者"`             //创建者id

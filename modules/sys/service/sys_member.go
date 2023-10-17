@@ -55,10 +55,15 @@ func (e *SysMemberService) GetTeamUser(teamId, uid int, teamMember *dto.TeamMemb
 	return core.DB().Raw(sql, teamId, uid).Find(teamMember).Error
 }
 
-func (e *SysMemberService) GetMembers(teamId int, name string, members *[]models.SysMember) error {
-	where := models.SysMember{
-		TeamId: teamId,
-		Name:   name,
+func (e *SysMemberService) GetMembers(teamId, userId int, deptPath string, name string, members *[]models.SysMember) error {
+	db := e.DB().Where("team_id = ?", teamId)
+	if userId != 0 {
+		db.Where("user_id = ?", userId)
+	} else if deptPath != "" {
+		db.Where("dept_path like ?", deptPath+"%")
 	}
-	return e.GetByWhere(where, members)
+	if name != "" {
+		db.Where("name like ?", "%"+name+"%")
+	}
+	return db.Find(members).Error
 }

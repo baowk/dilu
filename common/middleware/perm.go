@@ -3,7 +3,6 @@ package middleware
 import (
 	"dilu/modules/sys/models"
 	"dilu/modules/sys/service"
-	"fmt"
 	"regexp"
 	"strings"
 
@@ -20,9 +19,9 @@ func PermHandler() gin.HandlerFunc {
 
 		curUri := c.Request.URL.Path
 		curMethod := c.Request.Method
-		uid := c.GetInt("a_uid")
+		//uid := c.GetInt("a_uid")
 
-		fmt.Println(curUri, curMethod, uid, rid)
+		//fmt.Println(curUri, curMethod, uid, rid)
 		var aid int
 		apis := GetApis()
 		for _, api := range apis {
@@ -31,7 +30,7 @@ func PermHandler() gin.HandlerFunc {
 				break
 			}
 		}
-		fmt.Println(aid)
+		//fmt.Println(aid)
 		if aid < 1 {
 			Fail(c, 403, "无权限")
 			return

@@ -52,3 +52,27 @@ var PaybackDate = []string{"补款日期"}
 var Implant = []string{"种在嘴里", "是否已种", "种植情况"}
 var Extensions = []string{"延期情况"}
 var Remark = []string{"备注"}
+
+type DayType int
+
+const (
+	Week  DayType = 7
+	Month DayType = 30
+)
+
+type Pack int
+
+const (
+	PackCnt  Pack = 1 + iota //颗数
+	PackHalf                 //半口
+	PackFull                 //全口
+)
+
+type TradeType int
+
+const (
+	TradeDeal    TradeType = 1 + iota //成交
+	TradeBalance                      //补尾款
+	TradeDebt                         //欠款
+	TradeRefund  = 10                 //退款
+)

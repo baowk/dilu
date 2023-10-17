@@ -100,7 +100,7 @@ func (s *BillService) StDay(teamId, userId int, deptPath string, day time.Time, 
 	var tDeal, tPaid, deal, paid, debt decimal.Decimal
 	var firstCnt, dealCnt int
 	for _, b := range list {
-		if b.TradeStatus == 1 {
+		if b.TradeType == 1 {
 			tDeal = tDeal.Add(b.RealTotal)
 			tPaid = tPaid.Add(b.PaidTotal)
 			if b.TradeAt.After(today) {
@@ -109,24 +109,31 @@ func (s *BillService) StDay(teamId, userId int, deptPath string, day time.Time, 
 				debt = debt.Add(b.RealTotal.Sub(b.PaidTotal))
 				dealCnt += 1
 			}
-		} else if b.TradeStatus == 2 {
+		} else if b.TradeType == 2 {
 			tPaid = tPaid.Add(b.PaidTotal)
 			if b.TradeAt.After(today) {
 				paid = paid.Add(b.PaidTotal)
 			}
-		} else if b.TradeStatus == 3 {
+		} else if b.TradeType == 3 {
 			tPaid = tPaid.Add(b.PaidTotal)
 			if b.TradeAt.After(today) {
 				paid = paid.Add(b.PaidTotal)
 			}
-		} else if b.TradeStatus == 10 {
+		} else if b.TradeType == 10 {
 			tPaid = tPaid.Sub(b.PaidTotal)
 			if b.TradeAt.After(today) {
 				paid = paid.Sub(b.PaidTotal)
 			}
 		}
 	}
-	//SerEventDaySt.
+	var edList []models.EventDaySt
+	if err := SerEventDaySt.GetList(teamId, userId, deptPath, today, end, &edList); err != nil {
+		return "", err
+	}
+	for _, ed := range edList {
+		firstCnt += ed.FirstDiagnosis
+		dealCnt += ed.Deal
+	}
 	return fmt.Sprintf(DAY_TMPL, firstCnt, dealCnt, deal.StringFixedBank(0), paid.StringFixedBank(0), debt.StringFixedBank(0), tDeal.StringFixedBank(0), tPaid.StringFixedBank(0)), nil
 }
 
@@ -134,6 +141,13 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	if teamId < 1 {
 		return "", codes.ErrInvalidParameter(reqId, "teamId is nil")
 	}
+
+	var members []smodles.SysMember
+
+	if err := service.SerSysMember.GetMembers(teamId, userId, deptPath, "", &members); err != nil {
+		return "", err
+	}
+
 	today := utils.GetZoreTime(day)
 	end := today.Add(24 * time.Hour)
 	begin := utils.GetMonthFirstDay(day)
@@ -150,14 +164,69 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 		return "", err
 	}
 	dayFmt := day.Format("2006年01月03日")
-	var build strings.Builder
-	build.WriteString(dayFmt)
-	build.WriteString("\n\t")
+	build := utils.NewSB()
+	build.Append(dayFmt).Append("\n\t")
 	var tu sdto.TeamMemberResp
 	service.SerSysMember.GetTeamUser(teamId, userId, &tu)
-	build.WriteString("汇报人:")
-	build.WriteString(tu.Name)
-	build.WriteString("\n\t")
+	build.Append("汇报人:").Append(tu.Name).Append("\n\t")
+
+	var taskList []models.TargetTask
+	if err := SerTargetTask.GetTasks(enums.Month, today.Year()*100+int(today.Month()), teamId, userId, deptPath, &taskList); err != nil {
+		return "", err
+	}
+	var memberLen int
+	var totalDeal int
+	for _, task := range taskList {
+		if task.Deal > 0 {
+			totalDeal += task.Deal
+			memberLen++
+		}
+	}
+	build.Append("本月团队任务:").Append(utils.MoneyFmt(float64(totalDeal))).
+		Append("人员数量:").Append(strconv.Itoa(memberLen)).Append("\n\t")
+
+	var edList []models.EventDaySt
+	if err := SerEventDaySt.GetList(teamId, userId, deptPath, begin, end, &edList); err != nil {
+		return "", err
+	}
+
+	stDay := utils.NewSB()
+
+	var tNc, tFirD, tFuD, tDeal int
+	var dayNc, dayFirD, dayFuD, dayDeal, dayIv int
+	for _, ed := range edList {
+		if ed.Day.After(today) { //今日
+			dayNc += ed.NewCustomerCnt
+			dayFirD += ed.FirstDiagnosis
+			dayFuD += ed.FurtherDiagnosis
+			dayDeal += ed.Deal
+			dayIv += ed.Invitation
+			for _, m := range members {
+				if m.UserId == ed.UserId {
+					stDay.Append(m.Name).Append(":")
+					if ed.Rest == 2 {
+						stDay.Append("0休息\n\t")
+					} else {
+						stDay.Append("留存").Append(strconv.Itoa(ed.NewCustomerCnt)).
+							Append("初诊").Append(strconv.Itoa(ed.FirstDiagnosis)).
+							Append("复诊").Append(strconv.Itoa(ed.FurtherDiagnosis)).
+							Append("成交").Append(strconv.Itoa(ed.Deal)).Append("\n\t")
+					}
+					break
+				}
+			}
+
+		}
+		tNc += ed.NewCustomerCnt
+		tFirD += ed.FirstDiagnosis
+		tFuD += ed.FurtherDiagnosis
+		tDeal += ed.Deal
+	}
+	build.Append("今日留存信息:").Append(strconv.Itoa(dayNc)).Append("\n\t")
+	build.Append("今日邀约到诊:").Append(strconv.Itoa(dayNc)).Append("\n\t")
+	build.Append("今日成交患者:").Append(strconv.Itoa(dayNc)).Append("\n\t")
+
+	build.Append("今日留存:")
 
 	return build.String(), nil
 }
@@ -362,7 +431,7 @@ func (s *BillService) Identify(req dto.BillTmplReq, bill *dto.IdentifyBillDto) e
 	}
 
 	var members []smodles.SysMember
-	if err := service.SerSysMember.GetMembers(req.TeamId, bill.Name, &members); err != nil {
+	if err := service.SerSysMember.GetMembers(req.TeamId, 0, "", bill.Name, &members); err != nil {
 		core.Log.Error("获取咨询师错误", zap.Error(err))
 		return errs.Err(codes.FAILURE, "", err)
 	}
