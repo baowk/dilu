@@ -14,9 +14,11 @@ type Bill struct {
 	UserId         int             `json:"userId" gorm:"type:int unsigned;comment:用户id"`                     //用户id
 	TeamId         int             `json:"teamId" gorm:"type:int unsigned;comment:团队id"`                     //团队id
 	DeptPath       string          `json:"deptPath" gorm:"type:varchar(255);comment:部门路径"`                   //路径
-	Total          decimal.Decimal `json:"total" gorm:"type:decimal(10,2);comment:金额"`                       //金额
-	RealTotal      decimal.Decimal `json:"realTotal" gorm:"type:decimal(10,2);comment:折后金额"`                 //折后金额
-	PaidTotal      decimal.Decimal `json:"paidTotal" gorm:"type:decimal(10,2);comment:已支付金额"`                //已支付金额
+	Amount         decimal.Decimal `json:"amount" gorm:"type:decimal(10,2);comment:金额"`                      //金额
+	RealAmount     decimal.Decimal `json:"realAmount" gorm:"type:decimal(10,2);comment:折后金额"`                //折后金额
+	PaidAmount     decimal.Decimal `json:"paidAmount" gorm:"type:decimal(10,2);comment:已支付金额"`               //已支付金额
+	DebtAmount     decimal.Decimal `json:"debtAmount" gorm:"type:decimal(10,2);comment:回收上月欠款"`              //回收上月欠款
+	RefundAmount   decimal.Decimal `json:"refundAmount" gorm:"type:decimal(10,2);comment:退款"`                //退款
 	LinkId         int             `json:"linkId" gorm:"type:int unsigned;comment:关联订单"`                     //关联订单
 	TradeAt        time.Time       `json:"tradeAt" gorm:"type:datetime;default:(-);comment:交易日期"`            //交易日期
 	TradeType      int             `json:"tradeType" gorm:"type:tinyint;comment:交易类型1 成交 2补尾款  3补上月欠款 10退款"` //交易类型 1 成交 2补尾款  3补上月欠款 10退款
@@ -66,16 +68,16 @@ func (e *Bill) SetTeamId(teamId int) *Bill {
 	e.TeamId = teamId
 	return e
 }
-func (e *Bill) SetTotal(total decimal.Decimal) *Bill {
-	e.Total = total
+func (e *Bill) SetAmount(amount decimal.Decimal) *Bill {
+	e.Amount = amount
 	return e
 }
-func (e *Bill) SetRealTotal(realTotal decimal.Decimal) *Bill {
-	e.RealTotal = realTotal
+func (e *Bill) SetRealAmount(realAmount decimal.Decimal) *Bill {
+	e.RealAmount = realAmount
 	return e
 }
-func (e *Bill) SetPaidTotal(paidTotal decimal.Decimal) *Bill {
-	e.PaidTotal = paidTotal
+func (e *Bill) SetPaidAmount(paidAmount decimal.Decimal) *Bill {
+	e.PaidAmount = paidAmount
 	return e
 }
 func (e *Bill) SetLinkId(linkId int) *Bill {

@@ -3,8 +3,8 @@ package service
 import (
 	"dilu/common/consts"
 	"dilu/modules/dental/models"
+	smodels "dilu/modules/sys/models"
 	"dilu/modules/sys/service"
-	"dilu/modules/sys/service/dto"
 	"time"
 
 	"github.com/baowk/dilu-core/core/base"
@@ -25,8 +25,8 @@ func (s *EventDayStService) Create(teamId, userId int, reqId string, data *model
 	if teamId != 0 {
 		data.TeamId = teamId
 	}
-	var tu dto.TeamMemberResp
-	if err := service.SerSysMember.GetTeamUser(data.TeamId, data.UserId, &tu); err != nil {
+	var tu smodels.SysMember
+	if err := service.SerSysMember.GetMember(data.TeamId, data.UserId, &tu); err != nil {
 		return err
 	}
 	data.DeptPath = tu.DeptPath
@@ -41,8 +41,8 @@ func (s *EventDayStService) Update(teamId, userId int, reqId string, data *model
 	if teamId != 0 {
 		data.TeamId = teamId
 	}
-	var tu dto.TeamMemberResp
-	if err := service.SerSysMember.GetTeamUser(data.TeamId, data.UserId, &tu); err != nil {
+	var tu smodels.SysMember
+	if err := service.SerSysMember.GetMember(data.TeamId, data.UserId, &tu); err != nil {
 		return err
 	}
 	data.DeptPath = tu.DeptPath

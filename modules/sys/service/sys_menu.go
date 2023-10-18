@@ -189,8 +189,8 @@ func (e *SysMenu) GetRoles(c *gin.Context) (platform, teamId int, roles []int, i
 			ierr = codes.Err403(errors.New("团队id不存在"))
 			return
 		}
-		var tu dto.TeamMemberResp
-		if err := SerSysMember.GetTeamUser(teamId, utils.GetUserId(c), &tu); err != nil {
+		var tu models.SysMember
+		if err := SerSysMember.GetMember(teamId, utils.GetUserId(c), &tu); err != nil {
 			ierr = codes.Err403(err)
 			return
 		}

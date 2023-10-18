@@ -106,7 +106,7 @@ func (e *SysMemberApi) MyInfo(c *gin.Context) {
 		data.Nickname = utils.GetNickname(c)
 		data.Phone = utils.GetPhone(c)
 	} else {
-		if err := service.SerSysMember.GetTeamUser(teamId, uid, &data); err != nil {
+		if err := service.SerSysMember.GetTeamMember(teamId, uid, &data); err != nil {
 			e.Error(c, err)
 			return
 		}

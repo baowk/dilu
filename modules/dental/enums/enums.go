@@ -71,8 +71,8 @@ const (
 type TradeType int
 
 const (
-	TradeDeal    TradeType = 1 + iota //成交
-	TradeBalance                      //补尾款
-	TradeDebt                         //欠款
-	TradeRefund  = 10                 //退款
+	TradeDeal    TradeType = 1  //成交
+	TradeBalance TradeType = 2  //补尾款
+	TradeDebt    TradeType = 3  //欠款
+	TradeRefund  TradeType = 10 //退款
 )

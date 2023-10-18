@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/baowk/dilu-core/core/base"
+	"github.com/shopspring/decimal"
 )
 
 type BillGetPageReq struct {
@@ -75,4 +76,13 @@ type StDayReq struct {
 	UserId   int       `json:"userId"`
 	DeptPath string    `json:"deptPath"`
 	Day      time.Time `json:"day"`
+}
+
+type BillUserStDto struct {
+	UserId int             `json:"userId"`
+	Target decimal.Decimal `json:"target"` //目标
+	Deal   decimal.Decimal `json:"deal"`   //成交
+	Paid   decimal.Decimal `json:"paid"`   //实收
+	Debt   decimal.Decimal `json:"debt"`   //补上月欠款
+	Refund decimal.Decimal `json:"refund"` //退款
 }

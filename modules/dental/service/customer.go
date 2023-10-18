@@ -28,3 +28,7 @@ func (s *CustomerService) GetByUserIdAndName(userId, teamId int, name string, cu
 	}
 	return nil
 }
+
+func (s *CustomerService) GetByUserIds(teamId int, ids []int, customers *[]models.Customer) error {
+	return s.DB().Where("team_id = ?", teamId).Where("id in ?", ids).Find(customers).Error
+}

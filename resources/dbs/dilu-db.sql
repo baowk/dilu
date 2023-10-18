@@ -11,7 +11,7 @@
  Target Server Version : 80033
  File Encoding         : 65001
 
- Date: 16/10/2023 14:34:15
+ Date: 18/10/2023 10:54:59
 */
 
 SET NAMES utf8mb4;
@@ -313,7 +313,7 @@ CREATE TABLE `sys_api`  (
   `updated_at` datetime(3) NULL DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_method_path`(`method`, `path`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 62 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '接口' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 64 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '接口' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_api
@@ -549,7 +549,7 @@ CREATE TABLE `sys_menu`  (
   INDEX `idx_sys_menu_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_sys_menu_create_by`(`create_by`) USING BTREE,
   INDEX `idx_sys_menu_update_by`(`update_by`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 89 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 91 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -831,7 +831,7 @@ CREATE TABLE `sys_user`  (
   `bio` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '签名',
   `birthday` date NULL DEFAULT NULL COMMENT '生日 格式 yyyy-MM-dd',
   `gender` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '2' COMMENT '性别 1男 2女 3未知',
-  `platform_role_id` int(0) NULL DEFAULT NULL COMMENT '平台角色ID 1平台账户,0为团队账户',
+  `platform_role_id` mediumint(0) NULL DEFAULT NULL COMMENT '平台角色ID 大于0为平台账户,0为团队账户',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   `lock_time` datetime(3) NULL DEFAULT NULL COMMENT '锁定结束时间',
   `status` tinyint(0) NULL DEFAULT NULL COMMENT '状态 1正常 ',

@@ -12,6 +12,7 @@ type TargetTask struct {
 	TeamId         int       `json:"teamId" gorm:"type:int unsigned;comment:团队id"`                    //团队id
 	UserId         int       `json:"userId" gorm:"type:int unsigned;comment:用户id"`                    //用户id
 	DeptPath       string    `json:"deptPath" gorm:"type:varchar(255);comment:部门路径"`                  //部门路径
+	TaskType       int       `json:"taskType"  gorm:"type:int unsigned;comment:任务类型 1正式 算人员数量"`       //任务类型 1正式 算人员数量
 	NewCustomerCnt int       `json:"newCustomerCnt" gorm:"type:int unsigned;comment:留存任务"`            //留存任务
 	FirstDiagnosis int       `json:"firstDiagnosis" gorm:"type:int unsigned;comment:导诊任务"`            //导诊任务
 	Deal           int       `json:"deal" gorm:"type:int unsigned;comment:成交任务"`                      //成交任务

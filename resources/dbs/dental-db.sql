@@ -11,7 +11,7 @@
  Target Server Version : 80033
  File Encoding         : 65001
 
- Date: 11/10/2023 18:02:11
+ Date: 18/10/2023 10:54:47
 */
 
 SET NAMES utf8mb4;
@@ -28,12 +28,14 @@ CREATE TABLE `bill`  (
   `user_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
   `team_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '团队id',
   `dept_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '部门路径',
-  `total` decimal(10, 2) NULL DEFAULT NULL COMMENT '金额',
-  `real_total` decimal(10, 2) NULL DEFAULT NULL COMMENT '折后金额',
-  `paid_total` decimal(10, 2) NULL DEFAULT NULL COMMENT '已支付金额',
+  `amount` decimal(10, 2) NULL DEFAULT NULL COMMENT '金额',
+  `real_amount` decimal(10, 2) NULL DEFAULT NULL COMMENT '折后金额',
+  `paid_amount` decimal(10, 2) NULL DEFAULT NULL COMMENT '已支付金额',
+  `debt_amount` decimal(10, 2) NULL DEFAULT NULL COMMENT '回收上月欠款',
+  `refund_amount` decimal(10, 2) NULL DEFAULT NULL COMMENT '退款',
   `link_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '关联订单',
   `trade_at` datetime(0) NULL DEFAULT NULL COMMENT '交易日期',
-  `trade_status` tinyint(0) NULL DEFAULT NULL COMMENT '交易类型1 成交 2补尾款  3补上月欠款 10退款',
+  `trade_type` tinyint(0) NULL DEFAULT NULL COMMENT '交易类型1 成交 2补尾款  3补上月欠款 10退款',
   `dental_count` tinyint(0) NULL DEFAULT NULL COMMENT '颗数',
   `brand` tinyint(0) NULL DEFAULT NULL COMMENT '品牌',
   `implanted_count` tinyint(0) NULL DEFAULT NULL COMMENT '已种颗数',
@@ -100,7 +102,7 @@ CREATE TABLE `customer`  (
 DROP TABLE IF EXISTS `event_day_st`;
 CREATE TABLE `event_day_st`  (
   `id` int(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `day` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '时间',
+  `day` date NULL DEFAULT NULL COMMENT '时间',
   `team_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '团队id',
   `user_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
   `dept_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '部门路径',
@@ -109,7 +111,7 @@ CREATE TABLE `event_day_st`  (
   `further_diagnosis` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '复诊',
   `deal` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '成交',
   `invitation` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '明日邀约',
-  `rest` tinyint(0) NULL DEFAULT NULL COMMENT '休息',
+  `rest` tinyint(0) NULL DEFAULT NULL COMMENT ' 1上班 2休息',
   `created_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `updated_at` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `create_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
@@ -122,7 +124,7 @@ CREATE TABLE `event_day_st`  (
 -- ----------------------------
 -- Records of event_day_st
 -- ----------------------------
-INSERT INTO `event_day_st` VALUES (1, 20231001, 1, 2, '', 0, 0, 0, 0, 0, 1, '2023-10-03 18:32:55', '2023-10-03 18:32:55', 0, 0);
+INSERT INTO `event_day_st` VALUES (1, '2023-10-01', 1, 2, '', 0, 0, 0, 0, 0, 1, '2023-10-03 18:32:55', '2023-10-03 18:32:55', 0, 0);
 
 -- ----------------------------
 -- Table structure for summary_plan_day
@@ -162,6 +164,7 @@ CREATE TABLE `target_task`  (
   `team_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '团队id',
   `user_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
   `dept_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '部门路径',
+  `task_type` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '任务类型 1正式 算人员数量',
   `new_customer_cnt` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '留存任务',
   `first_diagnosis` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '导诊任务',
   `deal` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '成交任务',
@@ -177,11 +180,11 @@ CREATE TABLE `target_task`  (
 -- ----------------------------
 -- Records of target_task
 -- ----------------------------
-INSERT INTO `target_task` VALUES (1, 30, 202310, 1, 2, '/0/1/2', 72, 16, 80000, NULL, NULL, NULL, NULL);
-INSERT INTO `target_task` VALUES (2, 30, 202310, 1, 3, '/0/1/2', 72, 16, 80000, NULL, NULL, NULL, NULL);
-INSERT INTO `target_task` VALUES (3, 30, 202310, 1, 4, '/0/1/2', 72, 16, 80000, NULL, NULL, NULL, NULL);
-INSERT INTO `target_task` VALUES (4, 30, 202310, 1, 5, '/0/1/2', 72, 16, 80000, NULL, NULL, NULL, NULL);
-INSERT INTO `target_task` VALUES (5, 30, 202310, 1, 6, '/0/1/2', 72, 16, 80000, NULL, NULL, NULL, NULL);
-INSERT INTO `target_task` VALUES (6, 30, 202310, 1, 7, '/0/1/2', 72, 16, 80000, NULL, NULL, NULL, NULL);
+INSERT INTO `target_task` VALUES (1, 30, 202310, 1, 2, '/0/1/2', NULL, 72, 16, 80000, NULL, NULL, NULL, NULL);
+INSERT INTO `target_task` VALUES (2, 30, 202310, 1, 3, '/0/1/2', NULL, 72, 16, 80000, NULL, NULL, NULL, NULL);
+INSERT INTO `target_task` VALUES (3, 30, 202310, 1, 4, '/0/1/2', NULL, 72, 16, 80000, NULL, NULL, NULL, NULL);
+INSERT INTO `target_task` VALUES (4, 30, 202310, 1, 5, '/0/1/2', NULL, 72, 16, 80000, NULL, NULL, NULL, NULL);
+INSERT INTO `target_task` VALUES (5, 30, 202310, 1, 6, '/0/1/2', NULL, 72, 16, 80000, NULL, NULL, NULL, NULL);
+INSERT INTO `target_task` VALUES (6, 30, 202310, 1, 7, '/0/1/2', NULL, 72, 16, 80000, NULL, NULL, NULL, NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;
