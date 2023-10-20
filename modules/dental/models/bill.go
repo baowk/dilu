@@ -25,7 +25,7 @@ type Bill struct {
 	DentalCount    int             `json:"dentalCount" gorm:"type:tinyint;comment:颗数"`                       //颗数
 	Brand          int             `json:"brand" gorm:"type:tinyint;comment:品牌"`                             //品牌
 	ImplantedCount int             `json:"implantedCount" gorm:"type:tinyint;comment:已种颗数"`                  //已种颗数
-	Implant        int             `json:"implant" gorm:"type:tinyint;comment:是否已种"`                         //是否已种
+	Implant        int             `json:"implant" gorm:"type:tinyint;comment:种植状态：1 未种 2部分 3已种"`            //种植状态：1 未种 2部分 3已种
 	ImplantDate    time.Time       `json:"implantDate" gorm:"type:datetime;default:(-);comment:植入日期"`        //植入日期
 	Doctor         string          `json:"doctor" gorm:"type:varchar(32);comment:医生"`                        //医生
 	Pack           int             `json:"pack" gorm:"type:tinyint;comment:1 普通 2 半口 3 全口"`                  //1 普通 2 半口 3 全口

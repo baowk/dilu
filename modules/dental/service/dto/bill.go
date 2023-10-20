@@ -9,7 +9,7 @@ import (
 
 type BillGetPageReq struct {
 	base.ReqPage `search:"-"`
-	TradeStatus  int `json:"tradeStatus" form:"tradeStatus"` //交易类型 1 成交 2补尾款 3退款
+	TradeType    int `json:"tradeType" form:"tradeType"` //交易类型 1 成交 2补尾款  3补上月欠款 10退款
 }
 
 // Bill
@@ -19,12 +19,12 @@ type BillDto struct {
 	CustomerId     int       `json:"customerId"`     //顾客
 	UserId         int       `json:"userId"`         //用户id
 	TeamId         int       `json:"teamId"`         //团队id
-	Total          string    `json:"total"`          //金额
-	RealTotal      string    `json:"realTotal"`      //折后金额
-	PaidTotal      string    `json:"paidTotal"`      //已支付金额
+	Amount         string    `json:"amount"`         //金额
+	RealAmount     string    `json:"realAmount"`     //折后金额
+	PaidAmount     string    `json:"paidAmount"`     //已支付金额
 	LinkId         int       `json:"linkId"`         //关联订单
 	TradeAt        time.Time `json:"tradeAt"`        //交易日期
-	TradeStatus    int       `json:"tradeStatus"`    //交易类型 1 成交 2补尾款 3退款
+	TradeType      int       `json:"tradeType"`      //交易类型 1 成交 2补尾款  3补上月欠款 10退款
 	DentalCount    int       `json:"dentalCount"`    //颗数
 	Brand          int       `json:"brand"`          //品牌
 	ImplantedCount int       `json:"implantedCount"` //已种颗数
@@ -43,13 +43,13 @@ type IdentifyBillDto struct {
 	UserId         int    `json:"userId"`         //用户id
 	Name           string `json:"name"`           //用户名
 	TeamId         int    `json:"teamId"`         //团队id
-	Total          string `json:"total"`          //金额
-	RealTotal      string `json:"realTotal"`      //折后金额
-	PaidTotal      string `json:"paidTotal"`      //已支付金额
+	Amount         string `json:"amount"`         //金额
+	RealAmount     string `json:"realAmount"`     //折后金额
+	PaidAmount     string `json:"paidAmount"`     //已支付金额
 	Debts          string `json:"debts"`          //欠款
 	LinkId         int    `json:"linkId"`         //关联订单
 	TradeAt        string `json:"tradeAt"`        //交易日期
-	TradeStatus    int    `json:"tradeStatus"`    //交易类型 1 成交 2补尾款  3补上月欠款 10退款
+	TradeType      int    `json:"tradeType"`      //交易类型 1 成交 2补尾款  3补上月欠款 10退款
 	DentalCount    int    `json:"dentalCount"`    //颗数
 	Brand          int    `json:"brand"`          //品牌
 	BrandName      string `json:"brandName"`      //品牌名
@@ -64,6 +64,16 @@ type IdentifyBillDto struct {
 	Remark         string `json:"remark"`         //备注
 	Inviter        int    `json:"inviter"`        //邀请人id
 	InviterName    string `json:"inviterName"`    //邀请人名
+}
+
+type LinkBillDto struct {
+	RealAmount     string `json:"realAmount"`     //折后金额
+	PaidAmount     string `json:"paidAmount"`     //已支付金额
+	LinkId         int    `json:"linkId"`         //关联订单
+	TradeAt        string `json:"tradeAt"`        //交易日期
+	TradeType      int    `json:"tradeType"`      //交易类型 1 成交 2补尾款  3补上月欠款 10退款
+	ImplantedCount int    `json:"implantedCount"` //已种颗数
+	Remark         string `json:"remark"`         //备注
 }
 
 type BillTmplReq struct {

@@ -53,11 +53,7 @@ func (s *BillService) CreateBill(reqId string, bill dto.IdentifyBillDto, dbill *
 		return codes.ErrNotFound(strconv.Itoa(bill.TeamId), "team", reqId, err)
 	}
 	var teamM smodles.SysMember
-	tmWhere := smodles.SysMember{
-		TeamId: bill.TeamId,
-		UserId: bill.UserId,
-	}
-	if err := service.SerSysMember.GetByWhere(tmWhere, &teamM); err != nil {
+	if err := service.SerSysMember.GetMember(bill.TeamId, bill.UserId, &teamM); err != nil {
 		return codes.ErrNotFound(fmt.Sprintf("%d-%d", bill.TeamId, bill.UserId), "teamMember", reqId, err)
 	}
 	if bill.CustomerId < 1 {
@@ -90,14 +86,30 @@ func (s *BillService) CreateBill(reqId string, bill dto.IdentifyBillDto, dbill *
 	if err := copier.Copy(dbill, bill); err != nil {
 		return codes.ErrSys(err)
 	}
-	if dbill.Amount.IsZero() {
-		dbill.Amount = dbill.RealAmount
+
+	if dbill.TradeType == int(enums.TradeDebt) {
+		dbill.DebtAmount = dbill.PaidAmount
+		dbill.PaidAmount = decimal.Zero
+		dbill.RefundAmount = decimal.Zero
+	} else if dbill.TradeType == int(enums.TradeRefund) {
+		dbill.RefundAmount = dbill.PaidAmount
+		dbill.PaidAmount = decimal.Zero
 	}
 	dbill.CreatedAt = time.Now()
 	dbill.UpdatedAt = dbill.CreatedAt
-	if bill.ImplantDate != "" {
-		if d, err := time.Parse("2006-01-02", bill.ImplantDate); err == nil {
-			dbill.ImplantDate = d
+
+	if bill.ImplantedCount < 1 {
+		dbill.Implant = 1
+	} else {
+		if bill.ImplantDate != "" {
+			if d, err := time.Parse("2006-01-02", bill.ImplantDate); err == nil {
+				dbill.ImplantDate = d
+			}
+		}
+		if bill.ImplantedCount < bill.DentalCount {
+			dbill.Implant = 2
+		} else {
+			dbill.Implant = 3
 		}
 	}
 
@@ -117,6 +129,53 @@ func (s *BillService) CreateBill(reqId string, bill dto.IdentifyBillDto, dbill *
 	dbill.No = strings.Replace(dbill.CreatedAt.Format("20060102150405.000000"), ".", "", -1)
 
 	if err := s.Create(dbill); err != nil {
+		return codes.ErrSys(err)
+	}
+	return nil
+}
+
+func (s *BillService) LinkBill(reqId string, bill dto.LinkBillDto) errs.IError {
+	var old models.Bill
+	if err := s.Get(bill.LinkId, &old); err != nil {
+		return codes.ErrSys(err)
+	}
+
+	curBill := models.Bill{
+		LinkId:         bill.LinkId,
+		TeamId:         old.TeamId,
+		CustomerId:     old.CustomerId,
+		UserId:         old.UserId,
+		DeptPath:       old.DeptPath,
+		Amount:         decimal.Zero,
+		TradeType:      bill.TradeType,
+		DentalCount:    0,
+		Brand:          old.Brand,
+		ImplantedCount: old.ImplantedCount,
+		Doctor:         old.Doctor,
+		Pack:           old.Pack,
+		PaybackDate:    old.PaybackDate,
+		Tags:           old.Tags,
+		PrjName:        old.PrjName,
+		OtherPrj:       old.OtherPrj,
+		Remark:         bill.Remark,
+	}
+
+	// PaidAmount     decimal.Decimal `json:"paidAmount" gorm:"type:decimal(10,2);comment:已支付金额"`               //已支付金额
+	// 	DebtAmount     decimal.Decimal `json:"debtAmount" gorm:"type:decimal(10,2);comment:回收上月欠款"`              //回收上月欠款
+	// 	RefundAmount   decimal.Decimal `json:"refundAmount" gorm:"type:decimal(10,2);comment:退款"`                //退款
+	//Implant        :                        //是否已种
+	//ImplantDate    time.Time       `json:"implantDate" gorm:"type:datetime;default:(-);comment:植入日期"`        //植入日期
+
+	if bill.TradeAt != "" {
+		if d, err := time.Parse("2006-01-02", bill.TradeAt); err != nil {
+			curBill.TradeAt = curBill.CreatedAt
+		} else {
+			curBill.TradeAt = d
+		}
+	}
+	curBill.No = strings.Replace(curBill.CreatedAt.Format("20060102150405.000000"), ".", "", -1)
+
+	if err := s.Create(curBill); err != nil {
 		return codes.ErrSys(err)
 	}
 	return nil
@@ -185,13 +244,13 @@ func (s *BillService) Identify(req dto.BillTmplReq, bill *dto.IdentifyBillDto) e
 		}
 		for _, key := range enums.Total {
 			if strings.Contains(v, key) {
-				(*bill).RealTotal = getVal(v)
+				(*bill).RealAmount = getVal(v)
 				break
 			}
 		}
 		for _, key := range enums.Paid {
 			if strings.Contains(v, key) {
-				(*bill).PaidTotal = getVal(v)
+				(*bill).PaidAmount = getVal(v)
 				break
 			}
 		}
@@ -278,11 +337,11 @@ func (s *BillService) Identify(req dto.BillTmplReq, bill *dto.IdentifyBillDto) e
 			}
 		}
 	}
-	if bill.RealTotal == "" && bill.PaidTotal != "" {
-		(*bill).RealTotal = bill.PaidTotal
+	if bill.RealAmount == "" && bill.PaidAmount != "" {
+		(*bill).RealAmount = bill.PaidAmount
 	}
-	if bill.PaidTotal == "" && bill.RealTotal != "" {
-		(*bill).PaidTotal = bill.RealTotal
+	if bill.PaidAmount == "" && bill.RealAmount != "" {
+		(*bill).PaidAmount = bill.RealAmount
 	}
 	return nil
 }
