@@ -1376,6 +1376,59 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/dental/st/query": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-Bill"
+                ],
+                "summary": "查询统计",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.StQueryReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/dental/summary-plan-day/create": {
             "post": {
                 "security": [
@@ -5515,6 +5568,10 @@ const docTemplate = `{
         "dto.BillDto": {
             "type": "object",
             "properties": {
+                "amount": {
+                    "description": "金额",
+                    "type": "string"
+                },
                 "brand": {
                     "description": "品牌",
                     "type": "integer"
@@ -5559,7 +5616,7 @@ const docTemplate = `{
                     "description": "1 普通 2 半口 3 全口",
                     "type": "integer"
                 },
-                "paidTotal": {
+                "paidAmount": {
                     "description": "已支付金额",
                     "type": "string"
                 },
@@ -5567,7 +5624,7 @@ const docTemplate = `{
                     "description": "预定回款日期",
                     "type": "string"
                 },
-                "realTotal": {
+                "realAmount": {
                     "description": "折后金额",
                     "type": "string"
                 },
@@ -5575,16 +5632,12 @@ const docTemplate = `{
                     "description": "团队id",
                     "type": "integer"
                 },
-                "total": {
-                    "description": "金额",
-                    "type": "string"
-                },
                 "tradeAt": {
                     "description": "交易日期",
                     "type": "string"
                 },
-                "tradeStatus": {
-                    "description": "交易类型 1 成交 2补尾款 3退款",
+                "tradeType": {
+                    "description": "交易类型 1 成交 2补尾款  3补上月欠款 10退款",
                     "type": "integer"
                 },
                 "userId": {
@@ -5604,8 +5657,8 @@ const docTemplate = `{
                     "description": "每页大小",
                     "type": "integer"
                 },
-                "tradeStatus": {
-                    "description": "交易类型 1 成交 2补尾款 3退款",
+                "tradeType": {
+                    "description": "交易类型 1 成交 2补尾款  3补上月欠款 10退款",
                     "type": "integer"
                 }
             }
@@ -5856,6 +5909,10 @@ const docTemplate = `{
         "dto.IdentifyBillDto": {
             "type": "object",
             "properties": {
+                "amount": {
+                    "description": "金额",
+                    "type": "string"
+                },
                 "brand": {
                     "description": "品牌",
                     "type": "integer"
@@ -5924,7 +5981,7 @@ const docTemplate = `{
                     "description": "1 普通 2 半口 3 全口",
                     "type": "integer"
                 },
-                "paidTotal": {
+                "paidAmount": {
                     "description": "已支付金额",
                     "type": "string"
                 },
@@ -5936,7 +5993,7 @@ const docTemplate = `{
                     "description": "种植项目",
                     "type": "string"
                 },
-                "realTotal": {
+                "realAmount": {
                     "description": "折后金额",
                     "type": "string"
                 },
@@ -5952,15 +6009,11 @@ const docTemplate = `{
                     "description": "团队id",
                     "type": "integer"
                 },
-                "total": {
-                    "description": "金额",
-                    "type": "string"
-                },
                 "tradeAt": {
                     "description": "交易日期",
                     "type": "string"
                 },
-                "tradeStatus": {
+                "tradeType": {
                     "description": "交易类型 1 成交 2补尾款  3补上月欠款 10退款",
                     "type": "integer"
                 },
@@ -6257,6 +6310,26 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "deptPath": {
+                    "type": "string"
+                },
+                "teamId": {
+                    "type": "integer"
+                },
+                "userId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.StQueryReq": {
+            "type": "object",
+            "properties": {
+                "begin": {
+                    "type": "string"
+                },
+                "deptPath": {
+                    "type": "string"
+                },
+                "end": {
                     "type": "string"
                 },
                 "teamId": {
@@ -7102,6 +7175,10 @@ const docTemplate = `{
         "models.Bill": {
             "type": "object",
             "properties": {
+                "amount": {
+                    "description": "金额",
+                    "type": "number"
+                },
                 "brand": {
                     "description": "品牌",
                     "type": "integer"
@@ -7117,6 +7194,10 @@ const docTemplate = `{
                 "customerId": {
                     "description": "顾客",
                     "type": "integer"
+                },
+                "debtAmount": {
+                    "description": "回收上月欠款",
+                    "type": "number"
                 },
                 "dentalCount": {
                     "description": "颗数",
@@ -7135,7 +7216,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "implant": {
-                    "description": "是否已种",
+                    "description": "种植状态：1 未种 2部分 3已种",
                     "type": "integer"
                 },
                 "implantDate": {
@@ -7162,7 +7243,7 @@ const docTemplate = `{
                     "description": "1 普通 2 半口 3 全口",
                     "type": "integer"
                 },
-                "paidTotal": {
+                "paidAmount": {
                     "description": "已支付金额",
                     "type": "number"
                 },
@@ -7174,8 +7255,12 @@ const docTemplate = `{
                     "description": "种植项目",
                     "type": "string"
                 },
-                "realTotal": {
+                "realAmount": {
                     "description": "折后金额",
+                    "type": "number"
+                },
+                "refundAmount": {
+                    "description": "退款",
                     "type": "number"
                 },
                 "remark": {
@@ -7190,15 +7275,11 @@ const docTemplate = `{
                     "description": "团队id",
                     "type": "integer"
                 },
-                "total": {
-                    "description": "金额",
-                    "type": "number"
-                },
                 "tradeAt": {
                     "description": "交易日期",
                     "type": "string"
                 },
-                "tradeStatus": {
+                "tradeType": {
                     "description": "交易类型 1 成交 2补尾款  3补上月欠款 10退款",
                     "type": "integer"
                 },
@@ -7310,7 +7391,7 @@ const docTemplate = `{
                 },
                 "day": {
                     "description": "时间",
-                    "type": "integer"
+                    "type": "string"
                 },
                 "deal": {
                     "description": "成交",
@@ -7341,7 +7422,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "rest": {
-                    "description": "休息",
+                    "description": "1上班 2休息",
                     "type": "integer"
                 },
                 "teamId": {
@@ -8083,6 +8164,10 @@ const docTemplate = `{
                 },
                 "newCustomerCnt": {
                     "description": "留存任务",
+                    "type": "integer"
+                },
+                "taskType": {
+                    "description": "任务类型 1正式 算人员数量",
                     "type": "integer"
                 },
                 "teamId": {

@@ -73,6 +73,7 @@ type LinkBillDto struct {
 	TradeAt        string `json:"tradeAt"`        //交易日期
 	TradeType      int    `json:"tradeType"`      //交易类型 1 成交 2补尾款  3补上月欠款 10退款
 	ImplantedCount int    `json:"implantedCount"` //已种颗数
+	ImplantDate    string `json:"implantDate"`    //植入日期
 	Remark         string `json:"remark"`         //备注
 }
 
@@ -88,11 +89,22 @@ type StDayReq struct {
 	Day      time.Time `json:"day"`
 }
 
+type StQueryReq struct {
+	TeamId   int       `json:"teamId"`
+	UserId   int       `json:"userId"`
+	DeptPath string    `json:"deptPath"`
+	Begin    time.Time `json:"begin"`
+	End      time.Time `json:"end"`
+}
+
 type BillUserStDto struct {
-	UserId int             `json:"userId"`
-	Target decimal.Decimal `json:"target"` //目标
-	Deal   decimal.Decimal `json:"deal"`   //成交
-	Paid   decimal.Decimal `json:"paid"`   //实收
-	Debt   decimal.Decimal `json:"debt"`   //补上月欠款
-	Refund decimal.Decimal `json:"refund"` //退款
+	UserId         int             `json:"userId"`
+	Name           string          `json:"name"`           //姓名
+	Target         decimal.Decimal `json:"target"`         //目标
+	NewCustomerCnt int             `json:"newCustomerCnt"` //留存任务
+	FirstDiagnosis int             `json:"firstDiagnosis"` //导诊任务
+	Deal           decimal.Decimal `json:"deal"`           //成交
+	Paid           decimal.Decimal `json:"paid"`           //实收
+	Debt           decimal.Decimal `json:"debt"`           //补上月欠款
+	Refund         decimal.Decimal `json:"refund"`         //退款
 }

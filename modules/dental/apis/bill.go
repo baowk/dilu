@@ -236,3 +236,35 @@ func (e *BillApi) StMonth(c *gin.Context) {
 		e.Ok(c, text)
 	}
 }
+
+// StQuery 查询统计
+// @Summary 查询统计
+// @Tags dental-Bill
+// @Accept application/json
+// @Product application/json
+// @Param teamId header int false "团队id"
+// @Param data body dto.StQueryReq true "body"
+// @Success 200 {object} base.Resp{data=string} "{"code": 200, "data": [...]}"
+// @Router /api/v1/dental/st/query [post]
+// @Security Bearer
+func (e *BillApi) StQuery(c *gin.Context) {
+	var req dto.StQueryReq
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
+
+	teamId := utils.GetTeamId(c)
+	if teamId > 0 {
+		req.TeamId = teamId
+	}
+	// if req.UserId == 0 {
+	// 	req.UserId = utils.GetUserId(c)
+	// }
+	text, err := service.SerBill.StQuery(req.TeamId, req.UserId, req.DeptPath, req.Begin, req.End, e.GetReqId(c))
+	if err != nil {
+		e.Error(c, err)
+	} else {
+		e.Ok(c, text)
+	}
+}

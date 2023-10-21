@@ -52,3 +52,29 @@ func TestGetMonthFirstDay(t *testing.T) {
 	fmt.Println(cur)
 	fmt.Println(GetMonthFirstDay(cur))
 }
+
+func TestGetMonthLen(t *testing.T) {
+	cur := time.Now()
+	fmt.Println(cur)
+	fmt.Println(GetMonthLen(cur))
+
+	cur = cur.Add(-24 * 231 * time.Hour)
+	fmt.Println(cur)
+	fmt.Println(GetMonthLen(cur))
+
+	cur = cur.Add(-24 * 31 * time.Hour)
+	fmt.Println(cur)
+	fmt.Println(GetMonthLen(cur))
+
+	cur = cur.Add(-24 * 365 * 3 * time.Hour)
+	fmt.Println(cur)
+	fmt.Println(GetMonthLen(cur))
+
+	cur = cur.Add(-24 * 298 * time.Hour)
+	fmt.Println(cur)
+	fmt.Println(GetMonthLen(cur))
+
+	cur = cur.Add(-24 * 298 * time.Hour)
+	fmt.Println(cur)
+	fmt.Println(GetMonthLen(cur))
+}

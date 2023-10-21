@@ -98,6 +98,14 @@ func (s *BillService) CreateBill(reqId string, bill dto.IdentifyBillDto, dbill *
 	dbill.CreatedAt = time.Now()
 	dbill.UpdatedAt = dbill.CreatedAt
 
+	if bill.TradeAt != "" {
+		if d, err := time.Parse("2006-01-02", bill.TradeAt); err != nil {
+			dbill.TradeAt = dbill.CreatedAt
+		} else {
+			dbill.TradeAt = d
+		}
+	}
+
 	if bill.ImplantedCount < 1 {
 		dbill.Implant = 1
 	} else {
@@ -105,6 +113,8 @@ func (s *BillService) CreateBill(reqId string, bill dto.IdentifyBillDto, dbill *
 			if d, err := time.Parse("2006-01-02", bill.ImplantDate); err == nil {
 				dbill.ImplantDate = d
 			}
+		} else {
+			dbill.ImplantDate = dbill.TradeAt
 		}
 		if bill.ImplantedCount < bill.DentalCount {
 			dbill.Implant = 2
@@ -119,13 +129,6 @@ func (s *BillService) CreateBill(reqId string, bill dto.IdentifyBillDto, dbill *
 		}
 	}
 
-	if bill.TradeAt != "" {
-		if d, err := time.Parse("2006-01-02", bill.TradeAt); err != nil {
-			dbill.TradeAt = dbill.CreatedAt
-		} else {
-			dbill.TradeAt = d
-		}
-	}
 	dbill.No = strings.Replace(dbill.CreatedAt.Format("20060102150405.000000"), ".", "", -1)
 
 	if err := s.Create(dbill); err != nil {
@@ -160,11 +163,44 @@ func (s *BillService) LinkBill(reqId string, bill dto.LinkBillDto) errs.IError {
 		Remark:         bill.Remark,
 	}
 
-	// PaidAmount     decimal.Decimal `json:"paidAmount" gorm:"type:decimal(10,2);comment:已支付金额"`               //已支付金额
-	// 	DebtAmount     decimal.Decimal `json:"debtAmount" gorm:"type:decimal(10,2);comment:回收上月欠款"`              //回收上月欠款
-	// 	RefundAmount   decimal.Decimal `json:"refundAmount" gorm:"type:decimal(10,2);comment:退款"`                //退款
-	//Implant        :                        //是否已种
-	//ImplantDate    time.Time       `json:"implantDate" gorm:"type:datetime;default:(-);comment:植入日期"`        //植入日期
+	if bill.TradeType == int(enums.TradeDeal) {
+		return errs.ErrWithCode(codes.InvalidParameter)
+	} else if bill.TradeType == int(enums.TradeBalance) {
+		d, err := decimal.NewFromString(bill.PaidAmount)
+		if err != nil {
+			return codes.ErrSys(err)
+		}
+		curBill.PaidAmount = d
+
+		d, err = decimal.NewFromString(bill.RealAmount)
+		if err != nil {
+			return codes.ErrSys(err)
+		}
+		curBill.RealAmount = d
+	} else if bill.TradeType == int(enums.TradeDebt) {
+		d, err := decimal.NewFromString(bill.PaidAmount)
+		if err != nil {
+			return codes.ErrSys(err)
+		}
+		curBill.DebtAmount = d
+
+		d2, err := decimal.NewFromString(bill.RealAmount)
+		if err != nil {
+			return codes.ErrSys(err)
+		}
+		if d2.Cmp(decimal.Zero) > 0 {
+			curBill.RealAmount = d2
+			curBill.DebtAmount = curBill.DebtAmount.Sub(d2)
+			curBill.PaidAmount = d2
+		}
+
+	} else if bill.TradeType == int(enums.TradeRefund) {
+		d, err := decimal.NewFromString(bill.PaidAmount)
+		if err != nil {
+			return codes.ErrSys(err)
+		}
+		curBill.RefundAmount = d
+	}
 
 	if bill.TradeAt != "" {
 		if d, err := time.Parse("2006-01-02", bill.TradeAt); err != nil {
@@ -173,8 +209,24 @@ func (s *BillService) LinkBill(reqId string, bill dto.LinkBillDto) errs.IError {
 			curBill.TradeAt = d
 		}
 	}
-	curBill.No = strings.Replace(curBill.CreatedAt.Format("20060102150405.000000"), ".", "", -1)
 
+	if bill.ImplantedCount < 1 {
+		curBill.Implant = old.Implant
+	} else {
+		if bill.ImplantDate != "" {
+			if d, err := time.Parse("2006-01-02", bill.ImplantDate); err == nil {
+				curBill.ImplantDate = d
+			}
+		} else {
+			curBill.ImplantDate = curBill.TradeAt
+		}
+		if bill.ImplantedCount+old.ImplantedCount < old.DentalCount {
+			curBill.Implant = 2
+		} else {
+			curBill.Implant = 3
+		}
+	}
+	curBill.No = strings.Replace(curBill.CreatedAt.Format("20060102150405.000000"), ".", "", -1)
 	if err := s.Create(curBill); err != nil {
 		return codes.ErrSys(err)
 	}
@@ -384,6 +436,9 @@ func getDate(tmpD string) string {
 	return ""
 }
 
+/*
+*	日统计文字版
+ */
 func (s *BillService) StDay(teamId, userId int, deptPath string, day time.Time, reqId string) (string, error) {
 	if teamId < 1 {
 		return "", codes.ErrInvalidParameter(reqId, "teamId is nil")
@@ -403,34 +458,23 @@ func (s *BillService) StDay(teamId, userId int, deptPath string, day time.Time, 
 	if err := db.Find(&list).Error; err != nil {
 		return "", err
 	}
-	var tDeal, tPaid, deal, paid, debt decimal.Decimal
+	var totalDeal, totalPaid, totalDebt, totalrRefund, deal, paid, debt, refund decimal.Decimal
 	var firstCnt, dealCnt int
 	for _, b := range list {
-		if b.TradeType == 1 {
-			tDeal = tDeal.Add(b.RealAmount)
-			tPaid = tPaid.Add(b.PaidAmount)
-			if b.TradeAt.After(today) {
-				deal = deal.Add(b.RealAmount)
-				paid = paid.Add(b.PaidAmount)
-				debt = debt.Add(b.RealAmount.Sub(b.PaidAmount))
+		totalDeal = totalDeal.Add(b.RealAmount)
+		totalPaid = totalPaid.Add(b.PaidAmount)
+		totalDebt = totalDebt.Add(b.DebtAmount)
+		totalrRefund = totalrRefund.Add(b.RefundAmount)
+		if b.TradeAt.After(today) {
+			deal = deal.Add(b.RealAmount)
+			paid = paid.Add(b.PaidAmount)
+			debt = debt.Add(b.DebtAmount)
+			refund = refund.Add(b.RefundAmount)
+			if b.TradeType == int(enums.TradeDeal) {
 				dealCnt += 1
 			}
-		} else if b.TradeType == 2 {
-			tPaid = tPaid.Add(b.PaidAmount)
-			if b.TradeAt.After(today) {
-				paid = paid.Add(b.PaidAmount)
-			}
-		} else if b.TradeType == 3 {
-			tPaid = tPaid.Add(b.PaidAmount)
-			if b.TradeAt.After(today) {
-				paid = paid.Add(b.PaidAmount)
-			}
-		} else if b.TradeType == 10 {
-			tPaid = tPaid.Sub(b.PaidAmount)
-			if b.TradeAt.After(today) {
-				paid = paid.Sub(b.PaidAmount)
-			}
 		}
+
 	}
 	var edList []models.EventDaySt
 	if err := SerEventDaySt.GetList(teamId, userId, deptPath, today, end, &edList); err != nil {
@@ -440,22 +484,48 @@ func (s *BillService) StDay(teamId, userId int, deptPath string, day time.Time, 
 		firstCnt += ed.FirstDiagnosis
 		dealCnt += ed.Deal
 	}
-	return fmt.Sprintf(DAY_TMPL, firstCnt, dealCnt, deal.StringFixedBank(0), paid.StringFixedBank(0), debt.StringFixedBank(0), tDeal.StringFixedBank(0), tPaid.StringFixedBank(0)), nil
+	todayPaid := paid.Add(debt).Sub(refund)
+	tPaid := totalPaid.Add(totalDebt).Sub(totalrRefund)
+	return fmt.Sprintf(DAY_TMPL, firstCnt, dealCnt, deal.StringFixedBank(0), todayPaid.StringFixedBank(0), debt.StringFixedBank(0), totalDeal.StringFixedBank(0), tPaid.StringFixedBank(0)), nil
 }
 
-func (s *BillService) StByDate(teamId, userId int, deptPath string, begin, end time.Time, reqId string) (string, error) {
+/*
+* 时间段内每人统计
+ */
+func (s *BillService) StQuery(teamId, userId int, deptPath string, begin, end time.Time, reqId string) ([]dto.BillUserStDto, error) {
 	if teamId < 1 {
-		return "", codes.ErrInvalidParameter(reqId, "teamId is nil")
+		return nil, codes.ErrInvalidParameter(reqId, "teamId is nil")
 	}
 
 	var members []smodles.SysMember
 
 	if err := service.SerSysMember.GetMembers(teamId, userId, deptPath, "", &members); err != nil {
-		return "", err
+		return nil, err
 	}
 
 	bt := utils.GetZoreTime(begin)
 	et := utils.GetZoreTime(end).Add(24 * time.Hour)
+
+	var taskList []models.TargetTask
+	if err := SerTargetTask.GetTasks(enums.Month, bt.Year()*100+int(bt.Month()), teamId, userId, deptPath, &taskList); err != nil {
+		return nil, err
+	}
+	m := make(map[int]dto.BillUserStDto, len(taskList))
+	for _, task := range taskList {
+		br, ok := m[task.UserId]
+		if !ok {
+			br = dto.BillUserStDto{
+				UserId: task.UserId,
+				Target: decimal.NewFromInt(int64(task.Deal)),
+			}
+		}
+		for _, member := range members {
+			if member.UserId == task.UserId {
+				br.Name = member.Name
+			}
+		}
+		m[br.UserId] = br
+	}
 
 	db := s.DB().Where("team_id = ?", teamId).Where("trade_at >=?", bt).
 		Where("trade_at < ?", et)
@@ -466,9 +536,8 @@ func (s *BillService) StByDate(teamId, userId int, deptPath string, begin, end t
 	}
 	var list []models.Bill
 	if err := db.Find(&list).Error; err != nil {
-		return "", err
+		return nil, err
 	}
-	var m map[int]dto.BillUserStDto
 
 	for _, b := range list {
 		br, ok := m[b.UserId]
@@ -477,41 +546,21 @@ func (s *BillService) StByDate(teamId, userId int, deptPath string, begin, end t
 				UserId: userId,
 			}
 		}
-		if b.TradeType == int(enums.TradeDeal) {
-			br.Deal = br.Deal.Add(b.RealAmount)
-			br.Paid = br.Paid.Add(b.PaidAmount)
-		} else if b.TradeType == int(enums.TradeBalance) {
-			br.Paid = br.Paid.Add(b.PaidAmount)
-			br.Deal = br.Deal.Add(b.RealAmount)
-		} else if b.TradeType == int(enums.TradeDebt) {
-			br.Paid = br.Paid.Add(b.PaidAmount)
-			br.Deal = br.Deal.Add(b.RealAmount)
-			br.Debt = br.Debt.Add(b.PaidAmount)
-		} else if b.TradeType == int(enums.TradeRefund) {
-			br.Paid = br.Paid.Sub(b.PaidAmount)
-			br.Refund = br.Refund.Add(b.PaidAmount)
-		}
+		br.Deal = br.Deal.Add(b.RealAmount)
+		br.Paid = br.Paid.Add(b.PaidAmount)
+		br.Debt = br.Debt.Add(b.DebtAmount)
+		br.Refund = br.Refund.Add(b.RefundAmount)
 
 		m[b.UserId] = br
 	}
 
-	var tu smodles.SysMember
-	service.SerSysMember.GetMember(teamId, userId, &tu)
+	fmt.Println(len(m))
 
-	var taskList []models.TargetTask
-	if err := SerTargetTask.GetTasks(enums.Month, bt.Year()*100+int(bt.Month()), teamId, userId, deptPath, &taskList); err != nil {
-		return "", err
+	res := make([]dto.BillUserStDto, 0)
+	for _, v := range m {
+		res = append(res, v)
 	}
-	var memberLen int
-	var totalDeal int
-	for _, task := range taskList {
-		if task.Deal > 0 {
-			totalDeal += task.Deal
-			memberLen++
-		}
-	}
-
-	return "", nil
+	return res, nil
 }
 
 func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time, reqId string) (string, error) {
@@ -541,42 +590,30 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 		return "", err
 	}
 
-	var tmDeal, tPaid, tDebt, deal, paid, debt, befPaid decimal.Decimal
+	var tmDeal, tPaid, tDebt, tRefund, deal, paid, debt, refund decimal.Decimal
 	var dealCnt, dCnt, iCnt, tdCnt, tiCnt int
 	for _, b := range list {
 		dCnt += b.DentalCount
 		iCnt += b.ImplantedCount
-		if b.TradeType == int(enums.TradeDeal) {
-			tmDeal = tmDeal.Add(b.RealAmount)
-			tPaid = tPaid.Add(b.PaidAmount)
-			tDebt = tDebt.Add(b.RealAmount.Sub(b.PaidAmount))
-			if b.TradeAt.After(today) {
-				deal = deal.Add(b.RealAmount)
-				paid = paid.Add(b.PaidAmount)
-				debt = debt.Add(b.RealAmount.Sub(b.PaidAmount))
-				dealCnt += 1
-				tdCnt += b.DentalCount
-				tiCnt += b.ImplantedCount
-			}
-		} else if b.TradeType == int(enums.TradeBalance) {
-			tPaid = tPaid.Add(b.PaidAmount)
-			tDebt = tDebt.Sub(b.PaidAmount)
-			if b.TradeAt.After(today) {
-				paid = paid.Add(b.PaidAmount)
-			}
-		} else if b.TradeType == int(enums.TradeDebt) {
-			tPaid = tPaid.Add(b.PaidAmount)
-			befPaid = befPaid.Add(b.PaidAmount)
-			if b.TradeAt.After(today) {
-				paid = paid.Add(b.PaidAmount)
-			}
-		} else if b.TradeType == int(enums.TradeRefund) {
-			tPaid = tPaid.Sub(b.PaidAmount)
-			if b.TradeAt.After(today) {
-				paid = paid.Sub(b.PaidAmount)
-			}
+
+		tmDeal = tmDeal.Add(b.RealAmount)
+		tPaid = tPaid.Add(b.PaidAmount)
+		tDebt = tDebt.Add(b.DebtAmount)
+		tRefund = tRefund.Add(b.RefundAmount)
+		if b.TradeAt.After(today) {
+			deal = deal.Add(b.RealAmount)
+			paid = paid.Add(b.PaidAmount)
+			debt = debt.Add(b.DebtAmount)
+			refund = refund.Add(b.RefundAmount)
+			dealCnt += 1
+			tdCnt += b.DentalCount
+			tiCnt += b.ImplantedCount
 		}
 	}
+
+	totalPaid := tPaid.Add(tDebt).Sub(tRefund)
+	todayPaid := paid.Add(debt).Sub(refund)
+	totalDebt := tmDeal.Sub(tPaid).Sub(tDebt) //欠款
 
 	dayFmt := day.Format("2006年01月03日")
 	build := utils.NewSB()
@@ -637,39 +674,64 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 		tFuD += ed.FurtherDiagnosis
 		tDeal += ed.Deal
 	}
+	var spday models.SummaryPlanDay
+
+	if err := SerSummaryPlanDay.GetByDay(teamId, userId, today.Year()*10000+int(today.Month())*100+today.Day(), &spday); err != nil {
+		return "", err
+	}
+
 	build.Append("今日留存信息:").Append(strconv.Itoa(dayNc)).Append("\n\t")
-	build.Append("今日邀约到诊:").Append(strconv.Itoa(dayNc)).Append("\n\t")
-	build.Append("今日成交患者:").Append(strconv.Itoa(dayNc)).Append("\n\t")
+	build.Append("今日邀约到诊:").Append(strconv.Itoa(dayFirD)).Append("\n\t")
+	build.Append("今日成交患者:").Append(strconv.Itoa(dayDeal)).Append("\n\t")
 	build.Append("今日种植颗数:").Append(strconv.Itoa(tdCnt)).Append("\n\t")
 	build.Append("明日邀约患者:").Append(strconv.Itoa(dayIv)).Append("\n\t")
 	build.Append("本月留存患者数:").Append(strconv.Itoa(tNc)).Append("\n\t")
 	build.Append("本月初诊患者数:").Append(strconv.Itoa(tFirD)).Append("\n\t")
 	build.Append("本月成交患者数:").Append(strconv.Itoa(tDeal)).Append("\n\t")
-	f := fmt.Sprintf("%d%%", tDeal*100/tNc)
-	build.Append("本月患者成交率:").Append(f).Append("\n\t")
+	build.Append("本月患者成交率:")
+	if tNc == 0 {
+		build.Append("0%").Append("\n\t")
+	} else {
+		f := fmt.Sprintf("%d%%", tDeal*100/tNc)
+		build.Append(f).Append("\n\t")
+	}
 
 	build.Append("种植颗数:").Append(strconv.Itoa(dCnt)).Append("\n\t")
 	build.Append("延期颗数:").Append(strconv.Itoa(dCnt - iCnt)).Append("\n\t")
 	build.Append("成交总流水:").Append(tmDeal.StringFixedBank(0)).Append("\n\t")
-	build.Append("总欠款金额:").Append(tDebt.StringFixedBank(0)).Append("\n\t")
-	build.Append("本月实收:").Append(tPaid.StringFixedBank(0)).Append("\n\t")
-	build.Append("今日实收:").Append(paid.StringFixedBank(0)).Append("\n\t")
-	build.Append("实收率:").Append(fmt.Sprintf("%.2f%%", tPaid.Div(tmDeal).InexactFloat64())).Append("\n\t")
-	build.Append("团队人效:").Append(tPaid.Div(decimal.NewFromInt(int64(memberLen))).StringFixedBank(0)).Append("\n\t")
-	build.Append("收回上月欠款:").Append(befPaid.StringFixedBank(0)).Append("\n\t")
+	build.Append("总欠款金额:").Append(totalDebt.StringFixedBank(0)).Append("\n\t")
+	build.Append("本月实收:").Append(totalPaid.StringFixedBank(0)).Append("\n\t")
+	build.Append("今日实收:").Append(todayPaid.StringFixedBank(0)).Append("\n\t")
+	if tmDeal.IsZero() {
+		build.Append("实收率:").Append("0%").Append("\n\t")
+	} else {
+		build.Append("实收率:").Append(fmt.Sprintf("%.2f%%", totalPaid.Div(tmDeal).InexactFloat64())).Append("\n\t")
+	}
+	if memberLen == 0 {
+		build.Append("团队人效:").Append("0%").Append("\n\t")
+	} else {
+		build.Append("团队人效:").Append(tPaid.Div(decimal.NewFromInt(int64(memberLen))).StringFixedBank(0)).Append("\n\t")
+	}
+	build.Append("收回上月欠款:").Append(tDebt.StringFixedBank(0)).Append("\n\t")
 	build.Append("上月延期种植:").Append(strconv.Itoa(dayNc)).Append("\n\t") //TODO
-	build.Append("本月时间进度:").Append(strconv.Itoa(dayNc)).Append("\n\t") //TODO
-	tp := fmt.Sprintf("%f%%", tPaid.Div(tmDeal).InexactFloat64())
-	build.Append("本月任务达成率:").Append(tp).Append("\n\t")
+	dp := fmt.Sprintf("%d%%", today.Day()*100/utils.GetMonthLen(today))
+	build.Append("本月时间进度:").Append(dp).Append("\n\t")
+	build.Append("本月任务达成率:")
+	if tmDeal.IsZero() {
+		build.Append("0%").Append("\n\t")
+	} else {
+		tp := fmt.Sprintf("%f%%", tPaid.Div(tmDeal).InexactFloat64())
+		build.Append(tp).Append("\n\t")
+	}
 
 	build.Append("\n\t").Append("今日工作汇报").Append("\n\t")
-	build.Append("今日工作汇报").Append("\n\t") //TODO
+	build.Append(spday.Summary).Append("\n\t")
 
-	build.Append("\n\t").Append("今日留存:").Append(strconv.Itoa(dayNc)).Append("\n\t") //TODO
+	build.Append("\n\t").Append("今日留存:").Append(strconv.Itoa(dayNc)).Append("\n\t")
 	build.Append(stDay.String()).Append("\n\t")
 
 	build.Append("明日工作计划").Append("\n\t")
-	build.Append("zzz") //TODO
+	build.Append(spday.Plan)
 
 	return build.String(), nil
 }

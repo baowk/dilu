@@ -43,6 +43,9 @@ definitions:
     type: object
   dto.BillDto:
     properties:
+      amount:
+        description: 金额
+        type: string
       brand:
         description: 品牌
         type: integer
@@ -76,26 +79,23 @@ definitions:
       pack:
         description: 1 普通 2 半口 3 全口
         type: integer
-      paidTotal:
+      paidAmount:
         description: 已支付金额
         type: string
       paybackDate:
         description: 预定回款日期
         type: string
-      realTotal:
+      realAmount:
         description: 折后金额
         type: string
       teamId:
         description: 团队id
         type: integer
-      total:
-        description: 金额
-        type: string
       tradeAt:
         description: 交易日期
         type: string
-      tradeStatus:
-        description: 交易类型 1 成交 2补尾款 3退款
+      tradeType:
+        description: 交易类型 1 成交 2补尾款  3补上月欠款 10退款
         type: integer
       userId:
         description: 用户id
@@ -109,8 +109,8 @@ definitions:
       pageSize:
         description: 每页大小
         type: integer
-      tradeStatus:
-        description: 交易类型 1 成交 2补尾款 3退款
+      tradeType:
+        description: 交易类型 1 成交 2补尾款  3补上月欠款 10退款
         type: integer
     type: object
   dto.BillTmplReq:
@@ -289,6 +289,9 @@ definitions:
     type: object
   dto.IdentifyBillDto:
     properties:
+      amount:
+        description: 金额
+        type: string
       brand:
         description: 品牌
         type: integer
@@ -340,7 +343,7 @@ definitions:
       pack:
         description: 1 普通 2 半口 3 全口
         type: integer
-      paidTotal:
+      paidAmount:
         description: 已支付金额
         type: string
       paybackDate:
@@ -349,7 +352,7 @@ definitions:
       prjName:
         description: 种植项目
         type: string
-      realTotal:
+      realAmount:
         description: 折后金额
         type: string
       remark:
@@ -361,13 +364,10 @@ definitions:
       teamId:
         description: 团队id
         type: integer
-      total:
-        description: 金额
-        type: string
       tradeAt:
         description: 交易日期
         type: string
-      tradeStatus:
+      tradeType:
         description: 交易类型 1 成交 2补尾款  3补上月欠款 10退款
         type: integer
       userId:
@@ -582,6 +582,19 @@ definitions:
       day:
         type: string
       deptPath:
+        type: string
+      teamId:
+        type: integer
+      userId:
+        type: integer
+    type: object
+  dto.StQueryReq:
+    properties:
+      begin:
+        type: string
+      deptPath:
+        type: string
+      end:
         type: string
       teamId:
         type: integer
@@ -1186,6 +1199,9 @@ definitions:
     type: object
   models.Bill:
     properties:
+      amount:
+        description: 金额
+        type: number
       brand:
         description: 品牌
         type: integer
@@ -1198,6 +1214,9 @@ definitions:
       customerId:
         description: 顾客
         type: integer
+      debtAmount:
+        description: 回收上月欠款
+        type: number
       dentalCount:
         description: 颗数
         type: integer
@@ -1211,7 +1230,7 @@ definitions:
         description: 主键
         type: integer
       implant:
-        description: 是否已种
+        description: 种植状态：1 未种 2部分 3已种
         type: integer
       implantDate:
         description: 植入日期
@@ -1231,7 +1250,7 @@ definitions:
       pack:
         description: 1 普通 2 半口 3 全口
         type: integer
-      paidTotal:
+      paidAmount:
         description: 已支付金额
         type: number
       paybackDate:
@@ -1240,8 +1259,11 @@ definitions:
       prjName:
         description: 种植项目
         type: string
-      realTotal:
+      realAmount:
         description: 折后金额
+        type: number
+      refundAmount:
+        description: 退款
         type: number
       remark:
         description: 备注
@@ -1252,13 +1274,10 @@ definitions:
       teamId:
         description: 团队id
         type: integer
-      total:
-        description: 金额
-        type: number
       tradeAt:
         description: 交易日期
         type: string
-      tradeStatus:
+      tradeType:
         description: 交易类型 1 成交 2补尾款  3补上月欠款 10退款
         type: integer
       updateBy:
@@ -1341,7 +1360,7 @@ definitions:
         type: string
       day:
         description: 时间
-        type: integer
+        type: string
       deal:
         description: 成交
         type: integer
@@ -1364,7 +1383,7 @@ definitions:
         description: 留存
         type: integer
       rest:
-        description: 休息
+        description: 1上班 2休息
         type: integer
       teamId:
         description: 团队id
@@ -1911,6 +1930,9 @@ definitions:
         type: integer
       newCustomerCnt:
         description: 留存任务
+        type: integer
+      taskType:
+        description: 任务类型 1正式 算人员数量
         type: integer
       teamId:
         description: 团队id
@@ -2925,6 +2947,36 @@ paths:
       security:
       - Bearer: []
       summary: 月统计
+      tags:
+      - dental-Bill
+  /api/v1/dental/st/query:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.StQueryReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Bearer: []
+      summary: 查询统计
       tags:
       - dental-Bill
   /api/v1/dental/summary-plan-day/create:

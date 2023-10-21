@@ -26,5 +26,6 @@ func registerBillRouter(v1 *gin.RouterGroup) {
 	{
 		r1.POST("day", apis.ApiBill.StDay)
 		r1.POST("month", apis.ApiBill.StMonth)
+		r1.POST("query", apis.ApiBill.StQuery)
 	}
 }
