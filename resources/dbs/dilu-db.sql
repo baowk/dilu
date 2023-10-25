@@ -11,7 +11,7 @@
  Target Server Version : 80033
  File Encoding         : 65001
 
- Date: 18/10/2023 10:54:59
+ Date: 25/10/2023 16:56:42
 */
 
 SET NAMES utf8mb4;
@@ -494,6 +494,7 @@ CREATE TABLE `sys_member`  (
   `user_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
   `nickname` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '昵称',
   `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '姓名',
+  `py` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '姓名拼音',
   `phone` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '电话',
   `dept_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '部门路径',
   `dept_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '部门id',
@@ -514,12 +515,12 @@ CREATE TABLE `sys_member`  (
 -- ----------------------------
 -- Records of sys_member
 -- ----------------------------
-INSERT INTO `sys_member` VALUES (1, 1, 2, '糖糖', '唐敦霞', '', '/0/1/2', 2, '-1', 8, '2023-02-20 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_member` VALUES (2, 1, 3, '藏春梅', '藏春梅', NULL, '/0/1/2', 2, '1', 16, '2021-01-13 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_member` VALUES (3, 1, 4, '李艳雷', '李艳雷', NULL, '/0/1/2', 2, NULL, 16, '2023-06-19 00:00:00.000', NULL, '1', NULL, 1, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_member` VALUES (4, 1, 5, '简小丽', '简小丽', NULL, '/0/1/2', 2, NULL, 16, '2022-11-18 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_member` VALUES (5, 1, 6, '胡珊', '胡珊', NULL, '/0/1/2', 2, NULL, 16, '2023-06-02 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_member` VALUES (6, 1, 7, '余鸿雁', '余鸿雁', NULL, '/0/1/2', 2, NULL, 16, '2023-08-07 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_member` VALUES (1, 1, 2, '糖糖', '唐敦霞', NULL, '', '/0/1/2', 2, '-1', 8, '2023-02-20 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_member` VALUES (2, 1, 3, '藏春梅', '藏春梅', NULL, NULL, '/0/1/2', 2, '1', 16, '2021-01-13 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_member` VALUES (3, 1, 4, '李艳雷', '李艳雷', NULL, NULL, '/0/1/2', 2, NULL, 16, '2023-06-19 00:00:00.000', NULL, '1', NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_member` VALUES (4, 1, 5, '简小丽', '简小丽', NULL, NULL, '/0/1/2', 2, NULL, 16, '2022-11-18 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_member` VALUES (5, 1, 6, '胡珊', '胡珊', NULL, NULL, '/0/1/2', 2, NULL, 16, '2023-06-02 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_member` VALUES (6, 1, 7, '余鸿雁', '余鸿雁', NULL, NULL, '/0/1/2', 2, NULL, 16, '2023-08-07 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_menu

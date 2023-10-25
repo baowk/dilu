@@ -11,7 +11,7 @@
  Target Server Version : 80033
  File Encoding         : 65001
 
- Date: 18/10/2023 10:54:47
+ Date: 25/10/2023 16:56:57
 */
 
 SET NAMES utf8mb4;
@@ -39,7 +39,7 @@ CREATE TABLE `bill`  (
   `dental_count` tinyint(0) NULL DEFAULT NULL COMMENT '颗数',
   `brand` tinyint(0) NULL DEFAULT NULL COMMENT '品牌',
   `implanted_count` tinyint(0) NULL DEFAULT NULL COMMENT '已种颗数',
-  `implant` tinyint(0) NULL DEFAULT NULL COMMENT '是否已种',
+  `implant` tinyint(0) NULL DEFAULT NULL COMMENT '种植状态：1 未种 2部分 3已种',
   `implant_date` datetime(0) NULL DEFAULT NULL COMMENT '植入日期',
   `doctor` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '医生',
   `pack` tinyint(0) NULL DEFAULT NULL COMMENT '1 普通 2 半口 3 全口',
@@ -55,11 +55,19 @@ CREATE TABLE `bill`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_bill_create_by`(`create_by`) USING BTREE,
   INDEX `idx_bill_update_by`(`update_by`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of bill
 -- ----------------------------
+INSERT INTO `bill` VALUES (1, '20231025113256764792', 1, 2, 1, '', 0.00, 0.00, 0.00, 0.00, 0.00, 0, '2023-10-25 11:32:57', 0, 0, 0, 0, 1, NULL, '', 0, NULL, '', '', '', '', '2023-10-25 11:32:57', '2023-10-25 11:32:57', 0, 0);
+INSERT INTO `bill` VALUES (2, '20231025113341960401', 1, 2, 1, '', 0.00, 1000.00, 1000.00, 0.00, 0.00, 0, '2023-10-25 11:33:42', 1, 1, 1, 1, 3, '2023-10-25 11:33:42', '', 1, NULL, '', '', '', '', '2023-10-25 11:33:42', '2023-10-25 11:33:42', 0, 0);
+INSERT INTO `bill` VALUES (3, '20231025113457859242', 1, 2, 1, '', 0.00, 0.00, 10000.00, 0.00, 0.00, 0, '2023-10-25 11:34:58', 0, 0, 0, 0, 1, NULL, '', 0, NULL, '', '', '', '', '2023-10-25 11:34:58', '2023-10-25 11:34:58', 0, 0);
+INSERT INTO `bill` VALUES (4, '20231025123301632579', 1, 2, 1, '', 0.00, 35000.00, 10000.00, 0.00, 0.00, 0, '2023-10-24 08:00:00', 0, 6, 0, 6, 3, '2023-10-24 08:00:00', '', 2, NULL, '', '种植', '', '', '2023-10-25 12:33:02', '2023-10-25 13:32:33', 0, 0);
+INSERT INTO `bill` VALUES (5, '20231025134021589152', 1, 2, 1, '', 0.00, 10000.00, 10000.00, 0.00, 0.00, 0, '2023-10-24 08:00:00', 2, 0, 0, 0, 1, NULL, '', 1, NULL, '', '', '', '补尾款', '2023-10-25 13:40:22', '2023-10-25 13:40:22', 0, 0);
+INSERT INTO `bill` VALUES (6, '20231025150624242326', 2, 2, 1, '', 0.00, 0.00, 10000.00, 0.00, 0.00, 0, '2023-10-24 08:00:00', 2, 0, 0, 0, 1, NULL, '', 1, NULL, '', '', '', '补尾款', '2023-10-25 15:06:24', '2023-10-25 15:06:24', 0, 0);
+INSERT INTO `bill` VALUES (7, '20231025152223307412', 3, 5, 1, '', 0.00, 5980.00, 5980.00, 0.00, 0.00, 0, '2023-10-24 08:00:00', 1, 1, 4, 0, 1, NULL, '', 1, NULL, '', '种植', '', '', '2023-10-25 15:22:23', '2023-10-25 15:27:05', 0, 2);
+INSERT INTO `bill` VALUES (8, '20231025153053670816', 4, 5, 1, '/0/1/2', 0.00, 12200.00, 11200.00, 0.00, 0.00, 0, '2023-10-22 08:00:00', 1, 2, 3, 0, 1, NULL, '', 1, NULL, '', '种植', '', '', '2023-10-25 15:30:54', '2023-10-25 15:30:54', 2, 0);
 
 -- ----------------------------
 -- Table structure for customer
@@ -68,6 +76,7 @@ DROP TABLE IF EXISTS `customer`;
 CREATE TABLE `customer`  (
   `id` int(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '姓名',
+  `py` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '姓名拼音',
   `phone` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '手机号',
   `wechat` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '微信号',
   `gender` tinyint(0) NULL DEFAULT NULL COMMENT '性别',
@@ -90,11 +99,15 @@ CREATE TABLE `customer`  (
   INDEX `idx_customer_team_id`(`team_id`) USING BTREE,
   INDEX `idx_customer_create_by`(`create_by`) USING BTREE,
   INDEX `idx_customer_update_by`(`update_by`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of customer
 -- ----------------------------
+INSERT INTO `customer` VALUES (1, '李杏利', NULL, '', '', 0, 0, 0, '', '', '', 2, 1, '', 0, '', '2023-10-25 11:32:57', '2023-10-25 11:32:57', 0, 0);
+INSERT INTO `customer` VALUES (2, '傅见英', NULL, '', '', 0, 0, 0, '', '', '', 2, 1, '', 0, '', '2023-10-25 15:06:24', '2023-10-25 15:06:24', 0, 0);
+INSERT INTO `customer` VALUES (3, '鲁慧萍', NULL, '', '', 0, 0, 0, '', '', '', 5, 1, '', 0, '', '2023-10-25 15:22:23', '2023-10-25 15:22:23', 0, 0);
+INSERT INTO `customer` VALUES (4, '孔友祥', NULL, '', '', 0, 0, 0, '', '', '', 5, 1, '', 0, '', '2023-10-25 15:30:54', '2023-10-25 15:30:54', 2, 0);
 
 -- ----------------------------
 -- Table structure for event_day_st
