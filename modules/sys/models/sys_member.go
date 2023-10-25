@@ -11,6 +11,7 @@ type SysMember struct {
 	UserId     int       `json:"userId" gorm:"type:int unsigned;comment:用户id"`                               //用户id
 	Nickname   string    `json:"nickname" gorm:"type:varchar(128);comment:昵称"`                               //昵称
 	Name       string    `json:"name" gorm:"type:varchar(64);comment:姓名"`                                    //姓名
+	PY         string    `json:"py" gorm:"type:varchar(32);comment:姓名拼音"`                                    //姓名拼音
 	Phone      string    `json:"phone" gorm:"type:varchar(11);comment:电话"`                                   //电话
 	DeptPath   string    `json:"deptPath" gorm:"type:varchar(255);comment:部门路径"`                             //部门路径
 	DeptId     int       `json:"deptId" gorm:"type:int unsigned;comment:部门id"`                               //部门id

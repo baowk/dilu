@@ -10,14 +10,9 @@ import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
 
 export function use{{.ClassName}}() {
-  const form = reactive({
+  const qform = reactive({
   {{- range .Columns }}
-    {{- if eq .JsonField "createdAt" }}
-    {{- else if eq .JsonField "updatedAt" }}
-    {{- else if eq .JsonField "deletedAt" }}
-    {{- else if eq .JsonField "createBy" }}
-    {{- else if eq .JsonField "updateBy" }}
-    {{- else }}
+    {{- if .IsQuery -}}
     {{ .JsonField }}: {{if eq .GoType "int" }}0{{ else }}null{{- end }},
     {{- end}}
   {{- end }}
@@ -41,8 +36,8 @@ export function use{{.ClassName}}() {
       prop: "{{.JsonField}}",
       minWidth: 120{{- if eq .GoType "time.Time" -}},{{- end -}}
       {{- if eq .GoType "time.Time"}}
-      formatter: ({ createTime }) =>
-        dayjs(createTime).format("YYYY-MM-DD HH:mm:ss")
+      formatter: ({ {{.JsonField}} }) =>
+        dayjs({{.JsonField}}).format("YYYY-MM-DD HH:mm:ss")
       {{- end }}
     },
     {{- end }}
@@ -80,7 +75,7 @@ export function use{{.ClassName}}() {
 
   async function onSearch() {
     loading.value = true;
-    const { data } = await get{{.ClassName}}Page(toRaw(form));
+    const { data } = await get{{.ClassName}}Page(toRaw(qform));
     dataList.value = data.list;
     pagination.total = data.total;
     pagination.pageSize = data.pageSize;
@@ -167,7 +162,7 @@ export function use{{.ClassName}}() {
   });
 
   return {
-    form,
+    qform,
     loading,
     columns,
     dataList,

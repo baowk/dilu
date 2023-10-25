@@ -50,12 +50,14 @@ var Paid = []string{"实收金额", "实收"}
 var Debts = []string{"欠款金额", "欠款"}
 var PaybackDate = []string{"补款日期"}
 var Implant = []string{"种在嘴里", "是否已种", "种植情况"}
+var ImplantVals = []string{"是", "已"}
 var Extensions = []string{"延期情况"}
 var Remark = []string{"备注"}
 
 type DayType int
 
 const (
+	DAY   DayType = 1
 	Week  DayType = 7
 	Month DayType = 30
 )
@@ -63,7 +65,7 @@ const (
 type Pack int
 
 const (
-	PackCnt  Pack = 1 + iota //颗数
+	PackCnt  Pack = 1 + iota //多颗
 	PackHalf                 //半口
 	PackFull                 //全口
 )
@@ -75,4 +77,12 @@ const (
 	TradeBalance TradeType = 2  //补尾款
 	TradeDebt    TradeType = 3  //欠款
 	TradeRefund  TradeType = 10 //退款
+)
+
+type ImplantType int
+
+const (
+	ImplantNo   ImplantType = 1 //未种
+	ImplantHalf ImplantType = 2 //部分
+	ImplantFull ImplantType = 3 //全部
 )

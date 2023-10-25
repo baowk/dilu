@@ -181,7 +181,7 @@ func (e *SysMemberApi) Update(c *gin.Context) {
 	}
 	var data models.SysMember
 	copier.Copy(&data, req)
-	if err := service.SerSysMember.UpdateById(&data); err != nil {
+	if err := service.SerSysMember.Update(&data); err != nil {
 		e.Error(c, err)
 		return
 	}

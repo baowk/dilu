@@ -3,6 +3,7 @@ package service
 import (
 	"dilu/common/codes"
 	"dilu/common/consts"
+	"dilu/common/utils"
 	"dilu/modules/dental/models"
 
 	"github.com/baowk/dilu-core/core/base"
@@ -31,4 +32,24 @@ func (s *CustomerService) GetByUserIdAndName(userId, teamId int, name string, cu
 
 func (s *CustomerService) GetByUserIds(teamId int, ids []int, customers *[]models.Customer) error {
 	return s.DB().Where("team_id = ?", teamId).Where("id in ?", ids).Find(customers).Error
+}
+
+func (s *CustomerService) Create(customer *models.Customer) errs.IError {
+	if customer.Name != "" {
+		customer.PY = utils.GetPinyin(customer.Name)
+	}
+	if err := s.BaseService.Create(customer); err != nil {
+		return codes.ErrSys(err)
+	}
+	return nil
+}
+
+func (s *CustomerService) Update(customer *models.Customer) errs.IError {
+	if customer.Name != "" {
+		customer.PY = utils.GetPinyin(customer.Name)
+	}
+	if err := s.UpdateById(customer); err != nil {
+		return codes.ErrSys(err)
+	}
+	return nil
 }

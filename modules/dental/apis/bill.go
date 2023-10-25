@@ -91,7 +91,7 @@ func (e *BillApi) Create(c *gin.Context) {
 	}
 	req.TeamId = utils.GetTeamId(c)
 	var data models.Bill
-	if err := service.SerBill.CreateBill(e.GetReqId(c), req, &data); err != nil {
+	if err := service.SerBill.CreateBill(e.GetReqId(c), req, &data, utils.GetUserId(c)); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -116,7 +116,8 @@ func (e *BillApi) Update(c *gin.Context) {
 	}
 	var data models.Bill
 	copier.Copy(&data, req)
-	if err := service.SerBill.Save(&data); err != nil {
+	data.UpdateBy = utils.GetUserId(c)
+	if err := service.SerBill.UpdateById(&data); err != nil {
 		e.Error(c, err)
 		return
 	}

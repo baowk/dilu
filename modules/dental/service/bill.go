@@ -41,7 +41,7 @@ var (
 	总实收：%s`
 )
 
-func (s *BillService) CreateBill(reqId string, bill dto.IdentifyBillDto, dbill *models.Bill) errs.IError {
+func (s *BillService) CreateBill(reqId string, bill dto.IdentifyBillDto, dbill *models.Bill, createBy int) errs.IError {
 	if bill.TeamId < 1 {
 		return codes.ErrInvalidParameter(reqId, "teamId is nil")
 	}
@@ -71,6 +71,7 @@ func (s *BillService) CreateBill(reqId string, bill dto.IdentifyBillDto, dbill *
 				InviterName: bill.InviterName,
 				Inviter:     bill.Inviter,
 				Birthday:    0,
+				CreateBy:    createBy,
 			}
 			if err := SerCustomer.Create(&customer); err != nil {
 				return codes.ErrSys(err)
@@ -86,6 +87,8 @@ func (s *BillService) CreateBill(reqId string, bill dto.IdentifyBillDto, dbill *
 	if err := copier.Copy(dbill, bill); err != nil {
 		return codes.ErrSys(err)
 	}
+
+	dbill.DeptPath = teamM.DeptPath
 
 	if dbill.TradeType == int(enums.TradeDebt) {
 		dbill.DebtAmount = dbill.PaidAmount
@@ -130,6 +133,7 @@ func (s *BillService) CreateBill(reqId string, bill dto.IdentifyBillDto, dbill *
 	}
 
 	dbill.No = strings.Replace(dbill.CreatedAt.Format("20060102150405.000000"), ".", "", -1)
+	dbill.CreateBy = createBy
 
 	if err := s.Create(dbill); err != nil {
 		return codes.ErrSys(err)
@@ -236,6 +240,7 @@ func (s *BillService) LinkBill(reqId string, bill dto.LinkBillDto) errs.IError {
 func (s *BillService) Identify(req dto.BillTmplReq, bill *dto.IdentifyBillDto) errs.IError {
 	(*bill).TeamId = req.TeamId
 	arr := strings.Split(req.Text, "\n")
+	var custName string
 	for _, v := range arr {
 		if strings.Trim(v, " ") == "" {
 			continue
@@ -255,9 +260,10 @@ func (s *BillService) Identify(req dto.BillTmplReq, bill *dto.IdentifyBillDto) e
 				break
 			}
 		}
+
 		for _, key := range enums.CustomerName {
 			if strings.Contains(v, key) {
-				(*bill).CustomerName = getVal(v)
+				custName = getVal(v)
 				break
 			}
 		}
@@ -324,8 +330,16 @@ func (s *BillService) Identify(req dto.BillTmplReq, bill *dto.IdentifyBillDto) e
 		for _, key := range enums.Implant {
 			if strings.Contains(v, key) {
 				imp := getVal(v)
-				if imp == "是" {
-					(*bill).Implant = 1
+				var flag bool
+				for _, iv := range enums.ImplantVals {
+					if imp == iv {
+						(*bill).Implant = int(enums.ImplantFull)
+						flag = true
+						break
+					}
+				}
+				if !flag {
+					(*bill).Implant = int(enums.ImplantHalf)
 				}
 				break
 			}
@@ -344,11 +358,11 @@ func (s *BillService) Identify(req dto.BillTmplReq, bill *dto.IdentifyBillDto) e
 		}
 	}
 	if bill.PrjName == "半口" {
-		bill.Pack = 2
+		bill.Pack = int(enums.PackHalf)
 	} else if bill.PrjName == "全口" {
-		bill.Pack = 3
+		bill.Pack = int(enums.PackFull)
 	} else {
-		bill.Pack = 1
+		bill.Pack = int(enums.PackCnt)
 	}
 
 	var members []smodles.SysMember
@@ -361,25 +375,35 @@ func (s *BillService) Identify(req dto.BillTmplReq, bill *dto.IdentifyBillDto) e
 	}
 
 	var customers []models.Customer
-	if err := SerCustomer.GetByUserIdAndName(bill.UserId, 0, bill.CustomerName, &customers); err != nil {
+	if err := SerCustomer.GetByUserIdAndName(bill.UserId, 0, custName, &customers); err != nil {
 		core.Log.Error("获取客户错误", zap.Error(err))
+	}
+	for _, c := range customers {
+		op := dto.Option{
+			Value: c.Id,
+			Label: c.Name,
+		}
+		(*bill).Customers = append((*bill).Customers, op)
 	}
 	if len(customers) > 0 {
 		(*bill).CustomerId = customers[0].Id
+		(*bill).CustomerName = customers[0].Name
+	} else {
+		(*bill).CustomerName = custName
 	}
-	if bill.Implant == 1 {
+	if bill.Implant == 3 {
 		(*bill).ImplantedCount = bill.DentalCount
 		(*bill).ImplantDate = bill.TradeAt
 	}
 	if bill.BrandName != "" {
 		bn := strings.ToUpper(bill.BrandName)
 		for _, v := range enums.DentalBrands {
-			if bn == v.Name {
+			if strings.Contains(bn, v.Name) {
 				bill.Brand = v.Id
 				break
 			}
 			for _, a := range v.Alias {
-				if a == bn {
+				if strings.Contains(bn, a) {
 					bill.Brand = v.Id
 					break
 				}
@@ -389,8 +413,9 @@ func (s *BillService) Identify(req dto.BillTmplReq, bill *dto.IdentifyBillDto) e
 			}
 		}
 	}
+	(*bill).TradeType = int(enums.TradeDeal)
 	if bill.RealAmount == "" && bill.PaidAmount != "" {
-		(*bill).RealAmount = bill.PaidAmount
+		(*bill).TradeType = int(enums.TradeBalance)
 	}
 	if bill.PaidAmount == "" && bill.RealAmount != "" {
 		(*bill).PaidAmount = bill.RealAmount

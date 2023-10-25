@@ -6,6 +6,7 @@ import "time"
 type Customer struct {
 	Id          int       `json:"id" gorm:"type:int unsigned;primaryKey;autoIncrement;comment:主键"` //主键
 	Name        string    `json:"name" gorm:"type:varchar(32);comment:姓名"`                         //姓名
+	PY          string    `json:"py" gorm:"type:varchar(32);comment:姓名拼音"`                         //姓名拼音
 	Phone       string    `json:"phone" gorm:"type:varchar(11);comment:手机号"`                       //手机号
 	Wechat      string    `json:"wechat" gorm:"type:varchar(64);comment:微信号"`                      //微信号
 	Gender      int       `json:"gender" gorm:"type:tinyint;comment:性别"`                           //性别

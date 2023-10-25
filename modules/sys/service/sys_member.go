@@ -1,6 +1,7 @@
 package service
 
 import (
+	"dilu/common/utils"
 	"dilu/modules/sys/models"
 	"dilu/modules/sys/service/dto"
 
@@ -14,6 +15,34 @@ type SysMemberService struct {
 
 var SerSysMember = SysMemberService{
 	base.NewService(consts.DB_DEF),
+}
+
+func (e *SysMemberService) Create(m *models.SysMember) error {
+	if m.Name != "" {
+		m.PY = utils.GetPinyin(m.Name)
+	}
+	if m.DeptId > 0 {
+		var dept models.SysDept
+		if err := SerSysDept.Get(m.DeptId, &dept); err == nil {
+			m.DeptPath = dept.DeptPath
+		}
+	} else {
+		m.DeptPath = ""
+	}
+	return e.BaseService.Create(m)
+}
+
+func (e *SysMemberService) Update(m *models.SysMember) error {
+	if m.Name != "" {
+		m.PY = utils.GetPinyin(m.Name)
+	}
+	if m.DeptId > 0 {
+		var dept models.SysDept
+		if err := SerSysDept.Get(m.DeptId, &dept); err == nil {
+			m.DeptPath = dept.DeptPath
+		}
+	}
+	return e.UpdateById(m)
 }
 
 func (e *SysMemberService) Query(req dto.SysMemberGetPageReq, list *[]models.SysMember, total *int64) error {

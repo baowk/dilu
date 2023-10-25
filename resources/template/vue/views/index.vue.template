@@ -17,7 +17,7 @@ defineOptions({
 
 const formRef = ref();
 const {
-  form,
+  qform,
   loading,
   columns,
   dataList,
@@ -37,14 +37,14 @@ const {
     <el-form
       ref="formRef"
       :inline="true"
-      :model="form"
+      :model="qform"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
     {{ range .Columns}}
       {{- if .IsQuery -}}
       <el-form-item label="{{.ColumnComment}}：" prop="{{.JsonField}}">
         <el-input
-          v-model="form.name"
+          v-model="qform.{{.JsonField}}"
           placeholder="请输入{{.ColumnComment}}"
           clearable
           class="!w-[200px]"

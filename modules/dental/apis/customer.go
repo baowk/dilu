@@ -114,7 +114,7 @@ func (e *CustomerApi) Update(c *gin.Context) {
 	}
 	var data models.Customer
 	copier.Copy(&data, req)
-	if err := service.SerCustomer.Save(&data); err != nil {
+	if err := service.SerCustomer.Update(&data); err != nil {
 		e.Error(c, err)
 		return
 	}
