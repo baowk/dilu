@@ -25,7 +25,7 @@ var ApiBill = BillApi{}
 // @Product application/json
 // @Param teamId header int false "团队id"
 // @Param data body dto.BillGetPageReq true "body"
-// @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.Bill}} "{"code": 200, "data": [...]}"
+// @Success 200 {object} base.Resp{data=base.PageResp{list=[]dto.BillDto}} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/bill/page [post]
 // @Security Bearer
 func (e *BillApi) QueryPage(c *gin.Context) {
@@ -34,15 +34,10 @@ func (e *BillApi) QueryPage(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	list := make([]models.Bill, 10)
+	list := make([]dto.BillDto, 0)
 	var total int64
 
-	var model models.Bill
-	if err := copier.Copy(&model, req); err != nil {
-		e.Error(c, err)
-		return
-	}
-	if err := service.SerBill.Page(model, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
+	if err := service.SerBill.Page(utils.GetTeamId(c), req, &list, &total); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -109,7 +104,7 @@ func (e *BillApi) Create(c *gin.Context) {
 // @Router /api/v1/dental/bill/update [post]
 // @Security Bearer
 func (e *BillApi) Update(c *gin.Context) {
-	var req dto.BillDto
+	var req dto.IdentifyBillDto
 	if err := c.ShouldBind(&req); err != nil {
 		e.Error(c, err)
 		return
@@ -117,7 +112,7 @@ func (e *BillApi) Update(c *gin.Context) {
 	var data models.Bill
 	copier.Copy(&data, req)
 	data.UpdateBy = utils.GetUserId(c)
-	if err := service.SerBill.UpdateById(&data); err != nil {
+	if err := service.SerBill.UpdateBill(e.GetReqId(c), req, &data, utils.GetUserId(c)); err != nil {
 		e.Error(c, err)
 		return
 	}

@@ -30,8 +30,12 @@ func (s *CustomerService) GetByUserIdAndName(userId, teamId int, name string, cu
 	return nil
 }
 
-func (s *CustomerService) GetByUserIds(teamId int, ids []int, customers *[]models.Customer) error {
-	return s.DB().Where("team_id = ?", teamId).Where("id in ?", ids).Find(customers).Error
+func (s *CustomerService) GetByIds(teamId int, ids []int, customers *[]models.Customer) error {
+	db := s.DB().Where("id in ?", ids)
+	if teamId > 0 {
+		db.Where("team_id = ?", teamId)
+	}
+	return db.Find(customers).Error
 }
 
 func (s *CustomerService) Create(customer *models.Customer) errs.IError {

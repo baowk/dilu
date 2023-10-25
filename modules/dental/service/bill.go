@@ -41,6 +41,41 @@ var (
 	总实收：%s`
 )
 
+func (s *BillService) Page(teamId int, req dto.BillGetPageReq, list *[]dto.BillDto, total *int64) error {
+	db := s.DB().Offset(req.GetOffset()).Limit(req.GetSize())
+	if teamId > 0 {
+		db.Where("team_id = ?", teamId)
+	}
+	if req.TradeType != 0 {
+		db.Where("trade_type = ?", req.TradeType)
+	}
+	var ds []models.Bill
+	db.Find(&ds).Offset(-1).Limit(-1).Count(total)
+	var cids []int
+	for _, b := range ds {
+		cids = append(cids, b.CustomerId)
+
+	}
+	var cs []models.Customer
+	if len(cids) > 0 {
+		if err := SerCustomer.GetByIds(teamId, cids, &cs); err != nil {
+			return err
+		}
+	}
+	for _, b := range ds {
+		for _, c := range cs {
+			if c.Id == b.CustomerId {
+				var bt dto.BillDto
+				copier.Copy(&bt, b)
+				bt.CustomerName = c.Name
+				*list = append(*list, bt)
+				break
+			}
+		}
+	}
+	return nil
+}
+
 func (s *BillService) CreateBill(reqId string, bill dto.IdentifyBillDto, dbill *models.Bill, createBy int) errs.IError {
 	if bill.TeamId < 1 {
 		return codes.ErrInvalidParameter(reqId, "teamId is nil")
@@ -72,6 +107,7 @@ func (s *BillService) CreateBill(reqId string, bill dto.IdentifyBillDto, dbill *
 				Inviter:     bill.Inviter,
 				Birthday:    0,
 				CreateBy:    createBy,
+				DeptPath:    teamM.DeptPath,
 			}
 			if err := SerCustomer.Create(&customer); err != nil {
 				return codes.ErrSys(err)
@@ -136,6 +172,106 @@ func (s *BillService) CreateBill(reqId string, bill dto.IdentifyBillDto, dbill *
 	dbill.CreateBy = createBy
 
 	if err := s.Create(dbill); err != nil {
+		return codes.ErrSys(err)
+	}
+	return nil
+}
+
+func (s *BillService) UpdateBill(reqId string, bill dto.IdentifyBillDto, dbill *models.Bill, createBy int) errs.IError {
+	if bill.TeamId < 1 {
+		return codes.ErrInvalidParameter(reqId, "teamId is nil")
+	}
+	if bill.UserId < 1 {
+		return codes.ErrInvalidParameter(reqId, "userId is nil")
+	}
+	var team smodles.SysTeam
+	if err := service.SerSysTeam.Get(bill.TeamId, &team); err != nil {
+		return codes.ErrNotFound(strconv.Itoa(bill.TeamId), "team", reqId, err)
+	}
+	var teamM smodles.SysMember
+	if err := service.SerSysMember.GetMember(bill.TeamId, bill.UserId, &teamM); err != nil {
+		return codes.ErrNotFound(fmt.Sprintf("%d-%d", bill.TeamId, bill.UserId), "teamMember", reqId, err)
+	}
+	if bill.CustomerId < 1 {
+		var customers []models.Customer
+		if err := SerCustomer.GetByUserIdAndName(bill.UserId, 0, bill.CustomerName, &customers); err != nil {
+			core.Log.Error("获取客户错误", zap.Error(err))
+		}
+		if len(customers) > 0 {
+			bill.CustomerId = customers[0].Id
+		} else {
+			customer := models.Customer{
+				Name:        bill.CustomerName,
+				UserId:      bill.UserId,
+				TeamId:      bill.TeamId,
+				InviterName: bill.InviterName,
+				Inviter:     bill.Inviter,
+				Birthday:    0,
+				CreateBy:    createBy,
+				DeptPath:    teamM.DeptPath,
+			}
+			if err := SerCustomer.Create(&customer); err != nil {
+				return codes.ErrSys(err)
+			}
+			bill.CustomerId = customer.Id
+		}
+	} else {
+		var customer models.Customer
+		if err := SerCustomer.Get(bill.CustomerId, &customer); err != nil {
+			return codes.ErrNotFound(strconv.Itoa(bill.CustomerId), "customer", reqId, err)
+		}
+	}
+	if err := copier.Copy(dbill, bill); err != nil {
+		return codes.ErrSys(err)
+	}
+
+	dbill.DeptPath = teamM.DeptPath
+
+	if dbill.TradeType == int(enums.TradeDebt) {
+		dbill.DebtAmount = dbill.PaidAmount
+		dbill.PaidAmount = decimal.Zero
+		dbill.RefundAmount = decimal.Zero
+	} else if dbill.TradeType == int(enums.TradeRefund) {
+		dbill.RefundAmount = dbill.PaidAmount
+		dbill.PaidAmount = decimal.Zero
+	}
+	dbill.UpdatedAt = time.Now()
+
+	if bill.TradeAt != "" {
+		if d, err := time.Parse("2006-01-02", bill.TradeAt); err != nil {
+			dbill.TradeAt = dbill.CreatedAt
+		} else {
+			dbill.TradeAt = d
+		}
+	}
+
+	if bill.ImplantedCount < 1 {
+		dbill.Implant = 1
+	} else {
+		if bill.ImplantDate != "" {
+			if d, err := time.Parse("2006-01-02", bill.ImplantDate); err == nil {
+				dbill.ImplantDate = d
+			}
+		} else {
+			dbill.ImplantDate = dbill.TradeAt
+		}
+		if bill.ImplantedCount < bill.DentalCount {
+			dbill.Implant = 2
+		} else {
+			dbill.Implant = 3
+		}
+	}
+
+	if bill.PaybackDate != "" {
+		if d, err := time.Parse("2006-01-02", bill.PaybackDate); err == nil {
+			dbill.PaybackDate = d
+		}
+	}
+
+	//dbill.No = strings.Replace(dbill.CreatedAt.Format("20060102150405.000000"), ".", "", -1)
+	dbill.UpdateBy = createBy
+
+	if err := s.UpdateById(dbill); err != nil {
 		return codes.ErrSys(err)
 	}
 	return nil

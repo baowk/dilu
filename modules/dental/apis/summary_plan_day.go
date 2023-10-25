@@ -1,6 +1,7 @@
 package apis
 
 import (
+	"dilu/common/utils"
 	"dilu/modules/dental/models"
 	"dilu/modules/dental/service"
 	"dilu/modules/dental/service/dto"
@@ -87,9 +88,11 @@ func (e *SummaryPlanDayApi) Create(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
+	teamId := utils.GetTeamId(c)
+	userId := utils.GetUserId(c)
 	var data models.SummaryPlanDay
 	copier.Copy(&data, req)
-	if err := service.SerSummaryPlanDay.Create(&data); err != nil {
+	if err := service.SerSummaryPlanDay.Create(teamId, userId, &data); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -112,9 +115,11 @@ func (e *SummaryPlanDayApi) Update(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
+	teamId := utils.GetTeamId(c)
+	userId := utils.GetUserId(c)
 	var data models.SummaryPlanDay
 	copier.Copy(&data, req)
-	if err := service.SerSummaryPlanDay.Save(&data); err != nil {
+	if err := service.SerSummaryPlanDay.Update(teamId, userId, &data); err != nil {
 		e.Error(c, err)
 		return
 	}
