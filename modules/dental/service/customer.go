@@ -5,6 +5,7 @@ import (
 	"dilu/common/consts"
 	"dilu/common/utils"
 	"dilu/modules/dental/models"
+	"time"
 
 	"github.com/baowk/dilu-core/core/base"
 	"github.com/baowk/dilu-core/core/errs"
@@ -42,6 +43,9 @@ func (s *CustomerService) Create(customer *models.Customer) errs.IError {
 	if customer.Name != "" {
 		customer.PY = utils.GetPinyin(customer.Name)
 	}
+	if customer.Birthday > 0 {
+		customer.Age = utils.CmpAge(time.UnixMilli(int64(customer.Birthday)))
+	}
 	if err := s.BaseService.Create(customer); err != nil {
 		return codes.ErrSys(err)
 	}
@@ -51,6 +55,9 @@ func (s *CustomerService) Create(customer *models.Customer) errs.IError {
 func (s *CustomerService) Update(customer *models.Customer) errs.IError {
 	if customer.Name != "" {
 		customer.PY = utils.GetPinyin(customer.Name)
+	}
+	if customer.Birthday > 0 {
+		customer.Age = utils.CmpAge(time.UnixMilli(int64(customer.Birthday)))
 	}
 	if err := s.UpdateById(customer); err != nil {
 		return codes.ErrSys(err)

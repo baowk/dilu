@@ -12,7 +12,7 @@ type CustomerGetPageReq struct {
 type CustomerDto struct {
 	Id       int    `json:"id"`       //主键
 	Name     string `json:"name"`     //姓名
-	Birthday string `json:"birthday"` //生日
+	Birthday int    `json:"birthday"` //生日
 	Phone    string `json:"phone"`    //手机号
 	Wechat   string `json:"wechat"`   //微信号
 	Gender   int    `json:"gender"`   //性别

@@ -105,7 +105,6 @@ func (s *BillService) CreateBill(reqId string, bill dto.IdentifyBillDto, dbill *
 				TeamId:      bill.TeamId,
 				InviterName: bill.InviterName,
 				Inviter:     bill.Inviter,
-				Birthday:    0,
 				CreateBy:    createBy,
 				DeptPath:    teamM.DeptPath,
 			}
@@ -206,7 +205,6 @@ func (s *BillService) UpdateBill(reqId string, bill dto.IdentifyBillDto, dbill *
 				TeamId:      bill.TeamId,
 				InviterName: bill.InviterName,
 				Inviter:     bill.Inviter,
-				Birthday:    0,
 				CreateBy:    createBy,
 				DeptPath:    teamM.DeptPath,
 			}
