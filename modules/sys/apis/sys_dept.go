@@ -1,6 +1,7 @@
 package apis
 
 import (
+	"dilu/common/utils"
 	"dilu/modules/sys/models"
 	"dilu/modules/sys/service"
 	"dilu/modules/sys/service/dto"
@@ -63,9 +64,10 @@ func (e *SysDeptApi) List(c *gin.Context) {
 	// 	e.Error(c, err)
 	// 	return
 	// }
+	teamId := utils.GetTeamId(c)
 	list := make([]models.SysDept, 10)
 
-	if err := service.SerSysDept.GetDepts(&list); err != nil {
+	if err := service.SerSysDept.GetDepts(teamId, &list); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -112,9 +114,13 @@ func (e *SysDeptApi) Create(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
+	teamId := utils.GetTeamId(c)
 	var data models.SysDept
-	copier.Copy(&data, req)
-	if err := service.SerSysDept.Create(&data); err != nil {
+	if teamId > 0 {
+		req.TeamId = teamId
+	}
+	adminId := utils.GetUserId(c)
+	if err := service.SerSysDept.CreateDept(req, adminId, e.GetReqId(c)); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -137,9 +143,13 @@ func (e *SysDeptApi) Update(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
+	teamId := utils.GetTeamId(c)
 	var data models.SysDept
-	copier.Copy(&data, req)
-	if err := service.SerSysDept.Save(&data); err != nil {
+	if teamId > 0 {
+		req.TeamId = teamId
+	}
+	adminId := utils.GetUserId(c)
+	if err := service.SerSysDept.UpdateDept(req, adminId, e.GetReqId(c)); err != nil {
 		e.Error(c, err)
 		return
 	}

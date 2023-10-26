@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : local
+ Source Server         : local_u
  Source Server Type    : MySQL
- Source Server Version : 80033
+ Source Server Version : 80032 (8.0.32)
  Source Host           : localhost:3306
  Source Schema         : dental-db
 
  Target Server Type    : MySQL
- Target Server Version : 80033
+ Target Server Version : 80032 (8.0.32)
  File Encoding         : 65001
 
- Date: 25/10/2023 16:56:57
+ Date: 26/10/2023 21:10:04
 */
 
 SET NAMES utf8mb4;
@@ -22,47 +22,47 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `bill`;
 CREATE TABLE `bill`  (
-  `id` int(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   `no` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '订单号',
-  `customer_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '顾客',
-  `user_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
-  `team_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '团队id',
+  `customer_id` int UNSIGNED NULL DEFAULT NULL COMMENT '顾客',
+  `user_id` int UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
+  `team_id` int UNSIGNED NULL DEFAULT NULL COMMENT '团队id',
   `dept_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '部门路径',
   `amount` decimal(10, 2) NULL DEFAULT NULL COMMENT '金额',
   `real_amount` decimal(10, 2) NULL DEFAULT NULL COMMENT '折后金额',
   `paid_amount` decimal(10, 2) NULL DEFAULT NULL COMMENT '已支付金额',
   `debt_amount` decimal(10, 2) NULL DEFAULT NULL COMMENT '回收上月欠款',
   `refund_amount` decimal(10, 2) NULL DEFAULT NULL COMMENT '退款',
-  `link_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '关联订单',
-  `trade_at` datetime(0) NULL DEFAULT NULL COMMENT '交易日期',
-  `trade_type` tinyint(0) NULL DEFAULT NULL COMMENT '交易类型1 成交 2补尾款  3补上月欠款 10退款',
-  `dental_count` tinyint(0) NULL DEFAULT NULL COMMENT '颗数',
-  `brand` tinyint(0) NULL DEFAULT NULL COMMENT '品牌',
-  `implanted_count` tinyint(0) NULL DEFAULT NULL COMMENT '已种颗数',
-  `implant` tinyint(0) NULL DEFAULT NULL COMMENT '种植状态：1 未种 2部分 3已种',
-  `implant_date` datetime(0) NULL DEFAULT NULL COMMENT '植入日期',
+  `link_id` int UNSIGNED NULL DEFAULT NULL COMMENT '关联订单',
+  `trade_at` datetime NULL DEFAULT NULL COMMENT '交易日期',
+  `trade_type` tinyint NULL DEFAULT NULL COMMENT '交易类型1 成交 2补尾款  3补上月欠款 10退款',
+  `dental_count` tinyint NULL DEFAULT NULL COMMENT '颗数',
+  `brand` tinyint NULL DEFAULT NULL COMMENT '品牌',
+  `implanted_count` tinyint NULL DEFAULT NULL COMMENT '已种颗数',
+  `implant` tinyint NULL DEFAULT NULL COMMENT '种植状态：1 未种 2部分 3已种',
+  `implant_date` datetime NULL DEFAULT NULL COMMENT '植入日期',
   `doctor` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '医生',
-  `pack` tinyint(0) NULL DEFAULT NULL COMMENT '1 普通 2 半口 3 全口',
-  `payback_date` datetime(0) NULL DEFAULT NULL COMMENT '预定回款日期',
+  `pack` tinyint NULL DEFAULT NULL COMMENT '1 普通 2 半口 3 全口',
+  `payback_date` datetime NULL DEFAULT NULL COMMENT '预定回款日期',
   `tags` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '标签',
   `prj_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '项目',
   `other_prj` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '其他项目',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
-  `created_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `updated_at` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  `create_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
-  `update_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
+  `created_at` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `updated_at` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `create_by` int UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
+  `update_by` int UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_bill_create_by`(`create_by`) USING BTREE,
-  INDEX `idx_bill_update_by`(`update_by`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+  INDEX `idx_bill_create_by`(`create_by` ASC) USING BTREE,
+  INDEX `idx_bill_update_by`(`update_by` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of bill
 -- ----------------------------
-INSERT INTO `bill` VALUES (1, '20231025113256764792', 1, 2, 1, '', 0.00, 0.00, 0.00, 0.00, 0.00, 0, '2023-10-25 11:32:57', 0, 0, 0, 0, 1, NULL, '', 0, NULL, '', '', '', '', '2023-10-25 11:32:57', '2023-10-25 11:32:57', 0, 0);
+INSERT INTO `bill` VALUES (1, '20231025113256764792', 1, 2, 1, '/0/1/2', 0.00, 1000.00, 1000.00, 0.00, 0.00, 0, '2023-10-25 22:27:14', 1, 0, 1, 0, 1, NULL, '王院', 1, NULL, '', '', '', '', '2023-10-25 22:27:14', '2023-10-25 22:29:31', 0, 2);
 INSERT INTO `bill` VALUES (2, '20231025113341960401', 1, 2, 1, '', 0.00, 1000.00, 1000.00, 0.00, 0.00, 0, '2023-10-25 11:33:42', 1, 1, 1, 1, 3, '2023-10-25 11:33:42', '', 1, NULL, '', '', '', '', '2023-10-25 11:33:42', '2023-10-25 11:33:42', 0, 0);
-INSERT INTO `bill` VALUES (3, '20231025113457859242', 1, 2, 1, '', 0.00, 0.00, 10000.00, 0.00, 0.00, 0, '2023-10-25 11:34:58', 0, 0, 0, 0, 1, NULL, '', 0, NULL, '', '', '', '', '2023-10-25 11:34:58', '2023-10-25 11:34:58', 0, 0);
+INSERT INTO `bill` VALUES (3, '20231025113457859242', 1, 2, 1, '/0/1/2', 0.00, 0.00, 10000.00, 0.00, 0.00, 0, '2023-10-25 11:34:58', 1, 0, 1, 0, 1, NULL, '', 2, NULL, '', '', '', '', '2023-10-25 11:34:58', '2023-10-25 22:29:59', 0, 2);
 INSERT INTO `bill` VALUES (4, '20231025123301632579', 1, 2, 1, '', 0.00, 35000.00, 10000.00, 0.00, 0.00, 0, '2023-10-24 08:00:00', 0, 6, 0, 6, 3, '2023-10-24 08:00:00', '', 2, NULL, '', '种植', '', '', '2023-10-25 12:33:02', '2023-10-25 13:32:33', 0, 0);
 INSERT INTO `bill` VALUES (5, '20231025134021589152', 1, 2, 1, '', 0.00, 10000.00, 10000.00, 0.00, 0.00, 0, '2023-10-24 08:00:00', 2, 0, 0, 0, 1, NULL, '', 1, NULL, '', '', '', '补尾款', '2023-10-25 13:40:22', '2023-10-25 13:40:22', 0, 0);
 INSERT INTO `bill` VALUES (6, '20231025150624242326', 2, 2, 1, '', 0.00, 0.00, 10000.00, 0.00, 0.00, 0, '2023-10-24 08:00:00', 2, 0, 0, 0, 1, NULL, '', 1, NULL, '', '', '', '补尾款', '2023-10-25 15:06:24', '2023-10-25 15:06:24', 0, 0);
@@ -74,32 +74,32 @@ INSERT INTO `bill` VALUES (8, '20231025153053670816', 4, 5, 1, '/0/1/2', 0.00, 1
 -- ----------------------------
 DROP TABLE IF EXISTS `customer`;
 CREATE TABLE `customer`  (
-  `id` int(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '姓名',
   `py` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '姓名拼音',
   `phone` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '手机号',
   `wechat` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '微信号',
-  `gender` tinyint(0) NULL DEFAULT NULL COMMENT '性别',
-  `age` tinyint(0) UNSIGNED NULL DEFAULT NULL COMMENT '年龄',
-  `birthday` bigint(0) NULL DEFAULT NULL COMMENT '生日',
+  `gender` tinyint NULL DEFAULT NULL COMMENT '性别',
+  `age` tinyint UNSIGNED NULL DEFAULT NULL COMMENT '年龄',
+  `birthday` bigint NULL DEFAULT NULL COMMENT '生日',
   `source` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '来源',
   `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '地址',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '描述',
-  `user_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
-  `team_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '团队id',
+  `user_id` int UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
+  `team_id` int UNSIGNED NULL DEFAULT NULL COMMENT '团队id',
   `dept_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '部门路径',
-  `inviter` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '邀请人',
+  `inviter` int UNSIGNED NULL DEFAULT NULL COMMENT '邀请人',
   `inviter_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '邀请人名',
-  `created_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `updated_at` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  `create_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
-  `update_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
+  `created_at` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `updated_at` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `create_by` int UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
+  `update_by` int UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_customer_user_id`(`user_id`) USING BTREE,
-  INDEX `idx_customer_team_id`(`team_id`) USING BTREE,
-  INDEX `idx_customer_create_by`(`create_by`) USING BTREE,
-  INDEX `idx_customer_update_by`(`update_by`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+  INDEX `idx_customer_user_id`(`user_id` ASC) USING BTREE,
+  INDEX `idx_customer_team_id`(`team_id` ASC) USING BTREE,
+  INDEX `idx_customer_create_by`(`create_by` ASC) USING BTREE,
+  INDEX `idx_customer_update_by`(`update_by` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of customer
@@ -114,25 +114,25 @@ INSERT INTO `customer` VALUES (4, '孔友祥', NULL, '', '', 0, 0, 0, '', '', ''
 -- ----------------------------
 DROP TABLE IF EXISTS `event_day_st`;
 CREATE TABLE `event_day_st`  (
-  `id` int(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   `day` date NULL DEFAULT NULL COMMENT '时间',
-  `team_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '团队id',
-  `user_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
+  `team_id` int UNSIGNED NULL DEFAULT NULL COMMENT '团队id',
+  `user_id` int UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
   `dept_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '部门路径',
-  `new_customer_cnt` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '留存',
-  `first_diagnosis` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '初诊',
-  `further_diagnosis` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '复诊',
-  `deal` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '成交',
-  `invitation` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '明日邀约',
-  `rest` tinyint(0) NULL DEFAULT NULL COMMENT ' 1上班 2休息',
-  `created_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `updated_at` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  `create_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
-  `update_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
+  `new_customer_cnt` int UNSIGNED NULL DEFAULT NULL COMMENT '留存',
+  `first_diagnosis` int UNSIGNED NULL DEFAULT NULL COMMENT '初诊',
+  `further_diagnosis` int UNSIGNED NULL DEFAULT NULL COMMENT '复诊',
+  `deal` int UNSIGNED NULL DEFAULT NULL COMMENT '成交',
+  `invitation` int UNSIGNED NULL DEFAULT NULL COMMENT '明日邀约',
+  `rest` tinyint NULL DEFAULT NULL COMMENT ' 1上班 2休息',
+  `created_at` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `updated_at` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `create_by` int UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
+  `update_by` int UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_event_day_st_create_by`(`create_by`) USING BTREE,
-  INDEX `idx_event_day_st_update_by`(`update_by`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+  INDEX `idx_event_day_st_create_by`(`create_by` ASC) USING BTREE,
+  INDEX `idx_event_day_st_update_by`(`update_by` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of event_day_st
@@ -144,21 +144,21 @@ INSERT INTO `event_day_st` VALUES (1, '2023-10-01', 1, 2, '', 0, 0, 0, 0, 0, 1, 
 -- ----------------------------
 DROP TABLE IF EXISTS `summary_plan_day`;
 CREATE TABLE `summary_plan_day`  (
-  `id` int(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `day` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '天',
-  `team_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '团队id',
-  `user_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `day` int UNSIGNED NULL DEFAULT NULL COMMENT '天',
+  `team_id` int UNSIGNED NULL DEFAULT NULL COMMENT '团队id',
+  `user_id` int UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
   `dept_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '部门路径',
   `summary` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '今日总结',
   `plan` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '明日计划',
-  `created_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `updated_at` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  `create_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
-  `update_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
+  `created_at` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `updated_at` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `create_by` int UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
+  `update_by` int UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_summary_plan_day_create_by`(`create_by`) USING BTREE,
-  INDEX `idx_summary_plan_day_update_by`(`update_by`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+  INDEX `idx_summary_plan_day_create_by`(`create_by` ASC) USING BTREE,
+  INDEX `idx_summary_plan_day_update_by`(`update_by` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of summary_plan_day
@@ -171,24 +171,24 @@ INSERT INTO `summary_plan_day` VALUES (2, 20231002, 1, 2, '', '今日休息，�
 -- ----------------------------
 DROP TABLE IF EXISTS `target_task`;
 CREATE TABLE `target_task`  (
-  `id` int(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `day_type` tinyint(0) UNSIGNED NULL DEFAULT NULL COMMENT '时间类型:月 30,周 7',
-  `day` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '时间:202310',
-  `team_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '团队id',
-  `user_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `day_type` tinyint UNSIGNED NULL DEFAULT NULL COMMENT '时间类型:月 30,周 7',
+  `day` int UNSIGNED NULL DEFAULT NULL COMMENT '时间:202310',
+  `team_id` int UNSIGNED NULL DEFAULT NULL COMMENT '团队id',
+  `user_id` int UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
   `dept_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '部门路径',
-  `task_type` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '任务类型 1正式 算人员数量',
-  `new_customer_cnt` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '留存任务',
-  `first_diagnosis` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '导诊任务',
-  `deal` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '成交任务',
-  `create_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
-  `update_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
-  `created_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `updated_at` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `task_type` int UNSIGNED NULL DEFAULT NULL COMMENT '任务类型 1正式 算人员数量',
+  `new_customer_cnt` int UNSIGNED NULL DEFAULT NULL COMMENT '留存任务',
+  `first_diagnosis` int UNSIGNED NULL DEFAULT NULL COMMENT '导诊任务',
+  `deal` int UNSIGNED NULL DEFAULT NULL COMMENT '成交任务',
+  `create_by` int UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
+  `update_by` int UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
+  `created_at` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `updated_at` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_target_task_create_by`(`create_by`) USING BTREE,
-  INDEX `idx_target_task_update_by`(`update_by`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+  INDEX `idx_target_task_create_by`(`create_by` ASC) USING BTREE,
+  INDEX `idx_target_task_update_by`(`update_by` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of target_task

@@ -8,7 +8,6 @@ import (
 	"dilu/modules/dental/models"
 	"dilu/modules/dental/service/dto"
 	smodels "dilu/modules/sys/models"
-	smodles "dilu/modules/sys/models"
 	"dilu/modules/sys/service"
 	"fmt"
 	"strconv"
@@ -83,11 +82,11 @@ func (s *BillService) CreateBill(reqId string, bill dto.IdentifyBillDto, dbill *
 	if bill.UserId < 1 {
 		return codes.ErrInvalidParameter(reqId, "userId is nil")
 	}
-	var team smodles.SysTeam
+	var team smodels.SysTeam
 	if err := service.SerSysTeam.Get(bill.TeamId, &team); err != nil {
 		return codes.ErrNotFound(strconv.Itoa(bill.TeamId), "team", reqId, err)
 	}
-	var teamM smodles.SysMember
+	var teamM smodels.SysMember
 	if err := service.SerSysMember.GetMember(bill.TeamId, bill.UserId, &teamM); err != nil {
 		return codes.ErrNotFound(fmt.Sprintf("%d-%d", bill.TeamId, bill.UserId), "teamMember", reqId, err)
 	}
@@ -189,11 +188,11 @@ func (s *BillService) UpdateBill(reqId string, bill dto.IdentifyBillDto, dbill *
 	if bill.UserId < 1 {
 		return codes.ErrInvalidParameter(reqId, "userId is nil")
 	}
-	var team smodles.SysTeam
+	var team smodels.SysTeam
 	if err := service.SerSysTeam.Get(bill.TeamId, &team); err != nil {
 		return codes.ErrNotFound(strconv.Itoa(bill.TeamId), "team", reqId, err)
 	}
-	var teamM smodles.SysMember
+	var teamM smodels.SysMember
 	if err := service.SerSysMember.GetMember(bill.TeamId, bill.UserId, &teamM); err != nil {
 		return codes.ErrNotFound(fmt.Sprintf("%d-%d", bill.TeamId, bill.UserId), "teamMember", reqId, err)
 	}
@@ -505,7 +504,7 @@ func (s *BillService) Identify(req dto.BillTmplReq, bill *dto.IdentifyBillDto) e
 		bill.Pack = int(enums.PackCnt)
 	}
 
-	var members []smodles.SysMember
+	var members []smodels.SysMember
 	if err := service.SerSysMember.GetMembers(req.TeamId, 0, "", bill.Name, &members); err != nil {
 		core.Log.Error("获取咨询师错误", zap.Error(err))
 		return errs.Err(codes.FAILURE, "", err)
@@ -662,7 +661,7 @@ func (s *BillService) StQuery(teamId, userId int, deptPath string, begin, end ti
 		return nil, codes.ErrInvalidParameter(reqId, "teamId is nil")
 	}
 
-	var members []smodles.SysMember
+	var members []smodels.SysMember
 
 	if err := service.SerSysMember.GetMembers(teamId, userId, deptPath, "", &members); err != nil {
 		return nil, err
@@ -733,7 +732,7 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 		return "", codes.ErrInvalidParameter(reqId, "teamId is nil")
 	}
 
-	var members []smodles.SysMember
+	var members []smodels.SysMember
 
 	if err := service.SerSysMember.GetMembers(teamId, userId, deptPath, "", &members); err != nil {
 		return "", err
