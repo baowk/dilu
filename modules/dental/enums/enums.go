@@ -68,6 +68,7 @@ const (
 	PackCnt  Pack = 1 + iota //多颗
 	PackHalf                 //半口
 	PackFull                 //全口
+	General                  //全科
 )
 
 type TradeType int

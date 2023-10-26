@@ -55,7 +55,7 @@ func (e *SysDeptApi) QueryPage(c *gin.Context) {
 // @Param teamId header int false "团队id"
 // @Param data body dto.SysDeptGetPageReq true "body"
 // @Success 200 {object} base.Resp{data=[]models.SysDept} "{"code": 200, "data": [...]}"
-// @Router /api/v1/sys/sys-dept/list [post]
+// @Router /api/v1/sys/sys-dept/all [post]
 // @Security Bearer
 func (e *SysDeptApi) List(c *gin.Context) {
 	// var req dto.SysDeptGetPageReq

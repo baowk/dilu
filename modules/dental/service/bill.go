@@ -170,6 +170,12 @@ func (s *BillService) CreateBill(reqId string, bill dto.IdentifyBillDto, dbill *
 	dbill.No = strings.Replace(dbill.CreatedAt.Format("20060102150405.000000"), ".", "", -1)
 	dbill.CreateBy = createBy
 
+	if dbill.Pack == 0 {
+		if dbill.TradeType == int(enums.TradeDeal) && dbill.DentalCount == 0 {
+			dbill.Pack = int(enums.General)
+		}
+	}
+
 	if err := s.Create(dbill); err != nil {
 		return codes.ErrSys(err)
 	}
