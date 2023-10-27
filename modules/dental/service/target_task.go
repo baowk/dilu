@@ -38,6 +38,7 @@ func (s *TargetTaskService) Create(teamId, userId int, data *models.TargetTask) 
 		return err
 	}
 	data.DeptPath = tu.DeptPath
+	data.CreateBy = userId
 	return s.BaseService.Create(data)
 }
 
@@ -51,5 +52,6 @@ func (s *TargetTaskService) Update(teamId, userId int, data *models.TargetTask) 
 		return err
 	}
 	data.DeptPath = tu.DeptPath
+	data.UpdateBy = userId
 	return s.BaseService.UpdateById(data)
 }
