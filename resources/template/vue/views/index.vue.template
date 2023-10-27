@@ -69,13 +69,15 @@ const {
 
     <PureTableBar title="{{.TableComment}}列表" :columns="columns" @refresh="onSearch">
       <template #buttons>
-        <el-button
-          type="primary"
-          :icon="useRenderIcon(AddFill)"
-          @click="openDialog()"
-        >
-          新增{{.TableComment}}
-        </el-button>
+        <Auth value="{{.PackageName}}:{{.BusinessName}}:add">
+          <el-button
+            type="primary"
+            :icon="useRenderIcon(AddFill)"
+            @click="openDialog()"
+          >
+            新增{{.TableComment}}
+          </el-button>
+        </Auth>
       </template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
@@ -98,32 +100,36 @@ const {
           @page-current-change="handleCurrentChange"
         >
           <template #operation="{ row }">
-            <el-button
-              class="reset-margin"
-              link
-              type="primary"
-              :size="size"
-              :icon="useRenderIcon(EditPen)"
-              @click="openDialog('编辑', row)"
-            >
-              修改
-            </el-button>
-            <el-popconfirm
-              :title="`是否确认删除{{.TableComment}}名称为${row.name}的这条数据`"
-              @confirm="handleDelete(row)"
-            >
-              <template #reference>
-                <el-button
-                  class="reset-margin"
-                  link
-                  type="primary"
-                  :size="size"
-                  :icon="useRenderIcon(Delete)"
+            <Auth value="{{.PackageName}}:{{.BusinessName}}:edit">
+              <el-button
+                class="reset-margin"
+                link
+                type="primary"
+                :size="size"
+                :icon="useRenderIcon(EditPen)"
+                @click="openDialog('编辑', row)"
+              >
+                修改
+              </el-button>
+            </Auth>
+            <Auth value="{{.PackageName}}:{{.BusinessName}}:remove">
+              <el-popconfirm
+                :title="`是否确认删除{{.TableComment}}名称为${row.name}的这条数据`"
+                @confirm="handleDelete(row)"
                 >
-                  删除
-                </el-button>
-              </template>
-            </el-popconfirm>
+                <template #reference>
+                  <el-button
+                    class="reset-margin"
+                    link
+                    type="primary"
+                    :size="size"
+                    :icon="useRenderIcon(Delete)"
+                  >
+                    删除
+                  </el-button>
+                </template>
+              </el-popconfirm>
+            </Auth>
           </template>
         </pure-table>
       </template>

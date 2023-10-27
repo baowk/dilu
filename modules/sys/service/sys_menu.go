@@ -244,7 +244,8 @@ func (e *SysMenu) GetUserMenus(c *gin.Context, mvs *[]dto.MenuVo) errs.IError {
 	if err != nil {
 		return err
 	}
-	db := e.DB().Where("menu_type < ?", 3).Where("platform_type >= ?", platform)
+	//db := e.DB().Where("menu_type < ?", 3).Where("platform_type >= ?", platform)
+	db := e.DB().Where("platform_type >= ?", platform)
 	if len(roles) > 0 {
 		db.Joins(" left join sys_role_menu on sys_role_menu.menu_id = sys_menu.id").
 			Where("sys_role_menu.role_id in ?", roles)
@@ -276,9 +277,13 @@ func menuCall(ms []models.SysMenu, menu *dto.MenuVo) {
 		if menu.Id != m.ParentId {
 			continue
 		}
-		vo := menuToVo(m)
-		menuCall(ms, &vo)
-		children = append(children, vo)
+		if m.MenuType < 3 {
+			vo := menuToVo(m)
+			menuCall(ms, &vo)
+			children = append(children, vo)
+		} else {
+			menu.Meta.Auths = append(menu.Meta.Auths, m.Permission)
+		}
 	}
 	menu.Children = children
 }
