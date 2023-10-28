@@ -11,7 +11,7 @@
  Target Server Version : 80033
  File Encoding         : 65001
 
- Date: 27/10/2023 11:05:34
+ Date: 28/10/2023 09:45:50
 */
 
 SET NAMES utf8mb4;
@@ -565,12 +565,12 @@ INSERT INTO `sys_menu` VALUES (3, '', '用户详情', '', 'sys_user_detail', '/0
 INSERT INTO `sys_menu` VALUES (4, '', '用户创建', '', 'sys_user_create', '/0/1/2/4', 1, 3, 'sys:sysUser:add', 2, 0, '', 0, 0, 1, 1, '2023-09-26 13:46:59.534', '2023-09-26 13:46:59.536', NULL);
 INSERT INTO `sys_menu` VALUES (5, '', '用户修改', '', 'sys_user_update', '/0/1/2/5', 1, 3, 'sys:sysUser:edit', 2, 0, '', 0, 0, 1, 1, '2023-09-26 13:46:59.543', '2023-09-26 13:46:59.546', NULL);
 INSERT INTO `sys_menu` VALUES (6, '', '用户删除', '', 'sys_user_del', '/0/1/2/6', 1, 3, 'sys:sysUser:remove', 2, 0, '', 0, 0, 1, 1, '2023-09-26 13:46:59.553', '2023-09-26 13:46:59.555', NULL);
-INSERT INTO `sys_menu` VALUES (7, 'SysMenuManage', '菜单管理', 'menu', '/sys/sys-menu', '/0/1/7', 1, 2, 'sys:sysMenu:list', 1, 0, '/sys/menu/index', 0, 0, 1, 1, '2023-09-26 13:47:37.025', '2023-09-26 13:47:37.029', NULL);
+INSERT INTO `sys_menu` VALUES (7, 'SysMenuManage', '菜单管理', 'menu', '/sys/sys-menu', '/0/1/7', 1, 2, 'sys:sysMenu:list', 1, 0, '/sys/sys-menu/index', 0, 0, 1, 1, '2023-09-26 13:47:37.025', '2023-09-26 13:47:37.029', NULL);
 INSERT INTO `sys_menu` VALUES (8, '', '菜单详情', '', 'sys_menu_detail', '/0/1/7/8', 1, 3, 'sys:sysMenu:query', 7, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:37.042', '2023-09-26 13:47:37.055', NULL);
 INSERT INTO `sys_menu` VALUES (9, '', '菜单创建', '', 'sys_menu_create', '/0/1/7/9', 1, 3, 'sys:sysMenu:add', 7, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:37.067', '2023-09-26 13:47:37.069', NULL);
 INSERT INTO `sys_menu` VALUES (10, '', '菜单修改', '', 'sys_menu_update', '/0/1/7/10', 1, 3, 'sys:sysMenu:edit', 7, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:37.076', '2023-09-26 13:47:37.079', NULL);
 INSERT INTO `sys_menu` VALUES (11, '', '菜单删除', '', 'sys_menu_del', '/0/1/7/11', 1, 3, 'sys:sysMenu:remove', 7, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:37.084', '2023-09-26 13:47:37.086', NULL);
-INSERT INTO `sys_menu` VALUES (12, 'SysRoleManage', '角色管理', 'role', '/sys/sys-role', '/0/1/12', 2, 2, 'sys:sysRole:list', 1, 0, '/sys/role/index', 0, 0, 1, 1, '2023-09-26 13:47:39.688', '2023-09-26 13:47:39.694', NULL);
+INSERT INTO `sys_menu` VALUES (12, 'SysRoleManage', '角色管理', 'role', '/sys/sys-role', '/0/1/12', 2, 2, 'sys:sysRole:list', 1, 0, '/sys/sys-role/index', 0, 0, 1, 1, '2023-09-26 13:47:39.688', '2023-09-26 13:47:39.694', NULL);
 INSERT INTO `sys_menu` VALUES (13, '', '角色详情', '', 'sys_role_detail', '/0/1/12/13', 2, 3, 'sys:sysRole:query', 12, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:39.714', '2023-09-26 13:47:39.717', NULL);
 INSERT INTO `sys_menu` VALUES (14, '', '角色创建', '', 'sys_role_create', '/0/1/12/14', 2, 3, 'sys:sysRole:add', 12, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:39.747', '2023-09-26 13:47:39.752', NULL);
 INSERT INTO `sys_menu` VALUES (15, '', '角色修改', '', 'sys_role_update', '/0/1/12/15', 2, 3, 'sys:sysRole:edit', 12, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:39.765', '2023-09-26 13:47:39.769', NULL);
@@ -619,6 +619,8 @@ INSERT INTO `sys_menu` VALUES (87, '', '任务目标删除', '', 'target_task_de
 INSERT INTO `sys_menu` VALUES (88, NULL, '账单智能识别', NULL, 'bill_identify', '/0/62/63/88', 2, 3, 'dental:bill:identify', 63, 0, '', 0, 0, 1, 1, '2023-10-15 00:00:00.000', '2023-10-15 00:00:00.000', NULL);
 INSERT INTO `sys_menu` VALUES (89, NULL, '日统计', NULL, 'st_day', '/0/62/63/89', 2, 3, 'dental:st:day', 63, 0, NULL, 0, 0, 1, 1, '2023-10-16 13:53:40.000', '2023-10-16 13:53:44.000', NULL);
 INSERT INTO `sys_menu` VALUES (90, NULL, '月统计', NULL, 'st_month', '/0/62/63/90', 2, 3, 'dental:st:month', 63, 0, NULL, 0, 0, 1, 1, '2023-10-16 14:32:02.000', '2023-10-16 14:32:06.000', NULL);
+INSERT INTO `sys_menu` VALUES (91, '', '工具管理', 'tools', '/tools', NULL, 2, 1, NULL, 0, 0, 'Layout', 0, 0, 1, 1, '2023-10-28 09:41:26.000', '2023-10-28 09:41:29.000', NULL);
+INSERT INTO `sys_menu` VALUES (92, 'ToolManage', '代码生成', 'tools', '/tools/gen', NULL, 2, 2, 'tools:gen:list', 91, 0, '/tools/gen/index', 0, 0, 1, 1, '2023-10-28 09:44:15.000', '2023-10-28 09:44:18.000', NULL);
 
 -- ----------------------------
 -- Table structure for sys_menu_api_rule
