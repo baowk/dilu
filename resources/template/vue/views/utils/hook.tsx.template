@@ -11,6 +11,8 @@ import { reactive, ref, onMounted, h, toRaw } from "vue";
 
 export function use{{.ClassName}}() {
   const qform = reactive({
+    page: 1,
+    pageSize: 10,
   {{- range .Columns }}
     {{- if .IsQuery -}}
     {{ .JsonField }}: {{if eq .GoType "int" }}0{{ else }}null{{- end }},
@@ -62,11 +64,13 @@ export function use{{.ClassName}}() {
   }
 
   function handleSizeChange(val: number) {
-    console.log(`${val} items per page`);
+    qform.pageSize = val;
+    onSearch();
   }
 
   function handleCurrentChange(val: number) {
-    console.log(`current page: ${val}`);
+    qform.page = val;
+    onSearch();
   }
 
   function handleSelectionChange(val) {

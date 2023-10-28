@@ -11,7 +11,7 @@
  Target Server Version : 80033
  File Encoding         : 65001
 
- Date: 28/10/2023 16:22:37
+ Date: 28/10/2023 16:52:45
 */
 
 SET NAMES utf8mb4;
@@ -238,6 +238,86 @@ INSERT INTO `gen_columns` VALUES (390, 29, 'created_at', '创建时间', 'dateti
 INSERT INTO `gen_columns` VALUES (391, 29, 'updated_at', '更新时间', 'datetime', 'time.Time', 'UpdatedAt', 'updatedAt', '0', '', '0', '1', '', '1', '', 'EQ', 'datetime', '', 13, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-06 20:17:08.720', '2023-10-06 20:17:08.720', NULL);
 INSERT INTO `gen_columns` VALUES (392, 29, 'create_by', '创建者', 'int unsigned', 'int', 'CreateBy', 'createBy', '0', '', '0', '1', '', '1', '', 'EQ', 'input', '', 14, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-06 20:17:08.724', '2023-10-06 20:17:08.724', NULL);
 INSERT INTO `gen_columns` VALUES (393, 29, 'update_by', '更新者', 'int unsigned', 'int', 'UpdateBy', 'updateBy', '0', '', '0', '1', '', '1', '', 'EQ', 'input', '', 15, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-06 20:17:08.728', '2023-10-06 20:17:08.728', NULL);
+INSERT INTO `gen_columns` VALUES (394, 30, 'table_id', '', 'bigint', 'int', 'TableId', 'tableId', '1', '', '1', '1', '1', '1', '', 'EQ', 'input', '', 1, '', 1, 1, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:31.943', '2023-10-28 16:27:31.943', NULL);
+INSERT INTO `gen_columns` VALUES (395, 30, 'db_name', '', 'varchar(64)', 'string', 'DbName', 'dbName', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 2, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:31.947', '2023-10-28 16:27:31.947', NULL);
+INSERT INTO `gen_columns` VALUES (396, 30, 'table_name', '', 'varchar(128)', 'string', 'TableName', 'tableName', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 3, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:31.951', '2023-10-28 16:27:31.951', NULL);
+INSERT INTO `gen_columns` VALUES (397, 30, 'table_comment', '', 'varchar(128)', 'string', 'TableComment', 'tableComment', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 4, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:31.955', '2023-10-28 16:27:31.955', NULL);
+INSERT INTO `gen_columns` VALUES (398, 30, 'class_name', '', 'varchar(128)', 'string', 'ClassName', 'className', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 5, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:31.958', '2023-10-28 16:27:31.958', NULL);
+INSERT INTO `gen_columns` VALUES (399, 30, 'tpl_category', '', 'varchar(128)', 'string', 'TplCategory', 'tplCategory', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 6, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:31.962', '2023-10-28 16:27:31.962', NULL);
+INSERT INTO `gen_columns` VALUES (400, 30, 'package_name', '', 'varchar(128)', 'string', 'PackageName', 'packageName', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 7, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:31.965', '2023-10-28 16:27:31.965', NULL);
+INSERT INTO `gen_columns` VALUES (401, 30, 'module_name', '', 'varchar(128)', 'string', 'ModuleName', 'moduleName', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 8, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:31.969', '2023-10-28 16:27:31.969', NULL);
+INSERT INTO `gen_columns` VALUES (402, 30, 'module_front_name', '前端文件名', 'varchar(255)', 'string', 'ModuleFrontName', 'moduleFrontName', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 9, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:31.971', '2023-10-28 16:27:31.971', NULL);
+INSERT INTO `gen_columns` VALUES (403, 30, 'business_name', '', 'varchar(255)', 'string', 'BusinessName', 'businessName', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 10, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:31.974', '2023-10-28 16:27:31.974', NULL);
+INSERT INTO `gen_columns` VALUES (404, 30, 'function_name', '', 'varchar(255)', 'string', 'FunctionName', 'functionName', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 11, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:31.977', '2023-10-28 16:27:31.977', NULL);
+INSERT INTO `gen_columns` VALUES (405, 30, 'function_author', '', 'varchar(255)', 'string', 'FunctionAuthor', 'functionAuthor', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 12, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:31.981', '2023-10-28 16:27:31.981', NULL);
+INSERT INTO `gen_columns` VALUES (406, 30, 'pk_column', '', 'varchar(255)', 'string', 'PkColumn', 'pkColumn', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 13, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:31.985', '2023-10-28 16:27:31.985', NULL);
+INSERT INTO `gen_columns` VALUES (407, 30, 'pk_go_field', '', 'varchar(255)', 'string', 'PkGoField', 'pkGoField', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 14, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:31.988', '2023-10-28 16:27:31.988', NULL);
+INSERT INTO `gen_columns` VALUES (408, 30, 'pk_json_field', '', 'varchar(255)', 'string', 'PkJsonField', 'pkJsonField', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 15, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:31.990', '2023-10-28 16:27:31.990', NULL);
+INSERT INTO `gen_columns` VALUES (409, 30, 'options', '', 'varchar(255)', 'string', 'Options', 'options', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 16, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:31.994', '2023-10-28 16:27:31.994', NULL);
+INSERT INTO `gen_columns` VALUES (410, 30, 'tree_code', '', 'varchar(255)', 'string', 'TreeCode', 'treeCode', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 17, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:31.997', '2023-10-28 16:27:31.997', NULL);
+INSERT INTO `gen_columns` VALUES (411, 30, 'tree_parent_code', '', 'varchar(255)', 'string', 'TreeParentCode', 'treeParentCode', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 18, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:32.000', '2023-10-28 16:27:32.000', NULL);
+INSERT INTO `gen_columns` VALUES (412, 30, 'tree_name', '', 'varchar(255)', 'string', 'TreeName', 'treeName', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 19, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:32.003', '2023-10-28 16:27:32.003', NULL);
+INSERT INTO `gen_columns` VALUES (413, 30, 'tree', '', 'tinyint(1)', 'int', 'Tree', 'tree', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 20, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:32.005', '2023-10-28 16:27:32.005', NULL);
+INSERT INTO `gen_columns` VALUES (414, 30, 'crud', '', 'tinyint(1)', 'int', 'Crud', 'crud', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 21, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:32.008', '2023-10-28 16:27:32.008', NULL);
+INSERT INTO `gen_columns` VALUES (415, 30, 'remark', '', 'varchar(255)', 'string', 'Remark', 'remark', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 22, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:32.012', '2023-10-28 16:27:32.012', NULL);
+INSERT INTO `gen_columns` VALUES (416, 30, 'is_data_scope', '', 'tinyint', 'int', 'IsDataScope', 'isDataScope', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 23, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:32.015', '2023-10-28 16:27:32.015', NULL);
+INSERT INTO `gen_columns` VALUES (417, 30, 'is_actions', '', 'tinyint', 'int', 'IsActions', 'isActions', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 24, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:32.018', '2023-10-28 16:27:32.018', NULL);
+INSERT INTO `gen_columns` VALUES (418, 30, 'is_auth', '', 'tinyint', 'int', 'IsAuth', 'isAuth', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 25, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:32.021', '2023-10-28 16:27:32.021', NULL);
+INSERT INTO `gen_columns` VALUES (419, 30, 'is_logical_delete', '', 'varchar(1)', 'string', 'IsLogicalDelete', 'isLogicalDelete', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 26, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:32.024', '2023-10-28 16:27:32.024', NULL);
+INSERT INTO `gen_columns` VALUES (420, 30, 'logical_delete', '', 'tinyint(1)', 'int', 'LogicalDelete', 'logicalDelete', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 27, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:32.027', '2023-10-28 16:27:32.027', NULL);
+INSERT INTO `gen_columns` VALUES (421, 30, 'logical_delete_column', '', 'varchar(128)', 'string', 'LogicalDeleteColumn', 'logicalDeleteColumn', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 28, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:32.031', '2023-10-28 16:27:32.031', NULL);
+INSERT INTO `gen_columns` VALUES (422, 30, 'created_at', '创建时间', 'datetime(3)', 'time.Time', 'CreatedAt', 'createdAt', '0', '', '0', '1', '', '1', '', 'EQ', 'datetime', '', 29, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:32.034', '2023-10-28 16:27:32.034', NULL);
+INSERT INTO `gen_columns` VALUES (423, 30, 'updated_at', '最后更新时间', 'datetime(3)', 'time.Time', 'UpdatedAt', 'updatedAt', '0', '', '0', '1', '', '1', '', 'EQ', 'datetime', '', 30, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:32.036', '2023-10-28 16:27:32.036', NULL);
+INSERT INTO `gen_columns` VALUES (424, 30, 'deleted_at', '删除时间', 'datetime(3)', 'time.Time', 'DeletedAt', 'deletedAt', '0', '', '0', '1', '', '1', '', 'EQ', 'datetime', '', 31, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:32.039', '2023-10-28 16:27:32.039', NULL);
+INSERT INTO `gen_columns` VALUES (425, 30, 'create_by', '创建者', 'int unsigned', 'int', 'CreateBy', 'createBy', '0', '', '0', '1', '', '1', '', 'EQ', 'input', '', 32, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:32.042', '2023-10-28 16:27:32.042', NULL);
+INSERT INTO `gen_columns` VALUES (426, 30, 'update_by', '更新者', 'int unsigned', 'int', 'UpdateBy', 'updateBy', '0', '', '0', '1', '', '1', '', 'EQ', 'input', '', 33, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:27:32.045', '2023-10-28 16:27:32.045', NULL);
+INSERT INTO `gen_columns` VALUES (427, 31, 'column_id', '', 'bigint', 'int', 'ColumnId', 'columnId', '1', '', '1', '1', '1', '1', '', 'EQ', 'input', '', 1, '', 1, 1, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:02.931', '2023-10-28 16:28:02.931', NULL);
+INSERT INTO `gen_columns` VALUES (428, 31, 'table_id', '', 'bigint', 'int', 'TableId', 'tableId', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 2, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:02.935', '2023-10-28 16:28:02.935', NULL);
+INSERT INTO `gen_columns` VALUES (429, 31, 'column_name', '', 'varchar(128)', 'string', 'ColumnName', 'columnName', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 3, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:02.938', '2023-10-28 16:28:02.938', NULL);
+INSERT INTO `gen_columns` VALUES (430, 31, 'column_comment', '', 'varchar(128)', 'string', 'ColumnComment', 'columnComment', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 4, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:02.941', '2023-10-28 16:28:02.941', NULL);
+INSERT INTO `gen_columns` VALUES (431, 31, 'column_type', '', 'varchar(128)', 'string', 'ColumnType', 'columnType', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 5, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:02.946', '2023-10-28 16:28:02.946', NULL);
+INSERT INTO `gen_columns` VALUES (432, 31, 'go_type', '', 'varchar(128)', 'string', 'GoType', 'goType', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 6, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:02.949', '2023-10-28 16:28:02.949', NULL);
+INSERT INTO `gen_columns` VALUES (433, 31, 'go_field', '', 'varchar(128)', 'string', 'GoField', 'goField', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 7, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:02.952', '2023-10-28 16:28:02.952', NULL);
+INSERT INTO `gen_columns` VALUES (434, 31, 'json_field', '', 'varchar(128)', 'string', 'JsonField', 'jsonField', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 8, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:02.954', '2023-10-28 16:28:02.954', NULL);
+INSERT INTO `gen_columns` VALUES (435, 31, 'is_pk', '', 'varchar(4)', 'string', 'IsPk', 'isPk', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 9, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:02.957', '2023-10-28 16:28:02.957', NULL);
+INSERT INTO `gen_columns` VALUES (436, 31, 'is_increment', '', 'varchar(4)', 'string', 'IsIncrement', 'isIncrement', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 10, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:02.961', '2023-10-28 16:28:02.961', NULL);
+INSERT INTO `gen_columns` VALUES (437, 31, 'is_required', '', 'varchar(4)', 'string', 'IsRequired', 'isRequired', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 11, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:02.964', '2023-10-28 16:28:02.964', NULL);
+INSERT INTO `gen_columns` VALUES (438, 31, 'is_insert', '', 'varchar(4)', 'string', 'IsInsert', 'isInsert', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 12, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:02.967', '2023-10-28 16:28:02.967', NULL);
+INSERT INTO `gen_columns` VALUES (439, 31, 'is_edit', '', 'varchar(4)', 'string', 'IsEdit', 'isEdit', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 13, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:02.969', '2023-10-28 16:28:02.969', NULL);
+INSERT INTO `gen_columns` VALUES (440, 31, 'is_list', '', 'varchar(4)', 'string', 'IsList', 'isList', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 14, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:02.972', '2023-10-28 16:28:02.972', NULL);
+INSERT INTO `gen_columns` VALUES (441, 31, 'is_query', '', 'varchar(4)', 'string', 'IsQuery', 'isQuery', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 15, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:02.975', '2023-10-28 16:28:02.975', NULL);
+INSERT INTO `gen_columns` VALUES (442, 31, 'query_type', '', 'varchar(128)', 'string', 'QueryType', 'queryType', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 16, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:02.978', '2023-10-28 16:28:02.978', NULL);
+INSERT INTO `gen_columns` VALUES (443, 31, 'html_type', '', 'varchar(128)', 'string', 'HtmlType', 'htmlType', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 17, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:02.981', '2023-10-28 16:28:02.981', NULL);
+INSERT INTO `gen_columns` VALUES (444, 31, 'dict_type', '', 'varchar(128)', 'string', 'DictType', 'dictType', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 18, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:02.985', '2023-10-28 16:28:02.985', NULL);
+INSERT INTO `gen_columns` VALUES (445, 31, 'sort', '', 'bigint', 'int', 'Sort', 'sort', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 19, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:02.987', '2023-10-28 16:28:02.987', NULL);
+INSERT INTO `gen_columns` VALUES (446, 31, 'list', '', 'varchar(1)', 'string', 'List', 'list', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 20, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:02.990', '2023-10-28 16:28:02.990', NULL);
+INSERT INTO `gen_columns` VALUES (447, 31, 'pk', '', 'tinyint(1)', 'int', 'Pk', 'pk', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 21, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:02.993', '2023-10-28 16:28:02.993', NULL);
+INSERT INTO `gen_columns` VALUES (448, 31, 'required', '', 'tinyint(1)', 'int', 'Required', 'required', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 22, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:02.996', '2023-10-28 16:28:02.996', NULL);
+INSERT INTO `gen_columns` VALUES (449, 31, 'super_column', '', 'tinyint(1)', 'int', 'SuperColumn', 'superColumn', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 23, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:02.999', '2023-10-28 16:28:02.999', NULL);
+INSERT INTO `gen_columns` VALUES (450, 31, 'usable_column', '', 'tinyint(1)', 'int', 'UsableColumn', 'usableColumn', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 24, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:03.002', '2023-10-28 16:28:03.002', NULL);
+INSERT INTO `gen_columns` VALUES (451, 31, 'increment', '', 'tinyint(1)', 'int', 'Increment', 'increment', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 25, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:03.004', '2023-10-28 16:28:03.004', NULL);
+INSERT INTO `gen_columns` VALUES (452, 31, 'insert', '', 'tinyint(1)', 'int', 'Insert', 'insert', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 26, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:03.007', '2023-10-28 16:28:03.007', NULL);
+INSERT INTO `gen_columns` VALUES (453, 31, 'edit', '', 'tinyint(1)', 'int', 'Edit', 'edit', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 27, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:03.011', '2023-10-28 16:28:03.011', NULL);
+INSERT INTO `gen_columns` VALUES (454, 31, 'query', '', 'tinyint(1)', 'int', 'Query', 'query', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 28, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:03.014', '2023-10-28 16:28:03.014', NULL);
+INSERT INTO `gen_columns` VALUES (455, 31, 'remark', '', 'varchar(255)', 'string', 'Remark', 'remark', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 29, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:03.017', '2023-10-28 16:28:03.017', NULL);
+INSERT INTO `gen_columns` VALUES (456, 31, 'fk_table_name', '', 'longtext', 'string', 'FkTableName', 'fkTableName', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 30, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:03.019', '2023-10-28 16:28:03.019', NULL);
+INSERT INTO `gen_columns` VALUES (457, 31, 'fk_table_name_class', '', 'longtext', 'string', 'FkTableNameClass', 'fkTableNameClass', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 31, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:03.022', '2023-10-28 16:28:03.022', NULL);
+INSERT INTO `gen_columns` VALUES (458, 31, 'fk_table_name_package', '', 'longtext', 'string', 'FkTableNamePackage', 'fkTableNamePackage', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 32, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:03.026', '2023-10-28 16:28:03.026', NULL);
+INSERT INTO `gen_columns` VALUES (459, 31, 'fk_label_id', '', 'longtext', 'string', 'FkLabelId', 'fkLabelId', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 33, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:03.029', '2023-10-28 16:28:03.029', NULL);
+INSERT INTO `gen_columns` VALUES (460, 31, 'fk_label_name', '', 'varchar(255)', 'string', 'FkLabelName', 'fkLabelName', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 34, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:03.032', '2023-10-28 16:28:03.032', NULL);
+INSERT INTO `gen_columns` VALUES (461, 31, 'create_by', '', 'mediumint', 'int', 'CreateBy', 'createBy', '0', '', '0', '1', '', '1', '', 'EQ', 'input', '', 35, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:03.035', '2023-10-28 16:28:03.035', NULL);
+INSERT INTO `gen_columns` VALUES (462, 31, 'update_By', '', 'mediumint', 'int', 'UpdateBy', 'updateBy', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 36, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:03.037', '2023-10-28 16:28:03.037', NULL);
+INSERT INTO `gen_columns` VALUES (463, 31, 'created_at', '创建时间', 'datetime(3)', 'time.Time', 'CreatedAt', 'createdAt', '0', '', '0', '1', '', '1', '', 'EQ', 'datetime', '', 37, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:03.040', '2023-10-28 16:28:03.040', NULL);
+INSERT INTO `gen_columns` VALUES (464, 31, 'updated_at', '最后更新时间', 'datetime(3)', 'time.Time', 'UpdatedAt', 'updatedAt', '0', '', '0', '1', '', '1', '', 'EQ', 'datetime', '', 38, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:03.044', '2023-10-28 16:28:03.044', NULL);
+INSERT INTO `gen_columns` VALUES (465, 31, 'deleted_at', '删除时间', 'datetime(3)', 'time.Time', 'DeletedAt', 'deletedAt', '0', '', '0', '1', '', '1', '', 'EQ', 'datetime', '', 39, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:28:03.047', '2023-10-28 16:28:03.047', NULL);
+INSERT INTO `gen_columns` VALUES (466, 32, 'id', '主键编码', 'int unsigned', 'int', 'Id', 'id', '1', '', '1', '1', '1', '1', '', 'EQ', 'input', '', 1, '', 1, 1, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:51:28.750', '2023-10-28 16:51:28.750', NULL);
+INSERT INTO `gen_columns` VALUES (467, 32, 'title', '标题', 'varchar(128)', 'string', 'Title', 'title', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 2, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:51:28.754', '2023-10-28 16:51:28.754', NULL);
+INSERT INTO `gen_columns` VALUES (468, 32, 'method', '请求类型', 'varchar(16)', 'string', 'Method', 'method', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 3, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:51:28.756', '2023-10-28 16:51:28.756', NULL);
+INSERT INTO `gen_columns` VALUES (469, 32, 'path', '请求地址', 'varchar(128)', 'string', 'Path', 'path', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 4, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:51:28.758', '2023-10-28 16:51:28.758', NULL);
+INSERT INTO `gen_columns` VALUES (470, 32, 'perm_type', '权限类型（1：无需认证 2:须token 3：须鉴权）', 'bigint', 'int', 'PermType', 'permType', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 5, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:51:28.761', '2023-10-28 16:51:28.761', NULL);
+INSERT INTO `gen_columns` VALUES (471, 32, 'status', '状态 3 DEF 2 OK 1 del', 'tinyint', 'int', 'Status', 'status', '0', '', '0', '1', '1', '1', '1', 'EQ', 'input', '', 6, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:51:28.765', '2023-10-28 16:51:28.765', NULL);
+INSERT INTO `gen_columns` VALUES (472, 32, 'update_by', '更新者', 'int unsigned', 'int', 'UpdateBy', 'updateBy', '0', '', '0', '1', '', '1', '', 'EQ', 'input', '', 7, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:51:28.768', '2023-10-28 16:51:28.768', NULL);
+INSERT INTO `gen_columns` VALUES (473, 32, 'updated_at', '最后更新时间', 'datetime(3)', 'time.Time', 'UpdatedAt', 'updatedAt', '0', '', '0', '1', '', '1', '', 'EQ', 'datetime', '', 8, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-10-28 16:51:28.770', '2023-10-28 16:51:28.770', NULL);
 
 -- ----------------------------
 -- Table structure for gen_tables
@@ -297,6 +377,9 @@ INSERT INTO `gen_tables` VALUES (25, 'dental-db', 'summary_plan_day', '总结与
 INSERT INTO `gen_tables` VALUES (27, 'dilu-db', 'sys_dept', '部门', 'SysDept', 'crud', 'sys', 'sys-dept', '', 'sysDept', '部门', 'baowk', 'id', 'Id', 'id', '', '', '', '', 0, 1, '', 1, 2, 1, '1', 1, 'is_del', '2023-10-03 16:12:23.378', '2023-10-03 16:12:23.378', NULL, 0, 0);
 INSERT INTO `gen_tables` VALUES (28, 'dental-db', 'target_task', 'TargetTask', 'TargetTask', 'crud', 'dental', 'target-task', '', 'targetTask', 'TargetTask', 'baowk', 'id', 'Id', 'id', '', '', '', '', 0, 1, '', 1, 2, 1, '1', 1, 'is_del', '2023-10-03 17:15:17.051', '2023-10-03 17:15:17.051', NULL, 0, 0);
 INSERT INTO `gen_tables` VALUES (29, 'dental-db', 'event_day_st', 'EventDaySt', 'EventDaySt', 'crud', 'dental', 'event-day-st', '', 'eventDaySt', 'EventDaySt', 'baowk', 'id', 'Id', 'id', '', '', '', '', 0, 1, '', 1, 2, 1, '1', 1, 'is_del', '2023-10-06 20:17:08.646', '2023-10-06 20:17:08.646', NULL, 0, 0);
+INSERT INTO `gen_tables` VALUES (30, 'dilu-db', 'gen_tables', 'GenTables', 'GenTables', 'crud', 'sys', 'gen-tables', '', 'genTables', 'GenTables', 'baowk', 'table_id', 'TableId', 'tableId', '', '', '', '', 0, 1, '', 1, 2, 1, '1', 1, 'is_del', '2023-10-28 16:27:31.937', '2023-10-28 16:27:31.937', NULL, 0, 0);
+INSERT INTO `gen_tables` VALUES (31, 'dilu-db', 'gen_columns', 'GenColumns', 'GenColumns', 'crud', 'sys', 'gen-columns', '', 'genColumns', 'GenColumns', 'baowk', 'column_id', 'ColumnId', 'columnId', '', '', '', '', 0, 1, '', 1, 2, 1, '1', 1, 'is_del', '2023-10-28 16:28:02.925', '2023-10-28 16:28:02.925', NULL, 0, 0);
+INSERT INTO `gen_tables` VALUES (32, 'dilu-db', 'sys_api', '接口', 'SysApi', 'crud', 'sys', 'sys-api', '', 'sysApi', '接口', 'baowk', 'id', 'Id', 'id', '', '', '', '', 0, 1, '', 1, 2, 1, '1', 1, 'is_del', '2023-10-28 16:51:28.742', '2023-10-28 16:51:28.742', NULL, 0, 0);
 
 -- ----------------------------
 -- Table structure for sys_api
@@ -381,6 +464,21 @@ INSERT INTO `sys_api` VALUES (60, '删除任务目标', 'POST', '/api/v1/dental/
 INSERT INTO `sys_api` VALUES (61, '账单智能识别', 'POST', '/api/v1/dental/bill/identify', 3, 3, 0, '2023-10-15 10:45:32.000');
 INSERT INTO `sys_api` VALUES (62, '日统计', 'POST', '/api/v1/dental/st/day', 3, 3, 0, '2023-10-16 13:51:54.000');
 INSERT INTO `sys_api` VALUES (63, '月统计', 'POST', '/api/v1/dental/st/month', 3, 3, 0, '2023-10-16 14:30:58.000');
+INSERT INTO `sys_api` VALUES (64, '分页获取GenTables', 'POST', '/api/v1/sys/gen-tables/page', 3, 3, 0, '2023-10-28 16:31:47.687');
+INSERT INTO `sys_api` VALUES (65, '根据id获取GenTables', 'POST', '/api/v1/sys/gen-tables/get', 3, 3, 0, '2023-10-28 16:31:47.701');
+INSERT INTO `sys_api` VALUES (66, '创建GenTables', 'POST', '/api/v1/sys/gen-tables/create', 3, 3, 0, '2023-10-28 16:31:47.710');
+INSERT INTO `sys_api` VALUES (67, '修改GenTables', 'POST', '/api/v1/sys/gen-tables/update', 3, 3, 0, '2023-10-28 16:31:47.720');
+INSERT INTO `sys_api` VALUES (68, '删除GenTables', 'POST', '/api/v1/sys/gen-tables/del', 3, 3, 0, '2023-10-28 16:31:47.728');
+INSERT INTO `sys_api` VALUES (69, '分页获取GenColumns', 'POST', '/api/v1/sys/gen-columns/page', 3, 3, 0, '2023-10-28 16:35:01.328');
+INSERT INTO `sys_api` VALUES (70, '根据id获取GenColumns', 'POST', '/api/v1/sys/gen-columns/get', 3, 3, 0, '2023-10-28 16:35:01.350');
+INSERT INTO `sys_api` VALUES (71, '创建GenColumns', 'POST', '/api/v1/sys/gen-columns/create', 3, 3, 0, '2023-10-28 16:35:01.360');
+INSERT INTO `sys_api` VALUES (72, '修改GenColumns', 'POST', '/api/v1/sys/gen-columns/update', 3, 3, 0, '2023-10-28 16:35:01.368');
+INSERT INTO `sys_api` VALUES (73, '删除GenColumns', 'POST', '/api/v1/sys/gen-columns/del', 3, 3, 0, '2023-10-28 16:35:01.388');
+INSERT INTO `sys_api` VALUES (74, '分页获取接口', 'POST', '/api/v1/sys/sys-api/page', 3, 3, 0, '2023-10-28 16:51:44.921');
+INSERT INTO `sys_api` VALUES (75, '根据id获取接口', 'POST', '/api/v1/sys/sys-api/get', 3, 3, 0, '2023-10-28 16:51:44.933');
+INSERT INTO `sys_api` VALUES (76, '创建接口', 'POST', '/api/v1/sys/sys-api/create', 3, 3, 0, '2023-10-28 16:51:44.943');
+INSERT INTO `sys_api` VALUES (77, '修改接口', 'POST', '/api/v1/sys/sys-api/update', 3, 3, 0, '2023-10-28 16:51:44.952');
+INSERT INTO `sys_api` VALUES (78, '删除接口', 'POST', '/api/v1/sys/sys-api/del', 3, 3, 0, '2023-10-28 16:51:44.960');
 
 -- ----------------------------
 -- Table structure for sys_cfg
@@ -620,6 +718,21 @@ INSERT INTO `sys_menu` VALUES (89, NULL, '日统计', NULL, 'st_day', 2, 3, 'den
 INSERT INTO `sys_menu` VALUES (90, NULL, '月统计', NULL, 'st_month', 2, 3, 'dental:st:month', 63, 0, NULL, 0, 0, 1, 1, '2023-10-16 14:32:02.000', '2023-10-16 14:32:06.000', NULL);
 INSERT INTO `sys_menu` VALUES (91, '', '工具管理', 'tools', '/tools', 2, 1, NULL, 0, 0, 'Layout', 0, 0, 1, 1, '2023-10-28 09:41:26.000', '2023-10-28 09:41:29.000', NULL);
 INSERT INTO `sys_menu` VALUES (92, 'ToolManage', '代码生成', 'tools', '/tools/gen', 2, 2, 'tools:gen:list', 91, 0, '/tool/gen/index', 0, 0, 1, 1, '2023-10-28 09:44:15.000', '2023-10-28 09:44:18.000', NULL);
+INSERT INTO `sys_menu` VALUES (93, 'GenTablesManage', 'GenTables管理', 'pass', '/sys/gen-tables', 2, 2, 'sys:genTables:list', 91, 0, '/sys/gen-tables/index', 0, 0, 1, 1, '2023-10-28 16:31:47.693', '2023-10-28 16:31:47.693', NULL);
+INSERT INTO `sys_menu` VALUES (94, '', 'GenTables详情', '', 'gen_tables_detail', 2, 3, 'sys:genTables:query', 93, 0, '', 0, 0, 1, 1, '2023-10-28 16:31:47.704', '2023-10-28 16:31:47.704', NULL);
+INSERT INTO `sys_menu` VALUES (95, '', 'GenTables创建', '', 'gen_tables_create', 2, 3, 'sys:genTables:add', 93, 0, '', 0, 0, 1, 1, '2023-10-28 16:31:47.714', '2023-10-28 16:31:47.714', NULL);
+INSERT INTO `sys_menu` VALUES (96, '', 'GenTables修改', '', 'gen_tables_update', 2, 3, 'sys:genTables:edit', 93, 0, '', 0, 0, 1, 1, '2023-10-28 16:31:47.723', '2023-10-28 16:31:47.723', NULL);
+INSERT INTO `sys_menu` VALUES (97, '', 'GenTables删除', '', 'gen_tables_del', 2, 3, 'sys:genTables:remove', 93, 0, '', 0, 0, 1, 1, '2023-10-28 16:31:47.731', '2023-10-28 16:31:47.731', NULL);
+INSERT INTO `sys_menu` VALUES (98, 'GenColumnsManage', 'GenColumns管理', 'pass', '/sys/gen-columns', 2, 2, 'sys:genColumns:list', 91, 0, '/sys/gen-columns/index', 0, 0, 1, 1, '2023-10-28 16:35:01.334', '2023-10-28 16:35:01.334', NULL);
+INSERT INTO `sys_menu` VALUES (99, '', 'GenColumns详情', '', 'gen_columns_detail', 2, 3, 'sys:genColumns:query', 98, 0, '', 0, 0, 1, 1, '2023-10-28 16:35:01.354', '2023-10-28 16:35:01.354', NULL);
+INSERT INTO `sys_menu` VALUES (100, '', 'GenColumns创建', '', 'gen_columns_create', 2, 3, 'sys:genColumns:add', 98, 0, '', 0, 0, 1, 1, '2023-10-28 16:35:01.363', '2023-10-28 16:35:01.363', NULL);
+INSERT INTO `sys_menu` VALUES (101, '', 'GenColumns修改', '', 'gen_columns_update', 2, 3, 'sys:genColumns:edit', 98, 0, '', 0, 0, 1, 1, '2023-10-28 16:35:01.371', '2023-10-28 16:35:01.371', NULL);
+INSERT INTO `sys_menu` VALUES (102, '', 'GenColumns删除', '', 'gen_columns_del', 2, 3, 'sys:genColumns:remove', 98, 0, '', 0, 0, 1, 1, '2023-10-28 16:35:01.392', '2023-10-28 16:35:01.392', NULL);
+INSERT INTO `sys_menu` VALUES (103, 'SysApiManage', '接口管理', 'pass', '/sys/sys-api', 2, 2, 'sys:sysApi:list', 91, 0, '/sys/sys-api/index', 0, 0, 1, 1, '2023-10-28 16:51:44.924', '2023-10-28 16:51:44.924', NULL);
+INSERT INTO `sys_menu` VALUES (104, '', '接口详情', '', 'sys_api_detail', 2, 3, 'sys:sysApi:query', 103, 0, '', 0, 0, 1, 1, '2023-10-28 16:51:44.938', '2023-10-28 16:51:44.938', NULL);
+INSERT INTO `sys_menu` VALUES (105, '', '接口创建', '', 'sys_api_create', 2, 3, 'sys:sysApi:add', 103, 0, '', 0, 0, 1, 1, '2023-10-28 16:51:44.947', '2023-10-28 16:51:44.947', NULL);
+INSERT INTO `sys_menu` VALUES (106, '', '接口修改', '', 'sys_api_update', 2, 3, 'sys:sysApi:edit', 103, 0, '', 0, 0, 1, 1, '2023-10-28 16:51:44.955', '2023-10-28 16:51:44.955', NULL);
+INSERT INTO `sys_menu` VALUES (107, '', '接口删除', '', 'sys_api_del', 2, 3, 'sys:sysApi:remove', 103, 0, '', 0, 0, 1, 1, '2023-10-28 16:51:44.964', '2023-10-28 16:51:44.964', NULL);
 
 -- ----------------------------
 -- Table structure for sys_menu_api_rule
@@ -695,6 +808,21 @@ INSERT INTO `sys_menu_api_rule` VALUES (87, 60);
 INSERT INTO `sys_menu_api_rule` VALUES (88, 61);
 INSERT INTO `sys_menu_api_rule` VALUES (89, 62);
 INSERT INTO `sys_menu_api_rule` VALUES (90, 63);
+INSERT INTO `sys_menu_api_rule` VALUES (93, 64);
+INSERT INTO `sys_menu_api_rule` VALUES (94, 65);
+INSERT INTO `sys_menu_api_rule` VALUES (95, 66);
+INSERT INTO `sys_menu_api_rule` VALUES (96, 67);
+INSERT INTO `sys_menu_api_rule` VALUES (97, 68);
+INSERT INTO `sys_menu_api_rule` VALUES (98, 69);
+INSERT INTO `sys_menu_api_rule` VALUES (99, 70);
+INSERT INTO `sys_menu_api_rule` VALUES (100, 71);
+INSERT INTO `sys_menu_api_rule` VALUES (101, 72);
+INSERT INTO `sys_menu_api_rule` VALUES (102, 73);
+INSERT INTO `sys_menu_api_rule` VALUES (103, 74);
+INSERT INTO `sys_menu_api_rule` VALUES (104, 75);
+INSERT INTO `sys_menu_api_rule` VALUES (105, 76);
+INSERT INTO `sys_menu_api_rule` VALUES (106, 77);
+INSERT INTO `sys_menu_api_rule` VALUES (107, 78);
 
 -- ----------------------------
 -- Table structure for sys_opera_log
