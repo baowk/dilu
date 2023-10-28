@@ -11,7 +11,7 @@
  Target Server Version : 80033
  File Encoding         : 65001
 
- Date: 28/10/2023 16:20:20
+ Date: 28/10/2023 16:22:37
 */
 
 SET NAMES utf8mb4;
@@ -536,7 +536,6 @@ CREATE TABLE `sys_menu`  (
   `title` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '显示名称',
   `icon` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '图标',
   `path` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '路径',
-  `paths` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '路径ids/分割',
   `platform_type` bigint(0) NULL DEFAULT NULL COMMENT '平台类型 1 平台管理 2团队管理',
   `menu_type` tinyint(0) NULL DEFAULT NULL COMMENT '菜单类型 1 分类 2菜单 3方法按钮',
   `permission` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '权限',
@@ -559,68 +558,68 @@ CREATE TABLE `sys_menu`  (
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
-INSERT INTO `sys_menu` VALUES (1, '', '系统管理', 'setting', '/sys', '/0/1', 2, 1, '', 0, 0, 'Layout', 0, 0, 1, 0, '2023-09-26 13:46:59.480', '2023-09-26 13:46:59.481', NULL);
-INSERT INTO `sys_menu` VALUES (2, 'SysUserManage', '用户管理', 'flUser', '/sys/sys-user', '/0/1/2', 1, 2, 'sys:sysUser:list', 1, 0, '/sys/sys-user/index', 0, 0, 1, 1, '2023-09-26 13:46:59.493', '2023-09-26 13:46:59.503', NULL);
-INSERT INTO `sys_menu` VALUES (3, '', '用户详情', '', 'sys_user_detail', '/0/1/2/3', 1, 3, 'sys:sysUser:query', 2, 0, '', 0, 0, 1, 1, '2023-09-26 13:46:59.522', '2023-09-26 13:46:59.526', NULL);
-INSERT INTO `sys_menu` VALUES (4, '', '用户创建', '', 'sys_user_create', '/0/1/2/4', 1, 3, 'sys:sysUser:add', 2, 0, '', 0, 0, 1, 1, '2023-09-26 13:46:59.534', '2023-09-26 13:46:59.536', NULL);
-INSERT INTO `sys_menu` VALUES (5, '', '用户修改', '', 'sys_user_update', '/0/1/2/5', 1, 3, 'sys:sysUser:edit', 2, 0, '', 0, 0, 1, 1, '2023-09-26 13:46:59.543', '2023-09-26 13:46:59.546', NULL);
-INSERT INTO `sys_menu` VALUES (6, '', '用户删除', '', 'sys_user_del', '/0/1/2/6', 1, 3, 'sys:sysUser:remove', 2, 0, '', 0, 0, 1, 1, '2023-09-26 13:46:59.553', '2023-09-26 13:46:59.555', NULL);
-INSERT INTO `sys_menu` VALUES (7, 'SysMenuManage', '菜单管理', 'menu', '/sys/sys-menu', '/0/1/7', 1, 2, 'sys:sysMenu:list', 1, 0, '/sys/sys-menu/index', 0, 0, 1, 1, '2023-09-26 13:47:37.025', '2023-09-26 13:47:37.029', NULL);
-INSERT INTO `sys_menu` VALUES (8, '', '菜单详情', '', 'sys_menu_detail', '/0/1/7/8', 1, 3, 'sys:sysMenu:query', 7, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:37.042', '2023-09-26 13:47:37.055', NULL);
-INSERT INTO `sys_menu` VALUES (9, '', '菜单创建', '', 'sys_menu_create', '/0/1/7/9', 1, 3, 'sys:sysMenu:add', 7, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:37.067', '2023-09-26 13:47:37.069', NULL);
-INSERT INTO `sys_menu` VALUES (10, '', '菜单修改', '', 'sys_menu_update', '/0/1/7/10', 1, 3, 'sys:sysMenu:edit', 7, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:37.076', '2023-09-26 13:47:37.079', NULL);
-INSERT INTO `sys_menu` VALUES (11, '', '菜单删除', '', 'sys_menu_del', '/0/1/7/11', 1, 3, 'sys:sysMenu:remove', 7, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:37.084', '2023-09-26 13:47:37.086', NULL);
-INSERT INTO `sys_menu` VALUES (12, 'SysRoleManage', '角色管理', 'role', '/sys/sys-role', '/0/1/12', 2, 2, 'sys:sysRole:list', 1, 0, '/sys/sys-role/index', 0, 0, 1, 1, '2023-09-26 13:47:39.688', '2023-09-26 13:47:39.694', NULL);
-INSERT INTO `sys_menu` VALUES (13, '', '角色详情', '', 'sys_role_detail', '/0/1/12/13', 2, 3, 'sys:sysRole:query', 12, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:39.714', '2023-09-26 13:47:39.717', NULL);
-INSERT INTO `sys_menu` VALUES (14, '', '角色创建', '', 'sys_role_create', '/0/1/12/14', 2, 3, 'sys:sysRole:add', 12, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:39.747', '2023-09-26 13:47:39.752', NULL);
-INSERT INTO `sys_menu` VALUES (15, '', '角色修改', '', 'sys_role_update', '/0/1/12/15', 2, 3, 'sys:sysRole:edit', 12, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:39.765', '2023-09-26 13:47:39.769', NULL);
-INSERT INTO `sys_menu` VALUES (16, '', '角色删除', '', 'sys_role_del', '/0/1/12/16', 2, 3, 'sys:sysRole:remove', 12, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:39.776', '2023-09-26 13:47:39.778', NULL);
-INSERT INTO `sys_menu` VALUES (17, 'SysDeptManage', '部门管理', 'dept', '/sys/sys-dept', '/0/1/17', 2, 2, 'sys:sysDept:list', 1, 0, '/sys/sys-dept/index', 0, 0, 1, 1, '2023-09-26 13:47:42.140', '2023-09-26 13:47:42.144', NULL);
-INSERT INTO `sys_menu` VALUES (18, '', '部门详情', '', 'sys_dept_detail', '/0/1/17/18', 2, 3, 'sys:sysDept:query', 17, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:42.155', '2023-09-26 13:47:42.167', NULL);
-INSERT INTO `sys_menu` VALUES (19, '', '部门创建', '', 'sys_dept_create', '/0/1/17/19', 2, 3, 'sys:sysDept:add', 17, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:42.180', '2023-09-26 13:47:42.182', NULL);
-INSERT INTO `sys_menu` VALUES (20, '', '部门修改', '', 'sys_dept_update', '/0/1/17/20', 2, 3, 'sys:sysDept:edit', 17, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:42.188', '2023-09-26 13:47:42.190', NULL);
-INSERT INTO `sys_menu` VALUES (21, '', '部门删除', '', 'sys_dept_del', '/0/1/17/21', 2, 3, 'sys:sysDept:remove', 17, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:42.200', '2023-09-26 13:47:42.202', NULL);
-INSERT INTO `sys_menu` VALUES (52, 'SysTeamManage', '团队管理', 'team', '/sys/sys-team', '/0/1/52', 1, 2, 'sys:sysTeam:list', 1, 0, '/sys/sys-team/index', 0, 0, 1, 1, '2023-09-29 08:44:07.932', '2023-09-29 08:44:07.935', NULL);
-INSERT INTO `sys_menu` VALUES (53, '', '团队详情', '', 'sys_team_detail', '/0/1/52/53', 1, 3, 'sys:sysTeam:query', 52, 0, '', 0, 0, 1, 1, '2023-09-29 08:44:07.941', '2023-09-29 08:44:07.945', NULL);
-INSERT INTO `sys_menu` VALUES (54, '', '团队创建', '', 'sys_team_create', '/0/1/52/54', 1, 3, 'sys:sysTeam:add', 52, 0, '', 0, 0, 1, 1, '2023-09-29 08:44:07.951', '2023-09-29 08:44:07.954', NULL);
-INSERT INTO `sys_menu` VALUES (55, '', '团队修改', '', 'sys_team_update', '/0/1/52/55', 1, 3, 'sys:sysTeam:edit', 52, 0, '', 0, 0, 1, 1, '2023-09-29 08:44:07.958', '2023-09-29 08:44:07.961', NULL);
-INSERT INTO `sys_menu` VALUES (56, '', '团队删除', '', 'sys_team_del', '/0/1/52/56', 1, 3, 'sys:sysTeam:remove', 52, 0, '', 0, 0, 1, 1, '2023-09-29 08:44:07.966', '2023-09-29 08:44:07.971', NULL);
-INSERT INTO `sys_menu` VALUES (57, 'SysMemberManage', '成员管理', 'openArm', '/sys/sys-member', '/0/1/57', 2, 2, 'sys:sysMember:list', 1, 0, '/sys/sys-member/index', 0, 0, 1, 1, '2023-09-29 08:44:33.484', '2023-09-29 08:44:33.508', NULL);
-INSERT INTO `sys_menu` VALUES (58, '', '成员详情', '', 'sys_member_detail', '/0/1/57/58', 2, 3, 'sys:sysMember:query', 57, 0, '', 0, 0, 1, 1, '2023-09-29 08:44:33.517', '2023-09-29 08:44:33.520', NULL);
-INSERT INTO `sys_menu` VALUES (59, '', '成员创建', '', 'sys_member_create', '/0/1/57/59', 2, 3, 'sys:sysMember:add', 57, 0, '', 0, 0, 1, 1, '2023-09-29 08:44:33.526', '2023-09-29 08:44:33.529', NULL);
-INSERT INTO `sys_menu` VALUES (60, '', '成员修改', '', 'sys_member_update', '/0/1/57/60', 2, 3, 'sys:sysMember:edit', 57, 0, '', 0, 0, 1, 1, '2023-09-29 08:44:33.534', '2023-09-29 08:44:33.538', NULL);
-INSERT INTO `sys_menu` VALUES (61, '', '会员删除', '', 'sys_member_del', '/0/1/57/61', 2, 3, 'sys:sysMember:remove', 57, 0, '', 0, 0, 1, 1, '2023-09-29 08:44:33.543', '2023-09-29 08:44:33.546', NULL);
-INSERT INTO `sys_menu` VALUES (62, '', '营销管理', 'bill', '/dental', '/0/62', 2, 1, '', 0, 0, 'Layout', 0, 0, 1, 0, '2023-09-29 08:45:53.780', '2023-09-29 08:45:53.783', NULL);
-INSERT INTO `sys_menu` VALUES (63, 'BillManage', '账单管理', 'bill', '/dental/bill', '/0/62/63', 2, 2, 'dental:bill:list', 62, 0, '/dental/bill/index', 0, 0, 1, 1, '2023-09-29 08:45:53.794', '2023-09-29 08:45:53.797', NULL);
-INSERT INTO `sys_menu` VALUES (64, '', '账单详情', '', 'bill_detail', '/0/62/63/64', 2, 3, 'dental:bill:query', 63, 0, '', 0, 0, 1, 1, '2023-09-29 08:45:53.803', '2023-09-29 08:45:53.806', NULL);
-INSERT INTO `sys_menu` VALUES (65, '', '账单创建', '', 'bill_create', '/0/62/63/65', 2, 3, 'dental:bill:add', 63, 0, '', 0, 0, 1, 1, '2023-09-29 08:45:53.818', '2023-09-29 08:45:53.821', NULL);
-INSERT INTO `sys_menu` VALUES (66, '', '账单修改', '', 'bill_update', '/0/62/63/66', 2, 3, 'dental:bill:edit', 63, 0, '', 0, 0, 1, 1, '2023-09-29 08:45:53.829', '2023-09-29 08:45:53.833', NULL);
-INSERT INTO `sys_menu` VALUES (67, '', '账单删除', '', 'bill_del', '/0/62/63/67', 2, 3, 'dental:bill:remove', 63, 0, '', 0, 0, 1, 1, '2023-09-29 08:45:53.840', '2023-09-29 08:45:53.843', NULL);
-INSERT INTO `sys_menu` VALUES (68, 'CustomerManage', '客户管理', 'customer', '/dental/customer', '/0/62/68', 2, 2, 'dental:customer:list', 62, 0, '/dental/customer/index', 0, 0, 1, 1, '2023-09-29 08:46:25.139', '2023-09-29 08:46:25.143', NULL);
-INSERT INTO `sys_menu` VALUES (69, '', '客户详情', '', 'customer_detail', '/0/62/68/69', 2, 3, 'dental:customer:query', 68, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:25.153', '2023-09-29 08:46:25.156', NULL);
-INSERT INTO `sys_menu` VALUES (70, '', '客户创建', '', 'customer_create', '/0/62/68/70', 2, 3, 'dental:customer:add', 68, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:25.165', '2023-09-29 08:46:25.168', NULL);
-INSERT INTO `sys_menu` VALUES (71, '', '客户修改', '', 'customer_update', '/0/62/68/71', 2, 3, 'dental:customer:edit', 68, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:25.176', '2023-09-29 08:46:25.179', NULL);
-INSERT INTO `sys_menu` VALUES (72, '', '客户删除', '', 'customer_del', '/0/62/68/72', 2, 3, 'dental:customer:remove', 68, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:25.187', '2023-09-29 08:46:25.190', NULL);
-INSERT INTO `sys_menu` VALUES (73, 'EventDayStManage', '日统计管理', 'calendarCheck', '/dental/event-day-st', '/0/62/73', 2, 2, 'dental:eventDaySt:list', 62, 0, '/dental/event-day-st/index', 0, 0, 1, 1, '2023-09-29 08:46:27.736', '2023-09-29 08:46:27.762', NULL);
-INSERT INTO `sys_menu` VALUES (74, '', '日统计详情', '', 'event_day_st_detail', '/0/62/73/74', 2, 3, 'dental:eventDaySt:query', 73, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:27.771', '2023-09-29 08:46:27.774', NULL);
-INSERT INTO `sys_menu` VALUES (75, '', '日统计创建', '', 'event_day_st_create', '/0/62/73/75', 2, 3, 'dental:eventDaySt:add', 73, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:27.780', '2023-09-29 08:46:27.783', NULL);
-INSERT INTO `sys_menu` VALUES (76, '', '日统计修改', '', 'event_day_st_update', '/0/62/73/76', 2, 3, 'dental:eventDaySt:edit', 73, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:27.790', '2023-09-29 08:46:27.794', NULL);
-INSERT INTO `sys_menu` VALUES (77, '', '日统计删除', '', 'event_day_st_del', '/0/62/73/77', 2, 3, 'dental:eventDaySt:remove', 73, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:27.801', '2023-09-29 08:46:27.806', NULL);
-INSERT INTO `sys_menu` VALUES (78, 'SummaryPlanDayManage', '日总结与计划管理', 'planet', '/dental/summary-plan-day', '/0/62/78', 2, 2, 'dental:summaryPlanDay:list', 62, 0, '/dental/summary-plan-day/index', 0, 0, 1, 1, '2023-09-29 08:46:30.209', '2023-09-29 08:46:30.215', NULL);
-INSERT INTO `sys_menu` VALUES (79, '', '日总结与计划详情', '', 'summary_plan_day_detail', '/0/62/78/79', 2, 3, 'dental:summaryPlanDay:query', 78, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:30.222', '2023-09-29 08:46:30.225', NULL);
-INSERT INTO `sys_menu` VALUES (80, '', '日总结与计划创建', '', 'summary_plan_day_create', '/0/62/78/80', 2, 3, 'dental:summaryPlanDay:add', 78, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:30.233', '2023-09-29 08:46:30.236', NULL);
-INSERT INTO `sys_menu` VALUES (81, '', '日总结与计划修改', '', 'summary_plan_day_update', '/0/62/78/81', 2, 3, 'dental:summaryPlanDay:edit', 78, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:30.244', '2023-09-29 08:46:30.247', NULL);
-INSERT INTO `sys_menu` VALUES (82, '', '日总结与计划删除', '', 'summary_plan_day_del', '/0/62/78/82', 2, 3, 'dental:summaryPlanDay:remove', 78, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:30.254', '2023-09-29 08:46:30.258', NULL);
-INSERT INTO `sys_menu` VALUES (83, 'TargetTaskManage', '任务目标管理', 'task', '/dental/target-task', '/0/62/83', 2, 2, 'dental:targetTask:list', 62, 0, '/dental/target-task/index', 0, 0, 1, 1, '2023-09-29 08:46:32.790', '2023-09-29 08:46:32.815', NULL);
-INSERT INTO `sys_menu` VALUES (84, '', '任务目标详情', '', 'target_task_detail', '/0/62/83/84', 2, 3, 'dental:targetTask:query', 83, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:32.828', '2023-09-29 08:46:32.830', NULL);
-INSERT INTO `sys_menu` VALUES (85, '', '任务目标创建', '', 'target_task_create', '/0/62/83/85', 2, 3, 'dental:targetTask:add', 83, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:32.837', '2023-09-29 08:46:32.840', NULL);
-INSERT INTO `sys_menu` VALUES (86, '', '任务目标修改', '', 'target_task_update', '/0/62/83/86', 2, 3, 'dental:targetTask:edit', 83, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:32.847', '2023-09-29 08:46:32.850', NULL);
-INSERT INTO `sys_menu` VALUES (87, '', '任务目标删除', '', 'target_task_del', '/0/62/83/87', 2, 3, 'dental:targetTask:remove', 83, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:32.857', '2023-09-29 08:46:32.861', NULL);
-INSERT INTO `sys_menu` VALUES (88, NULL, '账单智能识别', NULL, 'bill_identify', '/0/62/63/88', 2, 3, 'dental:bill:identify', 63, 0, '', 0, 0, 1, 1, '2023-10-15 00:00:00.000', '2023-10-15 00:00:00.000', NULL);
-INSERT INTO `sys_menu` VALUES (89, NULL, '日统计', NULL, 'st_day', '/0/62/63/89', 2, 3, 'dental:st:day', 63, 0, NULL, 0, 0, 1, 1, '2023-10-16 13:53:40.000', '2023-10-16 13:53:44.000', NULL);
-INSERT INTO `sys_menu` VALUES (90, NULL, '月统计', NULL, 'st_month', '/0/62/63/90', 2, 3, 'dental:st:month', 63, 0, NULL, 0, 0, 1, 1, '2023-10-16 14:32:02.000', '2023-10-16 14:32:06.000', NULL);
-INSERT INTO `sys_menu` VALUES (91, '', '工具管理', 'tools', '/tools', NULL, 2, 1, NULL, 0, 0, 'Layout', 0, 0, 1, 1, '2023-10-28 09:41:26.000', '2023-10-28 09:41:29.000', NULL);
-INSERT INTO `sys_menu` VALUES (92, 'ToolManage', '代码生成', 'tools', '/tools/gen', NULL, 2, 2, 'tools:gen:list', 91, 0, '/tool/gen/index', 0, 0, 1, 1, '2023-10-28 09:44:15.000', '2023-10-28 09:44:18.000', NULL);
+INSERT INTO `sys_menu` VALUES (1, '', '系统管理', 'setting', '/sys', 2, 1, '', 0, 0, 'Layout', 0, 0, 1, 0, '2023-09-26 13:46:59.480', '2023-09-26 13:46:59.481', NULL);
+INSERT INTO `sys_menu` VALUES (2, 'SysUserManage', '用户管理', 'flUser', '/sys/sys-user', 1, 2, 'sys:sysUser:list', 1, 0, '/sys/sys-user/index', 0, 0, 1, 1, '2023-09-26 13:46:59.493', '2023-09-26 13:46:59.503', NULL);
+INSERT INTO `sys_menu` VALUES (3, '', '用户详情', '', 'sys_user_detail', 1, 3, 'sys:sysUser:query', 2, 0, '', 0, 0, 1, 1, '2023-09-26 13:46:59.522', '2023-09-26 13:46:59.526', NULL);
+INSERT INTO `sys_menu` VALUES (4, '', '用户创建', '', 'sys_user_create', 1, 3, 'sys:sysUser:add', 2, 0, '', 0, 0, 1, 1, '2023-09-26 13:46:59.534', '2023-09-26 13:46:59.536', NULL);
+INSERT INTO `sys_menu` VALUES (5, '', '用户修改', '', 'sys_user_update', 1, 3, 'sys:sysUser:edit', 2, 0, '', 0, 0, 1, 1, '2023-09-26 13:46:59.543', '2023-09-26 13:46:59.546', NULL);
+INSERT INTO `sys_menu` VALUES (6, '', '用户删除', '', 'sys_user_del', 1, 3, 'sys:sysUser:remove', 2, 0, '', 0, 0, 1, 1, '2023-09-26 13:46:59.553', '2023-09-26 13:46:59.555', NULL);
+INSERT INTO `sys_menu` VALUES (7, 'SysMenuManage', '菜单管理', 'menu', '/sys/sys-menu', 1, 2, 'sys:sysMenu:list', 1, 0, '/sys/sys-menu/index', 0, 0, 1, 1, '2023-09-26 13:47:37.025', '2023-09-26 13:47:37.029', NULL);
+INSERT INTO `sys_menu` VALUES (8, '', '菜单详情', '', 'sys_menu_detail', 1, 3, 'sys:sysMenu:query', 7, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:37.042', '2023-09-26 13:47:37.055', NULL);
+INSERT INTO `sys_menu` VALUES (9, '', '菜单创建', '', 'sys_menu_create', 1, 3, 'sys:sysMenu:add', 7, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:37.067', '2023-09-26 13:47:37.069', NULL);
+INSERT INTO `sys_menu` VALUES (10, '', '菜单修改', '', 'sys_menu_update', 1, 3, 'sys:sysMenu:edit', 7, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:37.076', '2023-09-26 13:47:37.079', NULL);
+INSERT INTO `sys_menu` VALUES (11, '', '菜单删除', '', 'sys_menu_del', 1, 3, 'sys:sysMenu:remove', 7, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:37.084', '2023-09-26 13:47:37.086', NULL);
+INSERT INTO `sys_menu` VALUES (12, 'SysRoleManage', '角色管理', 'role', '/sys/sys-role', 2, 2, 'sys:sysRole:list', 1, 0, '/sys/sys-role/index', 0, 0, 1, 1, '2023-09-26 13:47:39.688', '2023-09-26 13:47:39.694', NULL);
+INSERT INTO `sys_menu` VALUES (13, '', '角色详情', '', 'sys_role_detail', 2, 3, 'sys:sysRole:query', 12, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:39.714', '2023-09-26 13:47:39.717', NULL);
+INSERT INTO `sys_menu` VALUES (14, '', '角色创建', '', 'sys_role_create', 2, 3, 'sys:sysRole:add', 12, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:39.747', '2023-09-26 13:47:39.752', NULL);
+INSERT INTO `sys_menu` VALUES (15, '', '角色修改', '', 'sys_role_update', 2, 3, 'sys:sysRole:edit', 12, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:39.765', '2023-09-26 13:47:39.769', NULL);
+INSERT INTO `sys_menu` VALUES (16, '', '角色删除', '', 'sys_role_del', 2, 3, 'sys:sysRole:remove', 12, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:39.776', '2023-09-26 13:47:39.778', NULL);
+INSERT INTO `sys_menu` VALUES (17, 'SysDeptManage', '部门管理', 'dept', '/sys/sys-dept', 2, 2, 'sys:sysDept:list', 1, 0, '/sys/sys-dept/index', 0, 0, 1, 1, '2023-09-26 13:47:42.140', '2023-09-26 13:47:42.144', NULL);
+INSERT INTO `sys_menu` VALUES (18, '', '部门详情', '', 'sys_dept_detail', 2, 3, 'sys:sysDept:query', 17, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:42.155', '2023-09-26 13:47:42.167', NULL);
+INSERT INTO `sys_menu` VALUES (19, '', '部门创建', '', 'sys_dept_create', 2, 3, 'sys:sysDept:add', 17, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:42.180', '2023-09-26 13:47:42.182', NULL);
+INSERT INTO `sys_menu` VALUES (20, '', '部门修改', '', 'sys_dept_update', 2, 3, 'sys:sysDept:edit', 17, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:42.188', '2023-09-26 13:47:42.190', NULL);
+INSERT INTO `sys_menu` VALUES (21, '', '部门删除', '', 'sys_dept_del', 2, 3, 'sys:sysDept:remove', 17, 0, '', 0, 0, 1, 1, '2023-09-26 13:47:42.200', '2023-09-26 13:47:42.202', NULL);
+INSERT INTO `sys_menu` VALUES (52, 'SysTeamManage', '团队管理', 'team', '/sys/sys-team', 1, 2, 'sys:sysTeam:list', 1, 0, '/sys/sys-team/index', 0, 0, 1, 1, '2023-09-29 08:44:07.932', '2023-09-29 08:44:07.935', NULL);
+INSERT INTO `sys_menu` VALUES (53, '', '团队详情', '', 'sys_team_detail', 1, 3, 'sys:sysTeam:query', 52, 0, '', 0, 0, 1, 1, '2023-09-29 08:44:07.941', '2023-09-29 08:44:07.945', NULL);
+INSERT INTO `sys_menu` VALUES (54, '', '团队创建', '', 'sys_team_create', 1, 3, 'sys:sysTeam:add', 52, 0, '', 0, 0, 1, 1, '2023-09-29 08:44:07.951', '2023-09-29 08:44:07.954', NULL);
+INSERT INTO `sys_menu` VALUES (55, '', '团队修改', '', 'sys_team_update', 1, 3, 'sys:sysTeam:edit', 52, 0, '', 0, 0, 1, 1, '2023-09-29 08:44:07.958', '2023-09-29 08:44:07.961', NULL);
+INSERT INTO `sys_menu` VALUES (56, '', '团队删除', '', 'sys_team_del', 1, 3, 'sys:sysTeam:remove', 52, 0, '', 0, 0, 1, 1, '2023-09-29 08:44:07.966', '2023-09-29 08:44:07.971', NULL);
+INSERT INTO `sys_menu` VALUES (57, 'SysMemberManage', '成员管理', 'openArm', '/sys/sys-member', 2, 2, 'sys:sysMember:list', 1, 0, '/sys/sys-member/index', 0, 0, 1, 1, '2023-09-29 08:44:33.484', '2023-09-29 08:44:33.508', NULL);
+INSERT INTO `sys_menu` VALUES (58, '', '成员详情', '', 'sys_member_detail', 2, 3, 'sys:sysMember:query', 57, 0, '', 0, 0, 1, 1, '2023-09-29 08:44:33.517', '2023-09-29 08:44:33.520', NULL);
+INSERT INTO `sys_menu` VALUES (59, '', '成员创建', '', 'sys_member_create', 2, 3, 'sys:sysMember:add', 57, 0, '', 0, 0, 1, 1, '2023-09-29 08:44:33.526', '2023-09-29 08:44:33.529', NULL);
+INSERT INTO `sys_menu` VALUES (60, '', '成员修改', '', 'sys_member_update', 2, 3, 'sys:sysMember:edit', 57, 0, '', 0, 0, 1, 1, '2023-09-29 08:44:33.534', '2023-09-29 08:44:33.538', NULL);
+INSERT INTO `sys_menu` VALUES (61, '', '会员删除', '', 'sys_member_del', 2, 3, 'sys:sysMember:remove', 57, 0, '', 0, 0, 1, 1, '2023-09-29 08:44:33.543', '2023-09-29 08:44:33.546', NULL);
+INSERT INTO `sys_menu` VALUES (62, '', '营销管理', 'bill', '/dental', 2, 1, '', 0, 0, 'Layout', 0, 0, 1, 0, '2023-09-29 08:45:53.780', '2023-09-29 08:45:53.783', NULL);
+INSERT INTO `sys_menu` VALUES (63, 'BillManage', '账单管理', 'bill', '/dental/bill', 2, 2, 'dental:bill:list', 62, 0, '/dental/bill/index', 0, 0, 1, 1, '2023-09-29 08:45:53.794', '2023-09-29 08:45:53.797', NULL);
+INSERT INTO `sys_menu` VALUES (64, '', '账单详情', '', 'bill_detail', 2, 3, 'dental:bill:query', 63, 0, '', 0, 0, 1, 1, '2023-09-29 08:45:53.803', '2023-09-29 08:45:53.806', NULL);
+INSERT INTO `sys_menu` VALUES (65, '', '账单创建', '', 'bill_create', 2, 3, 'dental:bill:add', 63, 0, '', 0, 0, 1, 1, '2023-09-29 08:45:53.818', '2023-09-29 08:45:53.821', NULL);
+INSERT INTO `sys_menu` VALUES (66, '', '账单修改', '', 'bill_update', 2, 3, 'dental:bill:edit', 63, 0, '', 0, 0, 1, 1, '2023-09-29 08:45:53.829', '2023-09-29 08:45:53.833', NULL);
+INSERT INTO `sys_menu` VALUES (67, '', '账单删除', '', 'bill_del', 2, 3, 'dental:bill:remove', 63, 0, '', 0, 0, 1, 1, '2023-09-29 08:45:53.840', '2023-09-29 08:45:53.843', NULL);
+INSERT INTO `sys_menu` VALUES (68, 'CustomerManage', '客户管理', 'customer', '/dental/customer', 2, 2, 'dental:customer:list', 62, 0, '/dental/customer/index', 0, 0, 1, 1, '2023-09-29 08:46:25.139', '2023-09-29 08:46:25.143', NULL);
+INSERT INTO `sys_menu` VALUES (69, '', '客户详情', '', 'customer_detail', 2, 3, 'dental:customer:query', 68, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:25.153', '2023-09-29 08:46:25.156', NULL);
+INSERT INTO `sys_menu` VALUES (70, '', '客户创建', '', 'customer_create', 2, 3, 'dental:customer:add', 68, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:25.165', '2023-09-29 08:46:25.168', NULL);
+INSERT INTO `sys_menu` VALUES (71, '', '客户修改', '', 'customer_update', 2, 3, 'dental:customer:edit', 68, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:25.176', '2023-09-29 08:46:25.179', NULL);
+INSERT INTO `sys_menu` VALUES (72, '', '客户删除', '', 'customer_del', 2, 3, 'dental:customer:remove', 68, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:25.187', '2023-09-29 08:46:25.190', NULL);
+INSERT INTO `sys_menu` VALUES (73, 'EventDayStManage', '日统计管理', 'calendarCheck', '/dental/event-day-st', 2, 2, 'dental:eventDaySt:list', 62, 0, '/dental/event-day-st/index', 0, 0, 1, 1, '2023-09-29 08:46:27.736', '2023-09-29 08:46:27.762', NULL);
+INSERT INTO `sys_menu` VALUES (74, '', '日统计详情', '', 'event_day_st_detail', 2, 3, 'dental:eventDaySt:query', 73, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:27.771', '2023-09-29 08:46:27.774', NULL);
+INSERT INTO `sys_menu` VALUES (75, '', '日统计创建', '', 'event_day_st_create', 2, 3, 'dental:eventDaySt:add', 73, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:27.780', '2023-09-29 08:46:27.783', NULL);
+INSERT INTO `sys_menu` VALUES (76, '', '日统计修改', '', 'event_day_st_update', 2, 3, 'dental:eventDaySt:edit', 73, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:27.790', '2023-09-29 08:46:27.794', NULL);
+INSERT INTO `sys_menu` VALUES (77, '', '日统计删除', '', 'event_day_st_del', 2, 3, 'dental:eventDaySt:remove', 73, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:27.801', '2023-09-29 08:46:27.806', NULL);
+INSERT INTO `sys_menu` VALUES (78, 'SummaryPlanDayManage', '日总结与计划管理', 'planet', '/dental/summary-plan-day', 2, 2, 'dental:summaryPlanDay:list', 62, 0, '/dental/summary-plan-day/index', 0, 0, 1, 1, '2023-09-29 08:46:30.209', '2023-09-29 08:46:30.215', NULL);
+INSERT INTO `sys_menu` VALUES (79, '', '日总结与计划详情', '', 'summary_plan_day_detail', 2, 3, 'dental:summaryPlanDay:query', 78, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:30.222', '2023-09-29 08:46:30.225', NULL);
+INSERT INTO `sys_menu` VALUES (80, '', '日总结与计划创建', '', 'summary_plan_day_create', 2, 3, 'dental:summaryPlanDay:add', 78, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:30.233', '2023-09-29 08:46:30.236', NULL);
+INSERT INTO `sys_menu` VALUES (81, '', '日总结与计划修改', '', 'summary_plan_day_update', 2, 3, 'dental:summaryPlanDay:edit', 78, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:30.244', '2023-09-29 08:46:30.247', NULL);
+INSERT INTO `sys_menu` VALUES (82, '', '日总结与计划删除', '', 'summary_plan_day_del', 2, 3, 'dental:summaryPlanDay:remove', 78, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:30.254', '2023-09-29 08:46:30.258', NULL);
+INSERT INTO `sys_menu` VALUES (83, 'TargetTaskManage', '任务目标管理', 'task', '/dental/target-task', 2, 2, 'dental:targetTask:list', 62, 0, '/dental/target-task/index', 0, 0, 1, 1, '2023-09-29 08:46:32.790', '2023-09-29 08:46:32.815', NULL);
+INSERT INTO `sys_menu` VALUES (84, '', '任务目标详情', '', 'target_task_detail', 2, 3, 'dental:targetTask:query', 83, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:32.828', '2023-09-29 08:46:32.830', NULL);
+INSERT INTO `sys_menu` VALUES (85, '', '任务目标创建', '', 'target_task_create', 2, 3, 'dental:targetTask:add', 83, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:32.837', '2023-09-29 08:46:32.840', NULL);
+INSERT INTO `sys_menu` VALUES (86, '', '任务目标修改', '', 'target_task_update', 2, 3, 'dental:targetTask:edit', 83, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:32.847', '2023-09-29 08:46:32.850', NULL);
+INSERT INTO `sys_menu` VALUES (87, '', '任务目标删除', '', 'target_task_del', 2, 3, 'dental:targetTask:remove', 83, 0, '', 0, 0, 1, 1, '2023-09-29 08:46:32.857', '2023-09-29 08:46:32.861', NULL);
+INSERT INTO `sys_menu` VALUES (88, NULL, '账单智能识别', NULL, 'bill_identify', 2, 3, 'dental:bill:identify', 63, 0, '', 0, 0, 1, 1, '2023-10-15 00:00:00.000', '2023-10-15 00:00:00.000', NULL);
+INSERT INTO `sys_menu` VALUES (89, NULL, '日统计', NULL, 'st_day', 2, 3, 'dental:st:day', 63, 0, NULL, 0, 0, 1, 1, '2023-10-16 13:53:40.000', '2023-10-16 13:53:44.000', NULL);
+INSERT INTO `sys_menu` VALUES (90, NULL, '月统计', NULL, 'st_month', 2, 3, 'dental:st:month', 63, 0, NULL, 0, 0, 1, 1, '2023-10-16 14:32:02.000', '2023-10-16 14:32:06.000', NULL);
+INSERT INTO `sys_menu` VALUES (91, '', '工具管理', 'tools', '/tools', 2, 1, NULL, 0, 0, 'Layout', 0, 0, 1, 1, '2023-10-28 09:41:26.000', '2023-10-28 09:41:29.000', NULL);
+INSERT INTO `sys_menu` VALUES (92, 'ToolManage', '代码生成', 'tools', '/tools/gen', 2, 2, 'tools:gen:list', 91, 0, '/tool/gen/index', 0, 0, 1, 1, '2023-10-28 09:44:15.000', '2023-10-28 09:44:18.000', NULL);
 
 -- ----------------------------
 -- Table structure for sys_menu_api_rule
