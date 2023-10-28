@@ -11,7 +11,7 @@
  Target Server Version : 80033
  File Encoding         : 65001
 
- Date: 28/10/2023 09:45:50
+ Date: 28/10/2023 16:20:20
 */
 
 SET NAMES utf8mb4;
@@ -620,7 +620,7 @@ INSERT INTO `sys_menu` VALUES (88, NULL, '账单智能识别', NULL, 'bill_ident
 INSERT INTO `sys_menu` VALUES (89, NULL, '日统计', NULL, 'st_day', '/0/62/63/89', 2, 3, 'dental:st:day', 63, 0, NULL, 0, 0, 1, 1, '2023-10-16 13:53:40.000', '2023-10-16 13:53:44.000', NULL);
 INSERT INTO `sys_menu` VALUES (90, NULL, '月统计', NULL, 'st_month', '/0/62/63/90', 2, 3, 'dental:st:month', 63, 0, NULL, 0, 0, 1, 1, '2023-10-16 14:32:02.000', '2023-10-16 14:32:06.000', NULL);
 INSERT INTO `sys_menu` VALUES (91, '', '工具管理', 'tools', '/tools', NULL, 2, 1, NULL, 0, 0, 'Layout', 0, 0, 1, 1, '2023-10-28 09:41:26.000', '2023-10-28 09:41:29.000', NULL);
-INSERT INTO `sys_menu` VALUES (92, 'ToolManage', '代码生成', 'tools', '/tools/gen', NULL, 2, 2, 'tools:gen:list', 91, 0, '/tools/gen/index', 0, 0, 1, 1, '2023-10-28 09:44:15.000', '2023-10-28 09:44:18.000', NULL);
+INSERT INTO `sys_menu` VALUES (92, 'ToolManage', '代码生成', 'tools', '/tools/gen', NULL, 2, 2, 'tools:gen:list', 91, 0, '/tool/gen/index', 0, 0, 1, 1, '2023-10-28 09:44:15.000', '2023-10-28 09:44:18.000', NULL);
 
 -- ----------------------------
 -- Table structure for sys_menu_api_rule
