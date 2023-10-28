@@ -642,7 +642,7 @@ const docTemplate = `{
                                                         "list": {
                                                             "type": "array",
                                                             "items": {
-                                                                "$ref": "#/definitions/models.Bill"
+                                                                "$ref": "#/definitions/dto.BillDto"
                                                             }
                                                         }
                                                     }
@@ -3069,6 +3069,62 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/sys/sys-dept/all": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sys-SysDept"
+                ],
+                "summary": "获取全部部门",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SysDeptGetPageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/models.SysDept"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/sys/sys-dept/create": {
             "post": {
                 "security": [
@@ -3219,62 +3275,6 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/models.SysDept"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/sys/sys-dept/list": {
-            "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "sys-SysDept"
-                ],
-                "summary": "获取全部部门",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "团队id",
-                        "name": "teamId",
-                        "in": "header"
-                    },
-                    {
-                        "description": "body",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.SysDeptGetPageReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/models.SysDept"
-                                            }
                                         }
                                     }
                                 }
@@ -4042,6 +4042,45 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/models.SysMember"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sys/sys-menu/all": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sys-SysMenu"
+                ],
+                "summary": "获取所有菜单",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/models.SysMenu"
+                                            }
                                         }
                                     }
                                 }
@@ -5570,19 +5609,39 @@ const docTemplate = `{
             "properties": {
                 "amount": {
                     "description": "金额",
-                    "type": "string"
+                    "type": "number"
                 },
                 "brand": {
                     "description": "品牌",
                     "type": "integer"
                 },
+                "createBy": {
+                    "description": "创建者id",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
                 "customerId": {
                     "description": "顾客",
                     "type": "integer"
                 },
+                "customerName": {
+                    "description": "用户姓名",
+                    "type": "string"
+                },
+                "debtAmount": {
+                    "description": "回收上月欠款",
+                    "type": "number"
+                },
                 "dentalCount": {
                     "description": "颗数",
                     "type": "integer"
+                },
+                "deptPath": {
+                    "description": "路径",
+                    "type": "string"
                 },
                 "doctor": {
                     "description": "医生",
@@ -5593,7 +5652,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "implant": {
-                    "description": "是否已种",
+                    "description": "种植状态：1 未种 2部分 3已种",
                     "type": "integer"
                 },
                 "implantDate": {
@@ -5612,20 +5671,40 @@ const docTemplate = `{
                     "description": "订单号",
                     "type": "string"
                 },
+                "otherPrj": {
+                    "description": "其他项目",
+                    "type": "string"
+                },
                 "pack": {
                     "description": "1 普通 2 半口 3 全口",
                     "type": "integer"
                 },
                 "paidAmount": {
                     "description": "已支付金额",
-                    "type": "string"
+                    "type": "number"
                 },
                 "paybackDate": {
                     "description": "预定回款日期",
                     "type": "string"
                 },
+                "prjName": {
+                    "description": "种植项目",
+                    "type": "string"
+                },
                 "realAmount": {
                     "description": "折后金额",
+                    "type": "number"
+                },
+                "refundAmount": {
+                    "description": "退款",
+                    "type": "number"
+                },
+                "remark": {
+                    "description": "备注",
+                    "type": "string"
+                },
+                "tags": {
+                    "description": "标签",
                     "type": "string"
                 },
                 "teamId": {
@@ -5639,6 +5718,14 @@ const docTemplate = `{
                 "tradeType": {
                     "description": "交易类型 1 成交 2补尾款  3补上月欠款 10退款",
                     "type": "integer"
+                },
+                "updateBy": {
+                    "description": "更新者id",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
                 },
                 "userId": {
                     "description": "用户id",
@@ -5765,7 +5852,7 @@ const docTemplate = `{
                 },
                 "birthday": {
                     "description": "生日",
-                    "type": "string"
+                    "type": "integer"
                 },
                 "gender": {
                     "description": "性别",
@@ -5922,12 +6009,19 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "customerId": {
-                    "description": "顾客",
+                    "description": "顾客Id",
                     "type": "integer"
                 },
                 "customerName": {
-                    "description": "顾客姓名",
+                    "description": "用户姓名",
                     "type": "string"
+                },
+                "customers": {
+                    "description": "顾客列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Option"
+                    }
                 },
                 "debts": {
                     "description": "欠款",
@@ -5944,6 +6038,9 @@ const docTemplate = `{
                 "extensions": {
                     "description": "延期情况",
                     "type": "string"
+                },
+                "id": {
+                    "type": "integer"
                 },
                 "implant": {
                     "description": "是否已种",
@@ -6237,6 +6334,17 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.Option": {
+            "type": "object",
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "integer"
+                }
+            }
+        },
         "dto.RegisterReq": {
             "type": "object",
             "properties": {
@@ -6269,6 +6377,13 @@ const docTemplate = `{
         "dto.RouteMeta": {
             "type": "object",
             "properties": {
+                "auths": {
+                    "description": "按钮权限",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "frameLoading": {
                     "description": "iframe页是否开启首次加载动画（默认true）可选",
                     "type": "boolean"
@@ -6498,7 +6613,15 @@ const docTemplate = `{
                 "email": {
                     "type": "string"
                 },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
                 "leader": {
+                    "type": "string"
+                },
+                "name": {
+                    "description": "部门名称",
                     "type": "string"
                 },
                 "parentId": {
@@ -6507,10 +6630,26 @@ const docTemplate = `{
                 "phone": {
                     "type": "string"
                 },
+                "principal": {
+                    "description": "部门领导",
+                    "type": "string"
+                },
+                "remark": {
+                    "description": "备注",
+                    "type": "string"
+                },
                 "sort": {
                     "type": "integer"
                 },
                 "status": {
+                    "type": "integer"
+                },
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
+                "type": {
+                    "description": "状态",
                     "type": "integer"
                 }
             }
@@ -7348,6 +7487,10 @@ const docTemplate = `{
                     "description": "手机号",
                     "type": "string"
                 },
+                "py": {
+                    "description": "姓名拼音",
+                    "type": "string"
+                },
                 "remark": {
                     "description": "描述",
                     "type": "string"
@@ -7755,6 +7898,10 @@ const docTemplate = `{
                     "description": "职位 1 系统超管 2 团队拥有者 4主管 8副主管 16员工",
                     "type": "integer"
                 },
+                "py": {
+                    "description": "姓名拼音",
+                    "type": "string"
+                },
                 "retireTime": {
                     "description": "离职时间",
                     "type": "string"
@@ -7830,10 +7977,6 @@ const docTemplate = `{
                 },
                 "path": {
                     "description": "路径",
-                    "type": "string"
-                },
-                "paths": {
-                    "description": "id路径",
                     "type": "string"
                 },
                 "permission": {

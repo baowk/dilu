@@ -88,37 +88,37 @@ func (e *SysMenu) Insert(data *models.SysMenu) errs.IError {
 		berr := errs.Err(codes.FAILURE, "", err)
 		return berr
 	}
-	err = e.initPaths(tx, data)
-	if err != nil {
-		tx.Rollback()
-		core.Log.Error("sys_menu", zap.Error(err))
-		berr := errs.Err(codes.FAILURE, "", err)
-		return berr
-	}
+	// err = e.initPaths(tx, data)
+	// if err != nil {
+	// 	tx.Rollback()
+	// 	core.Log.Error("sys_menu", zap.Error(err))
+	// 	berr := errs.Err(codes.FAILURE, "", err)
+	// 	return berr
+	// }
 	tx.Commit()
 	return nil
 }
 
-func (e *SysMenu) initPaths(tx *gorm.DB, menu *models.SysMenu) error {
-	var err error
-	var data models.SysMenu
-	parentMenu := new(models.SysMenu)
-	if menu.ParentId != 0 {
-		err = tx.Model(&data).First(parentMenu, menu.ParentId).Error
-		if err != nil {
-			return err
-		}
-		if parentMenu.Paths == "" {
-			err = errors.New("父级paths异常，请尝试对当前节点父级菜单进行更新操作！")
-			return err
-		}
-		menu.Paths = parentMenu.Paths + "/" + strconv.Itoa(menu.Id)
-	} else {
-		menu.Paths = "/0/" + strconv.Itoa(menu.Id)
-	}
-	err = tx.Model(&data).Where("id = ?", menu.Id).Update("paths", menu.Paths).Error
-	return err
-}
+// func (e *SysMenu) initPaths(tx *gorm.DB, menu *models.SysMenu) error {
+// 	var err error
+// 	var data models.SysMenu
+// 	parentMenu := new(models.SysMenu)
+// 	if menu.ParentId != 0 {
+// 		err = tx.Model(&data).First(parentMenu, menu.ParentId).Error
+// 		if err != nil {
+// 			return err
+// 		}
+// 		if parentMenu.Paths == "" {
+// 			err = errors.New("父级paths异常，请尝试对当前节点父级菜单进行更新操作！")
+// 			return err
+// 		}
+// 		menu.Paths = parentMenu.Paths + "/" + strconv.Itoa(menu.Id)
+// 	} else {
+// 		menu.Paths = "/0/" + strconv.Itoa(menu.Id)
+// 	}
+// 	err = tx.Model(&data).Where("id = ?", menu.Id).Update("paths", menu.Paths).Error
+// 	return err
+// }
 
 // Update 修改SysMenu对象
 // func (e *SysMenu) Update(c *models.SysMenu) (*SysMenu, errs.IError) {
@@ -166,13 +166,42 @@ func (e *SysMenu) Remove(d *dto.SysMenuDeleteReq) (*SysMenu, errs.IError) {
 	return e, nil
 }
 
-// func (e *SysMenu) GetMenus(mvs *[]dto.MenuVo) errs.IError {
-// 	var ms []models.SysMenu
-// 	if err := core.DB().Where("menu_type < ?", 3).Find(&ms).Error; err != nil {
-// 		return codes.ErrSys(err)
+func (e *SysMenu) GetMenus(mvs *[]models.SysMenu) errs.IError {
+	if err := e.DB().Find(mvs).Error; err != nil {
+		return codes.ErrSys(err)
+	}
+	return nil
+	// var ms []models.SysMenu
+	// if err := core.DB().Find(&ms).Error; err != nil {
+	// 	return codes.ErrSys(err)
+	// }
+	// *mvs = treeMenu(ms)
+	// return nil
+}
+
+// func treeMenu(ms []models.SysMenu) []models.SysMenu {
+// 	mvs := make([]models.SysMenu, 0)
+// 	for _, menu := range ms {
+// 		if menu.ParentId == 0 {
+// 			menuCall(ms, &menu)
+// 			mvs = append(mvs, menu)
+// 		}
 // 	}
-// 	*mvs = treeMenu(ms)
-// 	return nil
+// 	return mvs
+// }
+
+// // menuCall 构建菜单树
+// func menuCall(ms []models.SysMenu, menu *models.SysMenu) {
+// 	children := make([]models.SysMenu, 0)
+// 	for _, m := range ms {
+// 		if menu.Id != m.ParentId {
+// 			continue
+// 		}
+// 		menuCall(ms, &m)
+// 		children = append(children, m)
+
+// 	}
+// 	menu.Children = children
 // }
 
 func (e *SysMenu) GetRoles(c *gin.Context) (platform, teamId int, roles []int, ierr errs.IError) {
@@ -254,16 +283,16 @@ func (e *SysMenu) GetUserMenus(c *gin.Context, mvs *[]dto.MenuVo) errs.IError {
 	if err := db.Find(&ms).Error; err != nil {
 		return codes.ErrSys(err)
 	}
-	*mvs = treeMenu(ms)
+	*mvs = treeMenuVo(ms)
 	return nil
 }
 
-func treeMenu(ms []models.SysMenu) []dto.MenuVo {
+func treeMenuVo(ms []models.SysMenu) []dto.MenuVo {
 	mvs := make([]dto.MenuVo, 0)
 	for _, menu := range ms {
 		if menu.ParentId == 0 {
 			vo := menuToVo(menu)
-			menuCall(ms, &vo)
+			menuCallVo(ms, &vo)
 			mvs = append(mvs, vo)
 		}
 	}
@@ -271,7 +300,7 @@ func treeMenu(ms []models.SysMenu) []dto.MenuVo {
 }
 
 // menuCall 构建菜单树
-func menuCall(ms []models.SysMenu, menu *dto.MenuVo) {
+func menuCallVo(ms []models.SysMenu, menu *dto.MenuVo) {
 	children := make([]dto.MenuVo, 0)
 	for _, m := range ms {
 		if menu.Id != m.ParentId {
@@ -279,7 +308,7 @@ func menuCall(ms []models.SysMenu, menu *dto.MenuVo) {
 		}
 		if m.MenuType < 3 {
 			vo := menuToVo(m)
-			menuCall(ms, &vo)
+			menuCallVo(ms, &vo)
 			children = append(children, vo)
 		} else {
 			menu.Meta.Auths = append(menu.Meta.Auths, m.Permission)

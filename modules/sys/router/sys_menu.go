@@ -18,7 +18,7 @@ func registerSysMenuRouter(v1 *gin.RouterGroup) {
 		r.POST("/get", apis.SysMenuA.Get)
 		r.POST("/create", apis.SysMenuA.Create)
 		r.POST("/update", apis.SysMenuA.Update)
-		//r.POST("/all", apis.SysMenuA.GetMenus)
+		r.POST("/all", apis.SysMenuA.GetMenus)
 		r.POST("/del", apis.SysMenuA.Del)
 	}
 
