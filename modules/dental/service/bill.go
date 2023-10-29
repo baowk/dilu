@@ -666,6 +666,12 @@ func (s *BillService) StQuery(teamId, userId int, deptPath string, begin, end ti
 	if err := service.SerSysMember.GetMembers(teamId, userId, deptPath, "", &members); err != nil {
 		return nil, err
 	}
+	if end.IsZero() {
+		end = time.Now()
+	}
+	if begin.IsZero() {
+		begin = utils.GetMonthFirstDay(end)
+	}
 
 	bt := utils.GetZoreTime(begin)
 	et := utils.GetZoreTime(end).Add(24 * time.Hour)
@@ -727,15 +733,16 @@ func (s *BillService) StQuery(teamId, userId int, deptPath string, begin, end ti
 	return res, nil
 }
 
-func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time, reqId string) (string, error) {
+func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time, reqId string) ([]string, error) {
+	var texts []string
 	if teamId < 1 {
-		return "", codes.ErrInvalidParameter(reqId, "teamId is nil")
+		return texts, codes.ErrInvalidParameter(reqId, "teamId is nil")
 	}
 
 	var members []smodels.SysMember
 
 	if err := service.SerSysMember.GetMembers(teamId, userId, deptPath, "", &members); err != nil {
-		return "", err
+		return texts, err
 	}
 
 	today := utils.GetZoreTime(day)
@@ -751,7 +758,7 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	}
 	var list []models.Bill
 	if err := db.Find(&list).Error; err != nil {
-		return "", err
+		return texts, err
 	}
 
 	var tmDeal, tPaid, tDebt, tRefund, deal, paid, debt, refund decimal.Decimal
@@ -780,15 +787,15 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	totalDebt := tmDeal.Sub(tPaid).Sub(tDebt) //欠款
 
 	dayFmt := day.Format("2006年01月03日")
-	build := utils.NewSB()
-	build.Append(dayFmt).Append("\n\t")
+
+	texts = append(texts, dayFmt)
 	var tu smodels.SysMember
 	service.SerSysMember.GetMember(teamId, userId, &tu)
-	build.Append("汇报人:").Append(tu.Name).Append("\n\t")
+	texts = append(texts, fmt.Sprintf("汇报人:%s", tu.Name))
 
 	var taskList []models.TargetTask
 	if err := SerTargetTask.GetTasks(enums.Month, today.Year()*100+int(today.Month()), teamId, userId, deptPath, &taskList); err != nil {
-		return "", err
+		return texts, err
 	}
 	var memberLen int
 	var totalDeal int
@@ -798,15 +805,15 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 			memberLen++
 		}
 	}
-	build.Append("本月团队任务:").Append(utils.MoneyFmt(float64(totalDeal))).Append("\n\t").
-		Append("人员数量:").Append(strconv.Itoa(memberLen)).Append("\n\t")
+	texts = append(texts, fmt.Sprintf("本月团队任务:%s", utils.MoneyFmt(float64(totalDeal))))
+	texts = append(texts, fmt.Sprintf("人员数量:%d", memberLen))
 
 	var edList []models.EventDaySt
 	if err := SerEventDaySt.GetList(teamId, userId, deptPath, begin, end, &edList); err != nil {
-		return "", err
+		return texts, err
 	}
 
-	stDay := utils.NewSB()
+	var stDay []string
 
 	var tNc, tFirD, tFuD, tDeal int
 	var dayNc, dayFirD, dayFuD, dayDeal, dayIv int
@@ -819,14 +826,10 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 			dayIv += ed.Invitation
 			for _, m := range members {
 				if m.UserId == ed.UserId {
-					stDay.Append(m.Name).Append(":")
 					if ed.Rest == 2 {
-						stDay.Append("0休息\n\t")
+						stDay = append(stDay, fmt.Sprintf("%s:0休息", m.Name))
 					} else {
-						stDay.Append("留存").Append(strconv.Itoa(ed.NewCustomerCnt)).
-							Append("初诊").Append(strconv.Itoa(ed.FirstDiagnosis)).
-							Append("复诊").Append(strconv.Itoa(ed.FurtherDiagnosis)).
-							Append("成交").Append(strconv.Itoa(ed.Deal)).Append("\n\t")
+						stDay = append(stDay, fmt.Sprintf("%s:留存%d初诊%d复诊%d成交%d", m.Name, ed.NewCustomerCnt, ed.FirstDiagnosis, ed.FurtherDiagnosis, ed.Deal))
 					}
 					break
 				}
@@ -841,61 +844,66 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	var spday models.SummaryPlanDay
 
 	if err := SerSummaryPlanDay.GetByDay(teamId, userId, today.Year()*10000+int(today.Month())*100+today.Day(), &spday); err != nil {
-		return "", err
+		return texts, err
 	}
 
-	build.Append("今日留存信息:").Append(strconv.Itoa(dayNc)).Append("\n\t")
-	build.Append("今日邀约到诊:").Append(strconv.Itoa(dayFirD)).Append("\n\t")
-	build.Append("今日成交患者:").Append(strconv.Itoa(dayDeal)).Append("\n\t")
-	build.Append("今日种植颗数:").Append(strconv.Itoa(tdCnt)).Append("\n\t")
-	build.Append("明日邀约患者:").Append(strconv.Itoa(dayIv)).Append("\n\t")
-	build.Append("本月留存患者数:").Append(strconv.Itoa(tNc)).Append("\n\t")
-	build.Append("本月初诊患者数:").Append(strconv.Itoa(tFirD)).Append("\n\t")
-	build.Append("本月成交患者数:").Append(strconv.Itoa(tDeal)).Append("\n\t")
-	build.Append("本月患者成交率:")
+	texts = append(texts, fmt.Sprintf("今日留存信息:%d", dayNc))
+	texts = append(texts, fmt.Sprintf("今日邀约到诊:%d", dayFirD))
+	texts = append(texts, fmt.Sprintf("今日成交患者:%d", dayDeal))
+	texts = append(texts, fmt.Sprintf("今日种植颗数:%d", tdCnt))
+	texts = append(texts, fmt.Sprintf("明日邀约患者:%d", dayIv))
+	texts = append(texts, fmt.Sprintf("本月留存患者数:%d", tNc))
+	texts = append(texts, fmt.Sprintf("本月初诊患者数:%d", tFirD))
+	texts = append(texts, fmt.Sprintf("本月成交患者数:%d", tDeal))
+
 	if tNc == 0 {
-		build.Append("0%").Append("\n\t")
+		texts = append(texts, "本月患者成交率:0%%")
 	} else {
 		f := fmt.Sprintf("%d%%", tDeal*100/tNc)
-		build.Append(f).Append("\n\t")
+		texts = append(texts, fmt.Sprintf("本月患者成交率:%s", f))
 	}
 
-	build.Append("种植颗数:").Append(strconv.Itoa(dCnt)).Append("\n\t")
-	build.Append("延期颗数:").Append(strconv.Itoa(dCnt - iCnt)).Append("\n\t")
-	build.Append("成交总流水:").Append(tmDeal.StringFixedBank(0)).Append("\n\t")
-	build.Append("总欠款金额:").Append(totalDebt.StringFixedBank(0)).Append("\n\t")
-	build.Append("本月实收:").Append(totalPaid.StringFixedBank(0)).Append("\n\t")
-	build.Append("今日实收:").Append(todayPaid.StringFixedBank(0)).Append("\n\t")
+	texts = append(texts, fmt.Sprintf("种植颗数:%d", dCnt))
+	texts = append(texts, fmt.Sprintf("延期颗数:%d", dCnt-iCnt))
+	texts = append(texts, fmt.Sprintf("成交总流水:%s", tmDeal.StringFixedBank(0)))
+
+	texts = append(texts, fmt.Sprintf("总欠款金额:%s", totalDebt.StringFixedBank(0)))
+	texts = append(texts, fmt.Sprintf("本月实收:%s", totalPaid.StringFixedBank(0)))
+	texts = append(texts, fmt.Sprintf("今日实收:%s", todayPaid.StringFixedBank(0)))
 	if tmDeal.IsZero() {
-		build.Append("实收率:").Append("0%").Append("\n\t")
+		texts = append(texts, "实收率:0%%")
 	} else {
-		build.Append("实收率:").Append(fmt.Sprintf("%.2f%%", totalPaid.Div(tmDeal).InexactFloat64())).Append("\n\t")
+		texts = append(texts, fmt.Sprintf("实收率:%s", fmt.Sprintf("%.2f%%", totalPaid.Div(tmDeal).InexactFloat64())))
 	}
 	if memberLen == 0 {
-		build.Append("团队人效:").Append("0%").Append("\n\t")
+		texts = append(texts, "团队人效:0%%")
 	} else {
-		build.Append("团队人效:").Append(tPaid.Div(decimal.NewFromInt(int64(memberLen))).StringFixedBank(0)).Append("\n\t")
+		texts = append(texts, fmt.Sprintf("团队人效:%s", tPaid.Div(decimal.NewFromInt(int64(memberLen))).StringFixedBank(0)))
 	}
-	build.Append("收回上月欠款:").Append(tDebt.StringFixedBank(0)).Append("\n\t")
-	build.Append("上月延期种植:").Append(strconv.Itoa(dayNc)).Append("\n\t") //TODO
+	texts = append(texts, fmt.Sprintf("收回上月欠款:%s", tDebt.StringFixedBank(0)))
+	texts = append(texts, fmt.Sprintf("上月延期种植:%s", strconv.Itoa(dayNc))) //TODO
+
 	dp := fmt.Sprintf("%d%%", today.Day()*100/utils.GetMonthLen(today))
-	build.Append("本月时间进度:").Append(dp).Append("\n\t")
-	build.Append("本月任务达成率:")
+	texts = append(texts, fmt.Sprintf("本月时间进度:%s", dp))
+
 	if tmDeal.IsZero() {
-		build.Append("0%").Append("\n\t")
+		texts = append(texts, "本月任务达成率:0%%")
 	} else {
 		tp := fmt.Sprintf("%f%%", tPaid.Div(tmDeal).InexactFloat64())
-		build.Append(tp).Append("\n\t")
+		texts = append(texts, fmt.Sprintf("本月时间进度:%s", tp))
 	}
 
-	build.Append("\n\t").Append("今日工作汇报").Append("\n\t")
-	build.Append(spday.Summary).Append("\n\t")
+	texts = append(texts, "")
+	texts = append(texts, fmt.Sprintf("今日工作汇报:%s", spday.Summary))
+	texts = append(texts, "")
 
-	build.Append("\n\t").Append("今日留存:").Append(strconv.Itoa(dayNc)).Append("\n\t")
-	build.Append(stDay.String()).Append("\n\t")
+	texts = append(texts, fmt.Sprintf("今日留存:%s", strconv.Itoa(dayNc)))
 
-	build.Append("明日工作计划").Append("\n\t")
-	build.Append(spday.Plan)
+	texts = append(texts, stDay...)
 
-	return build.String(), nil
+	texts = append(texts, "")
+	texts = append(texts, fmt.Sprintf("明日工作计划:%s", spday.Plan))
+	texts = append(texts, "")
+
+	return texts, nil
 }

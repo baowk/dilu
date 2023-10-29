@@ -11,7 +11,7 @@
  Target Server Version : 80032 (8.0.32)
  File Encoding         : 65001
 
- Date: 26/10/2023 21:10:04
+ Date: 29/10/2023 23:18:14
 */
 
 SET NAMES utf8mb4;
@@ -55,7 +55,7 @@ CREATE TABLE `bill`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_bill_create_by`(`create_by` ASC) USING BTREE,
   INDEX `idx_bill_update_by`(`update_by` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of bill
@@ -68,6 +68,7 @@ INSERT INTO `bill` VALUES (5, '20231025134021589152', 1, 2, 1, '', 0.00, 10000.0
 INSERT INTO `bill` VALUES (6, '20231025150624242326', 2, 2, 1, '', 0.00, 0.00, 10000.00, 0.00, 0.00, 0, '2023-10-24 08:00:00', 2, 0, 0, 0, 1, NULL, '', 1, NULL, '', '', '', '补尾款', '2023-10-25 15:06:24', '2023-10-25 15:06:24', 0, 0);
 INSERT INTO `bill` VALUES (7, '20231025152223307412', 3, 5, 1, '', 0.00, 5980.00, 5980.00, 0.00, 0.00, 0, '2023-10-24 08:00:00', 1, 1, 4, 0, 1, NULL, '', 1, NULL, '', '种植', '', '', '2023-10-25 15:22:23', '2023-10-25 15:27:05', 0, 2);
 INSERT INTO `bill` VALUES (8, '20231025153053670816', 4, 5, 1, '/0/1/2', 0.00, 12200.00, 11200.00, 0.00, 0.00, 0, '2023-10-22 08:00:00', 1, 2, 3, 0, 1, NULL, '', 1, NULL, '', '种植', '', '', '2023-10-25 15:30:54', '2023-10-25 15:30:54', 2, 0);
+INSERT INTO `bill` VALUES (9, '20231026211057191585', 5, 2, 1, '/0/1/2', 0.00, 19200.00, 19200.00, 0.00, 0.00, 0, '2023-10-25 08:00:00', 1, 0, 1, 0, 1, NULL, '', 1, NULL, '', '种植', '', '', '2023-10-26 21:10:57', '2023-10-26 21:10:57', 2, 0);
 
 -- ----------------------------
 -- Table structure for customer
@@ -99,7 +100,7 @@ CREATE TABLE `customer`  (
   INDEX `idx_customer_team_id`(`team_id` ASC) USING BTREE,
   INDEX `idx_customer_create_by`(`create_by` ASC) USING BTREE,
   INDEX `idx_customer_update_by`(`update_by` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of customer
@@ -108,6 +109,7 @@ INSERT INTO `customer` VALUES (1, '李杏利', NULL, '', '', 0, 0, 0, '', '', ''
 INSERT INTO `customer` VALUES (2, '傅见英', NULL, '', '', 0, 0, 0, '', '', '', 2, 1, '', 0, '', '2023-10-25 15:06:24', '2023-10-25 15:06:24', 0, 0);
 INSERT INTO `customer` VALUES (3, '鲁慧萍', NULL, '', '', 0, 0, 0, '', '', '', 5, 1, '', 0, '', '2023-10-25 15:22:23', '2023-10-25 15:22:23', 0, 0);
 INSERT INTO `customer` VALUES (4, '孔友祥', NULL, '', '', 0, 0, 0, '', '', '', 5, 1, '', 0, '', '2023-10-25 15:30:54', '2023-10-25 15:30:54', 2, 0);
+INSERT INTO `customer` VALUES (5, '诸红夏', 'zhu-hong-xia', '', '', 0, 0, 0, '', '', '', 2, 1, '/0/1/2', 0, '', '2023-10-26 21:10:57', '2023-10-26 21:10:57', 2, 0);
 
 -- ----------------------------
 -- Table structure for event_day_st
@@ -132,12 +134,13 @@ CREATE TABLE `event_day_st`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_event_day_st_create_by`(`create_by` ASC) USING BTREE,
   INDEX `idx_event_day_st_update_by`(`update_by` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of event_day_st
 -- ----------------------------
 INSERT INTO `event_day_st` VALUES (1, '2023-10-01', 1, 2, '', 0, 0, 0, 0, 0, 1, '2023-10-03 18:32:55', '2023-10-03 18:32:55', 0, 0);
+INSERT INTO `event_day_st` VALUES (2, '2023-10-27', 1, 2, '/0/1/2/', 1, 0, 0, 0, 0, 1, '2023-10-27 20:29:08', '2023-10-27 20:29:08', 2, 0);
 
 -- ----------------------------
 -- Table structure for summary_plan_day
@@ -158,13 +161,14 @@ CREATE TABLE `summary_plan_day`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_summary_plan_day_create_by`(`create_by` ASC) USING BTREE,
   INDEX `idx_summary_plan_day_update_by`(`update_by` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of summary_plan_day
 -- ----------------------------
-INSERT INTO `summary_plan_day` VALUES (1, 20231001, 1, 2, '', '今日休息，督促组员邀约初诊', '明日有事休息，组内有两个初诊，已安排同事帮忙接待，督促组员邀约初诊以及提高留存数量', '2023-10-03 17:19:57', '2023-10-03 17:19:57', 0, 0);
-INSERT INTO `summary_plan_day` VALUES (2, 20231002, 1, 2, '', '今日休息，督促组员邀约初诊', '上午去场地留存，下午参加市场大会，晚上集体打邀约初诊', '2023-10-03 17:21:29', '2023-10-03 17:21:29', 0, 0);
+INSERT INTO `summary_plan_day` VALUES (1, 20231001, 1, 2, '/0/1/2/', '今日休息，督促组员邀约初诊', '明日有事休息，组内有两个初诊，已安排同事帮忙接待，督促组员邀约初诊以及提高留存数量', '2023-10-03 17:19:57', '2023-10-27 20:22:42', 0, 0);
+INSERT INTO `summary_plan_day` VALUES (2, 20231002, 1, 2, '/0/1/2/', '今日休息，督促组员邀约初诊', '上午去场地留存，下午参加市场大会，晚上集体打邀约初诊', '2023-10-03 17:21:29', '2023-10-27 20:24:34', 0, 0);
+INSERT INTO `summary_plan_day` VALUES (3, 20231027, 1, 3, '/0/1/2/', '订单到', '订单到', '2023-10-27 20:23:30', '2023-10-27 20:23:30', 0, 0);
 
 -- ----------------------------
 -- Table structure for target_task
@@ -188,16 +192,18 @@ CREATE TABLE `target_task`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_target_task_create_by`(`create_by` ASC) USING BTREE,
   INDEX `idx_target_task_update_by`(`update_by` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of target_task
 -- ----------------------------
-INSERT INTO `target_task` VALUES (1, 30, 202310, 1, 2, '/0/1/2', NULL, 72, 16, 80000, NULL, NULL, NULL, NULL);
-INSERT INTO `target_task` VALUES (2, 30, 202310, 1, 3, '/0/1/2', NULL, 72, 16, 80000, NULL, NULL, NULL, NULL);
-INSERT INTO `target_task` VALUES (3, 30, 202310, 1, 4, '/0/1/2', NULL, 72, 16, 80000, NULL, NULL, NULL, NULL);
-INSERT INTO `target_task` VALUES (4, 30, 202310, 1, 5, '/0/1/2', NULL, 72, 16, 80000, NULL, NULL, NULL, NULL);
-INSERT INTO `target_task` VALUES (5, 30, 202310, 1, 6, '/0/1/2', NULL, 72, 16, 80000, NULL, NULL, NULL, NULL);
-INSERT INTO `target_task` VALUES (6, 30, 202310, 1, 7, '/0/1/2', NULL, 72, 16, 80000, NULL, NULL, NULL, NULL);
+INSERT INTO `target_task` VALUES (1, 30, 202310, 1, 2, '/0/1/2/', NULL, 72, 16, 80000, NULL, 2, NULL, '2023-10-27 20:21:04');
+INSERT INTO `target_task` VALUES (2, 30, 202310, 1, 3, '/0/1/2/', NULL, 72, 16, 80000, NULL, 2, NULL, '2023-10-27 20:22:14');
+INSERT INTO `target_task` VALUES (3, 30, 202310, 1, 4, '/0/1/2/', NULL, 72, 16, 80000, NULL, 2, NULL, '2023-10-27 20:22:17');
+INSERT INTO `target_task` VALUES (4, 30, 202310, 1, 5, '/0/1/2/', NULL, 72, 16, 80000, NULL, 2, NULL, '2023-10-27 20:22:20');
+INSERT INTO `target_task` VALUES (5, 30, 202310, 1, 6, '/0/1/2/', NULL, 72, 16, 80000, NULL, 2, NULL, '2023-10-27 20:22:24');
+INSERT INTO `target_task` VALUES (6, 30, 202310, 1, 7, '/0/1/2/', NULL, 72, 16, 80000, NULL, 2, NULL, '2023-10-27 20:22:27');
+INSERT INTO `target_task` VALUES (7, 7, 20231023, 1, 3, '/0/1/2/', 0, 10, 10, 20000, 0, 2, '2023-10-27 20:18:28', '2023-10-27 20:22:30');
+INSERT INTO `target_task` VALUES (8, 7, 20231023, 1, 2, '/0/1/2/', 0, 1, 2, 2, 2, 2, '2023-10-27 20:22:03', '2023-10-27 20:26:40');
 
 SET FOREIGN_KEY_CHECKS = 1;

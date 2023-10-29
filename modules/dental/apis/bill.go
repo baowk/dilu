@@ -174,28 +174,28 @@ func (e *BillApi) Identify(c *gin.Context) {
 // @Accept application/json
 // @Product application/json
 // @Param teamId header int false "团队id"
-// @Param data body dto.StDayReq true "body"
+// @Param data body dto.StQueryReq true "body"
 // @Success 200 {object} base.Resp{data=string} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/st/day [post]
 // @Security Bearer
 func (e *BillApi) StDay(c *gin.Context) {
-	var req dto.StDayReq
+	var req dto.StQueryReq
 	if err := c.ShouldBind(&req); err != nil {
 		e.Error(c, err)
 		return
 	}
-	if req.Day.IsZero() {
-		req.Day = time.Now()
+	if req.Begin.IsZero() {
+		req.Begin = time.Now()
 	}
 	teamId := utils.GetTeamId(c)
 	if teamId > 0 {
 		req.TeamId = teamId
 	}
-	text, err := service.SerBill.StDay(req.TeamId, req.UserId, req.DeptPath, req.Day, e.GetReqId(c))
+	text, err := service.SerBill.StDay(req.TeamId, req.UserId, req.DeptPath, req.Begin, e.GetReqId(c))
 	if err != nil {
 		e.Error(c, err)
 	} else {
-		e.Ok(c, text)
+		e.PureOk(c, text)
 	}
 }
 
@@ -205,18 +205,18 @@ func (e *BillApi) StDay(c *gin.Context) {
 // @Accept application/json
 // @Product application/json
 // @Param teamId header int false "团队id"
-// @Param data body dto.StDayReq true "body"
+// @Param data body dto.StQueryReq true "body"
 // @Success 200 {object} base.Resp{data=string} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/st/month [post]
 // @Security Bearer
 func (e *BillApi) StMonth(c *gin.Context) {
-	var req dto.StDayReq
+	var req dto.StQueryReq
 	if err := c.ShouldBind(&req); err != nil {
 		e.Error(c, err)
 		return
 	}
-	if req.Day.IsZero() {
-		req.Day = time.Now()
+	if req.Begin.IsZero() {
+		req.Begin = time.Now()
 	}
 	teamId := utils.GetTeamId(c)
 	if teamId > 0 {
@@ -225,11 +225,11 @@ func (e *BillApi) StMonth(c *gin.Context) {
 	if req.UserId == 0 {
 		req.UserId = utils.GetUserId(c)
 	}
-	text, err := service.SerBill.StMonth(req.TeamId, req.UserId, req.DeptPath, req.Day, e.GetReqId(c))
+	text, err := service.SerBill.StMonth(req.TeamId, req.UserId, req.DeptPath, req.Begin, e.GetReqId(c))
 	if err != nil {
 		e.Error(c, err)
 	} else {
-		e.Ok(c, text)
+		e.PureOk(c, text)
 	}
 }
 

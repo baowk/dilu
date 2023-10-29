@@ -110,7 +110,7 @@ func (e *SysUserApi) Update(c *gin.Context) {
 	}
 	var data models.SysUser
 	copier.Copy(&data, req)
-	if err := service.SerSysUser.Save(&data); err != nil {
+	if err := service.SerSysUser.UpdateById(&data); err != nil {
 		e.Error(c, err)
 		return
 	}
