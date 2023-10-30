@@ -108,7 +108,7 @@ export function use{{.ClassName}}() {
         {{- else if eq .JsonField "createBy" }}
         {{- else if eq .JsonField "updateBy" }}
         {{- else }}
-          {{ .JsonField }}: row?.{{ .JsonField }} ?? {{- if eq .GoType "int" }} 0 {{ else }} "" {{- end }},
+          {{ .JsonField }}: row?.{{ .JsonField }} ?? null,
         {{- end}}
       {{- end }}
         }

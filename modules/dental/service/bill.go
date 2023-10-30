@@ -30,16 +30,6 @@ var SerBill = BillService{
 	base.NewService(consts.DB_CRM),
 }
 
-var (
-	DAY_TMPL = `今日初诊数：%d
-	今日成交患者：%d
-	今日成交流水：%s
-	今日实收流水：%s
-	今日欠款:%s
-	总成交：%s
-	总实收：%s`
-)
-
 func (s *BillService) Page(teamId int, req dto.BillGetPageReq, list *[]dto.BillDto, total *int64) error {
 	db := s.DB().Offset(req.GetOffset()).Limit(req.GetSize())
 	if teamId > 0 {
@@ -603,9 +593,10 @@ func getDate(tmpD string) string {
 /*
 *	日统计文字版
  */
-func (s *BillService) StDay(teamId, userId int, deptPath string, day time.Time, reqId string) (string, error) {
+func (s *BillService) StDay(teamId, userId int, deptPath string, day time.Time, reqId string) ([]string, error) {
+	var texts []string
 	if teamId < 1 {
-		return "", codes.ErrInvalidParameter(reqId, "teamId is nil")
+		return texts, codes.ErrInvalidParameter(reqId, "teamId is nil")
 	}
 	today := utils.GetZoreTime(day)
 	end := today.Add(24 * time.Hour)
@@ -620,7 +611,7 @@ func (s *BillService) StDay(teamId, userId int, deptPath string, day time.Time, 
 	}
 	var list []models.Bill
 	if err := db.Find(&list).Error; err != nil {
-		return "", err
+		return texts, err
 	}
 	var totalDeal, totalPaid, totalDebt, totalrRefund, deal, paid, debt, refund decimal.Decimal
 	var firstCnt, dealCnt int
@@ -642,7 +633,7 @@ func (s *BillService) StDay(teamId, userId int, deptPath string, day time.Time, 
 	}
 	var edList []models.EventDaySt
 	if err := SerEventDaySt.GetList(teamId, userId, deptPath, today, end, &edList); err != nil {
-		return "", err
+		return texts, err
 	}
 	for _, ed := range edList {
 		firstCnt += ed.FirstDiagnosis
@@ -650,7 +641,14 @@ func (s *BillService) StDay(teamId, userId int, deptPath string, day time.Time, 
 	}
 	todayPaid := paid.Add(debt).Sub(refund)
 	tPaid := totalPaid.Add(totalDebt).Sub(totalrRefund)
-	return fmt.Sprintf(DAY_TMPL, firstCnt, dealCnt, deal.StringFixedBank(0), todayPaid.StringFixedBank(0), debt.StringFixedBank(0), totalDeal.StringFixedBank(0), tPaid.StringFixedBank(0)), nil
+	texts = append(texts, fmt.Sprintf("今日初诊数:%d", firstCnt))
+	texts = append(texts, fmt.Sprintf("今日成交患者:%d", dealCnt))
+	texts = append(texts, fmt.Sprintf("今日成交流水:%s", deal.StringFixedBank(0)))
+	texts = append(texts, fmt.Sprintf("今日实收流水:%s", todayPaid.StringFixedBank(0)))
+	texts = append(texts, fmt.Sprintf("今日欠款:%s", debt.StringFixedBank(0)))
+	texts = append(texts, fmt.Sprintf("总成交:%s", totalDeal.StringFixedBank(0)))
+	texts = append(texts, fmt.Sprintf("总实收:%s", tPaid.StringFixedBank(0)))
+	return texts, nil
 }
 
 /*
@@ -873,7 +871,7 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	if tmDeal.IsZero() {
 		texts = append(texts, "实收率:0%%")
 	} else {
-		texts = append(texts, fmt.Sprintf("实收率:%s", fmt.Sprintf("%.2f%%", totalPaid.Div(tmDeal).InexactFloat64())))
+		texts = append(texts, fmt.Sprintf("实收率:%s", fmt.Sprintf("%s%%", totalPaid.Div(tmDeal).Mul(decimal.NewFromInt(100)).StringFixedBank(0))))
 	}
 	if memberLen == 0 {
 		texts = append(texts, "团队人效:0%%")
@@ -889,21 +887,22 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	if tmDeal.IsZero() {
 		texts = append(texts, "本月任务达成率:0%%")
 	} else {
-		tp := fmt.Sprintf("%f%%", tPaid.Div(tmDeal).InexactFloat64())
-		texts = append(texts, fmt.Sprintf("本月时间进度:%s", tp))
+		tp := fmt.Sprintf("%s%%", tPaid.Div(tmDeal).Mul(decimal.NewFromInt(100)).StringFixedBank(0))
+		texts = append(texts, fmt.Sprintf("本月任务达成率:%s", tp))
 	}
 
-	texts = append(texts, "")
-	texts = append(texts, fmt.Sprintf("今日工作汇报:%s", spday.Summary))
-	texts = append(texts, "")
+	texts = append(texts, " ")
+	texts = append(texts, "今日工作汇报:")
+	texts = append(texts, spday.Summary)
+	texts = append(texts, " ")
 
 	texts = append(texts, fmt.Sprintf("今日留存:%s", strconv.Itoa(dayNc)))
 
 	texts = append(texts, stDay...)
 
-	texts = append(texts, "")
-	texts = append(texts, fmt.Sprintf("明日工作计划:%s", spday.Plan))
-	texts = append(texts, "")
+	texts = append(texts, " ")
+	texts = append(texts, "明日工作计划:")
+	texts = append(texts, spday.Plan)
 
 	return texts, nil
 }

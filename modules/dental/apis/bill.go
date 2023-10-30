@@ -175,7 +175,7 @@ func (e *BillApi) Identify(c *gin.Context) {
 // @Product application/json
 // @Param teamId header int false "团队id"
 // @Param data body dto.StQueryReq true "body"
-// @Success 200 {object} base.Resp{data=string} "{"code": 200, "data": [...]}"
+// @Success 200 {object} base.Resp{data=[]string} "{"code": 200, "data": [...]}"
 // @Router /api/v1/dental/st/day [post]
 // @Security Bearer
 func (e *BillApi) StDay(c *gin.Context) {
