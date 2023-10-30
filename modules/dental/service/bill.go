@@ -633,7 +633,7 @@ func (s *BillService) StDay(teamId, userId int, deptPath string, day time.Time, 
 
 	}
 	var edList []models.EventDaySt
-	if err := SerEventDaySt.GetList(teamId, userId, deptPath, today, end, &edList); err != nil {
+	if err := SerEventDaySt.GetList(teamId, 0, deptPath, today, end, &edList); err != nil {
 		return texts, err
 	}
 	for _, ed := range edList {
@@ -658,6 +658,12 @@ func (s *BillService) StDay(teamId, userId int, deptPath string, day time.Time, 
 func (s *BillService) StQuery(teamId, userId int, deptPath string, begin, end time.Time, reqId string) ([]dto.BillUserStDto, error) {
 	if teamId < 1 {
 		return nil, codes.ErrInvalidParameter(reqId, "teamId is nil")
+	}
+
+	var curM smodels.SysMember
+	if deptPath == "" {
+		service.SerSysMember.GetMember(teamId, userId, &curM)
+		deptPath = curM.DeptPath
 	}
 
 	var members []smodels.SysMember
@@ -738,9 +744,17 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 		return texts, codes.ErrInvalidParameter(reqId, "teamId is nil")
 	}
 
-	var members []smodels.SysMember
+	var tu smodels.SysMember
+	if err := service.SerSysMember.GetMember(teamId, userId, &tu); err != nil {
+		return texts, err
+	}
 
-	if err := service.SerSysMember.GetMembers(teamId, userId, deptPath, "", &members); err != nil {
+	if deptPath == "" {
+		deptPath = tu.DeptPath
+	}
+
+	var members []smodels.SysMember
+	if err := service.SerSysMember.GetMembers(teamId, 0, deptPath, "", &members); err != nil {
 		return texts, err
 	}
 
@@ -788,8 +802,7 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	dayFmt := day.Format("2006年01月03日")
 
 	texts = append(texts, dayFmt)
-	var tu smodels.SysMember
-	service.SerSysMember.GetMember(teamId, userId, &tu)
+
 	texts = append(texts, fmt.Sprintf("汇报人：%s", tu.Name))
 
 	var taskList []models.TargetTask
@@ -808,7 +821,7 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	texts = append(texts, fmt.Sprintf("人员数量：%d", memberLen))
 
 	var edList []models.EventDaySt
-	if err := SerEventDaySt.GetList(teamId, userId, deptPath, begin, end, &edList); err != nil {
+	if err := SerEventDaySt.GetList(teamId, 0, deptPath, today, end, &edList); err != nil {
 		return texts, err
 	}
 
@@ -901,7 +914,7 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 
 	texts = append(texts, stDay...)
 
-	texts = append(texts, " ")
+	texts = append(texts, "")
 	texts = append(texts, "明日工作计划：")
 	texts = append(texts, spday.Plan)
 

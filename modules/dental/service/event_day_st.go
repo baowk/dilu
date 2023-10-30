@@ -56,7 +56,7 @@ func (s *EventDayStService) GetList(teamId, userId int, deptPath string, begin, 
 	if userId > 0 {
 		db.Where("user_id = ?", userId)
 	} else if deptPath != "" {
-		db.Where("dept_path like ?", deptPath+"%s")
+		db.Where("dept_path like ?", deptPath+"%")
 	}
 	return db.Find(list).Error
 }
