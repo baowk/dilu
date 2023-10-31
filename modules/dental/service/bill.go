@@ -598,17 +598,20 @@ func (s *BillService) StDay(teamId, userId int, deptPath string, day time.Time, 
 	if teamId < 1 {
 		return texts, codes.ErrInvalidParameter(reqId, "teamId is nil")
 	}
-	today := utils.GetZoreTime(day)
+	fmt.Println(day)
+	today := utils.GetZoreTimeLocal(day)
 	end := today.Add(24 * time.Hour)
-	begin := utils.GetMonthFirstDay(day)
+	begin := utils.GetMonthFirstDayLocal(day)
+	unixToday := today.Unix()
+
+	var curM smodels.SysMember
+	if deptPath == "" {
+		service.SerSysMember.GetMember(teamId, userId, &curM)
+		deptPath = curM.DeptPath
+	}
 
 	db := s.DB().Where("team_id = ?", teamId).Where("trade_at >=?", begin).
-		Where("trade_at < ?", end)
-	if userId > 0 {
-		db.Where("user_id = ?", userId)
-	} else if deptPath != "" {
-		db.Where("dept_path like ?", deptPath+"%s")
-	}
+		Where("trade_at < ?", end).Where("dept_path like ?", deptPath+"%")
 	var list []models.Bill
 	if err := db.Find(&list).Error; err != nil {
 		return texts, err
@@ -620,7 +623,7 @@ func (s *BillService) StDay(teamId, userId int, deptPath string, day time.Time, 
 		totalPaid = totalPaid.Add(b.PaidAmount)
 		totalDebt = totalDebt.Add(b.DebtAmount)
 		totalrRefund = totalrRefund.Add(b.RefundAmount)
-		if b.TradeAt.After(today) {
+		if b.TradeAt.Unix() >= unixToday {
 			deal = deal.Add(b.RealAmount)
 			paid = paid.Add(b.PaidAmount)
 			debt = debt.Add(b.DebtAmount)
@@ -630,8 +633,8 @@ func (s *BillService) StDay(teamId, userId int, deptPath string, day time.Time, 
 				dealCnt += 1
 			}
 		}
-
 	}
+
 	var edList []models.EventDaySt
 	if err := SerEventDaySt.GetList(teamId, 0, deptPath, today, end, &edList); err != nil {
 		return texts, err
@@ -675,11 +678,11 @@ func (s *BillService) StQuery(teamId, userId int, deptPath string, begin, end ti
 		end = time.Now()
 	}
 	if begin.IsZero() {
-		begin = utils.GetMonthFirstDay(end)
+		begin = utils.GetMonthFirstDayLocal(end)
 	}
 
-	bt := utils.GetZoreTime(begin)
-	et := utils.GetZoreTime(end).Add(24 * time.Hour)
+	bt := utils.GetZoreTimeLocal(begin)
+	et := utils.GetZoreTimeLocal(end).Add(24 * time.Hour)
 
 	var taskList []models.TargetTask
 	if err := SerTargetTask.GetTasks(enums.Month, bt.Year()*100+int(bt.Month()), teamId, userId, deptPath, &taskList); err != nil {
@@ -707,7 +710,7 @@ func (s *BillService) StQuery(teamId, userId int, deptPath string, begin, end ti
 	if userId > 0 {
 		db.Where("user_id = ?", userId)
 	} else if deptPath != "" {
-		db.Where("dept_path like ?", deptPath+"%s")
+		db.Where("dept_path like ?", deptPath+"%")
 	}
 	var list []models.Bill
 	if err := db.Find(&list).Error; err != nil {
@@ -758,17 +761,14 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 		return texts, err
 	}
 
-	today := utils.GetZoreTime(day)
+	today := utils.GetZoreTimeLocal(day)
 	end := today.Add(24 * time.Hour)
-	begin := utils.GetMonthFirstDay(day)
+	begin := utils.GetMonthFirstDayLocal(day)
+	unixToday := today.Unix()
 
 	db := s.DB().Where("team_id = ?", teamId).Where("trade_at >=?", begin).
 		Where("trade_at < ?", end)
-	if userId > 0 {
-		db.Where("user_id = ?", userId)
-	} else if deptPath != "" {
-		db.Where("dept_path like ?", deptPath+"%s")
-	}
+	db.Where("dept_path like ?", deptPath+"%")
 	var list []models.Bill
 	if err := db.Find(&list).Error; err != nil {
 		return texts, err
@@ -784,7 +784,7 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 		tPaid = tPaid.Add(b.PaidAmount)
 		tDebt = tDebt.Add(b.DebtAmount)
 		tRefund = tRefund.Add(b.RefundAmount)
-		if b.TradeAt.After(today) {
+		if b.TradeAt.Unix() >= unixToday {
 			deal = deal.Add(b.RealAmount)
 			paid = paid.Add(b.PaidAmount)
 			debt = debt.Add(b.DebtAmount)
@@ -830,13 +830,16 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	var tNc, tFirD, tFuD, tDeal int
 	var dayNc, dayFirD, dayFuD, dayDeal, dayIv int
 	for _, ed := range edList {
-		if ed.Day.After(today) { //今日
+		fmt.Println("today +>", today, "ed:", ed.Day)
+		if ed.Day.Unix() >= unixToday { //今日
+			fmt.Println("today +>", today)
 			dayNc += ed.NewCustomerCnt
 			dayFirD += ed.FirstDiagnosis
 			dayFuD += ed.FurtherDiagnosis
 			dayDeal += ed.Deal
 			dayIv += ed.Invitation
 			for _, m := range members {
+				fmt.Println("today +>", m.UserId, ed.UserId)
 				if m.UserId == ed.UserId {
 					if ed.Rest == 2 {
 						stDay = append(stDay, fmt.Sprintf("%s：0休息", m.Name))

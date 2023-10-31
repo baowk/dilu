@@ -7,21 +7,52 @@ import (
 	"time"
 )
 
-func GetZoreTime(t time.Time) time.Time {
+func GetZoreTimeLocal(t time.Time) time.Time {
+	t = t.Local()
 	return time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, time.Local)
 }
 
-func GetWeekFirstDay(t time.Time) time.Time {
+func GetWeekFirstDayLocal(t time.Time) time.Time {
+	t = t.Local()
 	return time.Date(t.Year(), t.Month(), t.Day()-int(t.Weekday()), 0, 0, 0, 0, time.Local)
 }
 
-func GetMonthFirstDay(t time.Time) time.Time {
+func GetMonthFirstDayLocal(t time.Time) time.Time {
+	t = t.Local()
+	return time.Date(t.Year(), t.Month(), 1, 0, 0, 0, 0, time.Local)
+}
+
+// func GetZoreTime(t time.Time) time.Time {
+// 	return time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, time.Local)
+// }
+
+// func GetWeekFirstDay(t time.Time) time.Time {
+// 	return time.Date(t.Year(), t.Month(), t.Day()-int(t.Weekday()), 0, 0, 0, 0, time.Local)
+// }
+
+// func GetMonthFirstDay(t time.Time) time.Time {
+// 	return time.Date(t.Year(), t.Month(), 1, 0, 0, 0, 0, time.Local)
+// }
+
+func GetZoreTimeLocation(t time.Time, location *time.Location) time.Time {
+	t = t.In(location)
+	return time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, time.Local)
+}
+
+func GetWeekFirstDayLocation(t time.Time, location *time.Location) time.Time {
+	t = t.In(location)
+	return time.Date(t.Year(), t.Month(), t.Day()-int(t.Weekday()), 0, 0, 0, 0, time.Local)
+}
+
+func GetMonthFirstDayLocation(t time.Time, location *time.Location) time.Time {
+	t = t.In(location)
 	return time.Date(t.Year(), t.Month(), 1, 0, 0, 0, 0, time.Local)
 }
 
 var MonthDay = []int{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 
 func GetMonthLen(t time.Time) int {
+	t = t.Local()
 	month := int(t.Month())
 	if month == 2 {
 		year := t.Year()

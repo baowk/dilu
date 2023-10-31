@@ -191,6 +191,9 @@ func (e *BillApi) StDay(c *gin.Context) {
 	if teamId > 0 {
 		req.TeamId = teamId
 	}
+	if req.UserId == 0 {
+		req.UserId = utils.GetUserId(c)
+	}
 	text, err := service.SerBill.StDay(req.TeamId, req.UserId, req.DeptPath, req.Begin, e.GetReqId(c))
 	if err != nil {
 		e.Error(c, err)
