@@ -6,6 +6,9 @@ import (
 
 type CustomerGetPageReq struct {
 	base.ReqPage `search:"-"`
+	UserId       int    `json:"userId"` //用户id
+	TeamId       int    `json:"teamId"` //团队id
+	DeptPath     string `json:"deptPath"`
 }
 
 // Customer

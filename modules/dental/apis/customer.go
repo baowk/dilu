@@ -1,6 +1,7 @@
 package apis
 
 import (
+	"dilu/common/utils"
 	"dilu/modules/dental/models"
 	"dilu/modules/dental/service"
 	"dilu/modules/dental/service/dto"
@@ -34,13 +35,10 @@ func (e *CustomerApi) QueryPage(c *gin.Context) {
 	}
 	list := make([]models.Customer, 10)
 	var total int64
+	teamId := utils.GetTeamId(c)
+	userId := utils.GetUserId(c)
 
-	var model models.Customer
-	if err := copier.Copy(&model, req); err != nil {
-		e.Error(c, err)
-		return
-	}
-	if err := service.SerCustomer.Page(model, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
+	if err := service.SerCustomer.Page(req, teamId, userId, &list, &total); err != nil {
 		e.Error(c, err)
 		return
 	}

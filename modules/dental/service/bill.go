@@ -628,8 +628,8 @@ func (s *BillService) StDay(teamId, userId int, deptPath string, day time.Time, 
 			paid = paid.Add(b.PaidAmount)
 			debt = debt.Add(b.DebtAmount)
 			refund = refund.Add(b.RefundAmount)
-			arrear = arrear.Add(b.RealAmount.Sub(b.PaidAmount))
 			if b.TradeType == int(enums.TradeDeal) {
+				arrear = arrear.Add(b.RealAmount.Sub(b.PaidAmount))
 				dealCnt += 1
 			}
 		}
@@ -717,6 +717,8 @@ func (s *BillService) StQuery(teamId, userId int, deptPath string, begin, end ti
 		return nil, err
 	}
 
+	//var tdeal, tpaid, tdebt, trefund decimal.Decimal
+
 	for _, b := range list {
 		br, ok := m[b.UserId]
 		if !ok {
@@ -728,6 +730,10 @@ func (s *BillService) StQuery(teamId, userId int, deptPath string, begin, end ti
 		br.Paid = br.Paid.Add(b.PaidAmount)
 		br.Debt = br.Debt.Add(b.DebtAmount)
 		br.Refund = br.Refund.Add(b.RefundAmount)
+		// tdeal = tdeal.Add(b.RealAmount)
+		// tpaid = tpaid.Add(b.PaidAmount)
+		// tdebt = tdebt.Add(b.DebtAmount)
+		// trefund = trefund.Add(b.RefundAmount)
 
 		m[b.UserId] = br
 	}
@@ -738,6 +744,15 @@ func (s *BillService) StQuery(teamId, userId int, deptPath string, begin, end ti
 	for _, v := range m {
 		res = append(res, v)
 	}
+	// total := dto.BillUserStDto{
+	// 	UserId: 0,
+	// 	Name:   "总计",
+	// 	Deal:   tdeal,
+	// 	Paid:   tpaid,
+	// 	Debt:   tdebt,
+	// 	Refund: trefund,
+	// }
+	// res = append(res, total)
 	return res, nil
 }
 
@@ -799,7 +814,7 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	todayPaid := paid.Add(debt).Sub(refund)
 	totalDebt := tmDeal.Sub(tPaid).Sub(tDebt) //欠款
 
-	dayFmt := day.Format("2006年01月03日")
+	dayFmt := day.Format("2006年01月02日")
 
 	texts = append(texts, dayFmt)
 

@@ -3,6 +3,7 @@ package service
 import (
 	"dilu/common/consts"
 	"dilu/modules/dental/models"
+	"dilu/modules/dental/service/dto"
 	smodels "dilu/modules/sys/models"
 	"dilu/modules/sys/service"
 	"time"
@@ -59,4 +60,20 @@ func (s *EventDayStService) GetList(teamId, userId int, deptPath string, begin, 
 		db.Where("dept_path like ?", deptPath+"%")
 	}
 	return db.Find(list).Error
+}
+
+func (s *EventDayStService) Page(teamId, userId int, req dto.EventDayStGetPageReq, list *[]models.EventDaySt, total *int64) error {
+	db := s.DB().Where("team_id = ?", teamId)
+	if !req.Begin.IsZero() {
+		db.Where("day >=?", req.Begin)
+	}
+	if !req.End.IsZero() {
+		db.Where("day < ?", req.End)
+	}
+	if req.UserId > 0 {
+		db.Where("user_id = ?", userId)
+	} else if req.DeptPath != "" {
+		db.Where("dept_path like ?", req.DeptPath+"%")
+	}
+	return db.Order("day desc").Find(list).Error
 }

@@ -36,13 +36,10 @@ func (e *EventDayStApi) QueryPage(c *gin.Context) {
 	}
 	list := make([]models.EventDaySt, 10)
 	var total int64
+	teamId := utils.GetTeamId(c)
+	userId := utils.GetUserId(c)
 
-	var model models.EventDaySt
-	if err := copier.Copy(&model, req); err != nil {
-		e.Error(c, err)
-		return
-	}
-	if err := service.SerEventDaySt.Page(model, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
+	if err := service.SerEventDaySt.Page(teamId, userId, req, &list, &total); err != nil {
 		e.Error(c, err)
 		return
 	}

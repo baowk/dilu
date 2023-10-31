@@ -8,6 +8,11 @@ import (
 
 type EventDayStGetPageReq struct {
 	base.ReqPage `search:"-"`
+	Begin        time.Time
+	End          time.Time
+	TeamId       int
+	UserId       int
+	DeptPath     string
 }
 
 // EventDaySt
