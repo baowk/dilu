@@ -36,12 +36,9 @@ func (e *SummaryPlanDayApi) QueryPage(c *gin.Context) {
 	list := make([]models.SummaryPlanDay, 10)
 	var total int64
 
-	var model models.SummaryPlanDay
-	if err := copier.Copy(&model, req); err != nil {
-		e.Error(c, err)
-		return
-	}
-	if err := service.SerSummaryPlanDay.Page(model, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
+	teamId := utils.GetTeamId(c)
+	userId := utils.GetUserId(c)
+	if err := service.SerSummaryPlanDay.Page(req, teamId, userId, &list, &total); err != nil {
 		e.Error(c, err)
 		return
 	}

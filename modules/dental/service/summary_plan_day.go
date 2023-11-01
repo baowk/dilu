@@ -3,6 +3,7 @@ package service
 import (
 	"dilu/common/consts"
 	"dilu/modules/dental/models"
+	"dilu/modules/dental/service/dto"
 	smodels "dilu/modules/sys/models"
 	"dilu/modules/sys/service"
 
@@ -51,4 +52,9 @@ func (s *SummaryPlanDayService) Update(teamId, userId int, data *models.SummaryP
 	data.DeptPath = tu.DeptPath
 
 	return s.BaseService.UpdateById(data)
+}
+
+func (s *SummaryPlanDayService) Page(req dto.SummaryPlanDayGetPageReq, teamId, userId int, list *[]models.SummaryPlanDay, total *int64) error {
+	return s.DB().Where("team_id = ?", teamId).Order("id desc").Offset(req.GetOffset()).Limit(req.GetSize()).
+		Find(list).Offset(-1).Limit(-1).Count(total).Error
 }

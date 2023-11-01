@@ -110,13 +110,15 @@ type StQueryReq struct {
 }
 
 type BillUserStDto struct {
-	UserId         int             `json:"userId"`
-	Name           string          `json:"name"`           //姓名
-	Target         decimal.Decimal `json:"target"`         //目标
-	NewCustomerCnt int             `json:"newCustomerCnt"` //留存任务
-	FirstDiagnosis int             `json:"firstDiagnosis"` //导诊任务
-	Deal           decimal.Decimal `json:"deal"`           //成交
-	Paid           decimal.Decimal `json:"paid"`           //实收
-	Debt           decimal.Decimal `json:"debt"`           //补上月欠款
-	Refund         decimal.Decimal `json:"refund"`         //退款
+	UserId           int             `json:"userId"`
+	Name             string          `json:"name"`             //姓名
+	Target           decimal.Decimal `json:"target"`           //目标
+	NewCustomerCnt   int             `json:"newCustomerCnt"`   //留存任务
+	FirstDiagnosis   int             `json:"firstDiagnosis"`   //导诊任务
+	DealCnt          int             `json:"dealCnt"`          //成交患者
+	FurtherDiagnosis int             `json:"furtherDiagnosis"` //复诊患者
+	Deal             decimal.Decimal `json:"deal"`             //成交金额
+	Paid             decimal.Decimal `json:"paid"`             //实收
+	Debt             decimal.Decimal `json:"debt"`             //补上月欠款
+	Refund           decimal.Decimal `json:"refund"`           //退款
 }

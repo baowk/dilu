@@ -4,6 +4,7 @@ import (
 	"dilu/common/consts"
 	"dilu/modules/dental/enums"
 	"dilu/modules/dental/models"
+	"dilu/modules/dental/service/dto"
 	smodels "dilu/modules/sys/models"
 	"dilu/modules/sys/service"
 
@@ -16,6 +17,11 @@ type TargetTaskService struct {
 
 var SerTargetTask = TargetTaskService{
 	base.NewService(consts.DB_CRM),
+}
+
+func (s *TargetTaskService) Page(req dto.TargetTaskGetPageReq, teamId, userId int, list *[]models.TargetTask, total *int64) error {
+	return s.DB().Where("team_id = ?", teamId).Order("id desc").Limit(req.GetSize()).
+		Offset(req.GetOffset()).Find(list).Offset(-1).Limit(-1).Count(total).Error
 }
 
 func (s *TargetTaskService) GetTasks(dayType enums.DayType, day int, teamId int, userId int, deptPath string, list *[]models.TargetTask) error {

@@ -47,7 +47,7 @@ export function use{{.ClassName}}() {
     {
       label: "操作",
       fixed: "right",
-      width: 240,
+      width: 140,
       slot: "operation"
     }
   ];

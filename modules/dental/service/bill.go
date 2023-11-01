@@ -598,7 +598,6 @@ func (s *BillService) StDay(teamId, userId int, deptPath string, day time.Time, 
 	if teamId < 1 {
 		return texts, codes.ErrInvalidParameter(reqId, "teamId is nil")
 	}
-	fmt.Println(day)
 	today := utils.GetZoreTimeLocal(day)
 	end := today.Add(24 * time.Hour)
 	begin := utils.GetMonthFirstDayLocal(day)
@@ -630,7 +629,7 @@ func (s *BillService) StDay(teamId, userId int, deptPath string, day time.Time, 
 			refund = refund.Add(b.RefundAmount)
 			if b.TradeType == int(enums.TradeDeal) {
 				arrear = arrear.Add(b.RealAmount.Sub(b.PaidAmount))
-				dealCnt += 1
+				//dealCnt += 1
 			}
 		}
 	}
@@ -671,7 +670,7 @@ func (s *BillService) StQuery(teamId, userId int, deptPath string, begin, end ti
 
 	var members []smodels.SysMember
 
-	if err := service.SerSysMember.GetMembers(teamId, userId, deptPath, "", &members); err != nil {
+	if err := service.SerSysMember.GetMembers(teamId, 0, deptPath, "", &members); err != nil {
 		return nil, err
 	}
 	if end.IsZero() {
@@ -685,7 +684,7 @@ func (s *BillService) StQuery(teamId, userId int, deptPath string, begin, end ti
 	et := utils.GetZoreTimeLocal(end).Add(24 * time.Hour)
 
 	var taskList []models.TargetTask
-	if err := SerTargetTask.GetTasks(enums.Month, bt.Year()*100+int(bt.Month()), teamId, userId, deptPath, &taskList); err != nil {
+	if err := SerTargetTask.GetTasks(enums.Month, bt.Year()*100+int(bt.Month()), teamId, 0, deptPath, &taskList); err != nil {
 		return nil, err
 	}
 	m := make(map[int]dto.BillUserStDto, len(taskList))
@@ -717,8 +716,6 @@ func (s *BillService) StQuery(teamId, userId int, deptPath string, begin, end ti
 		return nil, err
 	}
 
-	//var tdeal, tpaid, tdebt, trefund decimal.Decimal
-
 	for _, b := range list {
 		br, ok := m[b.UserId]
 		if !ok {
@@ -730,29 +727,32 @@ func (s *BillService) StQuery(teamId, userId int, deptPath string, begin, end ti
 		br.Paid = br.Paid.Add(b.PaidAmount)
 		br.Debt = br.Debt.Add(b.DebtAmount)
 		br.Refund = br.Refund.Add(b.RefundAmount)
-		// tdeal = tdeal.Add(b.RealAmount)
-		// tpaid = tpaid.Add(b.PaidAmount)
-		// tdebt = tdebt.Add(b.DebtAmount)
-		// trefund = trefund.Add(b.RefundAmount)
-
 		m[b.UserId] = br
 	}
 
-	fmt.Println(len(m))
+	var edList []models.EventDaySt
+	if err := SerEventDaySt.GetList(teamId, 0, deptPath, bt, et, &edList); err != nil {
+		return nil, err
+	}
+
+	for _, ed := range edList {
+		br, ok := m[ed.UserId]
+		if !ok {
+			br = dto.BillUserStDto{
+				UserId: userId,
+			}
+		}
+		br.FirstDiagnosis += ed.FirstDiagnosis
+		br.NewCustomerCnt += ed.NewCustomerCnt
+		br.FurtherDiagnosis += ed.FurtherDiagnosis
+		br.DealCnt += ed.Deal
+		m[ed.UserId] = br
+	}
 
 	res := make([]dto.BillUserStDto, 0)
 	for _, v := range m {
 		res = append(res, v)
 	}
-	// total := dto.BillUserStDto{
-	// 	UserId: 0,
-	// 	Name:   "总计",
-	// 	Deal:   tdeal,
-	// 	Paid:   tpaid,
-	// 	Debt:   tdebt,
-	// 	Refund: trefund,
-	// }
-	// res = append(res, total)
 	return res, nil
 }
 
@@ -821,7 +821,7 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	texts = append(texts, fmt.Sprintf("汇报人：%s", tu.Name))
 
 	var taskList []models.TargetTask
-	if err := SerTargetTask.GetTasks(enums.Month, today.Year()*100+int(today.Month()), teamId, userId, deptPath, &taskList); err != nil {
+	if err := SerTargetTask.GetTasks(enums.Month, today.Year()*100+int(today.Month()), teamId, 0, deptPath, &taskList); err != nil {
 		return texts, err
 	}
 	var memberLen int
@@ -845,7 +845,6 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	var tNc, tFirD, tFuD, tDeal int
 	var dayNc, dayFirD, dayFuD, dayDeal, dayIv int
 	for _, ed := range edList {
-		fmt.Println("today +>", today, "ed:", ed.Day)
 		if ed.Day.Unix() >= unixToday { //今日
 			fmt.Println("today +>", today)
 			dayNc += ed.NewCustomerCnt
@@ -919,7 +918,7 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	if tmDeal.IsZero() {
 		texts = append(texts, "本月任务达成率：0%%")
 	} else {
-		tp := fmt.Sprintf("%s%%", tPaid.Div(tmDeal).Mul(decimal.NewFromInt(100)).StringFixedBank(0))
+		tp := fmt.Sprintf("%s%%", tPaid.Div(decimal.NewFromInt(int64(totalDeal))).Mul(decimal.NewFromInt(100)).StringFixedBank(0))
 		texts = append(texts, fmt.Sprintf("本月任务达成率：%s", tp))
 	}
 

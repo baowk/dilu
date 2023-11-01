@@ -36,12 +36,9 @@ func (e *TargetTaskApi) QueryPage(c *gin.Context) {
 	list := make([]models.TargetTask, 10)
 	var total int64
 
-	var model models.TargetTask
-	if err := copier.Copy(&model, req); err != nil {
-		e.Error(c, err)
-		return
-	}
-	if err := service.SerTargetTask.Page(model, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
+	teamId := utils.GetTeamId(c)
+	userId := utils.GetUserId(c)
+	if err := service.SerTargetTask.Page(req, teamId, userId, &list, &total); err != nil {
 		e.Error(c, err)
 		return
 	}
