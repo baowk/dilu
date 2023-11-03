@@ -122,3 +122,8 @@ type BillUserStDto struct {
 	Debt             decimal.Decimal `json:"debt"`             //补上月欠款
 	Refund           decimal.Decimal `json:"refund"`           //退款
 }
+
+type DentalStDto struct {
+	Total     int `json:"total"`     //总数
+	Implanted int `json:"implanted"` //已种植
+}
