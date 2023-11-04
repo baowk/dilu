@@ -322,8 +322,8 @@ func menuToVo(menu models.SysMenu) dto.MenuVo {
 		Title: menu.Title,
 		Icon:  menu.Icon,
 	}
-	if menu.Hidden {
-		meta.ShowLink = false
+	if !menu.Hidden {
+		meta.ShowLink = true
 	}
 	if !menu.NoCache {
 		meta.KeepAlive = true

@@ -250,11 +250,19 @@ definitions:
     type: object
   dto.CustomerGetPageReq:
     properties:
+      deptPath:
+        type: string
       page:
         description: 页码
         type: integer
       pageSize:
         description: 每页大小
+        type: integer
+      teamId:
+        description: 团队id
+        type: integer
+      userId:
+        description: 用户id
         type: integer
     type: object
   dto.DingCfgResp:
@@ -304,11 +312,21 @@ definitions:
     type: object
   dto.EventDayStGetPageReq:
     properties:
+      begin:
+        type: string
+      deptPath:
+        type: string
+      end:
+        type: string
       page:
         description: 页码
         type: integer
       pageSize:
         description: 每页大小
+        type: integer
+      teamId:
+        type: integer
+      userId:
         type: integer
     type: object
   dto.ForgetPwdReq:
@@ -467,12 +485,16 @@ definitions:
     type: object
   dto.GenTablesGetPageReq:
     properties:
+      dbName:
+        type: string
       page:
         description: 页码
         type: integer
       pageSize:
         description: 每页大小
         type: integer
+      tableName:
+        type: string
     type: object
   dto.IdentifyBillDto:
     properties:
@@ -1021,6 +1043,9 @@ definitions:
     type: object
   dto.SysMemberGetPageReq:
     properties:
+      deptId:
+        description: 部门id
+        type: integer
       deptPath:
         description: 部门路径
         type: string
@@ -2318,6 +2343,13 @@ definitions:
         description: 用户id
         type: integer
     type: object
+  tools.DbOption:
+    properties:
+      lable:
+        type: string
+      value:
+        type: string
+    type: object
   tools.GenColumn:
     properties:
       columnComment:
@@ -2617,6 +2649,26 @@ paths:
           schema:
             type: string
       summary: 生成代码
+      tags:
+      - 工具 / 生成工具
+  /api/tools/gen/dbs:
+    post:
+      consumes:
+      - application/json
+      description: 获取配置的数据库
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/tools.DbOption'
+                  type: array
+              type: object
+      summary: 获取配置的数据库
       tags:
       - 工具 / 生成工具
   /api/tools/gen/menu/{tableId}/{menuPid}:

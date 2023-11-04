@@ -870,7 +870,7 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	}
 	var spday models.SummaryPlanDay
 
-	if err := SerSummaryPlanDay.GetByDay(teamId, userId, today.Year()*10000+int(today.Month())*100+today.Day(), &spday); err != nil {
+	if err := SerSummaryPlanDay.GetByDay(teamId, userId, today, &spday); err != nil {
 		return texts, err
 	}
 

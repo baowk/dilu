@@ -24,6 +24,32 @@ func GetDb(dbname string) (db *gorm.DB, mdb string, sdb string) {
 	return
 }
 
+type DbOption struct {
+	Lable string `json:"label"`
+	Value string `json:"value"`
+}
+
+func GetDbs() []DbOption {
+	var dbs []DbOption
+	if core.Cfg.DBCfg.DSN != "" {
+		db := DbOption{
+			Lable: consts.DB_DEF,
+		}
+		db.Value = ParseDsn(core.Cfg.DBCfg.DSN)
+		dbs = append(dbs, db)
+	}
+	for key, dbc := range core.Cfg.DBCfg.DBS {
+		if !dbc.Disable {
+			db := DbOption{
+				Lable: key,
+			}
+			db.Value = ParseDsn(dbc.DSN)
+			dbs = append(dbs, db)
+		}
+	}
+	return dbs
+}
+
 func ParseDsn(dsn string) string {
 	idx := strings.LastIndex(dsn, ")/")
 	end := strings.LastIndex(dsn, "?")

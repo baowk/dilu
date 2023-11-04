@@ -123,15 +123,16 @@ type MenuVo struct {
 }
 
 type RouteMeta struct {
-	Title        string   `json:"title,omitempty"`        //菜单名称（兼容国际化、非国际化，如何用国际化的写法就必须在根目录的locales文件夹下对应添加） 必填
-	Icon         string   `json:"icon,omitempty"`         //图标
-	ShowParent   bool     `json:"showParent,omitempty"`   //是否显示父菜单
-	Rank         int      `json:"rank,omitempty"`         //排序
-	KeepAlive    bool     `json:"keepAlive,omitempty"`    //路由组件缓存（开启 true、关闭 false）可选
-	ShowLink     bool     `json:"showLink,omitempty"`     //是否显示 前端默认true，false在菜单列表中不显示
-	FrameSrc     string   `json:"frameSrc,omitempty"`     //内嵌的iframe链接 可选
-	FrameLoading bool     `json:"frameLoading,omitempty"` //iframe页是否开启首次加载动画（默认true）可选
-	Auths        []string `json:"auths,omitempty"`        //按钮权限
+	Title        string   `json:"title,omitempty"`      //菜单名称（兼容国际化、非国际化，如何用国际化的写法就必须在根目录的locales文件夹下对应添加） 必填
+	Icon         string   `json:"icon,omitempty"`       //图标
+	ShowParent   bool     `json:"showParent,omitempty"` //是否显示父菜单
+	Rank         int      `json:"rank,omitempty"`       //排序
+	KeepAlive    bool     `json:"keepAlive,omitempty"`  //路由组件缓存（开启 true、关闭 false）可选
+	ShowLink     bool     `json:"showLink"`             //是否显示 前端默认true，false在菜单列表中不显示
+	FrameSrc     string   `json:"frameSrc,omitempty"`   //内嵌的iframe链接 可选
+	FrameLoading bool     `json:"frameLoading"`         //iframe页是否开启首次加载动画（默认true）可选
+	Auths        []string `json:"auths,omitempty"`      //按钮权限
+	//HiddenTag    bool     `json:"hiddenTag"`              //当前菜单名称或自定义信息禁止添加到标签页
 }
 
 type SysMenuGetReq struct {

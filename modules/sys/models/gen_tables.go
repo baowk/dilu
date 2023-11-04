@@ -10,7 +10,7 @@ import (
 type GenTables struct {
 	TableId             int            `json:"tableId" gorm:"type:bigint;primaryKey;autoIncrement;comment:主键"`           //主键
 	DbName              string         `json:"dbName" gorm:"type:varchar(64);comment:DbName"`                            //
-	ATableName          string         `json:"tableName" gorm:"type:varchar(128);comment:TableName"`                     //
+	ATableName          string         `json:"tableName" gorm:"column:table_name;type:varchar(128);comment:TableName"`   //
 	TableComment        string         `json:"tableComment" gorm:"type:varchar(128);comment:TableComment"`               //
 	ClassName           string         `json:"className" gorm:"type:varchar(128);comment:ClassName"`                     //
 	TplCategory         string         `json:"tplCategory" gorm:"type:varchar(128);comment:TplCategory"`                 //

@@ -27,6 +27,7 @@ func sysNoCheckSsoRouter(v1 *gin.RouterGroup) {
 			r.GET("gen/code/:tableId/:force", apis.GenApi.GenCode)
 			r.GET("gen/menu/:tableId/:menuPid", apis.GenApi.GenMenuAndApi)
 			r.GET("gen/api", apis.GenApi.GenApis)
+			r.POST("/gen/dbs", apis.GenApi.GetDBS)
 		}
 	}
 }

@@ -10,6 +10,7 @@ type SysMemberGetPageReq struct {
 	base.ReqPage `search:"-"`
 	Status       int    `json:"status" form:"status"` //状态 1正常
 	TeamId       int    `json:"teamId"`               //团队id
+	DeptId       int    `json:"deptId"`               //部门id
 	DeptPath     string `json:"deptPath"`             //部门路径
 	Name         string `json:"name"`                 //名字
 	Phone        string `json:"phone"`                //手机号

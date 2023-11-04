@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : huawei
+ Source Server         : local_u
  Source Server Type    : MySQL
- Source Server Version : 80030 (8.0.30)
- Source Host           : 123.60.128.28:3306
+ Source Server Version : 80032 (8.0.32)
+ Source Host           : localhost:3306
  Source Schema         : dilu-db
 
  Target Server Type    : MySQL
- Target Server Version : 80030 (8.0.30)
+ Target Server Version : 80032 (8.0.32)
  File Encoding         : 65001
 
- Date: 01/11/2023 20:54:25
+ Date: 04/11/2023 20:34:49
 */
 
 SET NAMES utf8mb4;
@@ -396,7 +396,7 @@ CREATE TABLE `sys_api`  (
   `updated_at` datetime(3) NULL DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_method_path`(`method` ASC, `path` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 80 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '接口' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 81 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '接口' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_api
@@ -480,6 +480,7 @@ INSERT INTO `sys_api` VALUES (76, '创建接口', 'POST', '/api/v1/sys/sys-api/c
 INSERT INTO `sys_api` VALUES (77, '修改接口', 'POST', '/api/v1/sys/sys-api/update', 3, 3, 0, '2023-10-28 16:51:44.952');
 INSERT INTO `sys_api` VALUES (78, '删除接口', 'POST', '/api/v1/sys/sys-api/del', 3, 3, 0, '2023-10-28 16:51:44.960');
 INSERT INTO `sys_api` VALUES (79, '账单查询统计', 'POST', '/api/v1/dental/st/query', 3, 3, 0, '2023-10-29 18:56:28.000');
+INSERT INTO `sys_api` VALUES (80, '所有角色', 'POST', '/api/v1/sys/sys-role/list', 3, 3, 0, '2023-11-04 11:51:22.000');
 
 -- ----------------------------
 -- Table structure for sys_cfg
@@ -618,7 +619,7 @@ CREATE TABLE `sys_member`  (
 -- ----------------------------
 -- Records of sys_member
 -- ----------------------------
-INSERT INTO `sys_member` VALUES (1, 1, 2, '糖糖', '唐敦霞', NULL, '', '/0/1/2/', 2, '-1', 8, '2023-02-20 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_member` VALUES (1, 1, 2, '糖糖', '唐敦霞', 'tang-dun-xia', '', '/0/1/2/', 2, '-1', 8, '2023-02-20 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, '2023-11-04 15:08:01.618');
 INSERT INTO `sys_member` VALUES (2, 1, 3, '藏春梅', '藏春梅', NULL, NULL, '/0/1/2/', 2, '1', 16, '2021-01-13 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, NULL);
 INSERT INTO `sys_member` VALUES (3, 1, 4, '李艳雷', '李艳雷', NULL, NULL, '/0/1/2/', 2, NULL, 16, '2023-06-19 00:00:00.000', NULL, '1', NULL, 1, NULL, NULL, NULL, NULL);
 INSERT INTO `sys_member` VALUES (4, 1, 5, '简小丽', '简小丽', NULL, NULL, '/0/1/2/', 2, NULL, 16, '2022-11-18 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, NULL);
@@ -718,18 +719,18 @@ INSERT INTO `sys_menu` VALUES (88, NULL, '账单智能识别', NULL, 'bill_ident
 INSERT INTO `sys_menu` VALUES (89, NULL, '日统计', NULL, 'st_day', 2, 3, 'dental:st:day', 108, 0, NULL, 0, 0, 1, 1, '2023-10-16 13:53:40.000', '2023-10-16 13:53:44.000', NULL);
 INSERT INTO `sys_menu` VALUES (90, NULL, '月统计', NULL, 'st_month', 2, 3, 'dental:st:month', 108, 0, NULL, 0, 0, 1, 1, '2023-10-16 14:32:02.000', '2023-10-16 14:32:06.000', NULL);
 INSERT INTO `sys_menu` VALUES (91, '', '工具管理', 'setUp', '/tools', 1, 1, NULL, 0, 0, 'Layout', 0, 0, 1, 1, '2023-10-28 09:41:26.000', '2023-10-28 09:41:29.000', NULL);
-INSERT INTO `sys_menu` VALUES (92, 'ToolManage', '代码生成', 'setUp', '/tools/gen', 1, 2, 'tools:gen:list', 91, 0, '/tool/gen/index', 0, 0, 1, 1, '2023-10-28 09:44:15.000', '2023-10-28 09:44:18.000', NULL);
-INSERT INTO `sys_menu` VALUES (93, 'GenTablesManage', 'GenTables管理', 'table', '/sys/gen-tables', 1, 2, 'sys:genTables:list', 91, 0, '/sys/gen-tables/index', 0, 0, 1, 1, '2023-10-28 16:31:47.693', '2023-10-28 16:31:47.693', NULL);
+INSERT INTO `sys_menu` VALUES (92, 'ToolManage', '代码生成', 'setUp', '/tools/gen', 1, 2, 'tools:gen:list', 91, 0, '/tool/gen/index', 0, 1, 1, 1, '2023-10-28 09:44:15.000', '2023-10-28 09:44:18.000', NULL);
+INSERT INTO `sys_menu` VALUES (93, 'GenTablesManage', '代码生成', 'table', '/sys/gen-tables', 1, 2, 'sys:genTables:list', 91, 0, '/tool/gen-tables/index', 0, 0, 1, 1, '2023-10-28 16:31:47.693', '2023-10-28 16:31:47.693', NULL);
 INSERT INTO `sys_menu` VALUES (94, '', 'GenTables详情', '', 'gen_tables_detail', 1, 3, 'sys:genTables:query', 93, 0, '', 0, 0, 1, 1, '2023-10-28 16:31:47.704', '2023-10-28 16:31:47.704', NULL);
 INSERT INTO `sys_menu` VALUES (95, '', 'GenTables创建', '', 'gen_tables_create', 1, 3, 'sys:genTables:add', 93, 0, '', 0, 0, 1, 1, '2023-10-28 16:31:47.714', '2023-10-28 16:31:47.714', NULL);
 INSERT INTO `sys_menu` VALUES (96, '', 'GenTables修改', '', 'gen_tables_update', 1, 3, 'sys:genTables:edit', 93, 0, '', 0, 0, 1, 1, '2023-10-28 16:31:47.723', '2023-10-28 16:31:47.723', NULL);
 INSERT INTO `sys_menu` VALUES (97, '', 'GenTables删除', '', 'gen_tables_del', 1, 3, 'sys:genTables:remove', 93, 0, '', 0, 0, 1, 1, '2023-10-28 16:31:47.731', '2023-10-28 16:31:47.731', NULL);
-INSERT INTO `sys_menu` VALUES (98, 'GenColumnsManage', 'GenColumns管理', 'generate', '/sys/gen-columns', 1, 2, 'sys:genColumns:list', 91, 0, '/sys/gen-columns/index', 0, 0, 1, 1, '2023-10-28 16:35:01.334', '2023-10-28 16:35:01.334', NULL);
+INSERT INTO `sys_menu` VALUES (98, 'GenColumnsManage', 'GenColumns管理', 'generate', '/sys/gen-columns', 1, 2, 'sys:genColumns:list', 91, 0, '/tool/gen-columns/index', 0, 1, 1, 1, '2023-10-28 16:35:01.334', '2023-10-28 16:35:01.334', NULL);
 INSERT INTO `sys_menu` VALUES (99, '', 'GenColumns详情', '', 'gen_columns_detail', 1, 3, 'sys:genColumns:query', 98, 0, '', 0, 0, 1, 1, '2023-10-28 16:35:01.354', '2023-10-28 16:35:01.354', NULL);
 INSERT INTO `sys_menu` VALUES (100, '', 'GenColumns创建', '', 'gen_columns_create', 1, 3, 'sys:genColumns:add', 98, 0, '', 0, 0, 1, 1, '2023-10-28 16:35:01.363', '2023-10-28 16:35:01.363', NULL);
 INSERT INTO `sys_menu` VALUES (101, '', 'GenColumns修改', '', 'gen_columns_update', 1, 3, 'sys:genColumns:edit', 98, 0, '', 0, 0, 1, 1, '2023-10-28 16:35:01.371', '2023-10-28 16:35:01.371', NULL);
 INSERT INTO `sys_menu` VALUES (102, '', 'GenColumns删除', '', 'gen_columns_del', 1, 3, 'sys:genColumns:remove', 98, 0, '', 0, 0, 1, 1, '2023-10-28 16:35:01.392', '2023-10-28 16:35:01.392', NULL);
-INSERT INTO `sys_menu` VALUES (103, 'SysApiManage', '接口管理', 'pass', '/sys/sys-api', 1, 2, 'sys:sysApi:list', 91, 0, '/sys/sys-api/index', 0, 0, 1, 1, '2023-10-28 16:51:44.924', '2023-10-28 16:51:44.924', NULL);
+INSERT INTO `sys_menu` VALUES (103, 'SysApiManage', '接口管理', 'pass', '/sys/sys-api', 1, 2, 'sys:sysApi:list', 91, 0, '/tool/sys-api/index', 0, 0, 1, 1, '2023-10-28 16:51:44.924', '2023-10-28 16:51:44.924', NULL);
 INSERT INTO `sys_menu` VALUES (104, '', '接口详情', '', 'sys_api_detail', 1, 3, 'sys:sysApi:query', 103, 0, '', 0, 0, 1, 1, '2023-10-28 16:51:44.938', '2023-10-28 16:51:44.938', NULL);
 INSERT INTO `sys_menu` VALUES (105, '', '接口创建', '', 'sys_api_create', 1, 3, 'sys:sysApi:add', 103, 0, '', 0, 0, 1, 1, '2023-10-28 16:51:44.947', '2023-10-28 16:51:44.947', NULL);
 INSERT INTO `sys_menu` VALUES (106, '', '接口修改', '', 'sys_api_update', 1, 3, 'sys:sysApi:edit', 103, 0, '', 0, 0, 1, 1, '2023-10-28 16:51:44.955', '2023-10-28 16:51:44.955', NULL);

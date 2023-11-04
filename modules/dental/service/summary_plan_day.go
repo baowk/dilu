@@ -6,6 +6,7 @@ import (
 	"dilu/modules/dental/service/dto"
 	smodels "dilu/modules/sys/models"
 	"dilu/modules/sys/service"
+	"time"
 
 	"github.com/baowk/dilu-core/core/base"
 )
@@ -18,7 +19,7 @@ var SerSummaryPlanDay = SummaryPlanDayService{
 	base.NewService(consts.DB_CRM),
 }
 
-func (s *SummaryPlanDayService) GetByDay(teamId, userId, day int, res *models.SummaryPlanDay) error {
+func (s *SummaryPlanDayService) GetByDay(teamId, userId int, day time.Time, res *models.SummaryPlanDay) error {
 	return s.GetByWhere(models.SummaryPlanDay{
 		TeamId: teamId,
 		UserId: userId,

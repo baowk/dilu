@@ -34,6 +34,18 @@ var (
 	FrontPath = "../dilu-admin/src"
 )
 
+// GetDBS
+// @Summary 获取配置的数据库
+// @Description 获取配置的数据库
+// @Tags 工具 / 生成工具
+// @Accept  application/json
+// @Product application/json
+// @Success 200 {object} base.Resp{data=[]DbOption} "{"code": 200, "data": [...]}"
+// @Router /api/tools/gen/dbs [post]
+func (e *Gen) GetDBS(c *gin.Context) {
+	e.Ok(c, GetDbs())
+}
+
 // Preview
 // @Summary 生成预览
 // @Description 生成预览

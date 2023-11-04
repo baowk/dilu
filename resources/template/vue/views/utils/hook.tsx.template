@@ -1,11 +1,8 @@
 import dayjs from "dayjs";
 import editForm from "../form.vue";
 import { message } from "@/utils/message";
-import { get{{.ClassName}}Page, create{{.ClassName}}, update{{.ClassName}}, del{{.ClassName}} } from "@/api/{{.PackageName}}/{{.ModuleName}}";
-//import { ElMessageBox } from "element-plus";
-//import { usePublicHooks } from "@/utils/hooks";
+import {type {{.ClassName}}FormItemProps, get{{.ClassName}}Page, create{{.ClassName}}, update{{.ClassName}}, del{{.ClassName}} } from "@/api/{{.PackageName}}/{{.ModuleName}}";
 import { addDialog } from "@/components/ReDialog";
-import { type {{.ClassName}}FormItemProps } from "@/api/{{.PackageName}}/{{.ModuleName}}";
 import { type PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h, toRaw } from "vue";
 

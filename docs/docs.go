@@ -163,6 +163,41 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/tools/gen/dbs": {
+            "post": {
+                "description": "获取配置的数据库",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "获取配置的数据库",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/tools.DbOption"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/tools/gen/menu/{tableId}/{menuPid}": {
             "get": {
                 "description": "生成菜单",
@@ -6454,12 +6489,23 @@ const docTemplate = `{
         "dto.CustomerGetPageReq": {
             "type": "object",
             "properties": {
+                "deptPath": {
+                    "type": "string"
+                },
                 "page": {
                     "description": "页码",
                     "type": "integer"
                 },
                 "pageSize": {
                     "description": "每页大小",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
+                "userId": {
+                    "description": "用户id",
                     "type": "integer"
                 }
             }
@@ -6529,12 +6575,27 @@ const docTemplate = `{
         "dto.EventDayStGetPageReq": {
             "type": "object",
             "properties": {
+                "begin": {
+                    "type": "string"
+                },
+                "deptPath": {
+                    "type": "string"
+                },
+                "end": {
+                    "type": "string"
+                },
                 "page": {
                     "description": "页码",
                     "type": "integer"
                 },
                 "pageSize": {
                     "description": "每页大小",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "type": "integer"
+                },
+                "userId": {
                     "type": "integer"
                 }
             }
@@ -6771,6 +6832,9 @@ const docTemplate = `{
         "dto.GenTablesGetPageReq": {
             "type": "object",
             "properties": {
+                "dbName": {
+                    "type": "string"
+                },
                 "page": {
                     "description": "页码",
                     "type": "integer"
@@ -6778,6 +6842,9 @@ const docTemplate = `{
                 "pageSize": {
                     "description": "每页大小",
                     "type": "integer"
+                },
+                "tableName": {
+                    "type": "string"
                 }
             }
         },
@@ -7544,6 +7611,10 @@ const docTemplate = `{
         "dto.SysMemberGetPageReq": {
             "type": "object",
             "properties": {
+                "deptId": {
+                    "description": "部门id",
+                    "type": "integer"
+                },
                 "deptPath": {
                     "description": "部门路径",
                     "type": "string"
@@ -9328,6 +9399,17 @@ const docTemplate = `{
                 "userId": {
                     "description": "用户id",
                     "type": "integer"
+                }
+            }
+        },
+        "tools.DbOption": {
+            "type": "object",
+            "properties": {
+                "lable": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
                 }
             }
         },

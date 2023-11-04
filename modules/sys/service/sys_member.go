@@ -53,7 +53,9 @@ func (e *SysMemberService) Query(req dto.SysMemberGetPageReq, list *[]models.Sys
 	if req.Status != 0 {
 		db.Where("status = ?", req.Status)
 	}
-	if req.DeptPath != "" {
+	if req.DeptId > 0 {
+		db.Where("dept_id = ?", req.DeptId)
+	} else if req.DeptPath != "" {
 		db.Where("dept_path like ?", req.DeptPath+"%")
 	}
 	if req.Name != "" {
