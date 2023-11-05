@@ -789,7 +789,7 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 		return texts, err
 	}
 
-	var tmDeal, tPaid, tDebt, tRefund, deal, paid, debt, refund decimal.Decimal
+	var tmDeal, tPaid, tbDebt, tRefund, deal, paid, bdebt, refund decimal.Decimal
 	var dealCnt, dCnt, iCnt, tdCnt, tiCnt int
 	for _, b := range list {
 		dCnt += b.DentalCount
@@ -797,12 +797,12 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 
 		tmDeal = tmDeal.Add(b.RealAmount)
 		tPaid = tPaid.Add(b.PaidAmount)
-		tDebt = tDebt.Add(b.DebtAmount)
+		tbDebt = tbDebt.Add(b.DebtAmount)
 		tRefund = tRefund.Add(b.RefundAmount)
 		if b.TradeAt.Unix() >= unixToday {
 			deal = deal.Add(b.RealAmount)
 			paid = paid.Add(b.PaidAmount)
-			debt = debt.Add(b.DebtAmount)
+			bdebt = bdebt.Add(b.DebtAmount)
 			refund = refund.Add(b.RefundAmount)
 			dealCnt += 1
 			tdCnt += b.DentalCount
@@ -810,9 +810,9 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 		}
 	}
 
-	totalPaid := tPaid.Add(tDebt).Sub(tRefund)
-	todayPaid := paid.Add(debt).Sub(refund)
-	totalDebt := tmDeal.Sub(tPaid).Sub(tDebt) //欠款
+	totalPaid := tPaid.Add(tbDebt).Sub(tRefund)
+	todayPaid := paid.Add(bdebt).Sub(refund)
+	totalDebt := tmDeal.Sub(tPaid) //欠款
 
 	dayFmt := day.Format("2006年01月02日")
 
@@ -907,7 +907,7 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	} else {
 		texts = append(texts, fmt.Sprintf("团队人效：%s", tPaid.Div(decimal.NewFromInt(int64(memberLen))).StringFixedBank(0)))
 	}
-	texts = append(texts, fmt.Sprintf("收回上月欠款：%s", tDebt.StringFixedBank(0)))
+	texts = append(texts, fmt.Sprintf("收回上月欠款：%s", tbDebt.StringFixedBank(0)))
 
 	befMonth := begin.AddDate(0, -1, 0)
 	deferDental := 0

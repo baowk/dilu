@@ -34,13 +34,7 @@ func (e *GenTablesApi) QueryPage(c *gin.Context) {
 	}
 	list := make([]models.GenTables, 10)
 	var total int64
-
-	var model models.GenTables
-	if err := copier.Copy(&model, req); err != nil {
-		e.Error(c, err)
-		return
-	}
-	if err := service.SerGenTables.Page(model, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
+	if err := service.SerGenTables.Page(&req, &list, &total); err != nil {
 		e.Error(c, err)
 		return
 	}
