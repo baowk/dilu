@@ -12,6 +12,7 @@ import (
 	"gorm.io/gorm"
 
 	"dilu/modules/tools/models/tools"
+	"dilu/modules/tools/service/dto"
 )
 
 type SysTable struct {
@@ -107,24 +108,24 @@ func (e SysTable) GetSysTablesTree(c *gin.Context) {
 // @Tags 工具 / 生成工具
 // @Accept  application/json
 // @Product application/json
-// @Param dbName query string false "dbName / 数据库名称"
-// @Param tables query string false "tableName / 数据表名称"
+// @Param data body dto.ImpTablesReq true "body"
 // @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
 // @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
 // @Router /api/tools/tables/info [post]
 func (e SysTable) Insert(c *gin.Context) {
-	dbname := c.Request.FormValue("dbName")
-	tablesList := strings.Split(c.Request.FormValue("tables"), ",")
+	var req dto.ImpTablesReq
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
 	db, _, _ := GetDb(consts.DB_DEF)
-	for i := 0; i < len(tablesList); i++ {
-
-		data, err := genTableInit(db, dbname, tablesList, i)
+	for _, tableName := range req.Tables {
+		data, err := genTableInit(db, req.DbName, tableName)
 		if err != nil {
 			core.Log.Error("Gen", zap.Error(err))
 			e.Error(c, err)
 			return
 		}
-
 		_, err = data.Create(db)
 		if err != nil {
 			core.Log.Error("Gen", zap.Error(err))
@@ -136,11 +137,11 @@ func (e SysTable) Insert(c *gin.Context) {
 
 }
 
-func genTableInit(tx *gorm.DB, dbname string, tablesList []string, i int) (tools.GenTable, error) {
+func genTableInit(tx *gorm.DB, dbname string, tableName string) (tools.GenTable, error) {
 	var data tools.GenTable
 	var dbTable tools.DBTables
 	var dbColumn tools.DBColumns
-	data.TBName = tablesList[i]
+	data.TBName = tableName
 	data.CreateBy = 0
 
 	dbTable.TableName = data.TBName

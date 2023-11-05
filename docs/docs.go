@@ -65,7 +65,7 @@ const docTemplate = `{
             }
         },
         "/api/tools/db/tables/page": {
-            "get": {
+            "post": {
                 "description": "数据库表分页列表 / database table page list",
                 "tags": [
                     "工具 / 生成工具"
@@ -73,29 +73,13 @@ const docTemplate = `{
                 "summary": "分页列表数据 / page list data",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "dbname / 数据库",
-                        "name": "dbName",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "tableName / 数据表名称",
-                        "name": "tableName",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "pageSize / 页条数",
-                        "name": "pageSize",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "pageIndex / 页码",
-                        "name": "pageIndex",
-                        "in": "query"
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.DBReq"
+                        }
                     }
                 ],
                 "responses": {
@@ -303,16 +287,13 @@ const docTemplate = `{
                 "summary": "添加表结构",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "dbName / 数据库名称",
-                        "name": "dbName",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "tableName / 数据表名称",
-                        "name": "tables",
-                        "in": "query"
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ImpTablesReq"
+                        }
                     }
                 ],
                 "responses": {
@@ -6510,6 +6491,25 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.DBReq": {
+            "type": "object",
+            "properties": {
+                "dbName": {
+                    "type": "string"
+                },
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "description": "每页大小",
+                    "type": "integer"
+                },
+                "tableName": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.DingCfgResp": {
             "type": "object",
             "properties": {
@@ -6975,6 +6975,20 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.ImpTablesReq": {
+            "type": "object",
+            "properties": {
+                "dbName": {
+                    "type": "string"
+                },
+                "tables": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "dto.LoginDingReq": {
             "type": "object",
             "properties": {
@@ -7298,7 +7312,7 @@ const docTemplate = `{
             "properties": {
                 "day": {
                     "description": "天",
-                    "type": "integer"
+                    "type": "string"
                 },
                 "id": {
                     "description": "主键",
@@ -8670,7 +8684,7 @@ const docTemplate = `{
                 },
                 "day": {
                     "description": "天",
-                    "type": "integer"
+                    "type": "string"
                 },
                 "deptPath": {
                     "description": "路径",
@@ -9405,7 +9419,7 @@ const docTemplate = `{
         "tools.DbOption": {
             "type": "object",
             "properties": {
-                "lable": {
+                "label": {
                     "type": "string"
                 },
                 "value": {

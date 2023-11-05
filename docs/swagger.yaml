@@ -265,6 +265,19 @@ definitions:
         description: 用户id
         type: integer
     type: object
+  dto.DBReq:
+    properties:
+      dbName:
+        type: string
+      page:
+        description: 页码
+        type: integer
+      pageSize:
+        description: 每页大小
+        type: integer
+      tableName:
+        type: string
+    type: object
   dto.DingCfgResp:
     properties:
       appid:
@@ -590,6 +603,15 @@ definitions:
         description: 用户id
         type: integer
     type: object
+  dto.ImpTablesReq:
+    properties:
+      dbName:
+        type: string
+      tables:
+        items:
+          type: string
+        type: array
+    type: object
   dto.LoginDingReq:
     properties:
       client:
@@ -822,7 +844,7 @@ definitions:
     properties:
       day:
         description: 天
-        type: integer
+        type: string
       id:
         description: 主键
         type: integer
@@ -1804,7 +1826,7 @@ definitions:
         type: string
       day:
         description: 天
-        type: integer
+        type: string
       deptPath:
         description: 路径
         type: string
@@ -2345,7 +2367,7 @@ definitions:
     type: object
   tools.DbOption:
     properties:
-      lable:
+      label:
         type: string
       value:
         type: string
@@ -2587,26 +2609,15 @@ paths:
       tags:
       - 工具 / 生成工具
   /api/tools/db/tables/page:
-    get:
+    post:
       description: 数据库表分页列表 / database table page list
       parameters:
-      - description: dbname / 数据库
-        in: query
-        name: dbName
+      - description: body
+        in: body
+        name: data
         required: true
-        type: string
-      - description: tableName / 数据表名称
-        in: query
-        name: tableName
-        type: string
-      - description: pageSize / 页条数
-        in: query
-        name: pageSize
-        type: integer
-      - description: pageIndex / 页码
-        in: query
-        name: pageIndex
-        type: integer
+        schema:
+          $ref: '#/definitions/dto.DBReq'
       responses:
         "200":
           description: '{"code": 200, "data": [...]}'
@@ -2719,14 +2730,12 @@ paths:
       - application/json
       description: 添加表结构
       parameters:
-      - description: dbName / 数据库名称
-        in: query
-        name: dbName
-        type: string
-      - description: tableName / 数据表名称
-        in: query
-        name: tables
-        type: string
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ImpTablesReq'
       responses:
         "200":
           description: '{"code": -1, "message": "添加失败"}'
