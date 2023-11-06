@@ -1,9 +1,12 @@
 package service
 
 import (
+	"dilu/common"
 	"dilu/common/utils"
 	"dilu/modules/sys/models"
 	"dilu/modules/sys/service/dto"
+	"encoding/json"
+	"time"
 
 	"github.com/baowk/dilu-core/common/consts"
 	"github.com/baowk/dilu-core/core/base"
@@ -86,7 +89,19 @@ func (e *SysMemberService) GetTeamMember(teamId, uid int, teamMember *dto.TeamMe
 }
 
 func (e *SysMemberService) GetMember(teamId, userId int, member *models.SysMember) error {
-	return e.DB().Where("team_id = ?", teamId).Where("user_id = ?", userId).First(member).Error
+	cStr, err := e.Cache().Get(common.TeamMemberKey(teamId, userId))
+	if err == nil && cStr != "" {
+		err = json.Unmarshal([]byte(cStr), member)
+		if err == nil {
+			return nil
+		}
+	}
+	err = e.DB().Where("team_id = ?", teamId).Where("user_id = ?", userId).First(member).Error
+	if err != nil {
+		return err
+	}
+	e.Cache().Set(common.TeamMemberKey(teamId, userId), *member, time.Hour)
+	return nil
 }
 
 func (e *SysMemberService) GetMembersByUids(teamId int, uids []int, members *[]models.SysMember) error {

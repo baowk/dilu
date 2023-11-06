@@ -1,6 +1,8 @@
 package common
 
 import (
+	"fmt"
+
 	"github.com/baowk/dilu-core/core"
 )
 
@@ -30,4 +32,8 @@ func DelMpOpenId(scene string) error {
 		return err
 	}
 	return nil
+}
+
+func TeamMemberKey(teamId, userId int) string {
+	return fmt.Sprintf("t:m:%d:%d", teamId, userId)
 }
