@@ -1,0 +1,69 @@
+server:
+  mode: dev         # 应用程序运行模式（dev开发环境、test测试环境、prod线上环境）
+  host: 0.0.0.0     # 服务器IP地址，默认使用0.0.0.0
+  name: dilu-app      # 服务名称
+  port: 7888       # 服务端口号
+  #read-timeout    #读超时 单位秒 默认20
+  #write-timeout   #写超时 单位秒 默认20
+  fs-type: local    #文件服务
+logger:             # 日志配置
+  level: debug # 级别
+  prefix:    # 日志前缀
+  format:  # 输出格式 json
+  director: temp/log      # 日志文件夹
+  encode-level: LowercaseColorLevelEncoder # 编码级
+  stacktrace-key: # 栈名
+  #max-age: 7                         # 日志留存时间 默认7天
+  show-line: true # 显示行
+  log-in-console: true # 输出控制台
+jwt:                # JWT配置
+  sign-key: 56n1KywHIPEkWWIxffGpp8Dfl3z5SjE5WBeDStc1T64klnpoAqHrHN01vnete123   # Token密钥
+  expires: 10080    # Token过期时长（单位：分钟）
+  refresh: 14400    # Token 刷新时长（单位：分钟）
+cache:              # 缓存配置
+  type: memory
+  addr: redis:6379    # Redis服务器地址
+  #password: redis             # Redis密码
+  db: 5                       # Redis数据库索引
+dbcfg: # 数据库配置
+  driver: mysql  
+  dns: root:123456@tcp(mysql:3306)/dilu-db?charset=utf8&parseTime=True&loc=Local&timeout=1000ms  # 数据库连接字符串
+  log-mode: info #日志类型 GORM 定义了这些日志级别：silent、error、warn、info
+  #slow-threshold: 200 #慢日志
+  #max-idle-conns: 20 #最大空闲连接数 默认10
+  #max-open-conns: 60 #最大打开数
+# prefix: 日志前缀
+  dbs:      
+    - dental:    #子配置会继承父配置
+        dns: root:123456@tcp(mysql:3306)/dental-db?charset=utf8&parseTime=True&loc=Local&timeout=1000ms  # 数据库连接字符串
+#       disable: true
+#       driver: mysql          
+#       prefix: 日志前缀
+#       singular: false #全局复数
+#       max-idle-conns: 10 #最大空闲连接数 默认10
+#       max-open-conns: 30 #最大打开数
+#       max-lifetime: 60 #链接重置时间（分）
+cors:
+  enable: true
+  mode: allow-all
+  #whitelist:
+  #- allow-origin: example1.com
+  #  allow-methods: POST, GET
+  #  allow-headers: Content-Type,AccessToken,X-CSRF-Token, Authorization, Token,X-Token,X-User-Id
+  #  expose-headers: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers,
+  #    Content-Type
+  #  allow-credentials: true
+gen: true
+extend:             # 扩展项（此处没有提供具体说明）
+  ding: 
+    agent-id:
+    app-key:
+    app-secret:
+    crop-id:
+  wechat-mp:
+    app-id: 
+    app-secret: 
+    wx-token: 
+    encoding-aes-key: 
+    
+    
