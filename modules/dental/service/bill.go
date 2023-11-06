@@ -751,6 +751,8 @@ func (s *BillService) StQuery(teamId, userId int, deptPath string, begin, end ti
 
 	res := make([]dto.BillUserStDto, 0)
 	for _, v := range m {
+		v.CurDebt = v.Deal.Sub(v.Paid)
+		v.Total = v.Paid.Add(v.Debt).Sub(v.Refund)
 		res = append(res, v)
 	}
 	return res, nil

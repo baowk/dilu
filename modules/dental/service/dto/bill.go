@@ -120,7 +120,9 @@ type BillUserStDto struct {
 	Deal             decimal.Decimal `json:"deal"`             //成交金额
 	Paid             decimal.Decimal `json:"paid"`             //实收
 	Debt             decimal.Decimal `json:"debt"`             //补上月欠款
+	CurDebt          decimal.Decimal `json:"curDebt"`          //当前欠款
 	Refund           decimal.Decimal `json:"refund"`           //退款
+	Total            decimal.Decimal `json:"total"`            //总实收
 }
 
 type DentalStDto struct {
