@@ -24,6 +24,7 @@ import (
 	"dilu/modules/sys/models"
 	"dilu/modules/sys/service"
 	"dilu/modules/tools/models/tools"
+	"dilu/modules/tools/service/dto"
 )
 
 type Gen struct {
@@ -164,29 +165,19 @@ func (e *Gen) Preview(c *gin.Context) {
 // @Tags 工具 / 生成工具
 // @Accept  application/json
 // @Product application/json
-// @Param tableId path int true "tableId"
-// @Param force path string false "force"
+// @Param data body dto.GenCodeReq true "body"
 // @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
-// @Router /api/tools/gen/code/{tableId}/{force} [get]
+// @Router /api/tools/gen/code [post]
 func (e *Gen) GenCode(c *gin.Context) {
 	table := tools.GenTable{}
-	id, err := strconv.Atoi(c.Param("tableId"))
-	if err != nil {
+
+	var req dto.GenCodeReq
+	if err := c.ShouldBind(&req); err != nil {
 		e.Error(c, err)
 		return
 	}
 
-	force := false
-	strF := c.Param("force")
-	if strF != "" {
-		force, err = strconv.ParseBool(strF)
-		if err != nil {
-			force = false
-			err = nil
-		}
-	}
-
-	table.TableId = id
+	table.TableId = req.TableId
 
 	db, _, _ := GetDb(consts.DB_DEF)
 	tab, _ := table.Get(db, false)
@@ -195,9 +186,7 @@ func (e *Gen) GenCode(c *gin.Context) {
 	for i, v := range tab.Columns {
 		tab.Columns[i].TsType = TypeGo2Ts(v.GoType)
 	}
-
-	e.NOMethodsGen(c, tab, force)
-
+	e.NOMethodsGen(c, tab, req.Force)
 	e.Ok(c, "Code generated successfully！")
 }
 

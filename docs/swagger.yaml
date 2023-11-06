@@ -354,6 +354,13 @@ definitions:
         description: 手机号|邮箱
         type: string
     type: object
+  dto.GenCodeReq:
+    properties:
+      force:
+        type: boolean
+      tableId:
+        type: integer
+    type: object
   dto.GenColumnsDto:
     properties:
       columnComment:
@@ -2579,35 +2586,6 @@ info:
   title: Dilu API
   version: V0.0.1
 paths:
-  /api/tools/db/columns/page:
-    get:
-      description: 数据库表列分页列表 / database table column page list
-      parameters:
-      - description: dbname / 数据库
-        in: query
-        name: dbName
-        required: true
-        type: string
-      - description: tableName / 数据表名称
-        in: query
-        name: tableName
-        type: string
-      - description: pageSize / 页条数
-        in: query
-        name: pageSize
-        type: integer
-      - description: pageIndex / 页码
-        in: query
-        name: pageIndex
-        type: integer
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            $ref: '#/definitions/base.Resp'
-      summary: 分页列表数据 / page list data
-      tags:
-      - 工具 / 生成工具
   /api/tools/db/tables/page:
     post:
       description: 数据库表分页列表 / database table page list
@@ -2639,21 +2617,18 @@ paths:
       summary: 生成Api
       tags:
       - 工具 / 生成工具
-  /api/tools/gen/code/{tableId}/{force}:
-    get:
+  /api/tools/gen/code:
+    post:
       consumes:
       - application/json
       description: 生成代码
       parameters:
-      - description: tableId
-        in: path
-        name: tableId
+      - description: body
+        in: body
+        name: data
         required: true
-        type: integer
-      - description: force
-        in: path
-        name: force
-        type: string
+        schema:
+          $ref: '#/definitions/dto.GenCodeReq'
       responses:
         "200":
           description: '{"code": 200, "message": "添加成功"}'
@@ -2761,63 +2736,6 @@ paths:
           schema:
             type: string
       summary: 修改表结构
-      tags:
-      - 工具 / 生成工具
-  /api/tools/tables/info/{tableId}:
-    delete:
-      description: 删除表结构
-      parameters:
-      - description: tableId
-        in: path
-        name: tableId
-        required: true
-        type: integer
-      responses:
-        "200":
-          description: '{"code": -1, "message": "删除失败"}'
-          schema:
-            type: string
-      summary: 删除表结构
-      tags:
-      - 工具 / 生成工具
-    get:
-      description: 获取JSON
-      parameters:
-      - description: configKey
-        in: path
-        name: configKey
-        required: true
-        type: integer
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            $ref: '#/definitions/base.Resp'
-      summary: 获取配置
-      tags:
-      - 工具 / 生成工具
-  /api/tools/tables/page:
-    get:
-      description: 生成表分页列表
-      parameters:
-      - description: tableName / 数据表名称
-        in: query
-        name: tableName
-        type: string
-      - description: pageSize / 页条数
-        in: query
-        name: pageSize
-        type: integer
-      - description: pageIndex / 页码
-        in: query
-        name: pageIndex
-        type: integer
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            $ref: '#/definitions/base.Resp'
-      summary: 分页列表数据
       tags:
       - 工具 / 生成工具
   /api/v1/dental/bill/create:

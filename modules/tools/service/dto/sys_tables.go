@@ -24,3 +24,8 @@ type ImpTablesReq struct {
 	DbName string   `json:"dbName"`
 	Tables []string `json:"tables"`
 }
+
+type GenCodeReq struct {
+	TableId int  `json:"tableId"`
+	Force   bool `json:"force"`
+}

@@ -25,3 +25,11 @@ func (s *GenTablesService) Page(req *dto.GenTablesGetPageReq, list *[]models.Gen
 	}
 	return db.Find(list).Offset(-1).Limit(-1).Count(total).Error
 }
+
+func (s *GenTablesService) Del(req base.ReqIds) error {
+	err := s.DB().Where("table_id in ?", req.Ids).Delete(&models.GenColumns{}).Error
+	if err != nil {
+		return err
+	}
+	return s.DB().Delete(&models.GenTables{}, req.Ids).Error
+}

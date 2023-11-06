@@ -120,7 +120,6 @@ func (e *GenTablesApi) Update(c *gin.Context) {
 // @Tags sys-GenTables
 // @Accept application/json
 // @Product application/json
-// @Param teamId header int false "团队id"
 // @Param data body base.ReqIds true "body"
 // @Success 200 {object} base.Resp{data=models.GenTables} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/gen-tables/del [post]
@@ -131,7 +130,7 @@ func (e *GenTablesApi) Del(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	if err := service.SerGenTables.DelIds(&models.GenTables{}, req.Ids); err != nil {
+	if err := service.SerGenTables.Del(req); err != nil {
 		e.Error(c, err)
 		return
 	}

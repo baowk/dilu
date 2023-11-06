@@ -1,7 +1,6 @@
 package tools
 
 import (
-	"strconv"
 	"strings"
 
 	"github.com/baowk/dilu-core/common/consts"
@@ -19,56 +18,56 @@ type SysTable struct {
 	base.BaseApi
 }
 
-// GetPage 分页列表数据
-// @Summary 分页列表数据
-// @Description 生成表分页列表
-// @Tags 工具 / 生成工具
-// @Param tableName query string false "tableName / 数据表名称"
-// @Param pageSize query int false "pageSize / 页条数"
-// @Param pageIndex query int false "pageIndex / 页码"
-// @Success 200 {object} base.Resp "{"code": 200, "data": [...]}"
-// @Router /api/tools/tables/page [get]
-func (e *SysTable) GetPage(c *gin.Context) {
-	var data tools.GenTable
-	var err error
-	var pageSize = 10
-	var pageIndex = 1
+// // GetPage 分页列表数据
+// // @Summary 分页列表数据
+// // @Description 生成表分页列表
+// // @Tags 工具 / 生成工具
+// // @Param tableName query string false "tableName / 数据表名称"
+// // @Param pageSize query int false "pageSize / 页条数"
+// // @Param pageIndex query int false "pageIndex / 页码"
+// // @Success 200 {object} base.Resp "{"code": 200, "data": [...]}"
+// // @Router /api/tools/tables/page [get]
+// func (e *SysTable) GetPage(c *gin.Context) {
+// 	var data tools.GenTable
+// 	var err error
+// 	var pageSize = 10
+// 	var pageIndex = 1
 
-	data.TBName = c.Request.FormValue("tableName")
-	data.TableComment = c.Request.FormValue("tableComment")
-	db, _, _ := GetDb(consts.DB_DEF)
-	result, count, err := data.GetPage(db, pageSize, pageIndex)
-	if err != nil {
-		core.Log.Error("Gen", zap.Error(err))
-		e.Error(c, err)
-		return
-	}
-	e.Page(c, result, count, pageIndex, pageSize)
-}
+// 	data.TBName = c.Request.FormValue("tableName")
+// 	data.TableComment = c.Request.FormValue("tableComment")
+// 	db, _, _ := GetDb(consts.DB_DEF)
+// 	result, count, err := data.GetPage(db, pageSize, pageIndex)
+// 	if err != nil {
+// 		core.Log.Error("Gen", zap.Error(err))
+// 		e.Error(c, err)
+// 		return
+// 	}
+// 	e.Page(c, result, count, pageIndex, pageSize)
+// }
 
-// Get
-// @Summary 获取配置
-// @Description 获取JSON
-// @Tags 工具 / 生成工具
-// @Param configKey path int true "configKey"
-// @Success 200 {object} base.Resp "{"code": 200, "data": [...]}"
-// @Router /api/tools/tables/info/{tableId} [get]
-func (e SysTable) Get(c *gin.Context) {
-	var data tools.GenTable
-	data.TableId, _ = strconv.Atoi(c.Param("tableId"))
-	db, _, _ := GetDb(consts.DB_DEF)
-	result, err := data.Get(db, true)
-	if err != nil {
-		core.Log.Error("Gen", zap.Error(err))
-		e.Error(c, err)
-		return
-	}
+// // Get
+// // @Summary 获取配置
+// // @Description 获取JSON
+// // @Tags 工具 / 生成工具
+// // @Param configKey path int true "configKey"
+// // @Success 200 {object} base.Resp "{"code": 200, "data": [...]}"
+// // @Router /api/tools/tables/info/{tableId} [get]
+// func (e SysTable) Get(c *gin.Context) {
+// 	var data tools.GenTable
+// 	data.TableId, _ = strconv.Atoi(c.Param("tableId"))
+// 	db, _, _ := GetDb(consts.DB_DEF)
+// 	result, err := data.Get(db, true)
+// 	if err != nil {
+// 		core.Log.Error("Gen", zap.Error(err))
+// 		e.Error(c, err)
+// 		return
+// 	}
 
-	mp := make(map[string]interface{})
-	mp["list"] = result.Columns
-	mp["info"] = result
-	e.Ok(c, mp)
-}
+// 	mp := make(map[string]interface{})
+// 	mp["list"] = result.Columns
+// 	mp["info"] = result
+// 	e.Ok(c, mp)
+// }
 
 func (e SysTable) GetSysTablesInfo(c *gin.Context) {
 	var data tools.GenTable
@@ -293,24 +292,24 @@ func (e SysTable) Update(c *gin.Context) {
 	e.Ok(c, result)
 }
 
-// Delete
-// @Summary 删除表结构
-// @Description 删除表结构
-// @Tags 工具 / 生成工具
-// @Param tableId path int true "tableId"
-// @Success 200 {string} string	"{"code": 200, "message": "删除成功"}"
-// @Success 200 {string} string	"{"code": -1, "message": "删除失败"}"
-// @Router /api/tools/tables/info/{tableId} [delete]
-func (e SysTable) Delete(c *gin.Context) {
-	var req base.ReqIds
-	c.ShouldBind(&req)
-	var data tools.GenTable
-	db, _, _ := GetDb(consts.DB_DEF)
-	_, err := data.BatchDelete(db, req.Ids)
-	if err != nil {
-		core.Log.Error("Gen", zap.Error(err))
-		e.Error(c, err)
-		return
-	}
-	e.Ok(c)
-}
+// // Delete
+// // @Summary 删除表结构
+// // @Description 删除表结构
+// // @Tags 工具 / 生成工具
+// // @Param tableId path int true "tableId"
+// // @Success 200 {string} string	"{"code": 200, "message": "删除成功"}"
+// // @Success 200 {string} string	"{"code": -1, "message": "删除失败"}"
+// // @Router /api/tools/tables/info/{tableId} [delete]
+// func (e SysTable) Delete(c *gin.Context) {
+// 	var req base.ReqIds
+// 	c.ShouldBind(&req)
+// 	var data tools.GenTable
+// 	db, _, _ := GetDb(consts.DB_DEF)
+// 	_, err := data.BatchDelete(db, req.Ids)
+// 	if err != nil {
+// 		core.Log.Error("Gen", zap.Error(err))
+// 		e.Error(c, err)
+// 		return
+// 	}
+// 	e.Ok(c)
+// }

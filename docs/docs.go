@@ -20,50 +20,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/tools/db/columns/page": {
-            "get": {
-                "description": "数据库表列分页列表 / database table column page list",
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "分页列表数据 / page list data",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "dbname / 数据库",
-                        "name": "dbName",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "tableName / 数据表名称",
-                        "name": "tableName",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "pageSize / 页条数",
-                        "name": "pageSize",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "pageIndex / 页码",
-                        "name": "pageIndex",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "$ref": "#/definitions/base.Resp"
-                        }
-                    }
-                }
-            }
-        },
         "/api/tools/db/tables/page": {
             "post": {
                 "description": "数据库表分页列表 / database table page list",
@@ -112,8 +68,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/tools/gen/code/{tableId}/{force}": {
-            "get": {
+        "/api/tools/gen/code": {
+            "post": {
                 "description": "生成代码",
                 "consumes": [
                     "application/json"
@@ -124,17 +80,13 @@ const docTemplate = `{
                 "summary": "生成代码",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "tableId",
-                        "name": "tableId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "force",
-                        "name": "force",
-                        "in": "path"
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.GenCodeReq"
+                        }
                     }
                 ],
                 "responses": {
@@ -301,93 +253,6 @@ const docTemplate = `{
                         "description": "{\"code\": -1, \"message\": \"添加失败\"}",
                         "schema": {
                             "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/tools/tables/info/{tableId}": {
-            "get": {
-                "description": "获取JSON",
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "获取配置",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "configKey",
-                        "name": "configKey",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "$ref": "#/definitions/base.Resp"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "删除表结构",
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "删除表结构",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "tableId",
-                        "name": "tableId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": -1, \"message\": \"删除失败\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/tools/tables/page": {
-            "get": {
-                "description": "生成表分页列表",
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "分页列表数据",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "tableName / 数据表名称",
-                        "name": "tableName",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "pageSize / 页条数",
-                        "name": "pageSize",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "pageIndex / 页码",
-                        "name": "pageIndex",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "$ref": "#/definitions/base.Resp"
                         }
                     }
                 }
@@ -6614,6 +6479,17 @@ const docTemplate = `{
                 "username": {
                     "description": "手机号|邮箱",
                     "type": "string"
+                }
+            }
+        },
+        "dto.GenCodeReq": {
+            "type": "object",
+            "properties": {
+                "force": {
+                    "type": "boolean"
+                },
+                "tableId": {
+                    "type": "integer"
                 }
             }
         },
