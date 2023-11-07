@@ -3,8 +3,8 @@ package apis
 import (
 	dm "dilu/modules/dental/models"
 	"dilu/modules/sys/models"
+	tm "dilu/modules/tools/models"
 
-	"dilu/modules/tools/models/tools"
 	"fmt"
 	"text/template"
 
@@ -44,10 +44,12 @@ func (Init) DoInit(c *gin.Context) {
 		&models.SysRole{},
 		&models.SysUser{},
 		&models.ThirdLogin{},
-		&tools.GenColumn{},
-		&tools.GenTable{},
 		&models.SysMember{},
 		&models.SysTeam{},
+		&tm.GenTables{},
+		&tm.GenColumns{},
+		// &tools.GenColumn{},
+		// &tools.GenTable{},
 	); err != nil {
 		result = "sys执行失败"
 	}

@@ -41,3 +41,8 @@ type GenTablesDto struct {
 	LogicalDelete       int    `json:"logicalDelete"`       //
 	LogicalDeleteColumn string `json:"logicalDeleteColumn"` //
 }
+
+type DbOption struct {
+	Lable string `json:"label"`
+	Value string `json:"value"`
+}

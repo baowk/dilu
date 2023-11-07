@@ -16,11 +16,12 @@ type SysCfgApi struct {
 
 var ApiSysCfg = SysCfgApi{}
 
-// QueryPage 获取系统配置项列表
-// @Summary Page接口
+// QueryPage 获取配置列表
+// @Summary 获取配置列表
 // @Tags sys-SysCfg
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.SysCfgGetPageReq true "body"
 // @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.SysCfg}} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-cfg/page [post]
@@ -46,11 +47,12 @@ func (e *SysCfgApi) QueryPage(c *gin.Context) {
 	e.Page(c, list, total, req.GetPage(), req.GetSize())
 }
 
-// Get 获取系统配置项
-// @Summary 获取系统配置项
+// Get 获取配置
+// @Summary 获取配置
 // @Tags sys-SysCfg
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqId true "body"
 // @Success 200 {object} base.Resp{data=models.SysCfg} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-cfg/get [post]
@@ -69,11 +71,12 @@ func (e *SysCfgApi) Get(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Create 创建系统配置项
-// @Summary 创建系统配置项
+// Create 创建配置
+// @Summary 创建配置
 // @Tags sys-SysCfg
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.SysCfgDto true "body"
 // @Success 200 {object} base.Resp{data=models.SysCfg} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-cfg/create [post]
@@ -93,11 +96,12 @@ func (e *SysCfgApi) Create(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Update 更新系统配置项
-// @Summary 更新系统配置项
+// Update 更新配置
+// @Summary 更新配置
 // @Tags sys-SysCfg
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body dto.SysCfgDto true "body"
 // @Success 200 {object} base.Resp{data=models.SysCfg} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-cfg/update [post]
@@ -110,18 +114,19 @@ func (e *SysCfgApi) Update(c *gin.Context) {
 	}
 	var data models.SysCfg
 	copier.Copy(&data, req)
-	if err := service.SerSysCfg.Save(&data); err != nil {
+	if err := service.SerSysCfg.UpdateById(&data); err != nil {
 		e.Error(c, err)
 		return
 	}
 	e.Ok(c, data)
 }
 
-// Del 删除系统配置项
-// @Summary 删除系统配置项
+// Del 删除配置
+// @Summary 删除配置
 // @Tags sys-SysCfg
 // @Accept application/json
 // @Product application/json
+// @Param teamId header int false "团队id"
 // @Param data body base.ReqIds true "body"
 // @Success 200 {object} base.Resp{data=models.SysCfg} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-cfg/del [post]

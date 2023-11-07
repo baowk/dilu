@@ -278,6 +278,13 @@ definitions:
       tableName:
         type: string
     type: object
+  dto.DbOption:
+    properties:
+      label:
+        type: string
+      value:
+        type: string
+    type: object
   dto.DingCfgResp:
     properties:
       appid:
@@ -360,148 +367,6 @@ definitions:
         type: boolean
       tableId:
         type: integer
-    type: object
-  dto.GenColumnsDto:
-    properties:
-      columnComment:
-        type: string
-      columnId:
-        description: 主键
-        type: integer
-      columnName:
-        type: string
-      columnType:
-        type: string
-      dictType:
-        type: string
-      edit:
-        type: integer
-      fkLabelId:
-        type: string
-      fkLabelName:
-        type: string
-      fkTableName:
-        type: string
-      fkTableNameClass:
-        type: string
-      fkTableNamePackage:
-        type: string
-      goField:
-        type: string
-      goType:
-        type: string
-      htmlType:
-        type: string
-      increment:
-        type: integer
-      insert:
-        type: integer
-      isEdit:
-        type: string
-      isIncrement:
-        type: string
-      isInsert:
-        type: string
-      isList:
-        type: string
-      isPk:
-        type: string
-      isQuery:
-        type: string
-      isRequired:
-        type: string
-      jsonField:
-        type: string
-      list:
-        type: string
-      pk:
-        type: integer
-      query:
-        type: integer
-      queryType:
-        type: string
-      remark:
-        type: string
-      required:
-        type: integer
-      sort:
-        type: integer
-      superColumn:
-        type: integer
-      tableId:
-        type: integer
-      usableColumn:
-        type: integer
-    type: object
-  dto.GenColumnsGetPageReq:
-    properties:
-      page:
-        description: 页码
-        type: integer
-      pageSize:
-        description: 每页大小
-        type: integer
-    type: object
-  dto.GenTablesDto:
-    properties:
-      businessName:
-        type: string
-      className:
-        type: string
-      crud:
-        type: integer
-      dbName:
-        type: string
-      functionAuthor:
-        type: string
-      functionName:
-        type: string
-      isActions:
-        type: integer
-      isAuth:
-        type: integer
-      isDataScope:
-        type: integer
-      isLogicalDelete:
-        type: string
-      logicalDelete:
-        type: integer
-      logicalDeleteColumn:
-        type: string
-      moduleFrontName:
-        description: 前端文件名
-        type: string
-      moduleName:
-        type: string
-      options:
-        type: string
-      packageName:
-        type: string
-      pkColumn:
-        type: string
-      pkGoField:
-        type: string
-      pkJsonField:
-        type: string
-      remark:
-        type: string
-      tableComment:
-        type: string
-      tableId:
-        description: 主键
-        type: integer
-      tableName:
-        type: string
-      tplCategory:
-        type: string
-      tree:
-        type: integer
-      treeCode:
-        type: string
-      treeName:
-        type: string
-      treeParentCode:
-        type: string
     type: object
   dto.GenTablesGetPageReq:
     properties:
@@ -1707,7 +1572,7 @@ definitions:
       increment:
         type: integer
       insert:
-        type: integer
+        type: boolean
       isEdit:
         type: string
       isIncrement:
@@ -1727,7 +1592,7 @@ definitions:
       list:
         type: string
       pk:
-        type: integer
+        type: boolean
       query:
         type: integer
       queryType:
@@ -1735,13 +1600,15 @@ definitions:
       remark:
         type: string
       required:
-        type: integer
+        type: boolean
       sort:
         type: integer
       superColumn:
         type: integer
       tableId:
         type: integer
+      tsType:
+        type: string
       updateBy:
         type: integer
       updatedAt:
@@ -1752,10 +1619,16 @@ definitions:
     type: object
   models.GenTables:
     properties:
+      apiRoot:
+        type: string
       businessName:
         type: string
       className:
         type: string
+      columns:
+        items:
+          $ref: '#/definitions/models.GenColumns'
+        type: array
       createBy:
         description: 创建者
         type: integer
@@ -1763,7 +1636,7 @@ definitions:
         description: 创建时间
         type: string
       crud:
-        type: integer
+        type: boolean
       dbName:
         type: string
       functionAuthor:
@@ -1779,7 +1652,7 @@ definitions:
       isLogicalDelete:
         type: string
       logicalDelete:
-        type: integer
+        type: boolean
       logicalDeleteColumn:
         type: string
       moduleFrontName:
@@ -2372,200 +2245,6 @@ definitions:
         description: 用户id
         type: integer
     type: object
-  tools.DbOption:
-    properties:
-      label:
-        type: string
-      value:
-        type: string
-    type: object
-  tools.GenColumn:
-    properties:
-      columnComment:
-        type: string
-      columnId:
-        type: integer
-      columnName:
-        type: string
-      columnType:
-        type: string
-      createBy:
-        type: integer
-      createdAt:
-        description: 创建时间
-        type: string
-      dictType:
-        type: string
-      edit:
-        type: boolean
-      fkCol:
-        items:
-          $ref: '#/definitions/tools.GenColumn'
-        type: array
-      fkLabelId:
-        type: string
-      fkLabelName:
-        type: string
-      fkTableName:
-        type: string
-      fkTableNameClass:
-        type: string
-      fkTableNamePackage:
-        type: string
-      goField:
-        type: string
-      goType:
-        type: string
-      htmlType:
-        type: string
-      increment:
-        type: boolean
-      insert:
-        type: boolean
-      isEdit:
-        type: string
-      isIncrement:
-        type: string
-      isInsert:
-        type: string
-      isList:
-        type: string
-      isPk:
-        type: string
-      isQuery:
-        type: string
-      isRequired:
-        type: string
-      jsonField:
-        type: string
-      list:
-        type: string
-      pk:
-        type: boolean
-      query:
-        type: boolean
-      queryType:
-        type: string
-      remark:
-        type: string
-      required:
-        type: boolean
-      sort:
-        type: integer
-      superColumn:
-        type: boolean
-      tableId:
-        type: integer
-      tsType:
-        type: string
-      updateBy:
-        type: integer
-      updatedAt:
-        description: 更新时间
-        type: string
-      usableColumn:
-        type: boolean
-    type: object
-  tools.GenTable:
-    properties:
-      apiRoot:
-        type: string
-      businessName:
-        type: string
-      className:
-        description: 类名
-        type: string
-      columns:
-        items:
-          $ref: '#/definitions/tools.GenColumn'
-        type: array
-      createBy:
-        description: 创建者id
-        type: integer
-      createdAt:
-        description: 创建时间
-        type: string
-      crud:
-        type: boolean
-      dataScope:
-        type: string
-      dbName:
-        description: 库名
-        type: string
-      functionAuthor:
-        description: 功能作者
-        type: string
-      functionName:
-        description: 功能名称
-        type: string
-      isActions:
-        type: integer
-      isAuth:
-        type: integer
-      isDataScope:
-        type: integer
-      isLogicalDelete:
-        type: string
-      logicalDelete:
-        type: boolean
-      logicalDeleteColumn:
-        type: string
-      moduleFrontName:
-        description: 前端文件名
-        type: string
-      moduleName:
-        description: go文件名
-        type: string
-      options:
-        type: string
-      packageName:
-        description: 包名
-        type: string
-      params:
-        $ref: '#/definitions/tools.Params'
-      pkColumn:
-        type: string
-      pkGoField:
-        type: string
-      pkJsonField:
-        type: string
-      remark:
-        type: string
-      tableComment:
-        description: 表备注
-        type: string
-      tableId:
-        description: 表编码
-        type: integer
-      tableName:
-        description: 表名称
-        type: string
-      tplCategory:
-        type: string
-      tree:
-        type: boolean
-      treeCode:
-        type: string
-      treeName:
-        type: string
-      treeParentCode:
-        type: string
-      updateBy:
-        description: 更新者id
-        type: integer
-      updatedAt:
-        description: 更新时间
-        type: string
-    type: object
-  tools.Params:
-    properties:
-      treeCode:
-        type: string
-      treeName:
-        type: string
-      treeParentCode:
-        type: string
-    type: object
   wechat.QrCodeResp:
     properties:
       expire_seconds:
@@ -2602,140 +2281,6 @@ paths:
           schema:
             $ref: '#/definitions/base.Resp'
       summary: 分页列表数据 / page list data
-      tags:
-      - 工具 / 生成工具
-  /api/tools/gen/api:
-    get:
-      consumes:
-      - application/json
-      description: 生成Api
-      responses:
-        "200":
-          description: '{"code": -1, "message": "添加失败"}'
-          schema:
-            type: string
-      summary: 生成Api
-      tags:
-      - 工具 / 生成工具
-  /api/tools/gen/code:
-    post:
-      consumes:
-      - application/json
-      description: 生成代码
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.GenCodeReq'
-      responses:
-        "200":
-          description: '{"code": 200, "message": "添加成功"}'
-          schema:
-            type: string
-      summary: 生成代码
-      tags:
-      - 工具 / 生成工具
-  /api/tools/gen/dbs:
-    post:
-      consumes:
-      - application/json
-      description: 获取配置的数据库
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/tools.DbOption'
-                  type: array
-              type: object
-      summary: 获取配置的数据库
-      tags:
-      - 工具 / 生成工具
-  /api/tools/gen/menu/{tableId}/{menuPid}:
-    get:
-      consumes:
-      - application/json
-      description: 生成菜单
-      parameters:
-      - description: tableId
-        in: path
-        name: tableId
-        required: true
-        type: integer
-      - description: menuPid
-        in: path
-        name: menuPid
-        type: integer
-      responses:
-        "200":
-          description: '{"code": -1, "message": "添加失败"}'
-          schema:
-            type: string
-      summary: 生成菜单
-      tags:
-      - 工具 / 生成工具
-  /api/tools/gen/preview/{tableId}:
-    get:
-      consumes:
-      - application/json
-      description: 生成预览
-      parameters:
-      - description: tableId
-        in: path
-        name: tableId
-        required: true
-        type: integer
-      responses:
-        "200":
-          description: '{"code": -1, "message": "添加失败"}'
-          schema:
-            type: string
-      summary: 生成预览
-      tags:
-      - 工具 / 生成工具
-  /api/tools/tables/info:
-    post:
-      consumes:
-      - application/json
-      description: 添加表结构
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.ImpTablesReq'
-      responses:
-        "200":
-          description: '{"code": -1, "message": "添加失败"}'
-          schema:
-            type: string
-      summary: 添加表结构
-      tags:
-      - 工具 / 生成工具
-    put:
-      consumes:
-      - application/json
-      description: 修改表结构
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/tools.GenTable'
-      responses:
-        "200":
-          description: '{"code": -1, "message": "添加失败"}'
-          schema:
-            type: string
-      summary: 修改表结构
       tags:
       - 工具 / 生成工具
   /api/v1/dental/bill/create:
@@ -3778,320 +3323,6 @@ paths:
       summary: 忘记密码
       tags:
       - sys-sso
-  /api/v1/sys/gen-columns/create:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 团队id
-        in: header
-        name: teamId
-        type: integer
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.GenColumnsDto'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.GenColumns'
-              type: object
-      security:
-      - Bearer: []
-      summary: 创建GenColumns
-      tags:
-      - sys-GenColumns
-  /api/v1/sys/gen-columns/del:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 团队id
-        in: header
-        name: teamId
-        type: integer
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/base.ReqIds'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.GenColumns'
-              type: object
-      security:
-      - Bearer: []
-      summary: 删除GenColumns
-      tags:
-      - sys-GenColumns
-  /api/v1/sys/gen-columns/get:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 团队id
-        in: header
-        name: teamId
-        type: integer
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/base.ReqId'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.GenColumns'
-              type: object
-      security:
-      - Bearer: []
-      summary: 获取GenColumns
-      tags:
-      - sys-GenColumns
-  /api/v1/sys/gen-columns/page:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 团队id
-        in: header
-        name: teamId
-        type: integer
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.GenColumnsGetPageReq'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  allOf:
-                  - $ref: '#/definitions/base.PageResp'
-                  - properties:
-                      list:
-                        items:
-                          $ref: '#/definitions/models.GenColumns'
-                        type: array
-                    type: object
-              type: object
-      security:
-      - Bearer: []
-      summary: 获取GenColumns列表
-      tags:
-      - sys-GenColumns
-  /api/v1/sys/gen-columns/update:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 团队id
-        in: header
-        name: teamId
-        type: integer
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.GenColumnsDto'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.GenColumns'
-              type: object
-      security:
-      - Bearer: []
-      summary: 更新GenColumns
-      tags:
-      - sys-GenColumns
-  /api/v1/sys/gen-tables/create:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 团队id
-        in: header
-        name: teamId
-        type: integer
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.GenTablesDto'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.GenTables'
-              type: object
-      security:
-      - Bearer: []
-      summary: 创建GenTables
-      tags:
-      - sys-GenTables
-  /api/v1/sys/gen-tables/del:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 团队id
-        in: header
-        name: teamId
-        type: integer
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/base.ReqIds'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.GenTables'
-              type: object
-      security:
-      - Bearer: []
-      summary: 删除GenTables
-      tags:
-      - sys-GenTables
-  /api/v1/sys/gen-tables/get:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 团队id
-        in: header
-        name: teamId
-        type: integer
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/base.ReqId'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.GenTables'
-              type: object
-      security:
-      - Bearer: []
-      summary: 获取GenTables
-      tags:
-      - sys-GenTables
-  /api/v1/sys/gen-tables/page:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 团队id
-        in: header
-        name: teamId
-        type: integer
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.GenTablesGetPageReq'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  allOf:
-                  - $ref: '#/definitions/base.PageResp'
-                  - properties:
-                      list:
-                        items:
-                          $ref: '#/definitions/models.GenTables'
-                        type: array
-                    type: object
-              type: object
-      security:
-      - Bearer: []
-      summary: 获取GenTables列表
-      tags:
-      - sys-GenTables
-  /api/v1/sys/gen-tables/update:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 团队id
-        in: header
-        name: teamId
-        type: integer
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.GenTablesDto'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.GenTables'
-              type: object
-      security:
-      - Bearer: []
-      summary: 更新GenTables
-      tags:
-      - sys-GenTables
   /api/v1/sys/getDingCfg:
     post:
       description: 获取钉钉登录配置信息
@@ -5956,6 +5187,159 @@ paths:
       summary: 验证码校验
       tags:
       - sys-sso
+  /api/v1/tools/gen/add:
+    post:
+      consumes:
+      - application/json
+      description: 添加表结构
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ImpTablesReq'
+      responses:
+        "200":
+          description: '{"code": -1, "message": "添加失败"}'
+          schema:
+            type: string
+      summary: 添加表结构
+      tags:
+      - 工具 / 生成工具
+  /api/v1/tools/gen/code:
+    post:
+      consumes:
+      - application/json
+      description: 生成代码
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.GenCodeReq'
+      responses:
+        "200":
+          description: '{"code": 200, "message": "添加成功"}'
+          schema:
+            type: string
+      summary: 生成代码
+      tags:
+      - 工具 / 生成工具
+  /api/v1/tools/gen/db/tables:
+    post:
+      description: 数据库表分页列表 / database table page list
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.DBReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            $ref: '#/definitions/base.Resp'
+      summary: 分页列表数据 / page list data
+      tags:
+      - 工具 / 生成工具
+  /api/v1/tools/gen/dbs:
+    post:
+      consumes:
+      - application/json
+      description: 获取配置的数据库
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.DbOption'
+                  type: array
+              type: object
+      summary: 获取配置的数据库
+      tags:
+      - 工具 / 生成工具
+  /api/v1/tools/gen/del:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqIds'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.GenTables'
+              type: object
+      summary: 删除GenTables
+      tags:
+      - 工具 / 生成工具
+  /api/v1/tools/gen/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.GenTablesGetPageReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/base.PageResp'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/models.GenTables'
+                        type: array
+                    type: object
+              type: object
+      summary: 获取GenTables列表
+      tags:
+      - 工具 / 生成工具
+  /api/v1/tools/gen/update:
+    post:
+      consumes:
+      - application/json
+      description: 修改表结构
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.GenTables'
+      responses:
+        "200":
+          description: '{"code": -1, "message": "添加失败"}'
+          schema:
+            type: string
+      summary: 修改表结构
+      tags:
+      - 工具 / 生成工具
 securityDefinitions:
   Bearer:
     in: header

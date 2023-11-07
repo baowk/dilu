@@ -48,216 +48,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/tools/gen/api": {
-            "get": {
-                "description": "生成Api",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "生成Api",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/tools/gen/code": {
-            "post": {
-                "description": "生成代码",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "生成代码",
-                "parameters": [
-                    {
-                        "description": "body",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.GenCodeReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"message\": \"添加成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/tools/gen/dbs": {
-            "post": {
-                "description": "获取配置的数据库",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "获取配置的数据库",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/tools.DbOption"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/api/tools/gen/menu/{tableId}/{menuPid}": {
-            "get": {
-                "description": "生成菜单",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "生成菜单",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "tableId",
-                        "name": "tableId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "menuPid",
-                        "name": "menuPid",
-                        "in": "path"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/tools/gen/preview/{tableId}": {
-            "get": {
-                "description": "生成预览",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "生成预览",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "tableId",
-                        "name": "tableId",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/tools/tables/info": {
-            "put": {
-                "description": "修改表结构",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "修改表结构",
-                "parameters": [
-                    {
-                        "description": "body",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/tools.GenTable"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "添加表结构",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "添加表结构",
-                "parameters": [
-                    {
-                        "description": "body",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.ImpTablesReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/dental/bill/create": {
             "post": {
                 "security": [
@@ -2090,566 +1880,6 @@ const docTemplate = `{
                         "description": "{\"code\": 200, \"data\": [...]}",
                         "schema": {
                             "$ref": "#/definitions/base.Resp"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/sys/gen-columns/create": {
-            "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "sys-GenColumns"
-                ],
-                "summary": "创建GenColumns",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "团队id",
-                        "name": "teamId",
-                        "in": "header"
-                    },
-                    {
-                        "description": "body",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.GenColumnsDto"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/models.GenColumns"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/sys/gen-columns/del": {
-            "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "sys-GenColumns"
-                ],
-                "summary": "删除GenColumns",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "团队id",
-                        "name": "teamId",
-                        "in": "header"
-                    },
-                    {
-                        "description": "body",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/base.ReqIds"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/models.GenColumns"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/sys/gen-columns/get": {
-            "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "sys-GenColumns"
-                ],
-                "summary": "获取GenColumns",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "团队id",
-                        "name": "teamId",
-                        "in": "header"
-                    },
-                    {
-                        "description": "body",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/base.ReqId"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/models.GenColumns"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/sys/gen-columns/page": {
-            "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "sys-GenColumns"
-                ],
-                "summary": "获取GenColumns列表",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "团队id",
-                        "name": "teamId",
-                        "in": "header"
-                    },
-                    {
-                        "description": "body",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.GenColumnsGetPageReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/base.PageResp"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "list": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/models.GenColumns"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/sys/gen-columns/update": {
-            "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "sys-GenColumns"
-                ],
-                "summary": "更新GenColumns",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "团队id",
-                        "name": "teamId",
-                        "in": "header"
-                    },
-                    {
-                        "description": "body",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.GenColumnsDto"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/models.GenColumns"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/sys/gen-tables/create": {
-            "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "sys-GenTables"
-                ],
-                "summary": "创建GenTables",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "团队id",
-                        "name": "teamId",
-                        "in": "header"
-                    },
-                    {
-                        "description": "body",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.GenTablesDto"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/models.GenTables"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/sys/gen-tables/del": {
-            "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "sys-GenTables"
-                ],
-                "summary": "删除GenTables",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "团队id",
-                        "name": "teamId",
-                        "in": "header"
-                    },
-                    {
-                        "description": "body",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/base.ReqIds"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/models.GenTables"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/sys/gen-tables/get": {
-            "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "sys-GenTables"
-                ],
-                "summary": "获取GenTables",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "团队id",
-                        "name": "teamId",
-                        "in": "header"
-                    },
-                    {
-                        "description": "body",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/base.ReqId"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/models.GenTables"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/sys/gen-tables/page": {
-            "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "sys-GenTables"
-                ],
-                "summary": "获取GenTables列表",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "团队id",
-                        "name": "teamId",
-                        "in": "header"
-                    },
-                    {
-                        "description": "body",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.GenTablesGetPageReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/base.PageResp"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "list": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/models.GenTables"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/sys/gen-tables/update": {
-            "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "sys-GenTables"
-                ],
-                "summary": "更新GenTables",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "团队id",
-                        "name": "teamId",
-                        "in": "header"
-                    },
-                    {
-                        "description": "body",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.GenTablesDto"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/models.GenTables"
-                                        }
-                                    }
-                                }
-                            ]
                         }
                     }
                 }
@@ -5984,6 +5214,261 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/v1/tools/gen/add": {
+            "post": {
+                "description": "添加表结构",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "添加表结构",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ImpTablesReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/tools/gen/code": {
+            "post": {
+                "description": "生成代码",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "生成代码",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.GenCodeReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"message\": \"添加成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/tools/gen/db/tables": {
+            "post": {
+                "description": "数据库表分页列表 / database table page list",
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "分页列表数据 / page list data",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.DBReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "$ref": "#/definitions/base.Resp"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/tools/gen/dbs": {
+            "post": {
+                "description": "获取配置的数据库",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "获取配置的数据库",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dto.DbOption"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/tools/gen/del": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "删除GenTables",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqIds"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.GenTables"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/tools/gen/page": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "获取GenTables列表",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.GenTablesGetPageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/base.PageResp"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/models.GenTables"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/tools/gen/update": {
+            "post": {
+                "description": "修改表结构",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "修改表结构",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.GenTables"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -6375,6 +5860,17 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.DbOption": {
+            "type": "object",
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.DingCfgResp": {
             "type": "object",
             "properties": {
@@ -6490,218 +5986,6 @@ const docTemplate = `{
                 },
                 "tableId": {
                     "type": "integer"
-                }
-            }
-        },
-        "dto.GenColumnsDto": {
-            "type": "object",
-            "properties": {
-                "columnComment": {
-                    "type": "string"
-                },
-                "columnId": {
-                    "description": "主键",
-                    "type": "integer"
-                },
-                "columnName": {
-                    "type": "string"
-                },
-                "columnType": {
-                    "type": "string"
-                },
-                "dictType": {
-                    "type": "string"
-                },
-                "edit": {
-                    "type": "integer"
-                },
-                "fkLabelId": {
-                    "type": "string"
-                },
-                "fkLabelName": {
-                    "type": "string"
-                },
-                "fkTableName": {
-                    "type": "string"
-                },
-                "fkTableNameClass": {
-                    "type": "string"
-                },
-                "fkTableNamePackage": {
-                    "type": "string"
-                },
-                "goField": {
-                    "type": "string"
-                },
-                "goType": {
-                    "type": "string"
-                },
-                "htmlType": {
-                    "type": "string"
-                },
-                "increment": {
-                    "type": "integer"
-                },
-                "insert": {
-                    "type": "integer"
-                },
-                "isEdit": {
-                    "type": "string"
-                },
-                "isIncrement": {
-                    "type": "string"
-                },
-                "isInsert": {
-                    "type": "string"
-                },
-                "isList": {
-                    "type": "string"
-                },
-                "isPk": {
-                    "type": "string"
-                },
-                "isQuery": {
-                    "type": "string"
-                },
-                "isRequired": {
-                    "type": "string"
-                },
-                "jsonField": {
-                    "type": "string"
-                },
-                "list": {
-                    "type": "string"
-                },
-                "pk": {
-                    "type": "integer"
-                },
-                "query": {
-                    "type": "integer"
-                },
-                "queryType": {
-                    "type": "string"
-                },
-                "remark": {
-                    "type": "string"
-                },
-                "required": {
-                    "type": "integer"
-                },
-                "sort": {
-                    "type": "integer"
-                },
-                "superColumn": {
-                    "type": "integer"
-                },
-                "tableId": {
-                    "type": "integer"
-                },
-                "usableColumn": {
-                    "type": "integer"
-                }
-            }
-        },
-        "dto.GenColumnsGetPageReq": {
-            "type": "object",
-            "properties": {
-                "page": {
-                    "description": "页码",
-                    "type": "integer"
-                },
-                "pageSize": {
-                    "description": "每页大小",
-                    "type": "integer"
-                }
-            }
-        },
-        "dto.GenTablesDto": {
-            "type": "object",
-            "properties": {
-                "businessName": {
-                    "type": "string"
-                },
-                "className": {
-                    "type": "string"
-                },
-                "crud": {
-                    "type": "integer"
-                },
-                "dbName": {
-                    "type": "string"
-                },
-                "functionAuthor": {
-                    "type": "string"
-                },
-                "functionName": {
-                    "type": "string"
-                },
-                "isActions": {
-                    "type": "integer"
-                },
-                "isAuth": {
-                    "type": "integer"
-                },
-                "isDataScope": {
-                    "type": "integer"
-                },
-                "isLogicalDelete": {
-                    "type": "string"
-                },
-                "logicalDelete": {
-                    "type": "integer"
-                },
-                "logicalDeleteColumn": {
-                    "type": "string"
-                },
-                "moduleFrontName": {
-                    "description": "前端文件名",
-                    "type": "string"
-                },
-                "moduleName": {
-                    "type": "string"
-                },
-                "options": {
-                    "type": "string"
-                },
-                "packageName": {
-                    "type": "string"
-                },
-                "pkColumn": {
-                    "type": "string"
-                },
-                "pkGoField": {
-                    "type": "string"
-                },
-                "pkJsonField": {
-                    "type": "string"
-                },
-                "remark": {
-                    "type": "string"
-                },
-                "tableComment": {
-                    "type": "string"
-                },
-                "tableId": {
-                    "description": "主键",
-                    "type": "integer"
-                },
-                "tableName": {
-                    "type": "string"
-                },
-                "tplCategory": {
-                    "type": "string"
-                },
-                "tree": {
-                    "type": "integer"
-                },
-                "treeCode": {
-                    "type": "string"
-                },
-                "treeName": {
-                    "type": "string"
-                },
-                "treeParentCode": {
-                    "type": "string"
                 }
             }
         },
@@ -8375,7 +7659,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "insert": {
-                    "type": "integer"
+                    "type": "boolean"
                 },
                 "isEdit": {
                     "type": "string"
@@ -8405,7 +7689,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "pk": {
-                    "type": "integer"
+                    "type": "boolean"
                 },
                 "query": {
                     "type": "integer"
@@ -8417,7 +7701,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "required": {
-                    "type": "integer"
+                    "type": "boolean"
                 },
                 "sort": {
                     "type": "integer"
@@ -8427,6 +7711,9 @@ const docTemplate = `{
                 },
                 "tableId": {
                     "type": "integer"
+                },
+                "tsType": {
+                    "type": "string"
                 },
                 "updateBy": {
                     "type": "integer"
@@ -8443,11 +7730,20 @@ const docTemplate = `{
         "models.GenTables": {
             "type": "object",
             "properties": {
+                "apiRoot": {
+                    "type": "string"
+                },
                 "businessName": {
                     "type": "string"
                 },
                 "className": {
                     "type": "string"
+                },
+                "columns": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.GenColumns"
+                    }
                 },
                 "createBy": {
                     "description": "创建者",
@@ -8458,7 +7754,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "crud": {
-                    "type": "integer"
+                    "type": "boolean"
                 },
                 "dbName": {
                     "type": "string"
@@ -8482,7 +7778,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "logicalDelete": {
-                    "type": "integer"
+                    "type": "boolean"
                 },
                 "logicalDeleteColumn": {
                     "type": "string"
@@ -9289,291 +8585,6 @@ const docTemplate = `{
                 "userId": {
                     "description": "用户id",
                     "type": "integer"
-                }
-            }
-        },
-        "tools.DbOption": {
-            "type": "object",
-            "properties": {
-                "label": {
-                    "type": "string"
-                },
-                "value": {
-                    "type": "string"
-                }
-            }
-        },
-        "tools.GenColumn": {
-            "type": "object",
-            "properties": {
-                "columnComment": {
-                    "type": "string"
-                },
-                "columnId": {
-                    "type": "integer"
-                },
-                "columnName": {
-                    "type": "string"
-                },
-                "columnType": {
-                    "type": "string"
-                },
-                "createBy": {
-                    "type": "integer"
-                },
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "dictType": {
-                    "type": "string"
-                },
-                "edit": {
-                    "type": "boolean"
-                },
-                "fkCol": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/tools.GenColumn"
-                    }
-                },
-                "fkLabelId": {
-                    "type": "string"
-                },
-                "fkLabelName": {
-                    "type": "string"
-                },
-                "fkTableName": {
-                    "type": "string"
-                },
-                "fkTableNameClass": {
-                    "type": "string"
-                },
-                "fkTableNamePackage": {
-                    "type": "string"
-                },
-                "goField": {
-                    "type": "string"
-                },
-                "goType": {
-                    "type": "string"
-                },
-                "htmlType": {
-                    "type": "string"
-                },
-                "increment": {
-                    "type": "boolean"
-                },
-                "insert": {
-                    "type": "boolean"
-                },
-                "isEdit": {
-                    "type": "string"
-                },
-                "isIncrement": {
-                    "type": "string"
-                },
-                "isInsert": {
-                    "type": "string"
-                },
-                "isList": {
-                    "type": "string"
-                },
-                "isPk": {
-                    "type": "string"
-                },
-                "isQuery": {
-                    "type": "string"
-                },
-                "isRequired": {
-                    "type": "string"
-                },
-                "jsonField": {
-                    "type": "string"
-                },
-                "list": {
-                    "type": "string"
-                },
-                "pk": {
-                    "type": "boolean"
-                },
-                "query": {
-                    "type": "boolean"
-                },
-                "queryType": {
-                    "type": "string"
-                },
-                "remark": {
-                    "type": "string"
-                },
-                "required": {
-                    "type": "boolean"
-                },
-                "sort": {
-                    "type": "integer"
-                },
-                "superColumn": {
-                    "type": "boolean"
-                },
-                "tableId": {
-                    "type": "integer"
-                },
-                "tsType": {
-                    "type": "string"
-                },
-                "updateBy": {
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                },
-                "usableColumn": {
-                    "type": "boolean"
-                }
-            }
-        },
-        "tools.GenTable": {
-            "type": "object",
-            "properties": {
-                "apiRoot": {
-                    "type": "string"
-                },
-                "businessName": {
-                    "type": "string"
-                },
-                "className": {
-                    "description": "类名",
-                    "type": "string"
-                },
-                "columns": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/tools.GenColumn"
-                    }
-                },
-                "createBy": {
-                    "description": "创建者id",
-                    "type": "integer"
-                },
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "crud": {
-                    "type": "boolean"
-                },
-                "dataScope": {
-                    "type": "string"
-                },
-                "dbName": {
-                    "description": "库名",
-                    "type": "string"
-                },
-                "functionAuthor": {
-                    "description": "功能作者",
-                    "type": "string"
-                },
-                "functionName": {
-                    "description": "功能名称",
-                    "type": "string"
-                },
-                "isActions": {
-                    "type": "integer"
-                },
-                "isAuth": {
-                    "type": "integer"
-                },
-                "isDataScope": {
-                    "type": "integer"
-                },
-                "isLogicalDelete": {
-                    "type": "string"
-                },
-                "logicalDelete": {
-                    "type": "boolean"
-                },
-                "logicalDeleteColumn": {
-                    "type": "string"
-                },
-                "moduleFrontName": {
-                    "description": "前端文件名",
-                    "type": "string"
-                },
-                "moduleName": {
-                    "description": "go文件名",
-                    "type": "string"
-                },
-                "options": {
-                    "type": "string"
-                },
-                "packageName": {
-                    "description": "包名",
-                    "type": "string"
-                },
-                "params": {
-                    "$ref": "#/definitions/tools.Params"
-                },
-                "pkColumn": {
-                    "type": "string"
-                },
-                "pkGoField": {
-                    "type": "string"
-                },
-                "pkJsonField": {
-                    "type": "string"
-                },
-                "remark": {
-                    "type": "string"
-                },
-                "tableComment": {
-                    "description": "表备注",
-                    "type": "string"
-                },
-                "tableId": {
-                    "description": "表编码",
-                    "type": "integer"
-                },
-                "tableName": {
-                    "description": "表名称",
-                    "type": "string"
-                },
-                "tplCategory": {
-                    "type": "string"
-                },
-                "tree": {
-                    "type": "boolean"
-                },
-                "treeCode": {
-                    "type": "string"
-                },
-                "treeName": {
-                    "type": "string"
-                },
-                "treeParentCode": {
-                    "type": "string"
-                },
-                "updateBy": {
-                    "description": "更新者id",
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                }
-            }
-        },
-        "tools.Params": {
-            "type": "object",
-            "properties": {
-                "treeCode": {
-                    "type": "string"
-                },
-                "treeName": {
-                    "type": "string"
-                },
-                "treeParentCode": {
-                    "type": "string"
                 }
             }
         },
