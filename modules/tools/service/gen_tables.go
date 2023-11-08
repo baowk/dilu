@@ -373,7 +373,7 @@ func (e *GenTablesService) NOMethodsGen(tab models.GenTables, force bool) error 
 	}
 
 	//前端部分
-	js := frontPath + "/api/" + tab.PackageName + "/" + tab.TBName + ".ts"
+	js := frontPath + "/api/" + tab.PackageName + "/" + tab.MLTBName + ".ts"
 	if files.CheckExist(js) || force {
 		t4, err := template.ParseFiles(basePath + "vue/api/api.ts.template")
 		if err != nil {

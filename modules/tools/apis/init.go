@@ -17,13 +17,13 @@ type Init struct {
 	base.BaseApi
 }
 
-func (Init) Init(c *gin.Context) {
-	t1, err := template.ParseFiles("modules/tools/apis/tmpls/index.html")
-	if err != nil {
-		panic(err)
-	}
-	t1.Execute(c.Writer, "")
-}
+// func (Init) Init(c *gin.Context) {
+// 	t1, err := template.ParseFiles("modules/tools/apis/tmpls/index.html")
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	t1.Execute(c.Writer, "")
+// }
 
 func (Init) DoInit(c *gin.Context) {
 	fmt.Println("开始运行初始化")

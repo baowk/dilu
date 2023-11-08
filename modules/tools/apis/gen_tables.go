@@ -197,17 +197,12 @@ func (e *GenTablesApi) GenMenuAndApi(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-
 	menuPid := req.MenuId
 	table.TableId = req.TableId
-
 	db, _, _ := service.GetDb(consts.DB_DEF)
-
 	tab, _ := service.SerGenTables.Get(db, true, req.TableId)
 	tab.MLTBName = strings.Replace(tab.TBName, "_", "-", -1)
-
 	tab.ApiRoot = cons.ApiRoot
-
 	if menuPid == 0 {
 		Mmenu := sModels.SysMenu{}
 		Mmenu.Title = tab.TableComment
@@ -237,7 +232,6 @@ func (e *GenTablesApi) GenMenuAndApi(c *gin.Context) {
 			SetStatus(3).SetTitle("分页获取" + tab.TableComment)
 		sService.SerSysApi.Create(mApi)
 	}
-
 	Cmenu := sModels.SysMenu{}
 	Cmenu.MenuName = tab.ClassName + "Manage"
 	Cmenu.Title = tab.TableComment + "管理"

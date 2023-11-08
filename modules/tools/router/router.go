@@ -28,7 +28,7 @@ func InitRouter() {
 		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	}
 	if core.Cfg.Gen.Enable {
-		r.GET("/init", apis.InitApi.Init)
+		//r.GET("/init", apis.InitApi.Init)
 		r.POST("/doInit", apis.InitApi.DoInit)
 	}
 	noCheckRoleRouter(r)
