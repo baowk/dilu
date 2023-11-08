@@ -368,6 +368,13 @@ definitions:
       tableId:
         type: integer
     type: object
+  dto.GenMenuReq:
+    properties:
+      menuId:
+        type: integer
+      tableId:
+        type: integer
+    type: object
   dto.GenTablesGetPageReq:
     properties:
       dbName:
@@ -2265,24 +2272,6 @@ info:
   title: Dilu API
   version: V0.0.1
 paths:
-  /api/tools/db/tables/page:
-    post:
-      description: 数据库表分页列表 / database table page list
-      parameters:
-      - description: body
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dto.DBReq'
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            $ref: '#/definitions/base.Resp'
-      summary: 分页列表数据 / page list data
-      tags:
-      - 工具 / 生成工具
   /api/v1/dental/bill/create:
     post:
       consumes:
@@ -3673,6 +3662,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -3691,7 +3684,7 @@ paths:
               type: object
       security:
       - Bearer: []
-      summary: 创建系统配置项
+      summary: 创建配置
       tags:
       - sys-SysCfg
   /api/v1/sys/sys-cfg/del:
@@ -3699,6 +3692,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -3717,7 +3714,7 @@ paths:
               type: object
       security:
       - Bearer: []
-      summary: 删除系统配置项
+      summary: 删除配置
       tags:
       - sys-SysCfg
   /api/v1/sys/sys-cfg/get:
@@ -3725,6 +3722,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -3743,7 +3744,7 @@ paths:
               type: object
       security:
       - Bearer: []
-      summary: 获取系统配置项
+      summary: 获取配置
       tags:
       - sys-SysCfg
   /api/v1/sys/sys-cfg/page:
@@ -3751,6 +3752,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -3776,7 +3781,7 @@ paths:
               type: object
       security:
       - Bearer: []
-      summary: Page接口
+      summary: 获取配置列表
       tags:
       - sys-SysCfg
   /api/v1/sys/sys-cfg/update:
@@ -3784,6 +3789,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
       - description: body
         in: body
         name: data
@@ -3802,7 +3811,7 @@ paths:
               type: object
       security:
       - Bearer: []
-      summary: 更新系统配置项
+      summary: 更新配置
       tags:
       - sys-SysCfg
   /api/v1/sys/sys-dept/all:
@@ -5287,6 +5296,26 @@ paths:
                   $ref: '#/definitions/models.GenTables'
               type: object
       summary: 删除GenTables
+      tags:
+      - 工具 / 生成工具
+  /api/v1/tools/gen/menu:
+    post:
+      consumes:
+      - application/json
+      description: 生成菜单
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.GenMenuReq'
+      responses:
+        "200":
+          description: '{"code": -1, "message": "添加失败"}'
+          schema:
+            type: string
+      summary: 生成菜单
       tags:
       - 工具 / 生成工具
   /api/v1/tools/gen/page:

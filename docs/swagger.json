@@ -11,34 +11,6 @@
         "version": "V0.0.1"
     },
     "paths": {
-        "/api/tools/db/tables/page": {
-            "post": {
-                "description": "数据库表分页列表 / database table page list",
-                "tags": [
-                    "工具 / 生成工具"
-                ],
-                "summary": "分页列表数据 / page list data",
-                "parameters": [
-                    {
-                        "description": "body",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/dto.DBReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "$ref": "#/definitions/base.Resp"
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/dental/bill/create": {
             "post": {
                 "security": [
@@ -2497,8 +2469,14 @@
                 "tags": [
                     "sys-SysCfg"
                 ],
-                "summary": "创建系统配置项",
+                "summary": "创建配置",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -2544,8 +2522,14 @@
                 "tags": [
                     "sys-SysCfg"
                 ],
-                "summary": "删除系统配置项",
+                "summary": "删除配置",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -2591,8 +2575,14 @@
                 "tags": [
                     "sys-SysCfg"
                 ],
-                "summary": "获取系统配置项",
+                "summary": "获取配置",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -2638,8 +2628,14 @@
                 "tags": [
                     "sys-SysCfg"
                 ],
-                "summary": "Page接口",
+                "summary": "获取配置列表",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -2700,8 +2696,14 @@
                 "tags": [
                     "sys-SysCfg"
                 ],
-                "summary": "更新系统配置项",
+                "summary": "更新配置",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
                     {
                         "description": "body",
                         "name": "data",
@@ -5373,6 +5375,37 @@
                 }
             }
         },
+        "/api/v1/tools/gen/menu": {
+            "post": {
+                "description": "生成菜单",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "工具 / 生成工具"
+                ],
+                "summary": "生成菜单",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.GenMenuReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": -1, \"message\": \"添加失败\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/tools/gen/page": {
             "post": {
                 "consumes": [
@@ -5974,6 +6007,17 @@
             "properties": {
                 "force": {
                     "type": "boolean"
+                },
+                "tableId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.GenMenuReq": {
+            "type": "object",
+            "properties": {
+                "menuId": {
+                    "type": "integer"
                 },
                 "tableId": {
                     "type": "integer"

@@ -29,3 +29,8 @@ type GenCodeReq struct {
 	TableId int  `json:"tableId"`
 	Force   bool `json:"force"`
 }
+
+type GenMenuReq struct {
+	TableId int `json:"tableId"`
+	MenuId  int `json:"menuId"`
+}
