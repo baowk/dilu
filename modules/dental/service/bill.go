@@ -925,7 +925,7 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	if tmDeal.IsZero() {
 		texts = append(texts, "本月任务达成率：0%%")
 	} else {
-		tp := fmt.Sprintf("%s%%", tPaid.Div(decimal.NewFromInt(int64(totalDeal))).Mul(decimal.NewFromInt(100)).StringFixedBank(0))
+		tp := fmt.Sprintf("%s%%", totalPaid.Div(decimal.NewFromInt(int64(totalDeal))).Mul(decimal.NewFromInt(100)).StringFixedBank(0))
 		texts = append(texts, fmt.Sprintf("本月任务达成率：%s", tp))
 	}
 
