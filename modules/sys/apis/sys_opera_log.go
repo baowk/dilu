@@ -39,7 +39,7 @@ func (e *SysOperaLogApi) QueryPage(c *gin.Context) {
 		req.SortOrder = "desc"
 	}
 
-	if err := service.SerSysOperaLog.Page(req, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
+	if err := service.SerSysOperaLog.QueryPage(req, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
 		e.Error(c, err)
 		return
 	}
