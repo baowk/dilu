@@ -4052,7 +4052,7 @@ const docTemplate = `{
                 "tags": [
                     "sys-SysOperaLog"
                 ],
-                "summary": "创建SysOperaLog",
+                "summary": "创建操作日志",
                 "parameters": [
                     {
                         "type": "integer",
@@ -4105,7 +4105,7 @@ const docTemplate = `{
                 "tags": [
                     "sys-SysOperaLog"
                 ],
-                "summary": "删除SysOperaLog",
+                "summary": "删除操作日志",
                 "parameters": [
                     {
                         "type": "integer",
@@ -4158,7 +4158,7 @@ const docTemplate = `{
                 "tags": [
                     "sys-SysOperaLog"
                 ],
-                "summary": "获取SysOperaLog",
+                "summary": "获取操作日志",
                 "parameters": [
                     {
                         "type": "integer",
@@ -4211,7 +4211,7 @@ const docTemplate = `{
                 "tags": [
                     "sys-SysOperaLog"
                 ],
-                "summary": "Page接口",
+                "summary": "获取操作日志列表",
                 "parameters": [
                     {
                         "type": "integer",
@@ -4279,7 +4279,7 @@ const docTemplate = `{
                 "tags": [
                     "sys-SysOperaLog"
                 ],
-                "summary": "更新SysOperaLog",
+                "summary": "更新操作日志",
                 "parameters": [
                     {
                         "type": "integer",

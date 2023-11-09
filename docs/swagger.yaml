@@ -4563,7 +4563,7 @@ paths:
               type: object
       security:
       - Bearer: []
-      summary: 创建SysOperaLog
+      summary: 创建操作日志
       tags:
       - sys-SysOperaLog
   /api/v1/sys/sys-opera-log/del:
@@ -4593,7 +4593,7 @@ paths:
               type: object
       security:
       - Bearer: []
-      summary: 删除SysOperaLog
+      summary: 删除操作日志
       tags:
       - sys-SysOperaLog
   /api/v1/sys/sys-opera-log/get:
@@ -4623,7 +4623,7 @@ paths:
               type: object
       security:
       - Bearer: []
-      summary: 获取SysOperaLog
+      summary: 获取操作日志
       tags:
       - sys-SysOperaLog
   /api/v1/sys/sys-opera-log/page:
@@ -4660,7 +4660,7 @@ paths:
               type: object
       security:
       - Bearer: []
-      summary: Page接口
+      summary: 获取操作日志列表
       tags:
       - sys-SysOperaLog
   /api/v1/sys/sys-opera-log/update:
@@ -4690,7 +4690,7 @@ paths:
               type: object
       security:
       - Bearer: []
-      summary: 更新SysOperaLog
+      summary: 更新操作日志
       tags:
       - sys-SysOperaLog
   /api/v1/sys/sys-role/create:

@@ -35,12 +35,11 @@ func (e *{{.ClassName}}Api) QueryPage(c *gin.Context) {
 	list := make([]models.{{.ClassName}}, 10)
 	var total int64
 
-	var model models.{{.ClassName}}
-	if err := copier.Copy(&model, req); err != nil {
-		e.Error(c, err)
-		return
+	if req.SortOrder == "" {
+		req.SortOrder = "desc"
 	}
-	if err := service.Ser{{.ClassName}}.Page(model, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
+
+	if err := service.Ser{{.ClassName}}.Page(req, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
 		e.Error(c, err)
 		return
 	}

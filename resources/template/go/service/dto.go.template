@@ -2,18 +2,29 @@ package dto
 
 import (
     "github.com/baowk/dilu-core/core/base"
+    "dilu/modules/{{.PackageName}}/models"
 )
 
 type {{.ClassName}}GetPageReq struct {
-	base.ReqPage `search:"-"`
+	base.ReqPage `query:"-"`
     {{- $tablename := .TBName -}}
     {{- range .Columns -}}
     {{$z := .IsQuery}}
-    {{- if ($z) }}
-    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" form:"{{.JsonField}}"` //{{.ColumnComment}}
+    {{- if ($z) -}}
+    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" query:"column:{{.ColumnName}}"` //{{.ColumnComment}}
     {{- end }}
+    {{- $x := .Pk -}}
+    {{ if ($x) }}
+    SortOrder  string `json:"-" query:"type:order;column:{{.ColumnName}}"`
+    {{ end -}}
     {{- end }}
+    
 }
+
+func ({{.ClassName}}GetPageReq) TableName() string {
+	return models.TB{{.ClassName}}
+}
+
 
 //{{.TableComment}}
 type {{.ClassName}}Dto struct {

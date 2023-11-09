@@ -17,8 +17,10 @@ type SysCfg struct {
 	UpdatedAt time.Time `json:"updatedAt" gorm:"type:datetime(3);comment:最后更新时间"`                //最后更新时间
 }
 
+const TBSysCfg = "sys_cfg"
+
 func (SysCfg) TableName() string {
-	return "sys_cfg"
+	return TBSysCfg
 }
 
 func NewSysCfg() *SysCfg {

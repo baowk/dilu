@@ -16,8 +16,8 @@ type SysOperaLogApi struct {
 
 var ApiSysOperaLog = SysOperaLogApi{}
 
-// QueryPage 获取SysOperaLog列表
-// @Summary Page接口
+// QueryPage 获取操作日志列表
+// @Summary 获取操作日志列表
 // @Tags sys-SysOperaLog
 // @Accept application/json
 // @Product application/json
@@ -35,20 +35,19 @@ func (e *SysOperaLogApi) QueryPage(c *gin.Context) {
 	list := make([]models.SysOperaLog, 10)
 	var total int64
 
-	var model models.SysOperaLog
-	if err := copier.Copy(&model, req); err != nil {
-		e.Error(c, err)
-		return
+	if req.SortOrder == "" {
+		req.SortOrder = "desc"
 	}
-	if err := service.SerSysOperaLog.Page(model, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
+
+	if err := service.SerSysOperaLog.Page(req, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
 		e.Error(c, err)
 		return
 	}
 	e.Page(c, list, total, req.GetPage(), req.GetSize())
 }
 
-// Get 获取SysOperaLog
-// @Summary 获取SysOperaLog
+// Get 获取操作日志
+// @Summary 获取操作日志
 // @Tags sys-SysOperaLog
 // @Accept application/json
 // @Product application/json
@@ -71,8 +70,8 @@ func (e *SysOperaLogApi) Get(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Create 创建SysOperaLog
-// @Summary 创建SysOperaLog
+// Create 创建操作日志
+// @Summary 创建操作日志
 // @Tags sys-SysOperaLog
 // @Accept application/json
 // @Product application/json
@@ -96,8 +95,8 @@ func (e *SysOperaLogApi) Create(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Update 更新SysOperaLog
-// @Summary 更新SysOperaLog
+// Update 更新操作日志
+// @Summary 更新操作日志
 // @Tags sys-SysOperaLog
 // @Accept application/json
 // @Product application/json
@@ -114,15 +113,15 @@ func (e *SysOperaLogApi) Update(c *gin.Context) {
 	}
 	var data models.SysOperaLog
 	copier.Copy(&data, req)
-	if err := service.SerSysOperaLog.Save(&data); err != nil {
+	if err := service.SerSysOperaLog.UpdateById(&data); err != nil {
 		e.Error(c, err)
 		return
 	}
 	e.Ok(c, data)
 }
 
-// Del 删除SysOperaLog
-// @Summary 删除SysOperaLog
+// Del 删除操作日志
+// @Summary 删除操作日志
 // @Tags sys-SysOperaLog
 // @Accept application/json
 // @Product application/json

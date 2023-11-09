@@ -1,17 +1,24 @@
 package dto
 
 import (
+	"dilu/modules/sys/models"
 	"time"
 
 	"github.com/baowk/dilu-core/core/base"
 )
 
 type SysOperaLogGetPageReq struct {
-	base.ReqPage `search:"-"`
-	Status       int `json:"status" form:"status"` //操作状态 1:成功 2:失败
+	base.ReqPage `query:"-"`
+	SortOrder    string `json:"-" query:"type:order;column:id"`
+	Status       int    `json:"status" query:"column:status"` //操作状态 1:成功 2:失败
+
 }
 
-// SysOperaLog
+func (SysOperaLogGetPageReq) TableName() string {
+	return models.TBSysOperaLog
+}
+
+// 操作日志
 type SysOperaLogDto struct {
 	Id            int       `json:"id"`            //主键
 	Title         string    `json:"title"`         //操作模块

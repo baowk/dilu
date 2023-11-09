@@ -31,8 +31,10 @@ type {{.ClassName}} struct {
     {{- end }}
 }
 
+const TB{{.ClassName}} = "{{.TBName}}"
+
 func ({{.ClassName}}) TableName() string {
-    return "{{.TBName}}"
+    return TB{{.ClassName}}
 }
 
 func New{{.ClassName}}() *{{.ClassName}}{

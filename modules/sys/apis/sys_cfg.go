@@ -32,15 +32,18 @@ func (e *SysCfgApi) QueryPage(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	list := make([]models.SysCfg, 10)
+	list := make([]models.SysCfg, req.GetSize())
 	var total int64
 
-	var model models.SysCfg
-	if err := copier.Copy(&model, req); err != nil {
-		e.Error(c, err)
-		return
+	// var model models.SysCfg
+	// if err := copier.Copy(&model, req); err != nil {
+	// 	e.Error(c, err)
+	// 	return
+	// }
+	if req.SortOrder == "" {
+		req.SortOrder = "desc"
 	}
-	if err := service.SerSysCfg.Page(model, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
+	if err := service.SerSysCfg.QueryPage(req, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
 		e.Error(c, err)
 		return
 	}

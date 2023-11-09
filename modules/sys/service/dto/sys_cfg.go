@@ -1,12 +1,27 @@
 package dto
 
 import (
+	"dilu/modules/sys/models"
+
 	"github.com/baowk/dilu-core/core/base"
 )
 
 type SysCfgGetPageReq struct {
-	base.ReqPage `search:"-"`
-	Status       int `json:"status" form:"status"` //Status
+	base.ReqPage `query:"-"`
+	SortOrder    string `json:"-" query:"type:order;column:id"`
+	SysCfgQuery
+}
+
+type SysCfgQuery struct {
+	Status int `json:"status" query:""` //Status
+}
+
+func (SysCfgGetPageReq) TableName() string {
+	return models.TBSysCfg
+}
+
+func (SysCfgQuery) TableName() string {
+	return models.TBSysCfg
 }
 
 // 配置
