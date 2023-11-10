@@ -38,6 +38,15 @@ func (s *BillService) Page(teamId int, req dto.BillGetPageReq, list *[]dto.BillD
 	if req.TradeType != 0 {
 		db.Where("trade_type = ?", req.TradeType)
 	}
+	if !req.Begin.IsZero() {
+		db.Where("trade_at > ?", req.Begin)
+	}
+	if !req.End.IsZero() {
+		db.Where("trade_at < ?", req.End)
+	}
+	if req.UserId > 0 {
+		db.Where("user_id = ?", req.UserId)
+	}
 	var ds []models.Bill
 	db.Find(&ds).Offset(-1).Limit(-1).Count(total)
 	var cids []int

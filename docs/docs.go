@@ -5698,6 +5698,14 @@ const docTemplate = `{
         "dto.BillGetPageReq": {
             "type": "object",
             "properties": {
+                "begin": {
+                    "description": "开始成交日期",
+                    "type": "string"
+                },
+                "end": {
+                    "description": "结束成交日期",
+                    "type": "string"
+                },
                 "page": {
                     "description": "页码",
                     "type": "integer"
@@ -5708,6 +5716,10 @@ const docTemplate = `{
                 },
                 "tradeType": {
                     "description": "交易类型 1 成交 2补尾款  3补上月欠款 10退款",
+                    "type": "integer"
+                },
+                "userId": {
+                    "description": "咨询师id",
                     "type": "integer"
                 }
             }

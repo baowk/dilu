@@ -9,7 +9,10 @@ import (
 
 type BillGetPageReq struct {
 	base.ReqPage `search:"-"`
-	TradeType    int `json:"tradeType" form:"tradeType"` //交易类型 1 成交 2补尾款  3补上月欠款 10退款
+	TradeType    int       `json:"tradeType" form:"tradeType"` //交易类型 1 成交 2补尾款  3补上月欠款 10退款
+	Begin        time.Time `json:"begin"`                      //开始成交日期
+	End          time.Time `json:"end"`                        //结束成交日期
+	UserId       int       `json:"userId"`                     //咨询师id
 }
 
 // Bill
