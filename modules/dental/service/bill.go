@@ -907,7 +907,7 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	if memberLen == 0 {
 		texts = append(texts, "团队人效：0%%")
 	} else {
-		texts = append(texts, fmt.Sprintf("团队人效：%s", tPaid.Div(decimal.NewFromInt(int64(memberLen))).StringFixedBank(0)))
+		texts = append(texts, fmt.Sprintf("团队人效：%s", totalPaid.Div(decimal.NewFromInt(int64(memberLen))).StringFixedBank(0)))
 	}
 	texts = append(texts, fmt.Sprintf("收回上月欠款：%s", tbDebt.StringFixedBank(0)))
 
