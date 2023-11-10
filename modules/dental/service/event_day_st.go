@@ -71,7 +71,7 @@ func (s *EventDayStService) Page(teamId, userId int, req dto.EventDayStGetPageRe
 		db.Where("day < ?", req.End)
 	}
 	if req.UserId > 0 {
-		db.Where("user_id = ?", userId)
+		db.Where("user_id = ?", req.UserId)
 	} else if req.DeptPath != "" {
 		db.Where("dept_path like ?", req.DeptPath+"%")
 	}
