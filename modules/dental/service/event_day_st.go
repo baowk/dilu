@@ -76,5 +76,5 @@ func (s *EventDayStService) Page(teamId, userId int, req dto.EventDayStGetPageRe
 		db.Where("dept_path like ?", req.DeptPath+"%")
 	}
 	return db.Offset(req.GetOffset()).Limit(req.GetSize()).Order("day desc").Find(list).
-		Offset(-1).Limit(-1).Error
+		Offset(-1).Limit(-1).Count(total).Error
 }
