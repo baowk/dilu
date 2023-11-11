@@ -95,6 +95,10 @@ func (e *GenTablesApi) QueryPage(c *gin.Context) {
 // @Success 200 {object} base.Resp{data=models.GenTables} "{"code": 200, "data": [...]}"
 // @Router /api/v1/tools/gen/del [post]
 func (e *GenTablesApi) Del(c *gin.Context) {
+	if !core.Cfg.Gen.Enable {
+		e.Error(c, errors.New("当前生成表已关闭"))
+		return
+	}
 	var req base.ReqIds
 	if err := c.ShouldBind(&req); err != nil {
 		e.Error(c, err)
@@ -130,6 +134,10 @@ func (e *GenTablesApi) GetDBS(c *gin.Context) {
 // @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
 // @Router /api/v1/tools/gen/add [post]
 func (e *GenTablesApi) Insert(c *gin.Context) {
+	if !core.Cfg.Gen.Enable {
+		e.Error(c, errors.New("添加表结构已关闭"))
+		return
+	}
 	var req dto.ImpTablesReq
 	if err := c.ShouldBind(&req); err != nil {
 		e.Error(c, err)
@@ -165,6 +173,10 @@ func (e *GenTablesApi) Insert(c *gin.Context) {
 // @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
 // @Router /api/v1/tools/gen/update [POST]
 func (e *GenTablesApi) Update(c *gin.Context) {
+	if !core.Cfg.Gen.Enable {
+		e.Error(c, errors.New("修改表结构已关闭"))
+		return
+	}
 	var data models.GenTables
 	if err := c.ShouldBind(&data); err != nil {
 		e.Error(c, err)
@@ -191,6 +203,10 @@ func (e *GenTablesApi) Update(c *gin.Context) {
 // @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
 // @Router /api/v1/tools/gen/menu [post]
 func (e *GenTablesApi) GenMenuAndApi(c *gin.Context) {
+	if !core.Cfg.Gen.Enable {
+		e.Error(c, errors.New("api和菜单已关闭"))
+		return
+	}
 	table := models.GenTables{}
 	var req dto.GenMenuReq
 	if err := c.ShouldBind(&req); err != nil {
@@ -484,6 +500,10 @@ func (e *GenTablesApi) GenMenuAndApi(c *gin.Context) {
 // @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
 // @Router /api/v1/tools/gen/code [post]
 func (e *GenTablesApi) GenCode(c *gin.Context) {
+	if !core.Cfg.Gen.Enable {
+		e.Error(c, errors.New("生成代码已关闭"))
+		return
+	}
 	table := models.GenTables{}
 
 	var req dto.GenCodeReq
