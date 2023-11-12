@@ -33,7 +33,7 @@ func (e *CustomerApi) QueryPage(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	list := make([]models.Customer, 10)
+	list := make([]models.Customer, 0)
 	var total int64
 	teamId := utils.GetTeamId(c)
 	userId := utils.GetUserId(c)

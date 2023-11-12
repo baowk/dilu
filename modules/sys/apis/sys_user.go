@@ -1,6 +1,7 @@
 package apis
 
 import (
+	"dilu/common/utils"
 	"dilu/modules/sys/models"
 	"dilu/modules/sys/service"
 	"dilu/modules/sys/service/dto"
@@ -108,9 +109,10 @@ func (e *SysUserApi) Update(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
+
 	var data models.SysUser
 	copier.Copy(&data, req)
-	if err := service.SerSysUser.UpdateById(&data); err != nil {
+	if err := service.SerSysUser.ChangeUserinfo(utils.GetUserId(c), data); err != nil {
 		e.Error(c, err)
 		return
 	}

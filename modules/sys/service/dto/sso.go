@@ -122,12 +122,12 @@ type MyUserinfoResp struct {
 }
 
 type ChangeUserinfoReq struct {
-	Name     string `json:"name" gorm:"type:varchar(64);default:(-);comment:名"`             //名
-	Nickname string `json:"nickname" gorm:"type:varchar(64);default:(-);comment:昵称"`        //昵称
-	Avatar   string `json:"avatar" gorm:"type:varchar(255);default:(-);comment:头像"`         //头像
-	Bio      string `json:"bio" gorm:"type:varchar(255);default:(-);comment:签名"`            //签名
-	Gender   string `json:"gender" gorm:"type:char(1);default:'2';comment:性别 1 男 2女  3 未知"` //性别 1 男 2女  3 未知
-	Birthday string `json:"birthday" gorm:"type:date;default:(-);comment:生日 格式 yyyy-MM-dd"` //生日
+	Name     string `json:"name" `    //名
+	Nickname string `json:"nickname"` //昵称
+	Avatar   string `json:"avatar"`   //头像
+	Bio      string `json:"bio" `     //签名
+	Gender   string `json:"gender"`   //性别 1 男 2女  3 未知
+	Birthday string `json:"birthday"` //生日
 }
 
 type DingCfgResp struct {

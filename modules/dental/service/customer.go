@@ -13,6 +13,8 @@ import (
 
 	"github.com/baowk/dilu-core/core/base"
 	"github.com/baowk/dilu-core/core/errs"
+
+	butils "github.com/baowk/dilu-core/common/utils"
 )
 
 type CustomerService struct {
@@ -27,7 +29,6 @@ func (s *CustomerService) Page(req dto.CustomerGetPageReq, teamId, userId int, l
 	if teamId == 0 {
 		return codes.ErrSys(nil)
 	}
-	db := s.DB().Offset(req.GetOffset()).Limit(req.GetSize()).Where("team_id = ?", teamId)
 	var tm smodels.SysMember
 	if err := service.SerSysMember.GetMember(teamId, userId, &tm); err != nil {
 		return err
@@ -37,12 +38,36 @@ func (s *CustomerService) Page(req dto.CustomerGetPageReq, teamId, userId int, l
 	} else if tm.PostId > enums.Admin.Id {
 		req.DeptPath = tm.DeptPath
 	}
+
+	db := s.DB().Offset(req.GetOffset()).Limit(req.GetSize()).Where("team_id = ?", teamId)
 	if req.UserId != 0 {
 		db.Where("user_id = ?", req.UserId)
 	} else if req.DeptPath != "" {
-		db.Where("dept_path like ", req.DeptPath+"%")
+		db.Where("dept_path like ?", req.DeptPath+"%")
 	}
-	return db.Order("id desc").Find(list).Offset(-1).Limit(-1).Count(total).Error
+	var cs []models.Customer
+	err := db.Order("id desc").Find(&cs).Offset(-1).Limit(-1).Count(total).Error
+	if err != nil {
+		return err
+	}
+	for _, c := range cs {
+		if c.Birthday > 0 {
+			c.Age = utils.CmpAge(time.UnixMilli(int64(c.Birthday)))
+		}
+		if c.UserId != userId {
+			if len(c.Phone) > 7 {
+				c.Phone = butils.MaskSensitiveInfo(c.Phone, 3, 4)
+			}
+			if len(c.Wechat) > 5 {
+				c.Wechat = butils.MaskSensitiveInfo(c.Wechat, 4, 4)
+			}
+			if len(c.Address) > 0 {
+				c.Address = "****"
+			}
+		}
+		*list = append(*list, c)
+	}
+	return nil
 }
 
 func (s *CustomerService) GetByUserIdAndName(userId, teamId int, name string, customer *[]models.Customer) errs.IError {

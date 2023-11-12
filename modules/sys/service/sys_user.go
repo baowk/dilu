@@ -644,7 +644,7 @@ func (e *SysUser) ChangePwdByOld(id int, oldPwd, newPwd, inviteCode string) errs
 	return nil
 }
 
-// 通过老密码修改
+// 绑定
 func (e *SysUser) Bind(id int, c *dto.BindReq) error {
 	var user models.SysUser
 	if id != 0 {
@@ -685,36 +685,18 @@ func (e *SysUser) Bind(id int, c *dto.BindReq) error {
 	return nil
 }
 
-// 通过老密码修改
-func (e *SysUser) ChangeUserinfo(id int, c *dto.ChangeUserinfoReq) error {
-	var user models.SysUser
-	if id != 0 {
-		if err := e.Get(id, &user); err != nil {
-			return errors.New("用户不存在")
+// 修改用户信息
+func (e *SysUser) ChangeUserinfo(userId int, user models.SysUser) error {
+	if user.Password != "" {
+		enPwd, err := user.GenPwd(user.Password)
+		if err != nil {
+			return err
 		}
-	} else {
-		return errors.New("参数错误")
+		user.Password = string(enPwd)
 	}
-
-	updates := models.SysUser{}
-	if c.Birthday != "" {
-		updates.Birthday = c.Birthday
-	}
-	if c.Avatar != "" {
-		updates.Avatar = c.Avatar
-	}
-	if c.Bio != "" {
-		updates.Bio = c.Bio
-	}
-	if c.Nickname != "" {
-		updates.Nickname = c.Nickname
-	}
-	if c.Name != "" {
-		updates.Name = c.Name
-	}
-
-	db := core.DB().Model(user).Updates(updates)
-	if err := db.Error; err != nil {
+	user.UpdateBy = userId
+	err := e.UpdateById(user)
+	if err != nil {
 		core.Log.Error("UserService Save error", zap.Error(err))
 		return err
 	}

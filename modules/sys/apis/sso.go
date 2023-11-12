@@ -454,9 +454,12 @@ func (e *SSO) ChangeUserinfo(c *gin.Context) {
 		e.Code(c, codes.InvalidToken_401)
 		return
 	}
-	//是否手机
 
-	if err := service.SerSysUser.ChangeUserinfo(uid, &req); err != nil {
+	var user models.SysUser
+	copier.Copy(&user, req)
+	user.Id = uid
+	//是否手机
+	if err := service.SerSysUser.ChangeUserinfo(uid, user); err != nil {
 		e.Code(c, codes.ErrBind)
 		return
 	}
