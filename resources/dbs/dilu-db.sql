@@ -11,7 +11,7 @@
  Target Server Version : 80032 (8.0.32)
  File Encoding         : 65001
 
- Date: 09/11/2023 22:15:21
+ Date: 12/11/2023 20:34:44
 */
 
 SET NAMES utf8mb4;
@@ -677,12 +677,12 @@ CREATE TABLE `sys_member`  (
 -- ----------------------------
 -- Records of sys_member
 -- ----------------------------
-INSERT INTO `sys_member` VALUES (1, 1, 2, '糖糖', '小唐', 'tang-dun-xia', '', '/0/1/2/', 2, '-1', 8, '2023-02-20 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, '2023-11-04 15:08:01.618');
-INSERT INTO `sys_member` VALUES (2, 1, 3, '小梅', '小梅', NULL, NULL, '/0/1/2/', 2, '1', 16, '2021-01-13 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_member` VALUES (3, 1, 4, '小雷', '小雷', NULL, NULL, '/0/1/2/', 2, NULL, 16, '2023-06-19 00:00:00.000', NULL, '1', NULL, 1, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_member` VALUES (4, 1, 5, '小丽', '小丽', NULL, NULL, '/0/1/2/', 2, NULL, 16, '2022-11-18 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_member` VALUES (5, 1, 6, '小珊', '小珊', NULL, NULL, '/0/1/2/', 2, NULL, 16, '2023-06-02 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, NULL);
-INSERT INTO `sys_member` VALUES (6, 1, 7, '大雁', '大雁', NULL, NULL, '/0/1/2/', 2, NULL, 16, '2023-08-07 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_member` VALUES (1, 1, 2, '糖糖', '小唐', 'xiao-tang', '', '/0/1/2/', 2, '-1', 4, '2023-02-20 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, '2023-11-12 18:37:05.248');
+INSERT INTO `sys_member` VALUES (2, 1, 3, '梅梅', '小梅', 'xiao-mei', NULL, '/0/1/2/', 2, '1', 8, '2021-01-13 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, '2023-11-12 18:34:30.426');
+INSERT INTO `sys_member` VALUES (3, 1, 4, '小雷', '大雷', 'da-lei', NULL, '/0/1/2/', 2, NULL, 8, '2023-06-19 00:00:00.000', NULL, '1', NULL, 1, NULL, NULL, NULL, '2023-11-12 18:34:41.714');
+INSERT INTO `sys_member` VALUES (4, 1, 5, '小丽', '小丽', NULL, NULL, '/0/1/2/', 2, NULL, 8, '2022-11-18 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_member` VALUES (5, 1, 6, '小珊', '小珊', NULL, NULL, '/0/1/2/', 2, NULL, 8, '2023-06-02 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_member` VALUES (6, 1, 7, '大雁', '大雁', NULL, NULL, '/0/1/2/', 2, NULL, 8, '2023-08-07 00:00:00.000', NULL, '2', NULL, 1, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -782,19 +782,19 @@ INSERT INTO `sys_menu` VALUES (94, '', 'GenTables详情', '', 'gen_tables_detail
 INSERT INTO `sys_menu` VALUES (95, '', 'GenTables创建', '', 'gen_tables_create', 1, 3, 'sys:genTables:add', 93, 0, '', 0, 0, 1, 1, '2023-10-28 16:31:47.714', '2023-10-28 16:31:47.714', NULL);
 INSERT INTO `sys_menu` VALUES (96, '', 'GenTables修改', '', 'gen_tables_update', 1, 3, 'sys:genTables:edit', 93, 0, '', 0, 0, 1, 1, '2023-10-28 16:31:47.723', '2023-10-28 16:31:47.723', NULL);
 INSERT INTO `sys_menu` VALUES (97, '', 'GenTables删除', '', 'gen_tables_del', 1, 3, 'sys:genTables:remove', 93, 0, '', 0, 0, 1, 1, '2023-10-28 16:31:47.731', '2023-10-28 16:31:47.731', NULL);
-INSERT INTO `sys_menu` VALUES (103, 'SysApiManage', '接口管理', 'pass', '/sys/sys-api', 1, 2, 'sys:sysApi:list', 91, 0, '/tool/sys-api/index', 0, 0, 1, 1, '2023-10-28 16:51:44.924', '2023-10-28 16:51:44.924', NULL);
+INSERT INTO `sys_menu` VALUES (103, 'SysApiManage', '接口管理', 'swapLine', '/sys/sys-api', 1, 2, 'sys:sysApi:list', 91, 0, '/tool/sys-api/index', 0, 0, 1, 1, '2023-10-28 16:51:44.924', '2023-10-28 16:51:44.924', NULL);
 INSERT INTO `sys_menu` VALUES (104, '', '接口详情', '', 'sys_api_detail', 1, 3, 'sys:sysApi:query', 103, 0, '', 0, 0, 1, 1, '2023-10-28 16:51:44.938', '2023-10-28 16:51:44.938', NULL);
 INSERT INTO `sys_menu` VALUES (105, '', '接口创建', '', 'sys_api_create', 1, 3, 'sys:sysApi:add', 103, 0, '', 0, 0, 1, 1, '2023-10-28 16:51:44.947', '2023-10-28 16:51:44.947', NULL);
 INSERT INTO `sys_menu` VALUES (106, '', '接口修改', '', 'sys_api_update', 1, 3, 'sys:sysApi:edit', 103, 0, '', 0, 0, 1, 1, '2023-10-28 16:51:44.955', '2023-10-28 16:51:44.955', NULL);
 INSERT INTO `sys_menu` VALUES (107, '', '接口删除', '', 'sys_api_del', 1, 3, 'sys:sysApi:remove', 103, 0, '', 0, 0, 1, 1, '2023-10-28 16:51:44.964', '2023-10-28 16:51:44.964', NULL);
 INSERT INTO `sys_menu` VALUES (108, 'BillStQuery', '统计查询', 'histogram', '/dental/st', 2, 2, 'dental:st:list', 62, 0, '/dental/billst/index', 0, 0, 1, 1, '2023-10-29 14:34:14.000', '2023-10-29 14:34:23.000', NULL);
 INSERT INTO `sys_menu` VALUES (109, NULL, '查询统计', NULL, 'st_bill_query', 2, 3, 'dental:st:query', 108, 0, NULL, 0, 0, 1, 1, '2023-10-29 18:47:57.000', '2023-10-29 18:48:02.000', NULL);
-INSERT INTO `sys_menu` VALUES (111, 'SysCfgManage', '配置管理', 'pass', '/sys/sys-cfg', 2, 2, 'sys:sysCfg:list', 1, 0, '/sys/sys-cfg/index', 0, 0, 1, 1, '2023-11-08 20:34:50.875', '2023-11-08 20:34:50.875', NULL);
+INSERT INTO `sys_menu` VALUES (111, 'SysCfgManage', '配置管理', 'operation', '/sys/sys-cfg', 2, 2, 'sys:sysCfg:list', 1, 0, '/sys/sys-cfg/index', 0, 0, 1, 1, '2023-11-08 20:34:50.875', '2023-11-08 20:34:50.875', NULL);
 INSERT INTO `sys_menu` VALUES (112, '', '配置详情', '', 'sys_cfg_detail', 2, 3, 'sys:sysCfg:query', 111, 0, '', 0, 0, 1, 1, '2023-11-08 20:34:50.889', '2023-11-08 20:34:50.889', NULL);
 INSERT INTO `sys_menu` VALUES (113, '', '配置创建', '', 'sys_cfg_create', 2, 3, 'sys:sysCfg:add', 111, 0, '', 0, 0, 1, 1, '2023-11-08 20:34:50.903', '2023-11-08 20:34:50.903', NULL);
 INSERT INTO `sys_menu` VALUES (114, '', '配置修改', '', 'sys_cfg_update', 2, 3, 'sys:sysCfg:edit', 111, 0, '', 0, 0, 1, 1, '2023-11-08 20:34:50.916', '2023-11-08 20:34:50.916', NULL);
 INSERT INTO `sys_menu` VALUES (115, '', '配置删除', '', 'sys_cfg_del', 2, 3, 'sys:sysCfg:remove', 111, 0, '', 0, 0, 1, 1, '2023-11-08 20:34:50.929', '2023-11-08 20:34:50.929', NULL);
-INSERT INTO `sys_menu` VALUES (117, 'SysOperaLogManage', '操作日志管理', 'pass', '/sys/sys-opera-log', 2, 2, 'sys:sysOperaLog:list', 1, 0, '/sys/sys-opera-log/index', 0, 0, 1, 1, '2023-11-09 22:07:17.257', '2023-11-09 22:07:17.257', NULL);
+INSERT INTO `sys_menu` VALUES (117, 'SysOperaLogManage', '操作日志管理', 'generate', '/sys/sys-opera-log', 2, 2, 'sys:sysOperaLog:list', 1, 0, '/sys/sys-opera-log/index', 0, 0, 1, 1, '2023-11-09 22:07:17.257', '2023-11-09 22:07:17.257', NULL);
 INSERT INTO `sys_menu` VALUES (118, '', '操作日志详情', '', 'sys_opera_log_detail', 2, 3, 'sys:sysOperaLog:query', 117, 0, '', 0, 0, 1, 1, '2023-11-09 22:07:17.272', '2023-11-09 22:07:17.272', NULL);
 INSERT INTO `sys_menu` VALUES (119, '', '操作日志创建', '', 'sys_opera_log_create', 2, 3, 'sys:sysOperaLog:add', 117, 0, '', 0, 0, 1, 1, '2023-11-09 22:07:17.288', '2023-11-09 22:07:17.288', NULL);
 INSERT INTO `sys_menu` VALUES (120, '', '操作日志修改', '', 'sys_opera_log_update', 2, 3, 'sys:sysOperaLog:edit', 117, 0, '', 0, 0, 1, 1, '2023-11-09 22:07:17.301', '2023-11-09 22:07:17.301', NULL);
@@ -1052,9 +1052,9 @@ CREATE TABLE `sys_user`  (
 -- Records of sys_user
 -- ----------------------------
 INSERT INTO `sys_user` VALUES (1, 'dilu', '', NULL, '$2a$10$2OxaPJviu7NMSKMk5c2mPOvvb41Xg5ZiQB0153QpB77THK4sIXF1a', 'dilu', 'dilu', NULL, NULL, NULL, '2', -1, NULL, NULL, 1, NULL, NULL, NULL);
-INSERT INTO `sys_user` VALUES (2, 'tangtang', '13800138001', NULL, '$2a$10$2OxaPJviu7NMSKMk5c2mPOvvb41Xg5ZiQB0153QpB77THK4sIXF1a', '糖糖', '小唐', NULL, NULL, NULL, '2', NULL, NULL, NULL, 1, NULL, NULL, NULL);
-INSERT INTO `sys_user` VALUES (3, 'zcm', NULL, NULL, '$2a$10$2OxaPJviu7NMSKMk5c2mPOvvb41Xg5ZiQB0153QpB77THK4sIXF1a', '小梅', '小梅', NULL, NULL, NULL, '2', NULL, NULL, NULL, 1, NULL, NULL, NULL);
-INSERT INTO `sys_user` VALUES (4, 'liyanlei', NULL, NULL, NULL, '阿雷', '阿雷', NULL, NULL, NULL, '1', NULL, NULL, NULL, 1, NULL, NULL, '2023-10-29 14:01:31.999');
+INSERT INTO `sys_user` VALUES (2, 'tangtang', '13800138001', NULL, '$2a$10$xk4uJztXJztVewPbXPnm5utDvRfTLY98jaKAVlKqSLtaKtYEVgFoq', '糖糖', '小唐', NULL, NULL, NULL, '2', NULL, NULL, NULL, 1, NULL, NULL, '2023-11-12 19:58:21.597');
+INSERT INTO `sys_user` VALUES (3, 'zcm', NULL, NULL, '$2a$10$8ZbmdrNu22DMnRFDjfBugOwvK0fVOixMX.AAeLFbgOkjS9frXHjVW', '小梅', '小梅', NULL, NULL, NULL, '2', NULL, NULL, NULL, 1, NULL, NULL, '2023-11-12 19:59:39.849');
+INSERT INTO `sys_user` VALUES (4, 'liyanlei', NULL, NULL, '$2a$10$sPJOyDdh/J4OFVa27z4LCuz2xtu3KwhyNegkp27hL.G9D3xMMYoKW', '阿雷', '阿雷', NULL, NULL, NULL, '1', NULL, NULL, NULL, 1, 1, NULL, '2023-11-12 20:03:10.441');
 INSERT INTO `sys_user` VALUES (5, NULL, NULL, NULL, NULL, '小丽', '小丽', NULL, NULL, NULL, '2', NULL, NULL, NULL, 1, NULL, NULL, NULL);
 INSERT INTO `sys_user` VALUES (6, NULL, NULL, NULL, NULL, '小珊', '小珊', NULL, NULL, NULL, '2', NULL, NULL, NULL, 1, NULL, NULL, NULL);
 INSERT INTO `sys_user` VALUES (7, NULL, NULL, NULL, NULL, '大雁', '大雁', NULL, NULL, NULL, '2', NULL, NULL, NULL, 1, NULL, NULL, NULL);
