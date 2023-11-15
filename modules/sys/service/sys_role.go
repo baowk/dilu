@@ -33,15 +33,16 @@ func (s *SysRoleService) Create(userId, teamId int, req dto.SysRoleDto) error {
 		tx.Rollback()
 		return err
 	}
-	m := make(map[int]bool, 0)
+	//m := make(map[int]bool, 0)
 	var rms []models.SysRoleMenu
 	for _, mids := range req.MenuIds {
-		for _, mid := range mids {
-			if _, ok := m[mid]; !ok {
-				rms = append(rms, models.SysRoleMenu{RoleId: model.Id, MenuId: mid})
-				m[mid] = true
-			}
-		}
+		// for _, mid := range mids {
+		// 	if _, ok := m[mid]; !ok {
+		// 		rms = append(rms, models.SysRoleMenu{RoleId: model.Id, MenuId: mid})
+		// 		m[mid] = true
+		// 	}
+		// }
+		rms = append(rms, models.SysRoleMenu{RoleId: model.Id, MenuId: mids})
 	}
 	if err := tx.Create(rms).Error; err != nil {
 		tx.Rollback()
@@ -72,15 +73,16 @@ func (s *SysRoleService) Update(userId, teamId int, req dto.SysRoleDto) error {
 		return err
 	}
 
-	m := make(map[int]bool, 0)
+	//m := make(map[int]bool, 0)
 	var rms []models.SysRoleMenu
 	for _, mids := range req.MenuIds {
-		for _, mid := range mids {
-			if _, ok := m[mid]; !ok {
-				rms = append(rms, models.SysRoleMenu{RoleId: model.Id, MenuId: mid})
-				m[mid] = true
-			}
-		}
+		// for _, mid := range mids {
+		// 	if _, ok := m[mid]; !ok {
+		// 		rms = append(rms, models.SysRoleMenu{RoleId: model.Id, MenuId: mid})
+		// 		m[mid] = true
+		// 	}
+		// }
+		rms = append(rms, models.SysRoleMenu{RoleId: model.Id, MenuId: mids})
 	}
 	if err := tx.Create(rms).Error; err != nil {
 		tx.Rollback()

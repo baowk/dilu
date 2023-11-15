@@ -19,7 +19,7 @@ type SysRoleDto struct {
 	Status    int       `json:"status"`    //状态
 	TeamId    int       `json:"team_id"`   //团队
 	Remark    string    `json:"remark" `   //备注
-	MenuIds   [][]int   `json:"menuIds"`   //菜单id
+	MenuIds   []int     `json:"menuIds"`   //菜单id
 	CreateBy  int       `json:"createBy" ` //创建者
 	UpdateBy  int       `json:"updateBy" ` //更新者
 	CreatedAt time.Time `json:"createdAt"` //创建时间
