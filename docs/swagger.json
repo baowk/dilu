@@ -3898,7 +3898,7 @@
                 }
             }
         },
-        "/api/v1/sys/sys-menu/perms": {
+        "/api/v1/sys/sys-menu/grant": {
             "post": {
                 "security": [
                     {
@@ -3911,7 +3911,7 @@
                 "tags": [
                     "sys-SysMenu"
                 ],
-                "summary": "获取用户权限",
+                "summary": "获取授权菜单",
                 "responses": {
                     "200": {
                         "description": "{\"code\": 200, \"data\": [...]}",
@@ -3926,7 +3926,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "type": "string"
+                                                "$ref": "#/definitions/models.SysMenu"
                                             }
                                         }
                                     }
@@ -4346,19 +4346,7 @@
                     "200": {
                         "description": "{\"code\": 200, \"data\": [...]}",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/models.SysRole"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/base.Resp"
                         }
                     }
                 }
@@ -4460,7 +4448,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/models.SysRole"
+                                            "$ref": "#/definitions/dto.SysRoleDtoResp"
                                         }
                                     }
                                 }
@@ -4629,19 +4617,7 @@
                     "200": {
                         "description": "{\"code\": 200, \"data\": [...]}",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/models.SysRole"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/base.Resp"
                         }
                     }
                 }
@@ -6975,32 +6951,38 @@
         "dto.SysRoleDto": {
             "type": "object",
             "properties": {
-                "admin": {
-                    "description": "管理员",
+                "createBy": {
+                    "description": "创建者",
                     "type": "integer"
                 },
-                "dataScope": {
-                    "description": "数据权限",
+                "createdAt": {
+                    "description": "创建时间",
                     "type": "string"
                 },
-                "flag": {
-                    "description": "flag",
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "menuIds": {
+                    "description": "菜单id",
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "name": {
+                    "description": "角色名称",
                     "type": "string"
                 },
                 "remark": {
                     "description": "备注",
                     "type": "string"
                 },
-                "roleId": {
-                    "description": "主键",
-                    "type": "integer"
-                },
                 "roleKey": {
                     "description": "角色代码",
-                    "type": "string"
-                },
-                "roleName": {
-                    "description": "角色名称",
                     "type": "string"
                 },
                 "roleSort": {
@@ -7010,6 +6992,74 @@
                 "status": {
                     "description": "状态",
                     "type": "integer"
+                },
+                "team_id": {
+                    "description": "团队",
+                    "type": "integer"
+                },
+                "updateBy": {
+                    "description": "更新者",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "最后更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "dto.SysRoleDtoResp": {
+            "type": "object",
+            "properties": {
+                "createBy": {
+                    "description": "创建者",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "menuIds": {
+                    "description": "菜单id",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "name": {
+                    "description": "角色名称",
+                    "type": "string"
+                },
+                "remark": {
+                    "description": "备注",
+                    "type": "string"
+                },
+                "roleKey": {
+                    "description": "角色代码",
+                    "type": "string"
+                },
+                "roleSort": {
+                    "description": "排序",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态",
+                    "type": "integer"
+                },
+                "team_id": {
+                    "description": "团队",
+                    "type": "integer"
+                },
+                "updateBy": {
+                    "description": "更新者",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "最后更新时间",
+                    "type": "string"
                 }
             }
         },
@@ -8199,7 +8249,7 @@
                     "type": "string"
                 },
                 "postId": {
-                    "description": "职位 1 系统超管 2 团队拥有者 4主管 8副主管 16员工",
+                    "description": "-1系统超管 1 团队拥有者 2主管 4副主管 8员工",
                     "type": "integer"
                 },
                 "py": {
@@ -8447,12 +8497,6 @@
                 "status": {
                     "description": "状态",
                     "type": "integer"
-                },
-                "sysMenu": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/models.SysMenu"
-                    }
                 },
                 "team_id": {
                     "description": "团队",

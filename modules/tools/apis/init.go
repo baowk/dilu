@@ -46,6 +46,7 @@ func (Init) DoInit(c *gin.Context) {
 		&models.ThirdLogin{},
 		&models.SysMember{},
 		&models.SysTeam{},
+		&models.SysRoleMenu{},
 		&tm.GenTables{},
 		&tm.GenColumns{},
 		// &tools.GenColumn{},

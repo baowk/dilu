@@ -15,10 +15,10 @@ type SysMember struct {
 	Phone      string    `json:"phone" gorm:"type:varchar(11);comment:电话"`                                   //电话
 	DeptPath   string    `json:"deptPath" gorm:"type:varchar(255);comment:部门路径"`                             //部门路径
 	DeptId     int       `json:"deptId" gorm:"type:int unsigned;comment:部门id"`                               //部门id
-	PostId     int       `json:"postId" gorm:"type:tinyint unsigned;comment:职位 1系统超管 2 团队拥有者 4主管 8副主管 16员工"` //职位 1 系统超管 2 团队拥有者 4主管 8副主管 16员工
+	PostId     int       `json:"postId" gorm:"type:tinyint unsigned;comment:职位 -1系统超管 1 团队拥有者 2主管 4副主管 8员工"` //-1系统超管 1 团队拥有者 2主管 4副主管 8员工
 	Roles      string    `json:"roles" gorm:"type:varchar(255);comment:角色id"`                                //角色id,分割
 	Status     int       `json:"status" gorm:"type:tinyint;comment:状态 1正常 "`                                 //状态 1正常 2离职
-	Birthday   string    `json:"birthday" gorm:"type:date;default:(-);comment:生日 格式 yyyy-MM-dd"`             //生日
+	Birthday   time.Time `json:"birthday" gorm:"type:date;default:(-);comment:生日 格式 yyyy-MM-dd"`             //生日
 	Gender     string    `json:"gender" gorm:"type:char(1);default:'2';comment:性别 1男 2女 3未知"`                //性别 1男 2女 3未知
 	EntryTime  time.Time `json:"entryTime" gorm:"type:datetime(3);comment:入职时间"`                             //入职时间
 	RetireTime time.Time `json:"retireTime" gorm:"type:datetime(3);comment:离职时间"`                            //离职时间

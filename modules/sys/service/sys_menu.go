@@ -166,17 +166,16 @@ func (e *SysMenu) Remove(d *dto.SysMenuDeleteReq) (*SysMenu, errs.IError) {
 	return e, nil
 }
 
-func (e *SysMenu) GetMenus(mvs *[]models.SysMenu) errs.IError {
-	if err := e.DB().Find(mvs).Error; err != nil {
+func (e *SysMenu) GetMenus(c *gin.Context, mvs *[]models.SysMenu) errs.IError {
+	role := utils.GetRoleId(c)
+	platform := 2
+	if role != 0 { //超管
+		platform = 1
+	}
+	if err := e.DB().Where("platform_type >= ?", platform).Find(mvs).Error; err != nil {
 		return codes.ErrSys(err)
 	}
 	return nil
-	// var ms []models.SysMenu
-	// if err := core.DB().Find(&ms).Error; err != nil {
-	// 	return codes.ErrSys(err)
-	// }
-	// *mvs = treeMenu(ms)
-	// return nil
 }
 
 // func treeMenu(ms []models.SysMenu) []models.SysMenu {

@@ -20,7 +20,7 @@ type SysRole struct {
 	CreatedAt time.Time      `json:"createdAt" gorm:"type:datetime(3);comment:创建时间"`                  //创建时间
 	UpdatedAt time.Time      `json:"updatedAt" gorm:"type:datetime(3);comment:最后更新时间"`                //最后更新时间
 	DeletedAt gorm.DeletedAt `json:"-" gorm:"index;comment:删除时间"`                                     //删除时间
-	SysMenu   *[]SysMenu     `json:"sysMenu" gorm:"many2many:sys_role_menu;foreignKey:Id;joinForeignKey:role_id;references:Id;joinReferences:menu_id;"`
+	//SysMenu   *[]SysMenu     `json:"sysMenu" gorm:"many2many:sys_role_menu;foreignKey:Id;joinForeignKey:role_id;references:Id;joinReferences:menu_id;"`
 }
 
 func (SysRole) TableName() string {

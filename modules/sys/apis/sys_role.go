@@ -1,6 +1,7 @@
 package apis
 
 import (
+	"dilu/common/utils"
 	"dilu/modules/sys/models"
 	"dilu/modules/sys/service"
 	"dilu/modules/sys/service/dto"
@@ -40,6 +41,9 @@ func (e *SysRoleApi) QueryPage(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
+
+	model.TeamId = utils.GetTeamId(c)
+
 	if err := service.SerSysRole.Page(model, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
 		e.Error(c, err)
 		return
@@ -61,7 +65,9 @@ func (e *SysRoleApi) List(c *gin.Context) {
 
 	list := make([]models.SysRole, 10)
 
-	var model models.SysRole
+	model := models.SysRole{
+		TeamId: utils.GetTeamId(c),
+	}
 
 	if err := service.SerSysRole.GetByWhere(model, &list); err != nil {
 		e.Error(c, err)
@@ -77,7 +83,7 @@ func (e *SysRoleApi) List(c *gin.Context) {
 // @Product application/json
 // @Param teamId header int false "团队id"
 // @Param data body base.ReqId true "body"
-// @Success 200 {object} base.Resp{data=models.SysRole} "{"code": 200, "data": [...]}"
+// @Success 200 {object} base.Resp{data=dto.SysRoleDtoResp} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-role/get [post]
 // @Security Bearer
 func (e *SysRoleApi) Get(c *gin.Context) {
@@ -86,8 +92,8 @@ func (e *SysRoleApi) Get(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	var data models.SysRole
-	if err := service.SerSysRole.Get(req.Id, &data); err != nil {
+	var data dto.SysRoleDtoResp
+	if err := service.SerSysRole.GetRole(req.Id, utils.GetUserId(c), utils.GetTeamId(c), &data); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -101,7 +107,7 @@ func (e *SysRoleApi) Get(c *gin.Context) {
 // @Product application/json
 // @Param teamId header int false "团队id"
 // @Param data body dto.SysRoleDto true "body"
-// @Success 200 {object} base.Resp{data=models.SysRole} "{"code": 200, "data": [...]}"
+// @Success 200 {object} base.Resp{} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-role/create [post]
 // @Security Bearer
 func (e *SysRoleApi) Create(c *gin.Context) {
@@ -110,13 +116,11 @@ func (e *SysRoleApi) Create(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	var data models.SysRole
-	copier.Copy(&data, req)
-	if err := service.SerSysRole.Create(&data); err != nil {
+	if err := service.SerSysRole.Create(utils.GetUserId(c), utils.GetTeamId(c), req); err != nil {
 		e.Error(c, err)
 		return
 	}
-	e.Ok(c, data)
+	e.Ok(c)
 }
 
 // Update 更新SysRole
@@ -126,7 +130,7 @@ func (e *SysRoleApi) Create(c *gin.Context) {
 // @Product application/json
 // @Param teamId header int false "团队id"
 // @Param data body dto.SysRoleDto true "body"
-// @Success 200 {object} base.Resp{data=models.SysRole} "{"code": 200, "data": [...]}"
+// @Success 200 {object} base.Resp{} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-role/update [post]
 // @Security Bearer
 func (e *SysRoleApi) Update(c *gin.Context) {
@@ -135,13 +139,11 @@ func (e *SysRoleApi) Update(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	var data models.SysRole
-	copier.Copy(&data, req)
-	if err := service.SerSysRole.Save(&data); err != nil {
+	if err := service.SerSysRole.Update(utils.GetUserId(c), utils.GetTeamId(c), req); err != nil {
 		e.Error(c, err)
 		return
 	}
-	e.Ok(c, data)
+	e.Ok(c)
 }
 
 // Del 删除SysRole

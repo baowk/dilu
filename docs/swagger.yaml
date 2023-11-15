@@ -1057,26 +1057,30 @@ definitions:
     type: object
   dto.SysRoleDto:
     properties:
-      admin:
-        description: 管理员
+      createBy:
+        description: 创建者
         type: integer
-      dataScope:
-        description: 数据权限
+      createdAt:
+        description: 创建时间
         type: string
-      flag:
-        description: flag
+      id:
+        description: 主键
+        type: integer
+      menuIds:
+        description: 菜单id
+        items:
+          items:
+            type: integer
+          type: array
+        type: array
+      name:
+        description: 角色名称
         type: string
       remark:
         description: 备注
         type: string
-      roleId:
-        description: 主键
-        type: integer
       roleKey:
         description: 角色代码
-        type: string
-      roleName:
-        description: 角色名称
         type: string
       roleSort:
         description: 排序
@@ -1084,6 +1088,56 @@ definitions:
       status:
         description: 状态
         type: integer
+      team_id:
+        description: 团队
+        type: integer
+      updateBy:
+        description: 更新者
+        type: integer
+      updatedAt:
+        description: 最后更新时间
+        type: string
+    type: object
+  dto.SysRoleDtoResp:
+    properties:
+      createBy:
+        description: 创建者
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        description: 主键
+        type: integer
+      menuIds:
+        description: 菜单id
+        items:
+          type: integer
+        type: array
+      name:
+        description: 角色名称
+        type: string
+      remark:
+        description: 备注
+        type: string
+      roleKey:
+        description: 角色代码
+        type: string
+      roleSort:
+        description: 排序
+        type: integer
+      status:
+        description: 状态
+        type: integer
+      team_id:
+        description: 团队
+        type: integer
+      updateBy:
+        description: 更新者
+        type: integer
+      updatedAt:
+        description: 最后更新时间
+        type: string
     type: object
   dto.SysRoleGetPageReq:
     properties:
@@ -1940,7 +1994,7 @@ definitions:
         description: 电话
         type: string
       postId:
-        description: 职位 1 系统超管 2 团队拥有者 4主管 8副主管 16员工
+        description: -1系统超管 1 团队拥有者 2主管 4副主管 8员工
         type: integer
       py:
         description: 姓名拼音
@@ -2124,10 +2178,6 @@ definitions:
       status:
         description: 状态
         type: integer
-      sysMenu:
-        items:
-          $ref: '#/definitions/models.SysMenu'
-        type: array
       team_id:
         description: 团队
         type: integer
@@ -4472,7 +4522,7 @@ paths:
       summary: 获取接口列表
       tags:
       - sys-SysMenu
-  /api/v1/sys/sys-menu/perms:
+  /api/v1/sys/sys-menu/grant:
     post:
       consumes:
       - application/json
@@ -4485,12 +4535,12 @@ paths:
             - properties:
                 data:
                   items:
-                    type: string
+                    $ref: '#/definitions/models.SysMenu'
                   type: array
               type: object
       security:
       - Bearer: []
-      summary: 获取用户权限
+      summary: 获取授权菜单
       tags:
       - sys-SysMenu
   /api/v1/sys/sys-menu/update:
@@ -4721,12 +4771,7 @@ paths:
         "200":
           description: '{"code": 200, "data": [...]}'
           schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.SysRole'
-              type: object
+            $ref: '#/definitions/base.Resp'
       security:
       - Bearer: []
       summary: 创建SysRole
@@ -4785,7 +4830,7 @@ paths:
             - $ref: '#/definitions/base.Resp'
             - properties:
                 data:
-                  $ref: '#/definitions/models.SysRole'
+                  $ref: '#/definitions/dto.SysRoleDtoResp'
               type: object
       security:
       - Bearer: []
@@ -4880,12 +4925,7 @@ paths:
         "200":
           description: '{"code": 200, "data": [...]}'
           schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  $ref: '#/definitions/models.SysRole'
-              type: object
+            $ref: '#/definitions/base.Resp'
       security:
       - Bearer: []
       summary: 更新SysRole
