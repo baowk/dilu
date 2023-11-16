@@ -16,6 +16,7 @@ import (
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 
+	"dilu/modules/sys/enums"
 	"dilu/modules/sys/models"
 	"dilu/modules/sys/service/dto"
 )
@@ -88,13 +89,6 @@ func (e *SysMenu) Insert(data *models.SysMenu) errs.IError {
 		berr := errs.Err(codes.FAILURE, "", err)
 		return berr
 	}
-	// err = e.initPaths(tx, data)
-	// if err != nil {
-	// 	tx.Rollback()
-	// 	core.Log.Error("sys_menu", zap.Error(err))
-	// 	berr := errs.Err(codes.FAILURE, "", err)
-	// 	return berr
-	// }
 	tx.Commit()
 	return nil
 }
@@ -168,11 +162,13 @@ func (e *SysMenu) Remove(d *dto.SysMenuDeleteReq) (*SysMenu, errs.IError) {
 
 func (e *SysMenu) GetMenus(c *gin.Context, mvs *[]models.SysMenu) errs.IError {
 	role := utils.GetRoleId(c)
-	platform := 2
+	var where string
 	if role != 0 { //超管
-		platform = 1
+		where = "platform_type <= ?"
+	} else {
+		where = "platform_type >= ?"
 	}
-	if err := e.DB().Where("platform_type >= ?", platform).Find(mvs).Error; err != nil {
+	if err := e.DB().Where(where, enums.MenuPub).Find(mvs).Error; err != nil {
 		return codes.ErrSys(err)
 	}
 	return nil
@@ -272,8 +268,13 @@ func (e *SysMenu) GetUserMenus(c *gin.Context, mvs *[]dto.MenuVo) errs.IError {
 	if err != nil {
 		return err
 	}
-	//db := e.DB().Where("menu_type < ?", 3).Where("platform_type >= ?", platform)
-	db := e.DB().Where("platform_type >= ?", platform)
+	var where string
+	if platform == 1 {
+		where = "platform_type <= ?"
+	} else {
+		where = "platform_type >= ?"
+	}
+	db := e.DB().Where(where, enums.MenuPub)
 	if len(roles) > 0 {
 		db.Joins(" left join sys_role_menu on sys_role_menu.menu_id = sys_menu.id").
 			Where("sys_role_menu.role_id in ?", roles)

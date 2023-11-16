@@ -29,18 +29,23 @@ func GetTeamId(c *gin.Context) int {
 			teamId, _ = strconv.Atoi(sTeamId)
 		}
 	}
+	if teamId == 0 {
+		if GetRoleId(c) != 0 {
+			teamId = -1
+		}
+	}
 	return teamId
 }
 
 func GetRoleId(c *gin.Context) int {
-	uid := c.GetInt("a_rid")
-	if uid == 0 {
+	rid := c.GetInt("a_rid")
+	if rid == 0 {
 		suid := c.GetHeader("a_rid")
 		if suid != "" {
-			uid, _ = strconv.Atoi(suid)
+			rid, _ = strconv.Atoi(suid)
 		}
 	}
-	return uid
+	return rid
 }
 
 func GetPhone(c *gin.Context) string {

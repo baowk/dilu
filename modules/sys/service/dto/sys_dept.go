@@ -7,6 +7,7 @@ import (
 type SysDeptGetPageReq struct {
 	base.ReqPage `search:"-"`
 	Status       int `json:"status" form:"status"` //
+	TeamId       int `json:"teamId"`               //团队id
 }
 
 // SysDept

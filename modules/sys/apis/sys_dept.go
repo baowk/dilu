@@ -8,7 +8,6 @@ import (
 
 	"github.com/baowk/dilu-core/core/base"
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/copier"
 )
 
 type SysDeptApi struct {
@@ -35,13 +34,7 @@ func (e *SysDeptApi) QueryPage(c *gin.Context) {
 	}
 	list := make([]models.SysDept, 10)
 	var total int64
-
-	var model models.SysDept
-	if err := copier.Copy(&model, req); err != nil {
-		e.Error(c, err)
-		return
-	}
-	if err := service.SerSysDept.Page(model, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
+	if err := service.SerSysDept.Page(utils.GetTeamId(c), e.GetReqId(c), &req, &list, &total); err != nil {
 		e.Error(c, err)
 		return
 	}

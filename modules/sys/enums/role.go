@@ -1,5 +1,9 @@
 package enums
 
+type RoleType int
+
+const PlatformRoleSuper RoleType = 1
+
 type PostType struct {
 	Id   int
 	Name string

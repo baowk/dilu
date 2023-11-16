@@ -36,12 +36,9 @@ func (e *SysMemberApi) QueryPage(c *gin.Context) {
 	}
 	teamId := utils.GetTeamId(c)
 	if teamId > 0 {
-		if req.TeamId > 0 && teamId != req.TeamId {
-			e.Code(c, codes.AuthorizationError_403)
-			return
-		} else {
-			req.TeamId = teamId
-		}
+		req.TeamId = teamId
+	} else if req.TeamId == 0 {
+		req.TeamId = teamId
 	}
 
 	// uid := utils.GetUserId(c)
