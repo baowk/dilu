@@ -8,7 +8,6 @@ import (
 
 	"github.com/baowk/dilu-core/core/base"
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/copier"
 )
 
 type SysRoleApi struct {
@@ -33,18 +32,11 @@ func (e *SysRoleApi) QueryPage(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	list := make([]models.SysRole, 10)
+	list := make([]models.SysRole, 0)
 	var total int64
+	req.TeamId = utils.GetReqTeamId(c, req.TeamId)
 
-	var model models.SysRole
-	if err := copier.Copy(&model, req); err != nil {
-		e.Error(c, err)
-		return
-	}
-
-	model.TeamId = utils.GetTeamId(c)
-
-	if err := service.SerSysRole.Page(model, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
+	if err := service.SerSysRole.Page(&req, &list, &total); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -62,14 +54,14 @@ func (e *SysRoleApi) QueryPage(c *gin.Context) {
 // @Router /api/v1/sys/sys-role/list [post]
 // @Security Bearer
 func (e *SysRoleApi) List(c *gin.Context) {
-
-	list := make([]models.SysRole, 10)
-
-	model := models.SysRole{
-		TeamId: utils.GetTeamId(c),
+	var req dto.SysRoleGetPageReq
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
 	}
+	list := make([]models.SysRole, 0)
 
-	if err := service.SerSysRole.GetByWhere(model, &list); err != nil {
+	if err := service.SerSysRole.Query(utils.GetReqTeamId(c, req.TeamId), req.Status, &list); err != nil {
 		e.Error(c, err)
 		return
 	}

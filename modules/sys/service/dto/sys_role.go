@@ -9,6 +9,7 @@ import (
 type SysRoleGetPageReq struct {
 	base.ReqPage `search:"-"`
 	Status       int `json:"status" form:"status"` //状态
+	TeamId       int `json:"teamId"`               //团队id
 }
 
 type SysRoleDto struct {

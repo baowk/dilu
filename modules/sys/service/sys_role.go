@@ -20,10 +20,6 @@ var SerSysRole = SysRoleService{
 }
 
 func (s *SysRoleService) Create(userId, teamId int, req dto.SysRoleDto) error {
-	// var m models.SysMember
-	// if err := SerSysMember.GetMember(teamId, userId, &m); err != nil {
-	// 	return err
-	// }
 	var model models.SysRole
 	copier.Copy(&model, req)
 	model.TeamId = teamId
@@ -36,12 +32,6 @@ func (s *SysRoleService) Create(userId, teamId int, req dto.SysRoleDto) error {
 	//m := make(map[int]bool, 0)
 	var rms []models.SysRoleMenu
 	for _, mids := range req.MenuIds {
-		// for _, mid := range mids {
-		// 	if _, ok := m[mid]; !ok {
-		// 		rms = append(rms, models.SysRoleMenu{RoleId: model.Id, MenuId: mid})
-		// 		m[mid] = true
-		// 	}
-		// }
 		rms = append(rms, models.SysRoleMenu{RoleId: model.Id, MenuId: mids})
 	}
 	if err := tx.Create(rms).Error; err != nil {
@@ -53,10 +43,6 @@ func (s *SysRoleService) Create(userId, teamId int, req dto.SysRoleDto) error {
 }
 
 func (s *SysRoleService) Update(userId, teamId int, req dto.SysRoleDto) error {
-	// var m models.SysMember
-	// if err := SerSysMember.GetMember(teamId, userId, &m); err != nil {
-	// 	return err
-	// }
 	var model models.SysRole
 	copier.Copy(&model, req)
 	model.TeamId = teamId
@@ -76,12 +62,6 @@ func (s *SysRoleService) Update(userId, teamId int, req dto.SysRoleDto) error {
 	//m := make(map[int]bool, 0)
 	var rms []models.SysRoleMenu
 	for _, mids := range req.MenuIds {
-		// for _, mid := range mids {
-		// 	if _, ok := m[mid]; !ok {
-		// 		rms = append(rms, models.SysRoleMenu{RoleId: model.Id, MenuId: mid})
-		// 		m[mid] = true
-		// 	}
-		// }
 		rms = append(rms, models.SysRoleMenu{RoleId: model.Id, MenuId: mids})
 	}
 	if err := tx.Create(rms).Error; err != nil {
@@ -96,9 +76,6 @@ func (s *SysRoleService) GetRole(id, userId, teamId int, data *dto.SysRoleDtoRes
 	if err := s.DB().First(&model, id).Error; err != nil {
 		return err
 	}
-	// if *&model.TeamId != teamId {
-	// 	return codes.Err403(nil)
-	// }
 	copier.Copy(data, model)
 	var menuIds []int
 	if err := s.DB().Model(&models.SysRoleMenu{}).Select("menu_id").Where("role_id = ?", id).Find(&menuIds).Error; err != nil {
@@ -108,12 +85,24 @@ func (s *SysRoleService) GetRole(id, userId, teamId int, data *dto.SysRoleDtoRes
 	return nil
 }
 
-// func (s *SysRoleService) Query(teamId int) ([]*models.SysRole, error) {
-// 	q, t := gplus.NewQuery[models.SysRole]()
-// 	q.Eq(t.Status, 1).Eq(t.TeamId, teamId)
-// 	list, rdb := gplus.SelectList[models.SysRole](q)
-// 	if rdb.Error != nil {
-// 		return nil, rdb.Error
-// 	}
-// 	return list, nil
-// }
+func (s *SysRoleService) Query(teamId, status int, list *[]models.SysRole) error {
+	db := s.DB()
+	if teamId != 0 {
+		db = db.Where("team_id = ?", teamId)
+	}
+	if status != 0 {
+		db = db.Where("status = ?", status)
+	}
+	return db.Find(list).Error
+}
+
+func (s *SysRoleService) Page(req *dto.SysRoleGetPageReq, list *[]models.SysRole, total *int64) error {
+	db := s.DB().Offset(req.GetOffset()).Limit(req.GetSize())
+	if req.TeamId != 0 {
+		db.Where("team_id = ?", req.TeamId)
+	}
+	if req.Status != 0 {
+		db.Where("status = ?", req.Status)
+	}
+	return db.Find(list).Offset(-1).Limit(-1).Count(total).Error
+}

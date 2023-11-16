@@ -22,17 +22,24 @@ func GetUserId(c *gin.Context) int {
 }
 
 func GetTeamId(c *gin.Context) int {
-	teamId := c.GetInt("teamId")
-	if teamId == 0 {
-		sTeamId := c.GetHeader("teamId")
-		if sTeamId != "" {
-			teamId, _ = strconv.Atoi(sTeamId)
-		}
+	if GetRoleId(c) != 0 {
+		return -1
 	}
-	if teamId == 0 {
-		if GetRoleId(c) != 0 {
-			teamId = -1
+	sTeamId := c.GetHeader("teamId")
+	if sTeamId != "" {
+		teamId, _ := strconv.Atoi(sTeamId)
+		return teamId
+	}
+	return c.GetInt("teamId")
+}
+
+func GetReqTeamId(c *gin.Context, reqTeamId int) int {
+	teamId := GetTeamId(c)
+	if teamId == -1 {
+		if reqTeamId == 0 {
+			return teamId
 		}
+		return reqTeamId
 	}
 	return teamId
 }

@@ -18,10 +18,7 @@ var SerSysDept = SysDeptService{
 	base.NewService(consts.DB_DEF),
 }
 
-func (s *SysDeptService) Page(teamId int, reqId string, req *dto.SysDeptGetPageReq, list *[]models.SysDept, total *int64) error {
-	if req.TeamId == 0 {
-		req.TeamId = teamId
-	}
+func (s *SysDeptService) Page(req *dto.SysDeptGetPageReq, list *[]models.SysDept, total *int64) error {
 	db := s.DB().Offset(req.GetOffset()).Limit(req.GetSize())
 	if req.TeamId != 0 {
 		db.Where("team_id = ?", req.TeamId)
@@ -33,7 +30,7 @@ func (s *SysDeptService) Page(teamId int, reqId string, req *dto.SysDeptGetPageR
 }
 
 func (s *SysDeptService) GetDepts(teamId int, list *[]models.SysDept) error {
-	if teamId > 0 {
+	if teamId != 0 {
 		return s.DB().Where("team_id = ?", teamId).Find(list).Error
 	}
 	return s.DB().Find(list).Error

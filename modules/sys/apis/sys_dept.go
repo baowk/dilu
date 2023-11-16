@@ -34,7 +34,8 @@ func (e *SysDeptApi) QueryPage(c *gin.Context) {
 	}
 	list := make([]models.SysDept, 10)
 	var total int64
-	if err := service.SerSysDept.Page(utils.GetTeamId(c), e.GetReqId(c), &req, &list, &total); err != nil {
+	req.TeamId = utils.GetReqTeamId(c, req.TeamId)
+	if err := service.SerSysDept.Page(&req, &list, &total); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -52,15 +53,15 @@ func (e *SysDeptApi) QueryPage(c *gin.Context) {
 // @Router /api/v1/sys/sys-dept/all [post]
 // @Security Bearer
 func (e *SysDeptApi) List(c *gin.Context) {
-	// var req dto.SysDeptGetPageReq
-	// if err := c.ShouldBind(&req); err != nil {
-	// 	e.Error(c, err)
-	// 	return
-	// }
-	teamId := utils.GetTeamId(c)
+	var req dto.SysDeptGetPageReq
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
+	req.TeamId = utils.GetReqTeamId(c, req.TeamId)
 	list := make([]models.SysDept, 10)
 
-	if err := service.SerSysDept.GetDepts(teamId, &list); err != nil {
+	if err := service.SerSysDept.GetDepts(req.TeamId, &list); err != nil {
 		e.Error(c, err)
 		return
 	}
