@@ -362,7 +362,14 @@ func (e *SSO) MyUserInfo(c *gin.Context) {
 // @Security Bearer
 func (e *SSO) ChangePwd(c *gin.Context) {
 	req := dto.ChangePwdReq{}
-
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
+	if req.NewPassword != req.RePassword {
+		e.Code(c, codes.ErrRePassword)
+		return
+	}
 	if !regexps.CheckPwd(req.NewPassword) {
 		e.Code(c, codes.ErrPasswordFMT)
 		return

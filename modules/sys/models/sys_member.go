@@ -19,7 +19,7 @@ type SysMember struct {
 	Roles      string    `json:"roles" gorm:"type:varchar(255);comment:角色id"`                                //角色id,分割
 	Status     int       `json:"status" gorm:"type:tinyint;comment:状态 1正常 "`                                 //状态 1正常 2离职
 	Birthday   time.Time `json:"birthday" gorm:"type:date;default:(-);comment:生日 格式 yyyy-MM-dd"`             //生日
-	Gender     string    `json:"gender" gorm:"type:char(1);default:'2';comment:性别 1男 2女 3未知"`                //性别 1男 2女 3未知
+	Gender     int       `json:"gender" gorm:"type:tinyint;default:2;comment:性别 1男 2女 3未知"`                  //性别 1男 2女 3未知
 	EntryTime  time.Time `json:"entryTime" gorm:"type:datetime(3);comment:入职时间"`                             //入职时间
 	RetireTime time.Time `json:"retireTime" gorm:"type:datetime(3);comment:离职时间"`                            //离职时间
 	CreateBy   int       `json:"createBy" gorm:"type:int unsigned;comment:创建者"`                              //创建者

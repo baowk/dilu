@@ -20,5 +20,6 @@ func registerSysTeamRouter(v1 *gin.RouterGroup) {
 		r.POST("/update", apis.ApiSysTeam.Update)
 		r.POST("/page", apis.ApiSysTeam.QueryPage)
 		r.POST("/del", apis.ApiSysTeam.Del)
+		r.POST("/change", apis.ApiSysTeam.ChangeName)
 	}
 }

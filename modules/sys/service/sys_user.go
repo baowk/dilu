@@ -624,17 +624,17 @@ func (e *SysUser) ChangePwdByOld(id int, oldPwd, newPwd, inviteCode string) errs
 			return codes.ErrNotFound(strconv.Itoa(id), "sysuser", "", err)
 		}
 	}
+	if user.Password != "" { //已设置密码
+		if !user.CompPwd(oldPwd) {
+			return errs.ErrWithCode(codes.ErrPwd)
+		}
+	}
 	enPwd, err := user.GenPwd(newPwd)
 	if err != nil {
 		return codes.ErrSys(err)
 	}
 	updates := models.SysUser{
 		Password: string(enPwd),
-	}
-	if user.Password != "" { //已设置密码
-		if user.CompPwd(oldPwd) {
-			return errs.ErrWithCode(codes.ErrPwd)
-		}
 	}
 	db := core.DB().Model(user).Updates(updates)
 	if err = db.Error; err != nil {

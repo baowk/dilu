@@ -72,9 +72,10 @@ type CodeSendReq struct {
 }
 
 type ChangePwdReq struct {
-	OldPassword string `json:"oldPassword" comment:"旧密码"` //老密码
-	NewPassword string `json:"newPassword" comment:"新密码"` //新密码
-	InviteCode  string `json:"inviteCode" comment:"邀请码"`  //邀请码，首次有效
+	OldPassword string `json:"oldPwd" comment:"旧密码"`     //老密码
+	NewPassword string `json:"newPwd" comment:"新密码"`     //新密码
+	RePassword  string `json:"rePwd" comment:"重复新密码"`    //重复新密码
+	InviteCode  string `json:"inviteCode" comment:"邀请码"` //邀请码，首次有效
 }
 
 type ForgetPwdReq struct {

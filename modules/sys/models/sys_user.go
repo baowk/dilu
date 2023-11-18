@@ -18,7 +18,7 @@ type SysUser struct {
 	Avatar         string    `json:"avatar" gorm:"size:255;comment:头像"`                                     //头像
 	Bio            string    `json:"bio" gorm:"type:varchar(255);default:(-);comment:签名"`                   //签名
 	Birthday       string    `json:"birthday" gorm:"type:date;default:(-);comment:生日 格式 yyyy-MM-dd"`        //生日
-	Gender         string    `json:"gender" gorm:"type:char(1);default:'2';comment:性别 1男 2女 3未知"`           //性别 1男 2女 3未知
+	Gender         int       `json:"gender" gorm:"type:tinyint;default:2;comment:性别 1男 2女 3未知"`             //性别 1男 2女 3未知
 	PlatformRoleId int       `json:"platformRoleId" gorm:"type:int;size:20;comment:平台角色ID 大于0为平台账户,0为团队账户"` //平台角色ID 大于0为平台账户,0为团队账户
 	Status         int       `json:"status" gorm:"type:tinyint;comment:状态 1正常 "`                            //状态 1正常
 	Remark         string    `json:"remark" gorm:"size:255;comment:备注"`                                     //备注

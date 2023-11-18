@@ -11,7 +11,7 @@
  Target Server Version : 80032 (8.0.32)
  File Encoding         : 65001
 
- Date: 12/11/2023 20:09:12
+ Date: 18/11/2023 20:36:43
 */
 
 SET NAMES utf8mb4;
@@ -55,7 +55,7 @@ CREATE TABLE `bill`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_bill_create_by`(`create_by` ASC) USING BTREE,
   INDEX `idx_bill_update_by`(`update_by` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of bill
@@ -66,6 +66,7 @@ INSERT INTO `bill` VALUES (18, '20231102212406378265', 13, 3, 1, '/0/1/2/', 0.00
 INSERT INTO `bill` VALUES (19, '20231102212456325620', 11, 2, 1, '/0/1/2/', 0.00, 0.00, 62000.00, 0.00, 0.00, 16, '2023-11-02 21:24:56', 2, 0, 0, 0, 1, NULL, '', 0, NULL, '', '', '', '', '2023-11-02 21:24:56', '2023-11-02 21:24:56', 2, 0);
 INSERT INTO `bill` VALUES (20, '20231104203621052718', 14, 2, 1, '/0/1/2/', 0.00, 240.00, 240.00, 0.00, 0.00, 0, '2023-11-04 20:36:21', 1, 0, 0, 0, 1, NULL, '', 4, NULL, '', '', '补牙', '', '2023-11-04 20:36:21', '2023-11-04 20:36:21', 2, 0);
 INSERT INTO `bill` VALUES (21, '20231106214421763149', 15, 2, 1, '/0/1/2/', 0.00, 400.00, 400.00, 0.00, 0.00, 0, '2023-11-06 08:00:00', 1, 0, 0, 0, 1, NULL, '', 4, NULL, '', '', '临时牙', '', '2023-11-06 21:44:22', '2023-11-06 21:44:22', 2, 0);
+INSERT INTO `bill` VALUES (22, '20231113212040295399', 16, 2, 1, '/0/1/2/', 0.00, 0.00, 1000.00, 0.00, 0.00, 0, '2023-11-13 21:20:40', 1, 0, 0, 0, 1, NULL, '', 4, NULL, '', '', '', '', '2023-11-13 21:20:40', '2023-11-13 21:20:40', 2, 0);
 
 -- ----------------------------
 -- Table structure for customer
@@ -97,7 +98,7 @@ CREATE TABLE `customer`  (
   INDEX `idx_customer_team_id`(`team_id` ASC) USING BTREE,
   INDEX `idx_customer_create_by`(`create_by` ASC) USING BTREE,
   INDEX `idx_customer_update_by`(`update_by` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of customer
@@ -112,11 +113,12 @@ INSERT INTO `customer` VALUES (7, '滕国俊', 'teng-guo-jun', '13800138000', '1
 INSERT INTO `customer` VALUES (8, '李明景', 'li-ming-jing', '13800138001', '13800138001', 0, 0, 0, '', '上城区大大大大小区', '', 7, 1, '/0/1/2/', 0, '', '2023-10-30 21:13:57', '2023-10-30 21:13:57', 2, 0);
 INSERT INTO `customer` VALUES (9, '黄振', 'huang-zhen', '', '', 0, 0, 0, '', '', '', 2, 1, '/0/1/2/', 0, '', '2023-10-31 20:59:14', '2023-10-31 20:59:14', 2, 0);
 INSERT INTO `customer` VALUES (10, '赵光炎', 'zhao-guang-yan', '', '', 0, 0, 0, '', '', '', 2, 1, '/0/1/2/', 0, '', '2023-10-31 20:59:49', '2023-10-31 20:59:49', 2, 0);
-INSERT INTO `customer` VALUES (11, '陈纪生', 'chen-ji-sheng', '', '', 0, 0, 0, '', '', '', 2, 1, '/0/1/2/', 0, '', '2023-11-01 20:37:41', '2023-11-01 20:37:41', 2, 0);
-INSERT INTO `customer` VALUES (12, '韩爱琴', 'han-ai-qin', '', '', 0, 0, 0, '', '', '', 2, 1, '/0/1/2/', 0, '', '2023-11-01 20:39:02', '2023-11-01 20:39:02', 2, 0);
+INSERT INTO `customer` VALUES (11, '陈纪生', 'chen-ji-sheng', '', '', 2, 0, 0, '', '', '', 2, 1, '/0/1/2/', 0, '', '2023-11-01 20:37:41', '2023-11-18 20:34:24', 2, 0);
+INSERT INTO `customer` VALUES (12, '韩爱琴', 'han-ai-qin', '', '', 1, 0, 0, '', '', '', 2, 1, '/0/1/2/', 0, '', '2023-11-01 20:39:02', '2023-11-18 20:34:14', 2, 0);
 INSERT INTO `customer` VALUES (13, '凌曼卿', 'ling-man-qing', '', '', 0, 0, 0, '', '', '', 3, 1, '/0/1/2/', 0, '', '2023-11-02 21:24:06', '2023-11-02 21:24:06', 2, 0);
 INSERT INTO `customer` VALUES (14, '宋国甄', 'song-guo-zhen', '', '', 0, 0, 0, '', '', '', 2, 1, '/0/1/2/', 0, '', '2023-11-04 20:36:21', '2023-11-04 20:36:21', 2, 0);
 INSERT INTO `customer` VALUES (15, '谢军', 'xie-jun', '', '', 0, 0, 0, '', '', '', 2, 1, '/0/1/2/', 0, '', '2023-11-06 21:44:22', '2023-11-06 21:44:22', 2, 0);
+INSERT INTO `customer` VALUES (16, '订单到', 'ding-dan-dao', '', '', 0, 0, 0, '', '', '', 2, 1, '/0/1/2/', 0, '', '2023-11-13 21:20:40', '2023-11-13 21:20:40', 2, 0);
 
 -- ----------------------------
 -- Table structure for event_day_st

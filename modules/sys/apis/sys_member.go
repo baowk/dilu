@@ -194,3 +194,39 @@ func (e *SysMemberApi) Del(c *gin.Context) {
 	}
 	e.Ok(c)
 }
+
+// Update 更新会员
+// @Summary 更新会员
+// @Tags sys-SysMember
+// @Accept application/json
+// @Product application/json
+// @Param teamId header int false "团队id"
+// @Param data body dto.ChangeMyMemberDto true "body"
+// @Success 200 {object} base.Resp{data=models.SysMember} "{"code": 200, "data": [...]}"
+// @Router /api/v1/sys/sys-member/changeMyInfo [post]
+// @Security Bearer
+func (e *SysMemberApi) ChangeMyInfo(c *gin.Context) {
+	var req dto.ChangeMyMemberDto
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
+	teamId := utils.GetTeamId(c)
+	userId := utils.GetUserId(c)
+	var data models.SysMember
+	if err := service.SerSysMember.GetMember(teamId, userId, &data); err != nil {
+		e.Error(c, err)
+		return
+	}
+	data.Birthday = req.Birthday
+	data.Gender = req.Gender
+	data.Name = req.Name
+	data.Nickname = req.Nickname
+	data.Phone = req.Phone
+
+	if err := service.SerSysMember.Update(&data); err != nil {
+		e.Error(c, err)
+		return
+	}
+	e.Ok(c, data)
+}

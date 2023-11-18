@@ -26,7 +26,6 @@ type SysMemberDto struct {
 	Phone      string    `json:"phone"`      //电话
 	DeptPath   string    `json:"deptPath"`   //部门路径
 	DeptId     int       `json:"deptId"`     //部门id
-	PostTag    int       `json:"postTag"`    //职位标签 1主管 2副主管 3员工
 	Status     int       `json:"status"`     //状态 1正常
 	Roles      string    `json:"roles"`      //角色id
 	PY         string    `json:"py"`         //姓名拼音
@@ -35,6 +34,14 @@ type SysMemberDto struct {
 	Gender     string    `json:"gender"`     //性别 1男 2女 3未知
 	EntryTime  time.Time `json:"entryTime"`  //入职时间
 	RetireTime time.Time `json:"retireTime"` //离职时间
+}
+
+type ChangeMyMemberDto struct {
+	Nickname string    `json:"nickname"` //昵称
+	Name     string    `json:"name"`     //姓名
+	Phone    string    `json:"phone"`    //电话
+	Birthday time.Time `json:"birthday"` //生日
+	Gender   int       `json:"gender"`   //性别 1男 2女 3未知
 }
 
 type TeamMemberResp struct {

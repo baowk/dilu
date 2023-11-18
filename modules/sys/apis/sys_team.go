@@ -1,6 +1,7 @@
 package apis
 
 import (
+	"dilu/common/utils"
 	"dilu/modules/sys/models"
 	"dilu/modules/sys/service"
 	"dilu/modules/sys/service/dto"
@@ -112,6 +113,33 @@ func (e *SysTeamApi) Update(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
+	req.Id = utils.GetReqTeamId(c, req.Id)
+	var data models.SysTeam
+	copier.Copy(&data, req)
+	if err := service.SerSysTeam.UpdateById(&data); err != nil {
+		e.Error(c, err)
+		return
+	}
+	e.Ok(c, data)
+}
+
+// Update 更新团队
+// @Summary 更新团队
+// @Tags sys-SysTeam
+// @Accept application/json
+// @Product application/json
+// @Param teamId header int false "团队id"
+// @Param data body dto.SysTeamDto true "body"
+// @Success 200 {object} base.Resp{data=models.SysTeam} "{"code": 200, "data": [...]}"
+// @Router /api/v1/sys/sys-team/change [post]
+// @Security Bearer
+func (e *SysTeamApi) ChangeName(c *gin.Context) {
+	var req dto.SysTeamDto
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
+	req.Id = utils.GetTeamId(c)
 	var data models.SysTeam
 	copier.Copy(&data, req)
 	if err := service.SerSysTeam.UpdateById(&data); err != nil {
