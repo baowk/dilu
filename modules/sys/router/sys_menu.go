@@ -29,4 +29,5 @@ func registerSysMenuRouter(v1 *gin.RouterGroup) {
 
 		//		r2.POST("/perms", apis.SysMenuA.GetUserPerms)
 	}
+	v1.POST("canAccess", apis.SysMenuA.CanAccess)
 }

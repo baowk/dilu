@@ -161,6 +161,28 @@ func (e *SysMenuApi) GetUserMenus(c *gin.Context) {
 	e.Ok(c, ms)
 }
 
+// GetUserMenus 获取用户菜单
+// @Summary 获取用户菜单
+// @Tags sys-SysMenu
+// @Accept application/json
+// @Product application/json
+// @Param teamId header int false "团队id"
+// @Param data body dto.SysMenuGetReq true "body"
+// @Success 200 {object} base.Resp{data=string} "{"code": 200, "data": [...]}"
+// @Router /api/v1/sys/canAccess [post]
+func (e *SysMenuApi) CanAccess(c *gin.Context) {
+	var req dto.SysMenuGetReq
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
+	if err := service.SerSysMenu.CanAccess(c, req.Id); err != nil {
+		e.Error(c, err)
+		return
+	}
+	e.Ok(c)
+}
+
 // // GetUserPerms 获取用户权限
 // // @Summary 获取用户权限
 // // @Tags sys-SysMenu

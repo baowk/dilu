@@ -90,36 +90,35 @@ type BindReq struct {
 }
 
 type UserinfoResp struct {
-	UserId     string    `json:"userId" gorm:"type:char(32);comment:用户id"`                      //用户详情
-	Username   string    `json:"username" gorm:"type:varchar(50);default:(-);comment:用户名"`      //用户名
-	Phone      string    `json:"phone" gorm:"type:varchar(18);default:(-);comment:手机号"`         //手机号
-	Email      string    `json:"email" gorm:"type:varchar(128);default:(-);comment:邮箱"`         //邮箱
-	FirstName  string    `json:"firstName" gorm:"type:varchar(64);default:(-);comment:名"`       //名字
-	LastName   string    `json:"lastName" gorm:"type:varchar(64);default:(-);comment:姓"`        //姓
-	Nickname   string    `json:"nickname" gorm:"type:varchar(64);default:(-);comment:昵称"`       //昵称
-	Avatar     string    `json:"avatar" gorm:"type:varchar(255);default:(-);comment:头像"`        //头像
-	Bio        string    `json:"bio" gorm:"type:varchar(255);default:(-);comment:签名"`           //签名
-	Gender     string    `json:"gender" gorm:"type:char(1);default:'2';comment:性别 2女 1 男 3 未知"` //1 男 2女  3 未知
-	Birthday   time.Time `json:"birthday" gorm:"type:date;default:(-);comment:生日"`              //生日
-	Inviter    string    `json:"inviter" gorm:"type:varchar(32);default:(-);comment:邀请人"`       //邀请人
-	InviteType int       `json:"inviteType" gorm:"type:tinyint;comment:邀请类型"`                   //邀请类型
-	CreatedAt  time.Time `json:"createdAt" gorm:"comment:创建时间"`                                 //创建时间
+	UserId     int       `json:"userId"`     //用户详情
+	Username   string    `json:"username"`   //用户名
+	Phone      string    `json:"phone"`      //手机号
+	Email      string    `json:"email"`      //邮箱
+	FirstName  string    `json:"firstName"`  //名字
+	LastName   string    `json:"lastName"`   //姓
+	Nickname   string    `json:"nickname"`   //昵称
+	Avatar     string    `json:"avatar"`     //头像
+	Bio        string    `json:"bio"`        //签名
+	Gender     int       `json:"gender"`     //1 男 2女  3 未知
+	Birthday   time.Time `json:"birthday"`   //生日
+	Inviter    string    `json:"inviter"`    //邀请人
+	InviteType int       `json:"inviteType"` //邀请类型
+	CreatedAt  time.Time `json:"createdAt"`  //创建时间
 }
 
 type MyUserinfoResp struct {
-	UserId   int    `json:"userId" gorm:"type:int unsigned;primaryKey;autoIncrement;comment:主键"` //主键
-	Username string `json:"username" gorm:"size:32;comment:用户名"`                                 //用户名
-	Phone    string `json:"phone" gorm:"size:11;comment:手机号"`                                    //手机号
-	Email    string `json:"email" gorm:"size:128;comment:邮箱"`                                    //邮箱
-	NickName string `json:"nickName" gorm:"size:128;comment:昵称"`                                 //昵称
-	Avatar   string `json:"avatar" gorm:"size:255;comment:头像"`                                   //头像
-	Bio      string `json:"bio" gorm:"type:varchar(255);default:(-);comment:签名"`                 //签名
-	Gender   string `json:"gender" gorm:"type:char(1);default:'2';comment:性别 1男 2女 3未知"`         //性别 1男 2女 3未知
-	RoleId   int    `json:"roleId" gorm:"type:int unsigned;size:20;comment:角色ID"`                //角色id
-	DeptId   int    `json:"deptId" gorm:"type:int unsigned;size:20;comment:部门"`                  //部门id
-	Post     string `json:"post" gorm:"size:32;comment:岗位"`                                      //岗位
-	Remark   string `json:"remark" gorm:"size:255;comment:备注"`                                   //备注
-	Status   int    `json:"status" gorm:"type:tinyint;comment:状态 1冻结 2正常 3默认"`                   //状态 1冻结 2正常 3默认
+	UserId   int    `json:"userId"`   //主键
+	Username string `json:"username"` //用户名
+	Phone    string `json:"phone"`    //手机号
+	Email    string `json:"email"`    //邮箱
+	NickName string `json:"nickName"` //昵称
+	Avatar   string `json:"avatar"`   //头像
+	Bio      string `json:"bio"`      //签名
+	Gender   int    `json:"gender"`   //性别 1男 2女 3未知
+	RoleId   int    `json:"roleId"`   //角色id
+	DeptId   int    `json:"deptId"`   //部门id
+	Remark   string `json:"remark"`   //备注
+	Status   int    `json:"status"`   //状态 1冻结 2正常 3默认
 }
 
 type ChangeUserinfoReq struct {
@@ -127,7 +126,7 @@ type ChangeUserinfoReq struct {
 	Nickname string `json:"nickname"` //昵称
 	Avatar   string `json:"avatar"`   //头像
 	Bio      string `json:"bio" `     //签名
-	Gender   string `json:"gender"`   //性别 1 男 2女  3 未知
+	Gender   int    `json:"gender"`   //性别 1 男 2女  3 未知
 	Birthday string `json:"birthday"` //生日
 }
 

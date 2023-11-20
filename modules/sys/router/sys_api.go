@@ -21,4 +21,8 @@ func registerSysApiRouter(v1 *gin.RouterGroup) {
 		r.POST("/page", apis.SysApiA.QueryPage)
 		r.POST("/del", apis.SysApiA.Del)
 	}
+	r2 := v1.Group("sys-api")
+	{
+		r2.POST("/all", apis.SysApiA.Query)
+	}
 }
