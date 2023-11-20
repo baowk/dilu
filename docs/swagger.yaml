@@ -2359,6 +2359,8 @@ definitions:
         items:
           type: number
         type: array
+      usedPercent:
+        type: number
     type: object
   utils.Disk:
     properties:

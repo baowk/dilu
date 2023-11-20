@@ -5,6 +5,7 @@ import (
 	"dilu/modules/sys/models"
 	tm "dilu/modules/tools/models"
 	"dilu/modules/tools/utils"
+	"time"
 
 	"fmt"
 
@@ -73,6 +74,10 @@ func (e *Init) DoInit(c *gin.Context) {
 
 }
 
+var last time.Time
+
+var server utils.Server
+
 // Monitor 监控
 // @Summary 监控
 // @Tags 工具 / 监控
@@ -82,7 +87,12 @@ func (e *Init) DoInit(c *gin.Context) {
 // @Router /api/v1/tools/monitor [post]
 // @Security Bearer
 func (e *Init) Monitor(c *gin.Context) {
-	var server utils.Server
+	cur := time.Now()
+	if cur.Sub(last) < time.Second {
+		e.Ok(c, server)
+		return
+	}
+	last = cur
 	server.Os = utils.InitOS()
 	cpu, err := utils.InitCPU()
 	if err == nil {

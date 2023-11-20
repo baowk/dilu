@@ -9024,6 +9024,9 @@ const docTemplate = `{
                     "items": {
                         "type": "number"
                     }
+                },
+                "usedPercent": {
+                    "type": "number"
                 }
             }
         },

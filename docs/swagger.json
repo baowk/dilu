@@ -9015,6 +9015,9 @@
                     "items": {
                         "type": "number"
                     }
+                },
+                "usedPercent": {
+                    "type": "number"
                 }
             }
         },
