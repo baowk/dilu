@@ -11,7 +11,7 @@
  Target Server Version : 80032 (8.0.32)
  File Encoding         : 65001
 
- Date: 18/11/2023 20:36:51
+ Date: 20/11/2023 20:57:25
 */
 
 SET NAMES utf8mb4;
@@ -444,7 +444,7 @@ CREATE TABLE `sys_api`  (
   `updated_at` datetime(3) NULL DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_method_path`(`method` ASC, `path` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 93 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '接口' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 94 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '接口' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_api
@@ -540,6 +540,7 @@ INSERT INTO `sys_api` VALUES (88, '创建操作日志', 'POST', '/api/v1/sys/sys
 INSERT INTO `sys_api` VALUES (89, '修改操作日志', 'POST', '/api/v1/sys/sys-opera-log/update', 3, 3, 0, '2023-11-09 22:07:17.297');
 INSERT INTO `sys_api` VALUES (90, '删除操作日志', 'POST', '/api/v1/sys/sys-opera-log/del', 3, 3, 0, '2023-11-09 22:07:17.310');
 INSERT INTO `sys_api` VALUES (92, '修改我的企业信息', 'POST', '/api/v1/sys/sys-team/change', 3, 3, 0, '2023-11-18 15:45:42.000');
+INSERT INTO `sys_api` VALUES (93, '监控', 'POST', '/api/v1/tools/monitor', 3, 3, 0, '2023-11-20 19:42:50.000');
 
 -- ----------------------------
 -- Table structure for sys_cfg
@@ -712,7 +713,7 @@ CREATE TABLE `sys_menu`  (
   INDEX `idx_sys_menu_deleted_at`(`deleted_at` ASC) USING BTREE,
   INDEX `idx_sys_menu_create_by`(`create_by` ASC) USING BTREE,
   INDEX `idx_sys_menu_update_by`(`update_by` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 124 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 125 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -802,6 +803,7 @@ INSERT INTO `sys_menu` VALUES (120, '', '操作日志修改', '', 'sys_opera_log
 INSERT INTO `sys_menu` VALUES (121, '', '操作日志删除', '', 'sys_opera_log_del', 2, 3, 'sys:sysOperaLog:remove', 117, 0, '', 0, 0, 1, 1, '2023-11-09 22:07:17.313', '2023-11-09 22:07:17.313', NULL);
 INSERT INTO `sys_menu` VALUES (122, 'My', '我的', NULL, '/my', 2, 1, '', 0, 0, 'Layout', 0, 1, 1, 1, '2023-11-18 15:25:44.000', '2023-11-18 15:25:47.000', NULL);
 INSERT INTO `sys_menu` VALUES (123, NULL, '修改企业信息', NULL, 'my_team', 2, 3, 'my:change:team', 122, 0, NULL, 0, 0, 1, 1, '2023-11-18 15:33:28.000', '2023-11-18 15:33:31.000', NULL);
+INSERT INTO `sys_menu` VALUES (124, 'Monitor', '监控', 'monitor', '/tools/monitor', 1, 2, 'sys:monitor', 91, 0, '/tool/monitor', 0, 0, 1, 1, '2023-11-20 19:46:04.000', '2023-11-20 19:46:06.000', NULL);
 
 -- ----------------------------
 -- Table structure for sys_menu_api_rule
@@ -900,6 +902,7 @@ INSERT INTO `sys_menu_api_rule` VALUES (119, 88);
 INSERT INTO `sys_menu_api_rule` VALUES (120, 89);
 INSERT INTO `sys_menu_api_rule` VALUES (121, 90);
 INSERT INTO `sys_menu_api_rule` VALUES (123, 92);
+INSERT INTO `sys_menu_api_rule` VALUES (124, 93);
 
 -- ----------------------------
 -- Table structure for sys_opera_log

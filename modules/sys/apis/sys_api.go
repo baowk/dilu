@@ -52,7 +52,7 @@ func (e *SysApiApi) QueryPage(c *gin.Context) {
 // @Accept application/json
 // @Product application/json
 // @Param data body dto.SysApiGetPageReq true "body"
-// @Success 200 {object} base.Resp{data=list=[]models.SysApi} "{"code": 200, "data": [...]}"
+// @Success 200 {object} base.Resp{data=[]models.SysApi} "{"code": 200, "data": [...]}"
 // @Router /api/v1/sys/sys-api/all [post]
 func (e *SysApiApi) Query(c *gin.Context) {
 	list := make([]models.SysApi, 10)

@@ -176,16 +176,37 @@ definitions:
         description: 手机号|邮箱
         type: string
     type: object
+  dto.ChangeMyMemberDto:
+    properties:
+      birthday:
+        description: 生日
+        type: string
+      gender:
+        description: 性别 1男 2女 3未知
+        type: integer
+      name:
+        description: 姓名
+        type: string
+      nickname:
+        description: 昵称
+        type: string
+      phone:
+        description: 电话
+        type: string
+    type: object
   dto.ChangePwdReq:
     properties:
       inviteCode:
         description: 邀请码，首次有效
         type: string
-      newPassword:
+      newPwd:
         description: 新密码
         type: string
-      oldPassword:
+      oldPwd:
         description: 老密码
+        type: string
+      rePwd:
+        description: 重复新密码
         type: string
     type: object
   dto.ChangeUserinfoReq:
@@ -201,7 +222,7 @@ definitions:
         type: string
       gender:
         description: 性别 1 男 2女  3 未知
-        type: string
+        type: integer
       name:
         description: 名
         type: string
@@ -629,15 +650,12 @@ definitions:
         type: string
       gender:
         description: 性别 1男 2女 3未知
-        type: string
+        type: integer
       nickName:
         description: 昵称
         type: string
       phone:
         description: 手机号
-        type: string
-      post:
-        description: 岗位
         type: string
       remark:
         description: 备注
@@ -880,6 +898,9 @@ definitions:
         type: integer
       status:
         type: integer
+      teamId:
+        description: 团队id
+        type: integer
     type: object
   dto.SysJobDto:
     properties:
@@ -920,11 +941,20 @@ definitions:
     type: object
   dto.SysMemberDto:
     properties:
+      birthday:
+        description: 生日
+        type: string
       deptId:
         description: 部门id
         type: integer
       deptPath:
         description: 部门路径
+        type: string
+      entryTime:
+        description: 入职时间
+        type: string
+      gender:
+        description: 性别 1男 2女 3未知
         type: string
       id:
         description: 主键
@@ -938,9 +968,18 @@ definitions:
       phone:
         description: 电话
         type: string
-      postTag:
-        description: 职位标签 1主管 2副主管 3员工
+      postId:
+        description: -1系统超管 1 团队拥有者 2主管 4副主管 8员工
         type: integer
+      py:
+        description: 姓名拼音
+        type: string
+      retireTime:
+        description: 离职时间
+        type: string
+      roles:
+        description: 角色id
+        type: string
       status:
         description: 状态 1正常
         type: integer
@@ -1069,9 +1108,7 @@ definitions:
       menuIds:
         description: 菜单id
         items:
-          items:
-            type: integer
-          type: array
+          type: integer
         type: array
       name:
         description: 角色名称
@@ -1149,6 +1186,9 @@ definitions:
         type: integer
       status:
         description: 状态
+        type: integer
+      teamId:
+        description: 团队id
         type: integer
     type: object
   dto.SysTeamDto:
@@ -1367,7 +1407,7 @@ definitions:
         type: string
       gender:
         description: 1 男 2女  3 未知
-        type: string
+        type: integer
       inviteType:
         description: 邀请类型
         type: integer
@@ -1385,7 +1425,7 @@ definitions:
         type: string
       userId:
         description: 用户详情
-        type: string
+        type: integer
       username:
         description: 用户名
         type: string
@@ -1980,7 +2020,7 @@ definitions:
         type: string
       gender:
         description: 性别 1男 2女 3未知
-        type: string
+        type: integer
       id:
         description: 主键
         type: integer
@@ -2228,7 +2268,7 @@ definitions:
         type: string
       gender:
         description: 性别 1男 2女 3未知
-        type: string
+        type: integer
       id:
         description: 主键
         type: integer
@@ -2310,6 +2350,61 @@ definitions:
       userId:
         description: 用户id
         type: integer
+    type: object
+  utils.Cpu:
+    properties:
+      cores:
+        type: integer
+      cpus:
+        items:
+          type: number
+        type: array
+    type: object
+  utils.Disk:
+    properties:
+      totalGb:
+        type: integer
+      totalMb:
+        type: integer
+      usedGb:
+        type: integer
+      usedMb:
+        type: integer
+      usedPercent:
+        type: integer
+    type: object
+  utils.Os:
+    properties:
+      compiler:
+        type: string
+      goVersion:
+        type: string
+      goos:
+        type: string
+      numCpu:
+        type: integer
+      numGoroutine:
+        type: integer
+    type: object
+  utils.Ram:
+    properties:
+      totalMb:
+        type: integer
+      usedMb:
+        type: integer
+      usedPercent:
+        type: integer
+    type: object
+  utils.Server:
+    properties:
+      cpu:
+        $ref: '#/definitions/utils.Cpu'
+      disk:
+        $ref: '#/definitions/utils.Disk'
+      os:
+        $ref: '#/definitions/utils.Os'
+      ram:
+        $ref: '#/definitions/utils.Ram'
     type: object
   wechat.QrCodeResp:
     properties:
@@ -3295,6 +3390,34 @@ paths:
       summary: 退出登录
       tags:
       - sys-sso
+  /api/v1/sys/canAccess:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysMenuGetReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: 获取用户菜单
+      tags:
+      - sys-SysMenu
   /api/v1/sys/captcha:
     get:
       description: 获取验证码
@@ -3579,6 +3702,32 @@ paths:
       summary: 发送邮箱或者短信验证码
       tags:
       - sys-sso
+  /api/v1/sys/sys-api/all:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysApiGetPageReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.SysApi'
+                  type: array
+              type: object
+      summary: Page接口
+      tags:
+      - sys-SysApi
   /api/v1/sys/sys-api/create:
     post:
       consumes:
@@ -4219,6 +4368,36 @@ paths:
       summary: 更新SysJob
       tags:
       - sys-SysJob
+  /api/v1/sys/sys-member/changeMyInfo:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ChangeMyMemberDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysMember'
+              type: object
+      security:
+      - Bearer: []
+      summary: 更新会员
+      tags:
+      - sys-SysMember
   /api/v1/sys/sys-member/create:
     post:
       consumes:
@@ -4931,6 +5110,36 @@ paths:
       summary: 更新SysRole
       tags:
       - sys-SysRole
+  /api/v1/sys/sys-team/change:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysTeamDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.SysTeam'
+              type: object
+      security:
+      - Bearer: []
+      summary: 更新团队
+      tags:
+      - sys-SysTeam
   /api/v1/sys/sys-team/create:
     post:
       consumes:
@@ -5245,6 +5454,25 @@ paths:
       summary: 验证码校验
       tags:
       - sys-sso
+  /api/v1/tools/doInit:
+    post:
+      consumes:
+      - application/json
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Bearer: []
+      summary: 初始化
+      tags:
+      - 工具 / 初始化
   /api/v1/tools/gen/add:
     post:
       consumes:
@@ -5418,6 +5646,25 @@ paths:
       summary: 修改表结构
       tags:
       - 工具 / 生成工具
+  /api/v1/tools/monitor:
+    post:
+      consumes:
+      - application/json
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/utils.Server'
+              type: object
+      security:
+      - Bearer: []
+      summary: 监控
+      tags:
+      - 工具 / 监控
 securityDefinitions:
   Bearer:
     in: header

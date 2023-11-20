@@ -4,9 +4,9 @@ import (
 	dm "dilu/modules/dental/models"
 	"dilu/modules/sys/models"
 	tm "dilu/modules/tools/models"
+	"dilu/modules/tools/utils"
 
 	"fmt"
-	"text/template"
 
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/base"
@@ -17,15 +17,15 @@ type Init struct {
 	base.BaseApi
 }
 
-// func (Init) Init(c *gin.Context) {
-// 	t1, err := template.ParseFiles("modules/tools/apis/tmpls/index.html")
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	t1.Execute(c.Writer, "")
-// }
-
-func (Init) DoInit(c *gin.Context) {
+// DoInit 初始化
+// @Summary 初始化
+// @Tags 工具 / 初始化
+// @Accept application/json
+// @Product application/json
+// @Success 200 {object} base.Resp{data=string} "{"code": 200, "data": [...]}"
+// @Router /api/v1/tools/doInit [post]
+// @Security Bearer
+func (e *Init) DoInit(c *gin.Context) {
 	fmt.Println("开始运行初始化")
 
 	// service.ImportSql("resources/dbs/dilu-db.sql", "sys")
@@ -63,10 +63,38 @@ func (Init) DoInit(c *gin.Context) {
 	); err != nil {
 		result = "dental执行失败"
 	}
-	t1, err := template.ParseFiles("modules/tools/apis/tmpls/result.html")
-	if err != nil {
-		panic(err)
-	}
+	// t1, err := template.ParseFiles("modules/tools/apis/tmpls/result.html")
+	// if err != nil {
+	// 	panic(err)
+	// }
 
-	t1.Execute(c.Writer, result)
+	// t1.Execute(c.Writer, result)
+	e.Ok(c, result)
+
+}
+
+// Monitor 监控
+// @Summary 监控
+// @Tags 工具 / 监控
+// @Accept application/json
+// @Product application/json
+// @Success 200 {object} base.Resp{data=utils.Server} "{"code": 200, "data": [...]}"
+// @Router /api/v1/tools/monitor [post]
+// @Security Bearer
+func (e *Init) Monitor(c *gin.Context) {
+	var server utils.Server
+	server.Os = utils.InitOS()
+	cpu, err := utils.InitCPU()
+	if err == nil {
+		server.Cpu = cpu
+	}
+	d, err := utils.InitDisk()
+	if err == nil {
+		server.Disk = d
+	}
+	ram, err := utils.InitRAM()
+	if err == nil {
+		server.Ram = ram
+	}
+	e.Ok(c, server)
 }

@@ -1720,6 +1720,54 @@
                 }
             }
         },
+        "/api/v1/sys/canAccess": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sys-SysMenu"
+                ],
+                "summary": "获取用户菜单",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SysMenuGetReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/sys/captcha": {
             "get": {
                 "description": "获取验证码",
@@ -2201,6 +2249,51 @@
                         "description": "{\"code\": 200, \"data\": [...]}",
                         "schema": {
                             "$ref": "#/definitions/base.Resp"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sys/sys-api/all": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sys-SysApi"
+                ],
+                "summary": "Page接口",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SysApiGetPageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/models.SysApi"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -3343,6 +3436,59 @@
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/models.SysJob"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sys/sys-member/changeMyInfo": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sys-SysMember"
+                ],
+                "summary": "更新会员",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ChangeMyMemberDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.SysMember"
                                         }
                                     }
                                 }
@@ -4623,6 +4769,59 @@
                 }
             }
         },
+        "/api/v1/sys/sys-team/change": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sys-SysTeam"
+                ],
+                "summary": "更新团队",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SysTeamDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.SysTeam"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/sys/sys-team/create": {
             "post": {
                 "security": [
@@ -5184,6 +5383,42 @@
                 }
             }
         },
+        "/api/v1/tools/doInit": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "工具 / 初始化"
+                ],
+                "summary": "初始化",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/tools/gen/add": {
             "post": {
                 "description": "添加表结构",
@@ -5469,6 +5704,42 @@
                     }
                 }
             }
+        },
+        "/api/v1/tools/monitor": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "工具 / 监控"
+                ],
+                "summary": "监控",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/utils.Server"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -5717,6 +5988,31 @@
                 }
             }
         },
+        "dto.ChangeMyMemberDto": {
+            "type": "object",
+            "properties": {
+                "birthday": {
+                    "description": "生日",
+                    "type": "string"
+                },
+                "gender": {
+                    "description": "性别 1男 2女 3未知",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "姓名",
+                    "type": "string"
+                },
+                "nickname": {
+                    "description": "昵称",
+                    "type": "string"
+                },
+                "phone": {
+                    "description": "电话",
+                    "type": "string"
+                }
+            }
+        },
         "dto.ChangePwdReq": {
             "type": "object",
             "properties": {
@@ -5724,12 +6020,16 @@
                     "description": "邀请码，首次有效",
                     "type": "string"
                 },
-                "newPassword": {
+                "newPwd": {
                     "description": "新密码",
                     "type": "string"
                 },
-                "oldPassword": {
+                "oldPwd": {
                     "description": "老密码",
+                    "type": "string"
+                },
+                "rePwd": {
+                    "description": "重复新密码",
                     "type": "string"
                 }
             }
@@ -5751,7 +6051,7 @@
                 },
                 "gender": {
                     "description": "性别 1 男 2女  3 未知",
-                    "type": "string"
+                    "type": "integer"
                 },
                 "name": {
                     "description": "名",
@@ -6350,7 +6650,7 @@
                 },
                 "gender": {
                     "description": "性别 1男 2女 3未知",
-                    "type": "string"
+                    "type": "integer"
                 },
                 "nickName": {
                     "description": "昵称",
@@ -6358,10 +6658,6 @@
                 },
                 "phone": {
                     "description": "手机号",
-                    "type": "string"
-                },
-                "post": {
-                    "description": "岗位",
                     "type": "string"
                 },
                 "remark": {
@@ -6702,6 +6998,10 @@
                 },
                 "status": {
                     "type": "integer"
+                },
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
                 }
             }
         },
@@ -6763,12 +7063,24 @@
         "dto.SysMemberDto": {
             "type": "object",
             "properties": {
+                "birthday": {
+                    "description": "生日",
+                    "type": "string"
+                },
                 "deptId": {
                     "description": "部门id",
                     "type": "integer"
                 },
                 "deptPath": {
                     "description": "部门路径",
+                    "type": "string"
+                },
+                "entryTime": {
+                    "description": "入职时间",
+                    "type": "string"
+                },
+                "gender": {
+                    "description": "性别 1男 2女 3未知",
                     "type": "string"
                 },
                 "id": {
@@ -6787,9 +7099,21 @@
                     "description": "电话",
                     "type": "string"
                 },
-                "postTag": {
-                    "description": "职位标签 1主管 2副主管 3员工",
+                "postId": {
+                    "description": "-1系统超管 1 团队拥有者 2主管 4副主管 8员工",
                     "type": "integer"
+                },
+                "py": {
+                    "description": "姓名拼音",
+                    "type": "string"
+                },
+                "retireTime": {
+                    "description": "离职时间",
+                    "type": "string"
+                },
+                "roles": {
+                    "description": "角色id",
+                    "type": "string"
                 },
                 "status": {
                     "description": "状态 1正常",
@@ -6967,10 +7291,7 @@
                     "description": "菜单id",
                     "type": "array",
                     "items": {
-                        "type": "array",
-                        "items": {
-                            "type": "integer"
-                        }
+                        "type": "integer"
                     }
                 },
                 "name": {
@@ -7076,6 +7397,10 @@
                 },
                 "status": {
                     "description": "状态",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "description": "团队id",
                     "type": "integer"
                 }
             }
@@ -7379,7 +7704,7 @@
                 },
                 "gender": {
                     "description": "1 男 2女  3 未知",
-                    "type": "string"
+                    "type": "integer"
                 },
                 "inviteType": {
                     "description": "邀请类型",
@@ -7403,7 +7728,7 @@
                 },
                 "userId": {
                     "description": "用户详情",
-                    "type": "string"
+                    "type": "integer"
                 },
                 "username": {
                     "description": "用户名",
@@ -8230,7 +8555,7 @@
                 },
                 "gender": {
                     "description": "性别 1男 2女 3未知",
-                    "type": "string"
+                    "type": "integer"
                 },
                 "id": {
                     "description": "主键",
@@ -8566,7 +8891,7 @@
                 },
                 "gender": {
                     "description": "性别 1男 2女 3未知",
-                    "type": "string"
+                    "type": "integer"
                 },
                 "id": {
                     "description": "主键",
@@ -8676,6 +9001,91 @@
                 "userId": {
                     "description": "用户id",
                     "type": "integer"
+                }
+            }
+        },
+        "utils.Cpu": {
+            "type": "object",
+            "properties": {
+                "cores": {
+                    "type": "integer"
+                },
+                "cpus": {
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                }
+            }
+        },
+        "utils.Disk": {
+            "type": "object",
+            "properties": {
+                "totalGb": {
+                    "type": "integer"
+                },
+                "totalMb": {
+                    "type": "integer"
+                },
+                "usedGb": {
+                    "type": "integer"
+                },
+                "usedMb": {
+                    "type": "integer"
+                },
+                "usedPercent": {
+                    "type": "integer"
+                }
+            }
+        },
+        "utils.Os": {
+            "type": "object",
+            "properties": {
+                "compiler": {
+                    "type": "string"
+                },
+                "goVersion": {
+                    "type": "string"
+                },
+                "goos": {
+                    "type": "string"
+                },
+                "numCpu": {
+                    "type": "integer"
+                },
+                "numGoroutine": {
+                    "type": "integer"
+                }
+            }
+        },
+        "utils.Ram": {
+            "type": "object",
+            "properties": {
+                "totalMb": {
+                    "type": "integer"
+                },
+                "usedMb": {
+                    "type": "integer"
+                },
+                "usedPercent": {
+                    "type": "integer"
+                }
+            }
+        },
+        "utils.Server": {
+            "type": "object",
+            "properties": {
+                "cpu": {
+                    "$ref": "#/definitions/utils.Cpu"
+                },
+                "disk": {
+                    "$ref": "#/definitions/utils.Disk"
+                },
+                "os": {
+                    "$ref": "#/definitions/utils.Os"
+                },
+                "ram": {
+                    "$ref": "#/definitions/utils.Ram"
                 }
             }
         },
