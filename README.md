@@ -41,3 +41,6 @@ go run main.go start -c resources/config.dev.yaml
 ```
 
 前端使用请[跳至前端](https://github.com/baowk/dilu-admin)
+![d7f4b2513f7440d6c4c9bd932b4800f](https://github.com/baowk/dilu/assets/142554979/ee341fb7-f98e-4f18-9658-f89b4f7d466f)
+
+
