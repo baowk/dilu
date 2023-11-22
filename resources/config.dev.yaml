@@ -43,6 +43,8 @@ dbcfg: # 数据库配置
 #       max-idle-conns: 10 #最大空闲连接数 默认10
 #       max-open-conns: 30 #最大打开数
 #       max-lifetime: 60 #链接重置时间（分）
+    - notice:    #子配置会继承父配置
+        dns: root:123456@tcp(127.0.0.1:3306)/notice-db?charset=utf8&parseTime=True&loc=Local&timeout=1000ms
 cors:
   enable: true
   mode: allow-all

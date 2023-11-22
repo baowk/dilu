@@ -680,6 +680,48 @@ definitions:
       value:
         type: integer
     type: object
+  dto.PubNoticeDto:
+    properties:
+      content:
+        description: 内容
+        type: string
+      expired:
+        description: 到期时间
+        type: string
+      id:
+        description: 主键
+        type: integer
+      noticeType:
+        description: 消息类型
+        type: integer
+      op:
+        description: 操作类型
+        type: integer
+      opId:
+        description: 操作id
+        type: integer
+      status:
+        description: 状态
+        type: integer
+      teamId:
+        description: 针对组消息
+        type: integer
+      title:
+        description: 标题
+        type: string
+    type: object
+  dto.PubNoticeGetPageReq:
+    properties:
+      page:
+        description: 页码
+        type: integer
+      pageSize:
+        description: 每页大小
+        type: integer
+      status:
+        description: 状态
+        type: integer
+    type: object
   dto.RegisterReq:
     properties:
       code:
@@ -1385,6 +1427,51 @@ definitions:
         description: 用户id
         type: integer
     type: object
+  dto.UserNoticeDto:
+    properties:
+      content:
+        description: 内容
+        type: string
+      deleteAt:
+        description: 删除时间
+        type: string
+      id:
+        description: 主键
+        type: integer
+      noticeType:
+        description: 消息类型
+        type: integer
+      op:
+        description: 操作类型
+        type: integer
+      opId:
+        description: 操作对象id
+        type: integer
+      status:
+        description: 状态 1未读 2已读 -1回收站
+        type: integer
+      teamId:
+        description: 团队id
+        type: integer
+      title:
+        description: 标题
+        type: string
+      userId:
+        description: 用户id
+        type: integer
+    type: object
+  dto.UserNoticeGetPageReq:
+    properties:
+      page:
+        description: 页码
+        type: integer
+      pageSize:
+        description: 每页大小
+        type: integer
+      status:
+        description: 状态 1未读 2已读 -1回收站
+        type: integer
+    type: object
   dto.UserinfoResp:
     properties:
       avatar:
@@ -1804,6 +1891,48 @@ definitions:
         type: integer
       updatedAt:
         description: 最后更新时间
+        type: string
+    type: object
+  models.PubNotice:
+    properties:
+      content:
+        description: 内容
+        type: string
+      createBy:
+        description: 创建人
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      expired:
+        description: 到期时间
+        type: string
+      id:
+        description: 主键
+        type: integer
+      noticeType:
+        description: 消息类型
+        type: integer
+      op:
+        description: 操作类型
+        type: integer
+      opId:
+        description: 操作id
+        type: integer
+      status:
+        description: 状态
+        type: integer
+      teamId:
+        description: 针对组消息
+        type: integer
+      title:
+        description: 标题
+        type: string
+      updateBy:
+        description: 更新人
+        type: integer
+      updatedAt:
+        description: 更新时间
         type: string
     type: object
   models.SummaryPlanDay:
@@ -2344,6 +2473,48 @@ definitions:
       updateBy:
         description: 更新者
         type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+      userId:
+        description: 用户id
+        type: integer
+    type: object
+  models.UserNotice:
+    properties:
+      content:
+        description: 内容
+        type: string
+      createBy:
+        description: 创建人
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      deleteAt:
+        description: 删除时间
+        type: string
+      id:
+        description: 主键
+        type: integer
+      noticeType:
+        description: 消息类型
+        type: integer
+      op:
+        description: 操作类型
+        type: integer
+      opId:
+        description: 操作对象id
+        type: integer
+      status:
+        description: 状态 1未读 2已读 -1回收站
+        type: integer
+      teamId:
+        description: 团队id
+        type: integer
+      title:
+        description: 标题
+        type: string
       updatedAt:
         description: 更新时间
         type: string
@@ -3335,6 +3506,320 @@ paths:
       summary: 更新TargetTask
       tags:
       - dental-TargetTask
+  /api/v1/notice/pub-notice/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PubNoticeDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.PubNotice'
+              type: object
+      security:
+      - Bearer: []
+      summary: 创建公用通知
+      tags:
+      - notice-PubNotice
+  /api/v1/notice/pub-notice/del:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqIds'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.PubNotice'
+              type: object
+      security:
+      - Bearer: []
+      summary: 删除公用通知
+      tags:
+      - notice-PubNotice
+  /api/v1/notice/pub-notice/get:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqId'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.PubNotice'
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取公用通知
+      tags:
+      - notice-PubNotice
+  /api/v1/notice/pub-notice/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PubNoticeGetPageReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/base.PageResp'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/models.PubNotice'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取公用通知列表
+      tags:
+      - notice-PubNotice
+  /api/v1/notice/pub-notice/update:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PubNoticeDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.PubNotice'
+              type: object
+      security:
+      - Bearer: []
+      summary: 更新公用通知
+      tags:
+      - notice-PubNotice
+  /api/v1/notice/user-notice/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserNoticeDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.UserNotice'
+              type: object
+      security:
+      - Bearer: []
+      summary: 创建用户通知
+      tags:
+      - notice-UserNotice
+  /api/v1/notice/user-notice/del:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqIds'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.UserNotice'
+              type: object
+      security:
+      - Bearer: []
+      summary: 删除用户通知
+      tags:
+      - notice-UserNotice
+  /api/v1/notice/user-notice/get:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqId'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.UserNotice'
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取用户通知
+      tags:
+      - notice-UserNotice
+  /api/v1/notice/user-notice/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserNoticeGetPageReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/base.PageResp'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/models.UserNotice'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取用户通知列表
+      tags:
+      - notice-UserNotice
+  /api/v1/notice/user-notice/update:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserNoticeDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.UserNotice'
+              type: object
+      security:
+      - Bearer: []
+      summary: 更新用户通知
+      tags:
+      - notice-UserNotice
   /api/v1/sys/auth/bind:
     post:
       consumes:

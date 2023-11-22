@@ -11,7 +11,7 @@
  Target Server Version : 80032 (8.0.32)
  File Encoding         : 65001
 
- Date: 20/11/2023 20:57:25
+ Date: 22/11/2023 21:59:11
 */
 
 SET NAMES utf8mb4;
@@ -61,7 +61,7 @@ CREATE TABLE `gen_columns`  (
   `created_at` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
   `updated_at` datetime(3) NULL DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`column_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 565 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 591 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gen_columns
@@ -364,6 +364,32 @@ INSERT INTO `gen_columns` VALUES (561, 43, 'created_at', '创建时间', 'dateti
 INSERT INTO `gen_columns` VALUES (562, 43, 'updated_at', '最后更新时间', 'datetime(3)', 'time.Time', 'UpdatedAt', 'updatedAt', '0', '', '0', '1', '', '1', '', 'EQ', 'datetime', '', 21, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-09 21:58:35.552', '2023-11-09 21:58:35.552');
 INSERT INTO `gen_columns` VALUES (563, 43, 'create_by', '创建者', 'int unsigned', 'int', 'CreateBy', 'createBy', '0', '', '0', '1', '', '1', '', 'EQ', 'input', '', 22, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-09 21:58:35.556', '2023-11-09 21:58:35.556');
 INSERT INTO `gen_columns` VALUES (564, 43, 'update_by', '更新者', 'int unsigned', 'int', 'UpdateBy', 'updateBy', '0', '', '0', '1', '', '1', '', 'EQ', 'input', '', 23, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-09 21:58:35.560', '2023-11-09 21:58:35.560');
+INSERT INTO `gen_columns` VALUES (565, 44, 'id', '主键', 'int', 'int', 'Id', 'id', '1', '', '1', '1', '1', '1', '', 'EQ', 'input', '', 1, '', 1, 1, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.718', '2023-11-22 21:44:52.718');
+INSERT INTO `gen_columns` VALUES (566, 44, 'team_id', '针对组消息', 'int', 'int', 'TeamId', 'teamId', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 2, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.725', '2023-11-22 21:44:52.725');
+INSERT INTO `gen_columns` VALUES (567, 44, 'title', '标题', 'varchar(255)', 'string', 'Title', 'title', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 3, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.729', '2023-11-22 21:44:52.729');
+INSERT INTO `gen_columns` VALUES (568, 44, 'content', '内容', 'varchar(1024)', 'string', 'Content', 'content', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 4, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.733', '2023-11-22 21:44:52.733');
+INSERT INTO `gen_columns` VALUES (569, 44, 'notice_type', '消息类型', 'tinyint', 'int', 'NoticeType', 'noticeType', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 5, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.737', '2023-11-22 21:44:52.737');
+INSERT INTO `gen_columns` VALUES (570, 44, 'op', '操作类型', 'tinyint', 'int', 'Op', 'op', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 6, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.741', '2023-11-22 21:44:52.741');
+INSERT INTO `gen_columns` VALUES (571, 44, 'op_id', '操作id', 'int', 'int', 'OpId', 'opId', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 7, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.745', '2023-11-22 21:44:52.745');
+INSERT INTO `gen_columns` VALUES (572, 44, 'status', '状态', 'tinyint', 'int', 'Status', 'status', '0', '', '0', '1', '1', '1', '1', 'EQ', 'input', '', 8, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.749', '2023-11-22 21:44:52.749');
+INSERT INTO `gen_columns` VALUES (573, 44, 'create_by', '创建人', 'int', 'int', 'CreateBy', 'createBy', '0', '', '0', '1', '', '1', '', 'EQ', 'input', '', 9, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.754', '2023-11-22 21:44:52.754');
+INSERT INTO `gen_columns` VALUES (574, 44, 'update_by', '更新人', 'int', 'int', 'UpdateBy', 'updateBy', '0', '', '0', '1', '', '1', '', 'EQ', 'input', '', 10, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.758', '2023-11-22 21:44:52.758');
+INSERT INTO `gen_columns` VALUES (575, 44, 'expired', '到期时间', 'datetime', 'time.Time', 'Expired', 'expired', '0', '', '0', '1', '', '1', '', 'EQ', 'datetime', '', 11, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.763', '2023-11-22 21:44:52.763');
+INSERT INTO `gen_columns` VALUES (576, 44, 'created_at', '创建时间', 'datetime', 'time.Time', 'CreatedAt', 'createdAt', '0', '', '0', '1', '', '1', '', 'EQ', 'datetime', '', 12, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.766', '2023-11-22 21:44:52.766');
+INSERT INTO `gen_columns` VALUES (577, 44, 'updated_at', '更新时间', 'datetime', 'time.Time', 'UpdatedAt', 'updatedAt', '0', '', '0', '1', '', '1', '', 'EQ', 'datetime', '', 13, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.771', '2023-11-22 21:44:52.771');
+INSERT INTO `gen_columns` VALUES (578, 45, 'id', '主键', 'bigint unsigned', 'int', 'Id', 'id', '1', '', '1', '1', '1', '1', '', 'EQ', 'input', '', 1, '', 1, 1, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.786', '2023-11-22 21:44:52.786');
+INSERT INTO `gen_columns` VALUES (579, 45, 'team_id', '团队id', 'int', 'int', 'TeamId', 'teamId', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 2, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.789', '2023-11-22 21:44:52.789');
+INSERT INTO `gen_columns` VALUES (580, 45, 'user_id', '用户id', 'int', 'int', 'UserId', 'userId', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 3, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.794', '2023-11-22 21:44:52.794');
+INSERT INTO `gen_columns` VALUES (581, 45, 'title', '标题', 'varchar(255)', 'string', 'Title', 'title', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 4, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.797', '2023-11-22 21:44:52.797');
+INSERT INTO `gen_columns` VALUES (582, 45, 'content', '内容', 'varchar(1024)', 'string', 'Content', 'content', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 5, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.800', '2023-11-22 21:44:52.800');
+INSERT INTO `gen_columns` VALUES (583, 45, 'notice_type', '消息类型', 'tinyint', 'int', 'NoticeType', 'noticeType', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 6, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.805', '2023-11-22 21:44:52.805');
+INSERT INTO `gen_columns` VALUES (584, 45, 'op', '操作类型', 'tinyint', 'int', 'Op', 'op', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 7, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.809', '2023-11-22 21:44:52.809');
+INSERT INTO `gen_columns` VALUES (585, 45, 'op_id', '操作对象id', 'int', 'int', 'OpId', 'opId', '0', '', '0', '1', '1', '1', '', 'EQ', 'input', '', 8, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.812', '2023-11-22 21:44:52.812');
+INSERT INTO `gen_columns` VALUES (586, 45, 'status', '状态 1未读 2已读 -1回收站', 'tinyint', 'int', 'Status', 'status', '0', '', '0', '1', '1', '1', '1', 'EQ', 'input', '', 9, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.817', '2023-11-22 21:44:52.817');
+INSERT INTO `gen_columns` VALUES (587, 45, 'create_by', '创建人', 'int', 'int', 'CreateBy', 'createBy', '0', '', '0', '1', '', '1', '', 'EQ', 'input', '', 10, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.820', '2023-11-22 21:44:52.820');
+INSERT INTO `gen_columns` VALUES (588, 45, 'created_at', '创建时间', 'datetime', 'time.Time', 'CreatedAt', 'createdAt', '0', '', '0', '1', '', '1', '', 'EQ', 'datetime', '', 11, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.823', '2023-11-22 21:44:52.823');
+INSERT INTO `gen_columns` VALUES (589, 45, 'updated_at', '更新时间', 'datetime', 'time.Time', 'UpdatedAt', 'updatedAt', '0', '', '0', '1', '', '1', '', 'EQ', 'datetime', '', 12, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.828', '2023-11-22 21:44:52.828');
+INSERT INTO `gen_columns` VALUES (590, 45, 'delete_at', '删除时间', 'datetime', 'time.Time', 'DeleteAt', 'deleteAt', '0', '', '0', '1', '', '1', '', 'EQ', 'datetime', '', 13, '', 0, 0, 0, 0, 0, 1, 0, 0, '', '', '', '', '', '', 0, 0, '2023-11-22 21:44:52.831', '2023-11-22 21:44:52.831');
 
 -- ----------------------------
 -- Table structure for gen_tables
@@ -405,7 +431,7 @@ CREATE TABLE `gen_tables`  (
   PRIMARY KEY (`table_id`) USING BTREE,
   INDEX `idx_gen_tables_create_by`(`create_by` ASC) USING BTREE,
   INDEX `idx_gen_tables_update_by`(`update_by` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 44 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 46 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gen_tables
@@ -428,6 +454,8 @@ INSERT INTO `gen_tables` VALUES (35, 'dilu-db', 'sys_email', '邮件', 'SysEmail
 INSERT INTO `gen_tables` VALUES (36, 'dilu-db', 'sys_sms', '短信', 'SysSms', 'crud', 'sys', 'sys-sms', '', 'sysSms', '短信', 'baowk', 'id', 'Id', 'id', '', '', '', '', 0, 1, '', 1, 2, 1, '1', 1, 'is_del', '2023-11-05 20:34:42.469', '2023-11-05 20:34:42.469', 0, 0);
 INSERT INTO `gen_tables` VALUES (42, 'dilu-db', 'sys_cfg', '配置', 'SysCfg', 'crud', 'sys', 'sys-cfg', '', 'sysCfg', '配置', 'baowk', 'id', 'Id', 'id', '', '', '', '', 0, 1, '', 1, 2, 1, '1', 1, 'is_del', '2023-11-08 00:16:43.591', '2023-11-08 00:16:43.591', 0, 0);
 INSERT INTO `gen_tables` VALUES (43, 'dilu-db', 'sys_opera_log', '操作日志', 'SysOperaLog', 'crud', 'sys', 'sys-opera-log', '', 'sysOperaLog', '操作日志', 'baowk', 'id', 'Id', 'id', '', '', '', '', 0, 1, '', 1, 2, 1, '1', 1, 'is_del', '2023-11-09 21:58:35.441', '2023-11-09 21:58:35.441', 0, 0);
+INSERT INTO `gen_tables` VALUES (44, 'notice-db', 'pub_notice', '公用通知', 'PubNotice', 'crud', 'notice', 'pub-notice', '', 'pubNotice', '公用通知', 'baowk', 'id', 'Id', 'id', '', '', '', '', 0, 1, '', 1, 2, 1, '1', 1, 'is_del', '2023-11-22 21:44:52.710', '2023-11-22 21:44:52.710', 0, 0);
+INSERT INTO `gen_tables` VALUES (45, 'notice-db', 'user_notice', '用户通知', 'UserNotice', 'crud', 'notice', 'user-notice', '', 'userNotice', '用户通知', 'baowk', 'id', 'Id', 'id', '', '', '', '', 0, 1, '', 1, 2, 1, '1', 1, 'is_del', '2023-11-22 21:44:52.782', '2023-11-22 21:44:52.782', 0, 0);
 
 -- ----------------------------
 -- Table structure for sys_api
@@ -444,7 +472,7 @@ CREATE TABLE `sys_api`  (
   `updated_at` datetime(3) NULL DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_method_path`(`method` ASC, `path` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 94 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '接口' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 104 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '接口' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_api
@@ -541,6 +569,16 @@ INSERT INTO `sys_api` VALUES (89, '修改操作日志', 'POST', '/api/v1/sys/sys
 INSERT INTO `sys_api` VALUES (90, '删除操作日志', 'POST', '/api/v1/sys/sys-opera-log/del', 3, 3, 0, '2023-11-09 22:07:17.310');
 INSERT INTO `sys_api` VALUES (92, '修改我的企业信息', 'POST', '/api/v1/sys/sys-team/change', 3, 3, 0, '2023-11-18 15:45:42.000');
 INSERT INTO `sys_api` VALUES (93, '监控', 'POST', '/api/v1/tools/monitor', 3, 3, 0, '2023-11-20 19:42:50.000');
+INSERT INTO `sys_api` VALUES (94, '分页获取用户通知', 'POST', '/api/v1/notice/user-notice/page', 3, 3, 0, '2023-11-22 21:45:33.859');
+INSERT INTO `sys_api` VALUES (95, '根据id获取用户通知', 'POST', '/api/v1/notice/user-notice/get', 3, 3, 0, '2023-11-22 21:45:33.885');
+INSERT INTO `sys_api` VALUES (96, '创建用户通知', 'POST', '/api/v1/notice/user-notice/create', 3, 3, 0, '2023-11-22 21:45:33.902');
+INSERT INTO `sys_api` VALUES (97, '修改用户通知', 'POST', '/api/v1/notice/user-notice/update', 3, 3, 0, '2023-11-22 21:45:33.918');
+INSERT INTO `sys_api` VALUES (98, '删除用户通知', 'POST', '/api/v1/notice/user-notice/del', 3, 3, 0, '2023-11-22 21:45:33.936');
+INSERT INTO `sys_api` VALUES (99, '分页获取公用通知', 'POST', '/api/v1/notice/pub-notice/page', 3, 3, 0, '2023-11-22 21:45:36.388');
+INSERT INTO `sys_api` VALUES (100, '根据id获取公用通知', 'POST', '/api/v1/notice/pub-notice/get', 3, 3, 0, '2023-11-22 21:45:36.400');
+INSERT INTO `sys_api` VALUES (101, '创建公用通知', 'POST', '/api/v1/notice/pub-notice/create', 3, 3, 0, '2023-11-22 21:45:36.411');
+INSERT INTO `sys_api` VALUES (102, '修改公用通知', 'POST', '/api/v1/notice/pub-notice/update', 3, 3, 0, '2023-11-22 21:45:36.422');
+INSERT INTO `sys_api` VALUES (103, '删除公用通知', 'POST', '/api/v1/notice/pub-notice/del', 3, 3, 0, '2023-11-22 21:45:36.433');
 
 -- ----------------------------
 -- Table structure for sys_cfg
@@ -713,7 +751,7 @@ CREATE TABLE `sys_menu`  (
   INDEX `idx_sys_menu_deleted_at`(`deleted_at` ASC) USING BTREE,
   INDEX `idx_sys_menu_create_by`(`create_by` ASC) USING BTREE,
   INDEX `idx_sys_menu_update_by`(`update_by` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 125 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 137 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -804,6 +842,16 @@ INSERT INTO `sys_menu` VALUES (121, '', '操作日志删除', '', 'sys_opera_log
 INSERT INTO `sys_menu` VALUES (122, 'My', '我的', NULL, '/my', 2, 1, '', 0, 0, 'Layout', 0, 1, 1, 1, '2023-11-18 15:25:44.000', '2023-11-18 15:25:47.000', NULL);
 INSERT INTO `sys_menu` VALUES (123, NULL, '修改企业信息', NULL, 'my_team', 2, 3, 'my:change:team', 122, 0, NULL, 0, 0, 1, 1, '2023-11-18 15:33:28.000', '2023-11-18 15:33:31.000', NULL);
 INSERT INTO `sys_menu` VALUES (124, 'Monitor', '监控', 'monitor', '/tools/monitor', 1, 2, 'sys:monitor', 91, 0, '/tool/monitor', 0, 0, 1, 1, '2023-11-20 19:46:04.000', '2023-11-20 19:46:06.000', NULL);
+INSERT INTO `sys_menu` VALUES (126, 'UserNoticeManage', '用户通知管理', 'bell', '/notice/user-notice', 2, 2, 'notice:userNotice:list', 1, 0, '/notice/user-notice/index', 0, 0, 1, 1, '2023-11-22 21:45:33.866', '2023-11-22 21:45:33.866', NULL);
+INSERT INTO `sys_menu` VALUES (127, '', '用户通知详情', '', 'user_notice_detail', 2, 3, 'notice:userNotice:query', 126, 0, '', 0, 0, 1, 1, '2023-11-22 21:45:33.889', '2023-11-22 21:45:33.889', NULL);
+INSERT INTO `sys_menu` VALUES (128, '', '用户通知创建', '', 'user_notice_create', 2, 3, 'notice:userNotice:add', 126, 0, '', 0, 0, 1, 1, '2023-11-22 21:45:33.907', '2023-11-22 21:45:33.907', NULL);
+INSERT INTO `sys_menu` VALUES (129, '', '用户通知修改', '', 'user_notice_update', 2, 3, 'notice:userNotice:edit', 126, 0, '', 0, 0, 1, 1, '2023-11-22 21:45:33.925', '2023-11-22 21:45:33.925', NULL);
+INSERT INTO `sys_menu` VALUES (130, '', '用户通知删除', '', 'user_notice_del', 2, 3, 'notice:userNotice:remove', 126, 0, '', 0, 0, 1, 1, '2023-11-22 21:45:33.941', '2023-11-22 21:45:33.941', NULL);
+INSERT INTO `sys_menu` VALUES (132, 'PubNoticeManage', '公用通知管理', 'bellFill', '/notice/pub-notice', 2, 2, 'notice:pubNotice:list', 1, 0, '/notice/pub-notice/index', 0, 0, 1, 1, '2023-11-22 21:45:36.391', '2023-11-22 21:45:36.391', NULL);
+INSERT INTO `sys_menu` VALUES (133, '', '公用通知详情', '', 'pub_notice_detail', 2, 3, 'notice:pubNotice:query', 132, 0, '', 0, 0, 1, 1, '2023-11-22 21:45:36.405', '2023-11-22 21:45:36.405', NULL);
+INSERT INTO `sys_menu` VALUES (134, '', '公用通知创建', '', 'pub_notice_create', 2, 3, 'notice:pubNotice:add', 132, 0, '', 0, 0, 1, 1, '2023-11-22 21:45:36.416', '2023-11-22 21:45:36.416', NULL);
+INSERT INTO `sys_menu` VALUES (135, '', '公用通知修改', '', 'pub_notice_update', 2, 3, 'notice:pubNotice:edit', 132, 0, '', 0, 0, 1, 1, '2023-11-22 21:45:36.427', '2023-11-22 21:45:36.427', NULL);
+INSERT INTO `sys_menu` VALUES (136, '', '公用通知删除', '', 'pub_notice_del', 2, 3, 'notice:pubNotice:remove', 132, 0, '', 0, 0, 1, 1, '2023-11-22 21:45:36.439', '2023-11-22 21:45:36.439', NULL);
 
 -- ----------------------------
 -- Table structure for sys_menu_api_rule
@@ -903,6 +951,16 @@ INSERT INTO `sys_menu_api_rule` VALUES (120, 89);
 INSERT INTO `sys_menu_api_rule` VALUES (121, 90);
 INSERT INTO `sys_menu_api_rule` VALUES (123, 92);
 INSERT INTO `sys_menu_api_rule` VALUES (124, 93);
+INSERT INTO `sys_menu_api_rule` VALUES (126, 94);
+INSERT INTO `sys_menu_api_rule` VALUES (127, 95);
+INSERT INTO `sys_menu_api_rule` VALUES (128, 96);
+INSERT INTO `sys_menu_api_rule` VALUES (129, 97);
+INSERT INTO `sys_menu_api_rule` VALUES (130, 98);
+INSERT INTO `sys_menu_api_rule` VALUES (132, 99);
+INSERT INTO `sys_menu_api_rule` VALUES (133, 100);
+INSERT INTO `sys_menu_api_rule` VALUES (134, 101);
+INSERT INTO `sys_menu_api_rule` VALUES (135, 102);
+INSERT INTO `sys_menu_api_rule` VALUES (136, 103);
 
 -- ----------------------------
 -- Table structure for sys_opera_log
