@@ -1,8 +1,9 @@
 package router
 
 import (
-	"dilu/modules/notice/apis"
 	"dilu/common/middleware"
+	"dilu/modules/notice/apis"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,7 +13,7 @@ func init() {
 
 // 默认需登录认证的路由
 func registerPubNoticeRouter(v1 *gin.RouterGroup) {
-	r := v1.Group("pub-notice").Use(middleware.JwtHandler())
+	r := v1.Group("pub-notice").Use(middleware.JwtHandler()).Use(middleware.PermHandler())
 	{
 		r.POST("/get", apis.ApiPubNotice.Get)
 		r.POST("/create", apis.ApiPubNotice.Create)

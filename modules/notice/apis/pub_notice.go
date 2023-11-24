@@ -86,6 +86,7 @@ func (e *PubNoticeApi) Create(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
+
 	var data models.PubNotice
 	copier.Copy(&data, req)
 	if err := service.SerPubNotice.Create(&data); err != nil {

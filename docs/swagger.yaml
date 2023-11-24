@@ -1382,6 +1382,65 @@ definitions:
         description: 每页大小
         type: integer
     type: object
+  dto.TaskDto:
+    properties:
+      beginAt:
+        description: 开始时间
+        type: string
+      content:
+        description: 任务内容
+        type: string
+      endAt:
+        description: 结束时间
+        type: string
+      id:
+        description: 主键
+        type: integer
+      op:
+        description: 操作类型
+        type: integer
+      opId:
+        description: 操作id
+        type: integer
+      reminderStatus:
+        description: 提醒状态 1开启 2关闭
+        type: integer
+      reminderTime:
+        description: 提醒时间
+        type: string
+      status:
+        description: 状态1开启2关闭
+        type: integer
+      taskType:
+        description: 任务类型
+        type: integer
+      teamId:
+        description: 团队id
+        type: integer
+      title:
+        description: 任务标题
+        type: string
+      userId:
+        description: 用户id
+        type: integer
+    type: object
+  dto.TaskGetPageReq:
+    properties:
+      page:
+        description: 页码
+        type: integer
+      pageSize:
+        description: 每页大小
+        type: integer
+      status:
+        description: 状态1开启2关闭ReminderStatus int `json:"reminderStatus" query:"column:reminder_status"`
+          //提醒状态 1开启 2关闭
+        type: integer
+      teamId:
+        type: integer
+      userId:
+        type: integer
+    type: object
   dto.TeamMemberResp:
     properties:
       birthday:
@@ -1432,9 +1491,6 @@ definitions:
       content:
         description: 内容
         type: string
-      deleteAt:
-        description: 删除时间
-        type: string
       id:
         description: 主键
         type: integer
@@ -1470,6 +1526,10 @@ definitions:
         type: integer
       status:
         description: 状态 1未读 2已读 -1回收站
+        type: integer
+      teamId:
+        type: integer
+      userId:
         type: integer
     type: object
   dto.UserinfoResp:
@@ -1920,7 +1980,7 @@ definitions:
         description: 操作id
         type: integer
       status:
-        description: 状态
+        description: 状态1正常 2删除
         type: integer
       teamId:
         description: 针对组消息
@@ -2480,6 +2540,54 @@ definitions:
         description: 用户id
         type: integer
     type: object
+  models.Task:
+    properties:
+      beginAt:
+        description: 开始时间
+        type: string
+      content:
+        description: 任务内容
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      endAt:
+        description: 结束时间
+        type: string
+      id:
+        description: 主键
+        type: integer
+      op:
+        description: 操作类型
+        type: integer
+      opId:
+        description: 操作id
+        type: integer
+      reminderStatus:
+        description: 提醒状态 1开启 2关闭
+        type: integer
+      reminderTime:
+        description: 提醒时间
+        type: string
+      status:
+        description: 状态1开启2关闭
+        type: integer
+      taskType:
+        description: 任务类型
+        type: integer
+      teamId:
+        description: 团队id
+        type: integer
+      title:
+        description: 任务标题
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+      userId:
+        description: 用户id
+        type: integer
+    type: object
   models.UserNotice:
     properties:
       content:
@@ -2490,9 +2598,6 @@ definitions:
         type: integer
       createdAt:
         description: 创建时间
-        type: string
-      deleteAt:
-        description: 删除时间
         type: string
       id:
         description: 主键
@@ -2505,6 +2610,9 @@ definitions:
         type: integer
       opId:
         description: 操作对象id
+        type: integer
+      pubId:
+        description: 公共id
         type: integer
       status:
         description: 状态 1未读 2已读 -1回收站
@@ -3663,6 +3771,200 @@ paths:
       summary: 更新公用通知
       tags:
       - notice-PubNotice
+  /api/v1/notice/task/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.TaskDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Task'
+              type: object
+      security:
+      - Bearer: []
+      summary: 创建Task
+      tags:
+      - notice-Task
+  /api/v1/notice/task/del:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqIds'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Task'
+              type: object
+      security:
+      - Bearer: []
+      summary: 删除Task
+      tags:
+      - notice-Task
+  /api/v1/notice/task/get:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqId'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Task'
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取Task
+      tags:
+      - notice-Task
+  /api/v1/notice/task/my:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.TaskGetPageReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/base.PageResp'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/models.Task'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取Task列表
+      tags:
+      - notice-Task
+  /api/v1/notice/task/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.TaskGetPageReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/base.PageResp'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/models.Task'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取Task列表
+      tags:
+      - notice-Task
+  /api/v1/notice/task/update:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.TaskDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Task'
+              type: object
+      security:
+      - Bearer: []
+      summary: 更新Task
+      tags:
+      - notice-Task
   /api/v1/notice/user-notice/create:
     post:
       consumes:
@@ -3751,6 +4053,43 @@ paths:
       security:
       - Bearer: []
       summary: 获取用户通知
+      tags:
+      - notice-UserNotice
+  /api/v1/notice/user-notice/my:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserNoticeGetPageReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/base.PageResp'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/models.UserNotice'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取用户通知列表
       tags:
       - notice-UserNotice
   /api/v1/notice/user-notice/page:

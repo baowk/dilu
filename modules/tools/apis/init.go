@@ -2,6 +2,7 @@ package apis
 
 import (
 	dm "dilu/modules/dental/models"
+	nm "dilu/modules/notice/models"
 	"dilu/modules/sys/models"
 	tm "dilu/modules/tools/models"
 	"dilu/modules/tools/utils"
@@ -64,6 +65,14 @@ func (e *Init) DoInit(c *gin.Context) {
 	); err != nil {
 		result = "dental执行失败"
 	}
+	if err := core.Db("notice").AutoMigrate(
+		&nm.PubNotice{},
+		&nm.UserNotice{},
+		&nm.Task{},
+	); err != nil {
+		result = "notice执行失败"
+	}
+
 	// t1, err := template.ParseFiles("modules/tools/apis/tmpls/result.html")
 	// if err != nil {
 	// 	panic(err)

@@ -1906,6 +1906,354 @@
                 }
             }
         },
+        "/api/v1/notice/task/create": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-Task"
+                ],
+                "summary": "创建Task",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TaskDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Task"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/task/del": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-Task"
+                ],
+                "summary": "删除Task",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqIds"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Task"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/task/get": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-Task"
+                ],
+                "summary": "获取Task",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqId"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Task"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/task/my": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-Task"
+                ],
+                "summary": "获取Task列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TaskGetPageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/base.PageResp"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/models.Task"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/task/page": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-Task"
+                ],
+                "summary": "获取Task列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TaskGetPageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/base.PageResp"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/models.Task"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/task/update": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-Task"
+                ],
+                "summary": "更新Task",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TaskDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Task"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/notice/user-notice/create": {
             "post": {
                 "security": [
@@ -2056,6 +2404,74 @@
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/models.UserNotice"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/user-notice/my": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-UserNotice"
+                ],
+                "summary": "获取用户通知列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserNoticeGetPageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/base.PageResp"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/models.UserNotice"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
                                         }
                                     }
                                 }
@@ -8232,6 +8648,86 @@
                 }
             }
         },
+        "dto.TaskDto": {
+            "type": "object",
+            "properties": {
+                "beginAt": {
+                    "description": "开始时间",
+                    "type": "string"
+                },
+                "content": {
+                    "description": "任务内容",
+                    "type": "string"
+                },
+                "endAt": {
+                    "description": "结束时间",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "op": {
+                    "description": "操作类型",
+                    "type": "integer"
+                },
+                "opId": {
+                    "description": "操作id",
+                    "type": "integer"
+                },
+                "reminderStatus": {
+                    "description": "提醒状态 1开启 2关闭",
+                    "type": "integer"
+                },
+                "reminderTime": {
+                    "description": "提醒时间",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "状态1开启2关闭",
+                    "type": "integer"
+                },
+                "taskType": {
+                    "description": "任务类型",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "任务标题",
+                    "type": "string"
+                },
+                "userId": {
+                    "description": "用户id",
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.TaskGetPageReq": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "description": "每页大小",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态1开启2关闭ReminderStatus int `json:\"reminderStatus\" query:\"column:reminder_status\"` //提醒状态 1开启 2关闭",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "type": "integer"
+                },
+                "userId": {
+                    "type": "integer"
+                }
+            }
+        },
         "dto.TeamMemberResp": {
             "type": "object",
             "properties": {
@@ -8300,10 +8796,6 @@
                     "description": "内容",
                     "type": "string"
                 },
-                "deleteAt": {
-                    "description": "删除时间",
-                    "type": "string"
-                },
                 "id": {
                     "description": "主键",
                     "type": "integer"
@@ -8351,6 +8843,12 @@
                 },
                 "status": {
                     "description": "状态 1未读 2已读 -1回收站",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "type": "integer"
+                },
+                "userId": {
                     "type": "integer"
                 }
             }
@@ -8981,7 +9479,7 @@
                     "type": "integer"
                 },
                 "status": {
-                    "description": "状态",
+                    "description": "状态1正常 2删除",
                     "type": "integer"
                 },
                 "teamId": {
@@ -9741,6 +10239,71 @@
                 }
             }
         },
+        "models.Task": {
+            "type": "object",
+            "properties": {
+                "beginAt": {
+                    "description": "开始时间",
+                    "type": "string"
+                },
+                "content": {
+                    "description": "任务内容",
+                    "type": "string"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "endAt": {
+                    "description": "结束时间",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "op": {
+                    "description": "操作类型",
+                    "type": "integer"
+                },
+                "opId": {
+                    "description": "操作id",
+                    "type": "integer"
+                },
+                "reminderStatus": {
+                    "description": "提醒状态 1开启 2关闭",
+                    "type": "integer"
+                },
+                "reminderTime": {
+                    "description": "提醒时间",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "状态1开启2关闭",
+                    "type": "integer"
+                },
+                "taskType": {
+                    "description": "任务类型",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "任务标题",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                },
+                "userId": {
+                    "description": "用户id",
+                    "type": "integer"
+                }
+            }
+        },
         "models.UserNotice": {
             "type": "object",
             "properties": {
@@ -9754,10 +10317,6 @@
                 },
                 "createdAt": {
                     "description": "创建时间",
-                    "type": "string"
-                },
-                "deleteAt": {
-                    "description": "删除时间",
                     "type": "string"
                 },
                 "id": {
@@ -9774,6 +10333,10 @@
                 },
                 "opId": {
                     "description": "操作对象id",
+                    "type": "integer"
+                },
+                "pubId": {
+                    "description": "公共id",
                     "type": "integer"
                 },
                 "status": {
