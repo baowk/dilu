@@ -11,9 +11,11 @@ import (
 const (
 	API_URL = "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation"
 	// QwenTurbo 问问机器人
-	QwenTurbo QWModel = "qwen-turbo"
-	QwenPlus  QWModel = "qwen-plus"
-	QwenMax   QWModel = "qwen-max"
+	QwenTurbo   QWModel = "qwen-turbo"
+	QwenPlus    QWModel = "qwen-plus"
+	QwenMax     QWModel = "qwen-max"
+	Qwen14bChat QWModel = "qwen-14b-chat"
+	Qwen7bChat  QWModel = "qwen-7b-chat"
 )
 
 type QWModel string
