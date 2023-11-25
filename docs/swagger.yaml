@@ -41,6 +41,17 @@ definitions:
         description: '`json:"请求id"`'
         type: string
     type: object
+  dto.AiMsg:
+    properties:
+      messages:
+        items:
+          $ref: '#/definitions/dto.Message'
+        type: array
+      modelName:
+        type: string
+      platform:
+        type: string
+    type: object
   dto.BillDto:
     properties:
       amount:
@@ -605,6 +616,13 @@ definitions:
         type: string
       redirect:
         description: 路由重定向 可选
+        type: string
+    type: object
+  dto.Message:
+    properties:
+      content:
+        type: string
+      role:
         type: string
     type: object
   dto.MpSceneReq:
@@ -2707,6 +2725,34 @@ info:
   title: Dilu API
   version: V0.0.1
 paths:
+  /api/v1/ai/chat:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AiMsg'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: ai接口
+      tags:
+      - Ai
   /api/v1/dental/bill/create:
     post:
       consumes:

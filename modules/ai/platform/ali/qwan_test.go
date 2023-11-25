@@ -1,21 +1,22 @@
 package ali
 
 import (
+	"dilu/modules/ai/service/dto"
 	"testing"
 )
 
-const token = "sk-"
+const token = "sk-bda12fce76524d98ac5912d934ea9ce6"
 
 func TestQwen(t *testing.T) {
-	msg := []Message{
+	msg := []dto.Message{
 		{
 			Role:    "user",
-			Content: "你好",
+			Content: "龙井茶园的茶和其他的龙井茶有什么区别",
 		},
 	}
 	params := Parameters{
 		// RepetitionPenalty: 1.0,
-		// ResultFormat:      "text",
+		ResultFormat: "message",
 		// EnableSearch:      true,
 		// MaxTokens:         100,
 		// TopP:              0.9,
