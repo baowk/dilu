@@ -12,7 +12,7 @@ export function use{{.ClassName}}() {
     pageSize: 10,
   {{- range .Columns }}
     {{- if .IsQuery -}}
-    {{ .JsonField }}: {{if eq .GoType "int" }}0{{ else }}null{{- end }},
+    {{ .JsonField }}: null,
     {{- end}}
   {{- end }}
   });

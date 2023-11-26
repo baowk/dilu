@@ -11,6 +11,54 @@
         "version": "V0.0.1"
     },
     "paths": {
+        "/api/v1/ai/chat": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Ai"
+                ],
+                "summary": "ai接口",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.AiMsg"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/dental/bill/create": {
             "post": {
                 "security": [
@@ -1617,6 +1665,982 @@
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/models.TargetTask"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/pub-notice/create": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-PubNotice"
+                ],
+                "summary": "创建公用通知",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.PubNoticeDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.PubNotice"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/pub-notice/del": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-PubNotice"
+                ],
+                "summary": "删除公用通知",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqIds"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.PubNotice"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/pub-notice/get": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-PubNotice"
+                ],
+                "summary": "获取公用通知",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqId"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.PubNotice"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/pub-notice/page": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-PubNotice"
+                ],
+                "summary": "获取公用通知列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.PubNoticeGetPageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/base.PageResp"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/models.PubNotice"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/pub-notice/update": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-PubNotice"
+                ],
+                "summary": "更新公用通知",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.PubNoticeDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.PubNotice"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/task/create": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-Task"
+                ],
+                "summary": "创建Task",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TaskDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Task"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/task/del": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-Task"
+                ],
+                "summary": "删除Task",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqIds"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Task"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/task/get": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-Task"
+                ],
+                "summary": "获取Task",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqId"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Task"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/task/my": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-Task"
+                ],
+                "summary": "获取Task列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TaskGetPageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/base.PageResp"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/models.Task"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/task/page": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-Task"
+                ],
+                "summary": "获取Task列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TaskGetPageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/base.PageResp"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/models.Task"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/task/update": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-Task"
+                ],
+                "summary": "更新Task",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TaskDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Task"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/user-notice/create": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-UserNotice"
+                ],
+                "summary": "创建用户通知",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserNoticeDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.UserNotice"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/user-notice/del": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-UserNotice"
+                ],
+                "summary": "删除用户通知",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqIds"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.UserNotice"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/user-notice/get": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-UserNotice"
+                ],
+                "summary": "获取用户通知",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base.ReqId"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.UserNotice"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/user-notice/my": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-UserNotice"
+                ],
+                "summary": "获取用户通知列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserNoticeGetPageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/base.PageResp"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/models.UserNotice"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/user-notice/page": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-UserNotice"
+                ],
+                "summary": "获取用户通知列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserNoticeGetPageReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/base.PageResp"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/models.UserNotice"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/user-notice/update": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-UserNotice"
+                ],
+                "summary": "更新用户通知",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserNoticeDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.UserNotice"
                                         }
                                     }
                                 }
@@ -5804,6 +6828,23 @@
                 }
             }
         },
+        "dto.AiMsg": {
+            "type": "object",
+            "properties": {
+                "messages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.Message"
+                    }
+                },
+                "modelName": {
+                    "type": "string"
+                },
+                "platform": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.BillDto": {
             "type": "object",
             "properties": {
@@ -6592,6 +7633,17 @@
                 }
             }
         },
+        "dto.Message": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.MpSceneReq": {
             "type": "object",
             "properties": {
@@ -6689,6 +7741,64 @@
                     "type": "string"
                 },
                 "value": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.PubNoticeDto": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "description": "内容",
+                    "type": "string"
+                },
+                "expired": {
+                    "description": "到期时间",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "noticeType": {
+                    "description": "消息类型",
+                    "type": "integer"
+                },
+                "op": {
+                    "description": "操作类型",
+                    "type": "integer"
+                },
+                "opId": {
+                    "description": "操作id",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "description": "针对组消息",
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "标题",
+                    "type": "string"
+                }
+            }
+        },
+        "dto.PubNoticeGetPageReq": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "description": "每页大小",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态",
                     "type": "integer"
                 }
             }
@@ -7614,6 +8724,86 @@
                 }
             }
         },
+        "dto.TaskDto": {
+            "type": "object",
+            "properties": {
+                "beginAt": {
+                    "description": "开始时间",
+                    "type": "string"
+                },
+                "content": {
+                    "description": "任务内容",
+                    "type": "string"
+                },
+                "endAt": {
+                    "description": "结束时间",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "op": {
+                    "description": "操作类型",
+                    "type": "integer"
+                },
+                "opId": {
+                    "description": "操作id",
+                    "type": "integer"
+                },
+                "reminderStatus": {
+                    "description": "提醒状态 1开启 2关闭",
+                    "type": "integer"
+                },
+                "reminderTime": {
+                    "description": "提醒时间",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "状态1开启2关闭",
+                    "type": "integer"
+                },
+                "taskType": {
+                    "description": "任务类型",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "任务标题",
+                    "type": "string"
+                },
+                "userId": {
+                    "description": "用户id",
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.TaskGetPageReq": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "description": "每页大小",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态1开启2关闭ReminderStatus int `json:\"reminderStatus\" query:\"column:reminder_status\"` //提醒状态 1开启 2关闭",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "type": "integer"
+                },
+                "userId": {
+                    "type": "integer"
+                }
+            }
+        },
         "dto.TeamMemberResp": {
             "type": "object",
             "properties": {
@@ -7671,6 +8861,70 @@
                 },
                 "userId": {
                     "description": "用户id",
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.UserNoticeDto": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "description": "内容",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "noticeType": {
+                    "description": "消息类型",
+                    "type": "integer"
+                },
+                "op": {
+                    "description": "操作类型",
+                    "type": "integer"
+                },
+                "opId": {
+                    "description": "操作对象id",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态 1未读 2已读 -1回收站",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "标题",
+                    "type": "string"
+                },
+                "userId": {
+                    "description": "用户id",
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.UserNoticeGetPageReq": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "description": "每页大小",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态 1未读 2已读 -1回收站",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "type": "integer"
+                },
+                "userId": {
                     "type": "integer"
                 }
             }
@@ -8261,6 +9515,63 @@
                 },
                 "updatedAt": {
                     "description": "最后更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "models.PubNotice": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "description": "内容",
+                    "type": "string"
+                },
+                "createBy": {
+                    "description": "创建人",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "expired": {
+                    "description": "到期时间",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "noticeType": {
+                    "description": "消息类型",
+                    "type": "integer"
+                },
+                "op": {
+                    "description": "操作类型",
+                    "type": "integer"
+                },
+                "opId": {
+                    "description": "操作id",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态1正常 2删除",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "description": "针对组消息",
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "标题",
+                    "type": "string"
+                },
+                "updateBy": {
+                    "description": "更新人",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
                     "type": "string"
                 }
             }
@@ -8993,6 +10304,128 @@
                 "updateBy": {
                     "description": "更新者",
                     "type": "integer"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                },
+                "userId": {
+                    "description": "用户id",
+                    "type": "integer"
+                }
+            }
+        },
+        "models.Task": {
+            "type": "object",
+            "properties": {
+                "beginAt": {
+                    "description": "开始时间",
+                    "type": "string"
+                },
+                "content": {
+                    "description": "任务内容",
+                    "type": "string"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "endAt": {
+                    "description": "结束时间",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "op": {
+                    "description": "操作类型",
+                    "type": "integer"
+                },
+                "opId": {
+                    "description": "操作id",
+                    "type": "integer"
+                },
+                "reminderStatus": {
+                    "description": "提醒状态 1开启 2关闭",
+                    "type": "integer"
+                },
+                "reminderTime": {
+                    "description": "提醒时间",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "状态1开启2关闭",
+                    "type": "integer"
+                },
+                "taskType": {
+                    "description": "任务类型",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "任务标题",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                },
+                "userId": {
+                    "description": "用户id",
+                    "type": "integer"
+                }
+            }
+        },
+        "models.UserNotice": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "description": "内容",
+                    "type": "string"
+                },
+                "createBy": {
+                    "description": "创建人",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "主键",
+                    "type": "integer"
+                },
+                "noticeType": {
+                    "description": "消息类型",
+                    "type": "integer"
+                },
+                "op": {
+                    "description": "操作类型",
+                    "type": "integer"
+                },
+                "opId": {
+                    "description": "操作对象id",
+                    "type": "integer"
+                },
+                "pubId": {
+                    "description": "公共id",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "状态 1未读 2已读 -1回收站",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "description": "团队id",
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "标题",
+                    "type": "string"
                 },
                 "updatedAt": {
                     "description": "更新时间",
