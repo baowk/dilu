@@ -164,7 +164,7 @@ func (e *UserNoticeApi) Del(c *gin.Context) {
 // @Product application/json
 // @Param teamId header int false "团队id"
 // @Param data body dto.UserNoticeGetPageReq true "body"
-// @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.UserNotice}} "{"code": 200, "data": [...]}"
+// @Success 200 {object} base.Resp{data=dto.NoticeDto}} "{"code": 200, "data": [...]}"
 // @Router /api/v1/notice/user-notice/my [post]
 // @Security Bearer
 func (e *UserNoticeApi) GetUserNotice(c *gin.Context) {
@@ -179,38 +179,23 @@ func (e *UserNoticeApi) GetUserNotice(c *gin.Context) {
 
 	list := make([]models.UserNotice, 10)
 	var total int64
-	if err := service.SerUserNotice.UserNotices(&req, &list, &total); err != nil {
+	var unReadCnt int64
+	if err := service.SerUserNotice.UserNotices(&req, &list, &total, &unReadCnt); err != nil {
 		e.Error(c, err)
 		return
 	}
-	e.Page(c, list, total, req.GetPage(), req.GetSize())
-}
-
-// GetUserNotice 获取用户通知列表
-// @Summary 获取用户通知列表
-// @Tags notice-UserNotice
-// @Accept application/json
-// @Product application/json
-// @Param teamId header int false "团队id"
-// @Param data body dto.UserNoticeGetPageReq true "body"
-// @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.UserNotice}} "{"code": 200, "data": [...]}"
-// @Router /api/v1/notice/users [post]
-// @Security Bearer
-func (e *UserNoticeApi) GetNotices(c *gin.Context) {
-	var req dto.UserNoticeGetPageReq
-	if err := c.ShouldBind(&req); err != nil {
-		e.Error(c, err)
-		return
+	res := dto.NoticeDto{
+		Key:   "1",
+		Name:  "通知",
+		Count: unReadCnt,
+		Total: total,
 	}
-
-	req.TeamId = utils.GetReqTeamId(c, req.TeamId)
-	req.UserId = utils.GetUserId(c)
-
-	list := make([]models.UserNotice, 10)
-	var total int64
-	if err := service.SerUserNotice.UserNotices(&req, &list, &total); err != nil {
-		e.Error(c, err)
-		return
+	for _, v := range list {
+		var item dto.NoticeItem
+		copier.Copy(&item, v)
+		item.Type = v.NoticeType
+		item.CreatedAt = v.CreatedAt.Unix()
+		res.List = append(res.List, item)
 	}
-	e.Page(c, list, total, req.GetPage(), req.GetSize())
+	e.Ok(c, res)
 }

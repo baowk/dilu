@@ -168,10 +168,28 @@ func (e *TaskApi) UserTasks(c *gin.Context) {
 	}
 	req.TeamId = utils.GetReqTeamId(c, req.TeamId)
 	req.UserId = utils.GetUserId(c)
+	var unReadCnt int64
 
-	if err := service.SerTask.QueryPage(req, &list, &total, req.GetSize(), req.GetOffset()); err != nil {
+	if err := service.SerTask.UserTasks(&req, &list, &total, &unReadCnt); err != nil {
 		e.Error(c, err)
 		return
 	}
-	e.Page(c, list, total, req.GetPage(), req.GetSize())
+
+	res := dto.NoticeDto{
+		Key:   "2",
+		Name:  "任务",
+		Total: total,
+		Count: unReadCnt,
+	}
+	for _, v := range list {
+		var item dto.NoticeItem
+		copier.Copy(&item, v)
+		item.Type = v.TaskType
+		item.CreatedAt = v.CreatedAt.Unix()
+		item.BeginAt = v.BeginAt.Unix()
+		item.EndAt = v.EndAt.Unix()
+		item.Reminder = v.ReminderTime.Unix()
+		res.List = append(res.List, item)
+	}
+	e.Ok(c, res)
 }

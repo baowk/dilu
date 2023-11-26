@@ -31,6 +31,25 @@ type UserNoticeDto struct {
 	Status     int    `json:"status"`     //状态 1未读 2已读 -1回收站
 }
 
-// type NoticeDto struct {
-// 	Key string `json:"key"`
-// }
+type NoticeDto struct {
+	Key   string       `json:"key"`
+	Name  string       `json:"name"`
+	Count int64        `json:"count"`
+	Total int64        `json:"total"`
+	List  []NoticeItem `json:"list"`
+}
+
+type NoticeItem struct {
+	Id             int    `json:"id"`
+	Title          string `json:"title"`
+	Content        string `json:"content"`
+	Type           int    `json:"type"`
+	Op             int    `json:"op"`
+	OpId           int    `json:"opId"`
+	Status         int    `json:"status"`
+	CreatedAt      int64  `json:"createdAt,omitempty"`
+	BeginAt        int64  `json:"beginAt,omitempty"`
+	EndAt          int64  `json:"endAt,omitempty"`
+	Reminder       int64  `json:"reminder,omitempty"`
+	ReminderStatus int    `json:"reminderStatus"`
+}
