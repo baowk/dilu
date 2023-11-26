@@ -16,3 +16,4 @@ resources/config.dev.yml
 # go sum
 go.sum
 resources/config.test.yaml
+resources/config.local.yaml

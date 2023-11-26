@@ -30,3 +30,7 @@ type UserNoticeDto struct {
 	OpId       int    `json:"opId"`       //操作对象id
 	Status     int    `json:"status"`     //状态 1未读 2已读 -1回收站
 }
+
+// type NoticeDto struct {
+// 	Key string `json:"key"`
+// }

@@ -12,7 +12,7 @@ func init() {
 
 // 默认需登录认证的路由
 func register{{.ClassName}}Router(v1 *gin.RouterGroup) {
-	r := v1.Group("{{.ModuleName}}").Use(middleware.JwtHandler())
+	r := v1.Group("{{.ModuleName}}").Use(middleware.JwtHandler()).Use(middleware.PermHandler())
 	{
 		r.POST("/get", apis.Api{{.ClassName}}.Get)
 		r.POST("/create", apis.Api{{.ClassName}}.Create)

@@ -157,7 +157,7 @@ func (e *UserNoticeApi) Del(c *gin.Context) {
 	e.Ok(c)
 }
 
-// QueryPage 获取用户通知列表
+// GetUserNotice 获取用户通知列表
 // @Summary 获取用户通知列表
 // @Tags notice-UserNotice
 // @Accept application/json
@@ -168,6 +168,35 @@ func (e *UserNoticeApi) Del(c *gin.Context) {
 // @Router /api/v1/notice/user-notice/my [post]
 // @Security Bearer
 func (e *UserNoticeApi) GetUserNotice(c *gin.Context) {
+	var req dto.UserNoticeGetPageReq
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
+
+	req.TeamId = utils.GetReqTeamId(c, req.TeamId)
+	req.UserId = utils.GetUserId(c)
+
+	list := make([]models.UserNotice, 10)
+	var total int64
+	if err := service.SerUserNotice.UserNotices(&req, &list, &total); err != nil {
+		e.Error(c, err)
+		return
+	}
+	e.Page(c, list, total, req.GetPage(), req.GetSize())
+}
+
+// GetUserNotice 获取用户通知列表
+// @Summary 获取用户通知列表
+// @Tags notice-UserNotice
+// @Accept application/json
+// @Product application/json
+// @Param teamId header int false "团队id"
+// @Param data body dto.UserNoticeGetPageReq true "body"
+// @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.UserNotice}} "{"code": 200, "data": [...]}"
+// @Router /api/v1/notice/users [post]
+// @Security Bearer
+func (e *UserNoticeApi) GetNotices(c *gin.Context) {
 	var req dto.UserNoticeGetPageReq
 	if err := c.ShouldBind(&req); err != nil {
 		e.Error(c, err)
