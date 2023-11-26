@@ -193,7 +193,8 @@ func (e *UserNoticeApi) GetUserNotice(c *gin.Context) {
 	for _, v := range list {
 		var item dto.NoticeItem
 		copier.Copy(&item, v)
-		item.Type = v.NoticeType
+		item.Type = 1
+		item.NoticeType = v.NoticeType
 		item.CreatedAt = v.CreatedAt.Unix()
 		res.List = append(res.List, item)
 	}

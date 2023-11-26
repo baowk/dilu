@@ -44,12 +44,13 @@ type NoticeItem struct {
 	Title          string `json:"title"`
 	Content        string `json:"content"`
 	Type           int    `json:"type"`
+	NoticeType     int    `json:"noticeType"`
 	Op             int    `json:"op"`
 	OpId           int    `json:"opId"`
 	Status         int    `json:"status"`
 	CreatedAt      int64  `json:"createdAt,omitempty"`
 	BeginAt        int64  `json:"beginAt,omitempty"`
 	EndAt          int64  `json:"endAt,omitempty"`
-	Reminder       int64  `json:"reminder,omitempty"`
+	ReminderTime   int64  `json:"reminderTime,omitempty"`
 	ReminderStatus int    `json:"reminderStatus"`
 }

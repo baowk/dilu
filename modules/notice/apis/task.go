@@ -184,11 +184,12 @@ func (e *TaskApi) UserTasks(c *gin.Context) {
 	for _, v := range list {
 		var item dto.NoticeItem
 		copier.Copy(&item, v)
-		item.Type = v.TaskType
+		item.Type = 2
+		item.NoticeType = v.TaskType
 		item.CreatedAt = v.CreatedAt.Unix()
 		item.BeginAt = v.BeginAt.Unix()
 		item.EndAt = v.EndAt.Unix()
-		item.Reminder = v.ReminderTime.Unix()
+		item.ReminderTime = v.ReminderTime.Unix()
 		res.List = append(res.List, item)
 	}
 	e.Ok(c, res)
