@@ -56,6 +56,6 @@ type NoticeItem struct {
 }
 
 type ReadNoticeDto struct {
-	Key string `json:"key"`
-	Id  int    `json:"id"`
+	Key int `json:"key"`
+	Id  int `json:"id"`
 }

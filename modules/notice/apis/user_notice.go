@@ -218,7 +218,7 @@ func (e *UserNoticeApi) Read(c *gin.Context) {
 		return
 	}
 
-	if req.Key == "1" {
+	if req.Key == 1 {
 		if err := service.SerUserNotice.ReadUserNotice(&req, e.GetReqId(c), utils.GetTeamId(c), utils.GetUserId(c)); err != nil {
 			e.Error(c, err)
 			return
