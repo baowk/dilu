@@ -54,3 +54,8 @@ type NoticeItem struct {
 	ReminderTime   int64  `json:"reminderTime,omitempty"`
 	ReminderStatus int    `json:"reminderStatus"`
 }
+
+type ReadNoticeDto struct {
+	Key int `json:"key"`
+	Id  int `json:"id"`
+}

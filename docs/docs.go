@@ -2164,22 +2164,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/base.PageResp"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "list": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/models.Task"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
+                                            "$ref": "#/definitions/dto.NoticeDto"
                                         }
                                     }
                                 }
@@ -2512,22 +2497,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "allOf": [
-                                                {
-                                                    "$ref": "#/definitions/base.PageResp"
-                                                },
-                                                {
-                                                    "type": "object",
-                                                    "properties": {
-                                                        "list": {
-                                                            "type": "array",
-                                                            "items": {
-                                                                "$ref": "#/definitions/models.UserNotice"
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            ]
+                                            "$ref": "#/definitions/dto.NoticeDto"
                                         }
                                     }
                                 }
@@ -2596,6 +2566,59 @@ const docTemplate = `{
                                                     }
                                                 }
                                             ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/notice/user-notice/read": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notice-UserNotice"
+                ],
+                "summary": "获取用户通知",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.ReadNoticeDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
                                         }
                                     }
                                 }
@@ -7742,6 +7765,73 @@ const docTemplate = `{
                 }
             }
         },
+        "dto.NoticeDto": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dto.NoticeItem"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.NoticeItem": {
+            "type": "object",
+            "properties": {
+                "beginAt": {
+                    "type": "integer"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "integer"
+                },
+                "endAt": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "noticeType": {
+                    "type": "integer"
+                },
+                "op": {
+                    "type": "integer"
+                },
+                "opId": {
+                    "type": "integer"
+                },
+                "reminderStatus": {
+                    "type": "integer"
+                },
+                "reminderTime": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "integer"
+                }
+            }
+        },
         "dto.Option": {
             "type": "object",
             "properties": {
@@ -7808,6 +7898,17 @@ const docTemplate = `{
                 "status": {
                     "description": "状态",
                     "type": "integer"
+                }
+            }
+        },
+        "dto.ReadNoticeDto": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "key": {
+                    "type": "string"
                 }
             }
         },

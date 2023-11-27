@@ -691,6 +691,50 @@ definitions:
         description: 用户名
         type: string
     type: object
+  dto.NoticeDto:
+    properties:
+      count:
+        type: integer
+      key:
+        type: string
+      list:
+        items:
+          $ref: '#/definitions/dto.NoticeItem'
+        type: array
+      name:
+        type: string
+      total:
+        type: integer
+    type: object
+  dto.NoticeItem:
+    properties:
+      beginAt:
+        type: integer
+      content:
+        type: string
+      createdAt:
+        type: integer
+      endAt:
+        type: integer
+      id:
+        type: integer
+      noticeType:
+        type: integer
+      op:
+        type: integer
+      opId:
+        type: integer
+      reminderStatus:
+        type: integer
+      reminderTime:
+        type: integer
+      status:
+        type: integer
+      title:
+        type: string
+      type:
+        type: integer
+    type: object
   dto.Option:
     properties:
       label:
@@ -739,6 +783,13 @@ definitions:
       status:
         description: 状态
         type: integer
+    type: object
+  dto.ReadNoticeDto:
+    properties:
+      id:
+        type: integer
+      key:
+        type: string
     type: object
   dto.RegisterReq:
     properties:
@@ -3930,14 +3981,7 @@ paths:
             - $ref: '#/definitions/base.Resp'
             - properties:
                 data:
-                  allOf:
-                  - $ref: '#/definitions/base.PageResp'
-                  - properties:
-                      list:
-                        items:
-                          $ref: '#/definitions/models.Task'
-                        type: array
-                    type: object
+                  $ref: '#/definitions/dto.NoticeDto'
               type: object
       security:
       - Bearer: []
@@ -4124,14 +4168,7 @@ paths:
             - $ref: '#/definitions/base.Resp'
             - properties:
                 data:
-                  allOf:
-                  - $ref: '#/definitions/base.PageResp'
-                  - properties:
-                      list:
-                        items:
-                          $ref: '#/definitions/models.UserNotice'
-                        type: array
-                    type: object
+                  $ref: '#/definitions/dto.NoticeDto'
               type: object
       security:
       - Bearer: []
@@ -4173,6 +4210,36 @@ paths:
       security:
       - Bearer: []
       summary: 获取用户通知列表
+      tags:
+      - notice-UserNotice
+  /api/v1/notice/user-notice/read:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ReadNoticeDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取用户通知
       tags:
       - notice-UserNotice
   /api/v1/notice/user-notice/update:
