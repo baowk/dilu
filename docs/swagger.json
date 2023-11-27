@@ -13,6 +13,11 @@
     "paths": {
         "/api/v1/ai/chat": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -7900,7 +7905,7 @@
                     "type": "integer"
                 },
                 "key": {
-                    "type": "string"
+                    "type": "integer"
                 }
             }
         },

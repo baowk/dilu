@@ -6,26 +6,30 @@ import (
 	"fmt"
 
 	"github.com/baowk/dilu-core/common/utils/https"
+	"github.com/baowk/dilu-core/core"
+	"go.uber.org/zap"
 )
 
 const (
 	API_URL = "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation"
 	// QwenTurbo 问问机器人
-	QwenTurbo   QWModel = "qwen-turbo"
-	QwenPlus    QWModel = "qwen-plus"
-	QwenMax     QWModel = "qwen-max"
-	Qwen14bChat QWModel = "qwen-14b-chat"
-	Qwen7bChat  QWModel = "qwen-7b-chat"
+	QwenTurbo       DashscopeModel = "qwen-turbo"
+	QwenPlus        DashscopeModel = "qwen-plus"
+	QwenMax         DashscopeModel = "qwen-max"
+	Qwen14bChat     DashscopeModel = "qwen-14b-chat"
+	Qwen7bChat      DashscopeModel = "qwen-7b-chat"
+	Llama27bChatV2  DashscopeModel = "llama2-7b-chat-v2"
+	Llama213bChatV2 DashscopeModel = "llama2-13b-chat-v2"
 )
 
-type QWModel string
+type DashscopeModel string
 
-type QwenTurboRequest struct {
+type DashscopeReq struct {
 	Model string `json:"model"`
 	Input struct {
 		Messages []dto.Message `json:"messages"`
 	} `json:"input"`
-	Parameters Parameters `json:"parameters"`
+	Parameters Parameters `json:"parameters,omitempty"`
 }
 
 // type Stop[T int | string] [][]T
@@ -43,6 +47,7 @@ type Parameters struct {
 }
 
 type Output struct {
+	Text         string    `json:"text"`
 	Choices      []Choices `json:"choices"`
 	FinishReason string    `json:"finish_reason"`
 }
@@ -57,14 +62,17 @@ type Usage struct {
 	InputTokens  int `json:"input_tokens"`
 }
 
-type QwenTurboResponse struct {
-	Output    Output `json:"output"`
-	Usage     Usage  `json:"usage"`
-	RequestId string `json:"request_id"`
+type DashscopeRes struct {
+	Output     Output `json:"output"`
+	Usage      Usage  `json:"usage"`
+	RequestId  string `json:"request_id"`
+	StatusCode int    `json:"status_code"`
+	Code       string `json:"code"`
+	Message    string `json:"message"`
 }
 
-func Qwen(token string, model QWModel, messages []dto.Message, params Parameters) (resp QwenTurboResponse, err error) {
-	req := QwenTurboRequest{
+func Dashscope(token string, model DashscopeModel, messages []dto.Message, params Parameters) (resp DashscopeRes, err error) {
+	req := DashscopeReq{
 		Model: string(model),
 		Input: struct {
 			Messages []dto.Message `json:"messages"`
@@ -88,11 +96,14 @@ func Qwen(token string, model QWModel, messages []dto.Message, params Parameters
 	if err != nil {
 		return
 	}
+	core.Log.Info(string(data))
 	res, err := https.New().AddHeader("Content-Type", "application/json").AddHeader("Authorization", fmt.Sprintf("Bearer %s", token)).Post(API_URL, data)
+
 	if err != nil {
+		core.Log.Error("chat err ", zap.Error(err))
 		return
 	} else {
-		fmt.Println(string(res))
+		core.Log.Info(string(res))
 		err = json.Unmarshal(res, &resp)
 		return
 	}

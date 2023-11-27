@@ -27,6 +27,14 @@ func (e *AiService) Chat(req dto.AiMsg, reqId string, msg *string) error {
 			model = ali.QwenTurbo
 		} else if req.ModelName == "qwen-plus" {
 			model = ali.QwenPlus
+		} else if req.ModelName == "qwen-7b-chat" {
+			model = ali.Qwen7bChat
+		} else if req.ModelName == "qwen-14b-chat" {
+			model = ali.Qwen14bChat
+		} else if req.ModelName == "llama2-7b-chat-v2" {
+			model = ali.Llama27bChatV2
+		} else if req.ModelName == "llama2-13b-chat-v2" {
+			model = ali.Llama213bChatV2
 		}
 		token := config.Ext.Ai.Ali.SK
 		if token == "" {
@@ -42,13 +50,17 @@ func (e *AiService) Chat(req dto.AiMsg, reqId string, msg *string) error {
 			// TopK:              1,
 			// IncrementalOutput: true,
 		}
-		resp, err := ali.Qwen(token, model, req.Messages, params)
+		resp, err := ali.Dashscope(token, model, req.Messages, params)
 		if err != nil {
 			return err
 		} else {
+			//*msg = resp.Output.Text
 			for _, choice := range resp.Output.Choices {
-				*msg += choice.Message.Content + "\n"
+				*msg += choice.Message.Content
 			}
+		}
+		if *msg == "" {
+			*msg = ""
 		}
 	}
 	return nil

@@ -789,7 +789,7 @@ definitions:
       id:
         type: integer
       key:
-        type: string
+        type: integer
     type: object
   dto.RegisterReq:
     properties:
@@ -2801,6 +2801,8 @@ paths:
                 data:
                   type: string
               type: object
+      security:
+      - Bearer: []
       summary: ai接口
       tags:
       - Ai
