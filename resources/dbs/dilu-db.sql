@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : wsl
+ Source Server         : local_u
  Source Server Type    : MySQL
- Source Server Version : 80035
- Source Host           : 172.29.173.47:3306
+ Source Server Version : 80032 (8.0.32)
+ Source Host           : localhost:3306
  Source Schema         : dilu-db
 
  Target Server Type    : MySQL
- Target Server Version : 80035
+ Target Server Version : 80032 (8.0.32)
  File Encoding         : 65001
 
- Date: 24/11/2023 15:55:28
+ Date: 27/11/2023 22:17:49
 */
 
 SET NAMES utf8mb4;
@@ -22,8 +22,8 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `gen_columns`;
 CREATE TABLE `gen_columns`  (
-  `column_id` bigint(0) NOT NULL AUTO_INCREMENT,
-  `table_id` bigint(0) NULL DEFAULT NULL,
+  `column_id` bigint NOT NULL AUTO_INCREMENT,
+  `table_id` bigint NULL DEFAULT NULL,
   `column_name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `column_comment` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `column_type` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE `gen_columns`  (
   `query_type` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `html_type` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `dict_type` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `sort` bigint(0) NULL DEFAULT NULL,
+  `sort` bigint NULL DEFAULT NULL,
   `list` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `pk` tinyint(1) NULL DEFAULT NULL,
   `required` tinyint(1) NULL DEFAULT NULL,
@@ -56,12 +56,12 @@ CREATE TABLE `gen_columns`  (
   `fk_table_name_package` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL,
   `fk_label_id` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL,
   `fk_label_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `create_by` mediumint(0) NULL DEFAULT NULL,
-  `update_By` mediumint(0) NULL DEFAULT NULL,
+  `create_by` mediumint NULL DEFAULT NULL,
+  `update_By` mediumint NULL DEFAULT NULL,
   `created_at` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
   `updated_at` datetime(3) NULL DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`column_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 607 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 607 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gen_columns
@@ -412,7 +412,7 @@ INSERT INTO `gen_columns` VALUES (606, 46, 'deleted_at', '删除时间', 'dateti
 -- ----------------------------
 DROP TABLE IF EXISTS `gen_tables`;
 CREATE TABLE `gen_tables`  (
-  `table_id` bigint(0) NOT NULL AUTO_INCREMENT,
+  `table_id` bigint NOT NULL AUTO_INCREMENT,
   `db_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `table_name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `table_comment` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
@@ -434,20 +434,20 @@ CREATE TABLE `gen_tables`  (
   `tree` tinyint(1) NULL DEFAULT 0,
   `crud` tinyint(1) NULL DEFAULT 1,
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `is_data_scope` tinyint(0) NULL DEFAULT NULL,
-  `is_actions` tinyint(0) NULL DEFAULT NULL,
-  `is_auth` tinyint(0) NULL DEFAULT NULL,
+  `is_data_scope` tinyint NULL DEFAULT NULL,
+  `is_actions` tinyint NULL DEFAULT NULL,
+  `is_auth` tinyint NULL DEFAULT NULL,
   `is_logical_delete` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `logical_delete` tinyint(1) NULL DEFAULT NULL,
   `logical_delete_column` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `created_at` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
   `updated_at` datetime(3) NULL DEFAULT NULL COMMENT '最后更新时间',
-  `create_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
-  `update_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
+  `create_by` int UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
+  `update_by` int UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
   PRIMARY KEY (`table_id`) USING BTREE,
-  INDEX `idx_gen_tables_create_by`(`create_by`) USING BTREE,
-  INDEX `idx_gen_tables_update_by`(`update_by`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 47 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+  INDEX `idx_gen_tables_create_by`(`create_by` ASC) USING BTREE,
+  INDEX `idx_gen_tables_update_by`(`update_by` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 47 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of gen_tables
@@ -479,17 +479,17 @@ INSERT INTO `gen_tables` VALUES (46, 'notice-db', 'task', 'Task', 'Task', 'crud'
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_api`;
 CREATE TABLE `sys_api`  (
-  `id` int(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键编码',
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键编码',
   `title` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '标题',
   `method` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '请求类型',
   `path` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '请求地址',
-  `perm_type` bigint(0) NULL DEFAULT NULL COMMENT '权限类型（1：无需认证 2:须token 3：须鉴权）',
-  `status` tinyint(0) NULL DEFAULT NULL COMMENT '状态 3 DEF 2 OK 1 del',
-  `update_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
+  `perm_type` bigint NULL DEFAULT NULL COMMENT '权限类型（1：无需认证 2:须token 3：须鉴权）',
+  `status` tinyint NULL DEFAULT NULL COMMENT '状态 3 DEF 2 OK 1 del',
+  `update_by` int UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
   `updated_at` datetime(3) NULL DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `idx_method_path`(`method`, `path`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 109 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '接口' ROW_FORMAT = Dynamic;
+  UNIQUE INDEX `idx_method_path`(`method` ASC, `path` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 109 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '接口' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_api
@@ -607,17 +607,17 @@ INSERT INTO `sys_api` VALUES (108, '删除Task', 'POST', '/api/v1/notice/task/de
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_cfg`;
 CREATE TABLE `sys_cfg`  (
-  `id` int(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键编码',
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键编码',
   `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '名字',
   `key` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'key',
   `value` json NULL COMMENT 'Value',
   `type` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'Type',
   `remark` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'Remark',
-  `status` tinyint(0) NULL DEFAULT NULL COMMENT 'Status',
-  `update_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
+  `status` tinyint NULL DEFAULT NULL COMMENT 'Status',
+  `update_by` int UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
   `updated_at` datetime(3) NULL DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '配置' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '配置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_cfg
@@ -628,26 +628,26 @@ CREATE TABLE `sys_cfg`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_dept`;
 CREATE TABLE `sys_dept`  (
-  `id` int(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `parent_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '父id',
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `parent_id` int UNSIGNED NULL DEFAULT NULL COMMENT '父id',
   `dept_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '部门路径',
   `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '部门名',
-  `type` tinyint(0) NULL DEFAULT NULL COMMENT '类型 1分公司 2部门',
+  `type` tinyint NULL DEFAULT NULL COMMENT '类型 1分公司 2部门',
   `principal` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '部门领导',
   `phone` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '手机号',
   `email` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '邮箱',
-  `sort` tinyint(0) NULL DEFAULT NULL COMMENT '排序',
-  `status` tinyint(0) NULL DEFAULT NULL COMMENT '状态 1正常 2关闭',
+  `sort` tinyint NULL DEFAULT NULL COMMENT '排序',
+  `status` tinyint NULL DEFAULT NULL COMMENT '状态 1正常 2关闭',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
-  `team_id` int(0) NULL DEFAULT NULL COMMENT '团队id',
-  `create_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
-  `update_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
+  `team_id` int NULL DEFAULT NULL COMMENT '团队id',
+  `create_by` int UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
+  `update_by` int UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
   `created_at` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
   `updated_at` datetime(3) NULL DEFAULT NULL COMMENT '最后更新时间',
   `deleted_at` datetime(3) NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_sys_dept_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '部门' ROW_FORMAT = Dynamic;
+  INDEX `idx_sys_dept_deleted_at`(`deleted_at` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '部门' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_dept
@@ -664,16 +664,16 @@ INSERT INTO `sys_dept` VALUES (12, 11, '/0/11/12/', '呵呵组', 2, '', '', '', 
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_email`;
 CREATE TABLE `sys_email`  (
-  `id` int(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键编码',
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键编码',
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '邮箱地址',
   `code` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '验证码',
   `type` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '类型',
-  `status` tinyint(0) NULL DEFAULT NULL COMMENT '状态',
-  `use_status` tinyint(0) NULL DEFAULT NULL COMMENT '使用状态',
-  `created_at` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '创建时间',
-  `updated_at` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '最后更新时间',
+  `status` tinyint NULL DEFAULT NULL COMMENT '状态',
+  `use_status` tinyint NULL DEFAULT NULL COMMENT '使用状态',
+  `created_at` int UNSIGNED NULL DEFAULT NULL COMMENT '创建时间',
+  `updated_at` int UNSIGNED NULL DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '邮件' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '邮件' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_email
@@ -684,25 +684,25 @@ CREATE TABLE `sys_email`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_job`;
 CREATE TABLE `sys_job`  (
-  `id` int(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   `job_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '名称',
   `job_group` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '组',
-  `job_type` tinyint(0) NULL DEFAULT NULL COMMENT '类型',
+  `job_type` tinyint NULL DEFAULT NULL COMMENT '类型',
   `cron_expression` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '表达式',
   `invoke_target` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '调用目标',
   `args` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '参数',
-  `misfire_policy` bigint(0) NULL DEFAULT NULL COMMENT '策略',
-  `concurrent` tinyint(0) NULL DEFAULT NULL COMMENT '并发',
-  `status` tinyint(0) NULL DEFAULT NULL COMMENT '状态',
-  `entry_id` smallint(0) NULL DEFAULT NULL COMMENT '任务id',
+  `misfire_policy` bigint NULL DEFAULT NULL COMMENT '策略',
+  `concurrent` tinyint NULL DEFAULT NULL COMMENT '并发',
+  `status` tinyint NULL DEFAULT NULL COMMENT '状态',
+  `entry_id` smallint NULL DEFAULT NULL COMMENT '任务id',
   `created_at` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
   `updated_at` datetime(3) NULL DEFAULT NULL COMMENT '最后更新时间',
   `deleted_at` datetime(3) NULL DEFAULT NULL COMMENT '删除时间',
-  `create_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
-  `update_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
+  `create_by` int UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
+  `update_by` int UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_sys_job_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '定时任务' ROW_FORMAT = Dynamic;
+  INDEX `idx_sys_job_deleted_at`(`deleted_at` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '定时任务' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_job
@@ -713,28 +713,28 @@ CREATE TABLE `sys_job`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_member`;
 CREATE TABLE `sys_member`  (
-  `id` int(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `team_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '团队id',
-  `user_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `team_id` int UNSIGNED NULL DEFAULT NULL COMMENT '团队id',
+  `user_id` int UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
   `nickname` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '昵称',
   `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '姓名',
   `py` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '姓名拼音',
   `phone` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '电话',
   `dept_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '部门路径',
-  `dept_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '部门id',
+  `dept_id` int UNSIGNED NULL DEFAULT NULL COMMENT '部门id',
   `roles` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '角色id',
-  `post_id` tinyint(0) UNSIGNED NULL DEFAULT NULL COMMENT '职位 1系统超管 2 团队拥有者 4主管 8副主管 16员工',
+  `post_id` tinyint UNSIGNED NULL DEFAULT NULL COMMENT '职位 1系统超管 2 团队拥有者 4主管 8副主管 16员工',
   `entry_time` datetime(3) NULL DEFAULT NULL COMMENT '入职时间',
   `retire_time` datetime(3) NULL DEFAULT NULL COMMENT '离职时间',
   `gender` tinyint(1) NULL DEFAULT 2 COMMENT '性别 1男 2女 3未知',
   `birthday` date NULL DEFAULT NULL COMMENT '生日 格式 yyyy-MM-dd',
-  `status` tinyint(0) NULL DEFAULT NULL COMMENT '状态 1正常 ',
-  `create_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
-  `update_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
+  `status` tinyint NULL DEFAULT NULL COMMENT '状态 1正常 ',
+  `create_by` int UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
+  `update_by` int UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
   `created_at` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
   `updated_at` datetime(3) NULL DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_member
@@ -751,29 +751,29 @@ INSERT INTO `sys_member` VALUES (6, 1, 7, '大雁', '大雁', 'da-yan', NULL, '/
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_menu`;
 CREATE TABLE `sys_menu`  (
-  `id` int(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   `menu_name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '菜单名',
   `title` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '显示名称',
   `icon` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '图标',
   `path` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '路径',
-  `platform_type` bigint(0) NULL DEFAULT NULL COMMENT '平台类型 1 平台管理 2团队管理',
-  `menu_type` tinyint(0) NULL DEFAULT NULL COMMENT '菜单类型 1 分类 2菜单 3方法按钮',
+  `platform_type` bigint NULL DEFAULT NULL COMMENT '平台类型 1 平台管理 2团队管理',
+  `menu_type` tinyint NULL DEFAULT NULL COMMENT '菜单类型 1 分类 2菜单 3方法按钮',
   `permission` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '权限',
-  `parent_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '菜单父id',
+  `parent_id` int UNSIGNED NULL DEFAULT NULL COMMENT '菜单父id',
   `no_cache` tinyint(1) NULL DEFAULT NULL COMMENT '是否缓存',
   `component` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '前端组件路径',
-  `sort` tinyint(0) NULL DEFAULT NULL COMMENT '排序倒叙',
+  `sort` tinyint NULL DEFAULT NULL COMMENT '排序倒叙',
   `hidden` tinyint(1) NULL DEFAULT NULL COMMENT '是否隐藏',
-  `create_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
-  `update_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
+  `create_by` int UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
+  `update_by` int UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
   `created_at` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
   `updated_at` datetime(3) NULL DEFAULT NULL COMMENT '最后更新时间',
   `deleted_at` datetime(3) NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_sys_menu_deleted_at`(`deleted_at`) USING BTREE,
-  INDEX `idx_sys_menu_create_by`(`create_by`) USING BTREE,
-  INDEX `idx_sys_menu_update_by`(`update_by`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 143 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单' ROW_FORMAT = Dynamic;
+  INDEX `idx_sys_menu_deleted_at`(`deleted_at` ASC) USING BTREE,
+  INDEX `idx_sys_menu_create_by`(`create_by` ASC) USING BTREE,
+  INDEX `idx_sys_menu_update_by`(`update_by` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 144 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -879,19 +879,20 @@ INSERT INTO `sys_menu` VALUES (139, '', 'Task详情', '', 'task_detail', 2, 3, '
 INSERT INTO `sys_menu` VALUES (140, '', 'Task创建', '', 'task_create', 2, 3, 'notice:task:add', 138, 0, '', 0, 0, 1, 1, '2023-11-24 15:39:24.131', '2023-11-24 15:39:24.131', NULL);
 INSERT INTO `sys_menu` VALUES (141, '', 'Task修改', '', 'task_update', 2, 3, 'notice:task:edit', 138, 0, '', 0, 0, 1, 1, '2023-11-24 15:39:24.142', '2023-11-24 15:39:24.142', NULL);
 INSERT INTO `sys_menu` VALUES (142, '', 'Task删除', '', 'task_del', 2, 3, 'notice:task:remove', 138, 0, '', 0, 0, 1, 1, '2023-11-24 15:39:24.155', '2023-11-24 15:39:24.155', NULL);
+INSERT INTO `sys_menu` VALUES (143, 'AiChat', 'AiChat', 'ai', '/ai/chat', 2, 2, 'ai:chat', 1, 0, '/ai/chat/index', 0, 0, 1, 1, '2023-11-27 21:09:36.000', '2023-11-27 21:09:40.000', NULL);
 
 -- ----------------------------
 -- Table structure for sys_menu_api_rule
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_menu_api_rule`;
 CREATE TABLE `sys_menu_api_rule`  (
-  `sys_menu_id` int(0) UNSIGNED NOT NULL COMMENT '主键',
-  `sys_api_id` int(0) UNSIGNED NOT NULL COMMENT '主键编码',
+  `sys_menu_id` int UNSIGNED NOT NULL COMMENT '主键',
+  `sys_api_id` int UNSIGNED NOT NULL COMMENT '主键编码',
   PRIMARY KEY (`sys_menu_id`, `sys_api_id`) USING BTREE,
-  INDEX `fk_sys_menu_api_rule_sys_api`(`sys_api_id`) USING BTREE,
+  INDEX `fk_sys_menu_api_rule_sys_api`(`sys_api_id` ASC) USING BTREE,
   CONSTRAINT `fk_sys_menu_api_rule_sys_api` FOREIGN KEY (`sys_api_id`) REFERENCES `sys_api` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `fk_sys_menu_api_rule_sys_menu` FOREIGN KEY (`sys_menu_id`) REFERENCES `sys_menu` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_menu_api_rule
@@ -999,7 +1000,7 @@ INSERT INTO `sys_menu_api_rule` VALUES (142, 108);
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_opera_log`;
 CREATE TABLE `sys_opera_log`  (
-  `id` int(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '操作模块',
   `business_type` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '操作类型',
   `business_types` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'BusinessTypes',
@@ -1012,7 +1013,7 @@ CREATE TABLE `sys_opera_log`  (
   `oper_ip` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '客户端ip',
   `oper_location` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '访问位置',
   `oper_param` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '请求参数',
-  `status` tinyint(0) NULL DEFAULT NULL COMMENT '操作状态 1:成功 2:失败',
+  `status` tinyint NULL DEFAULT NULL COMMENT '操作状态 1:成功 2:失败',
   `oper_time` datetime(3) NULL DEFAULT NULL COMMENT '操作时间',
   `json_result` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '返回数据',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
@@ -1020,10 +1021,10 @@ CREATE TABLE `sys_opera_log`  (
   `user_agent` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'ua',
   `created_at` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
   `updated_at` datetime(3) NULL DEFAULT NULL COMMENT '最后更新时间',
-  `create_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
-  `update_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
+  `create_by` int UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
+  `update_by` int UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_opera_log
@@ -1034,21 +1035,21 @@ CREATE TABLE `sys_opera_log`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_role`;
 CREATE TABLE `sys_role`  (
-  `id` int(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '角色名称',
   `role_key` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '角色代码',
-  `role_sort` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '排序',
-  `status` tinyint(0) NULL DEFAULT NULL COMMENT '状态',
+  `role_sort` int UNSIGNED NULL DEFAULT NULL COMMENT '排序',
+  `status` tinyint NULL DEFAULT NULL COMMENT '状态',
   `team_id` tinyint(1) NULL DEFAULT NULL COMMENT '团队',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
-  `create_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
-  `update_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
+  `create_by` int UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
+  `update_by` int UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
   `created_at` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
   `updated_at` datetime(3) NULL DEFAULT NULL COMMENT '最后更新时间',
   `deleted_at` datetime(3) NULL DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_sys_role_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '角色' ROW_FORMAT = Dynamic;
+  INDEX `idx_sys_role_deleted_at`(`deleted_at` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '角色' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_role
@@ -1064,13 +1065,13 @@ INSERT INTO `sys_role` VALUES (8, '角色1', 'test4', 0, 1, 1, '', 2, 0, '2023-1
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_role_menu`;
 CREATE TABLE `sys_role_menu`  (
-  `role_id` int(0) UNSIGNED NOT NULL COMMENT '主键',
-  `menu_id` int(0) UNSIGNED NOT NULL COMMENT '主键',
+  `role_id` int UNSIGNED NOT NULL COMMENT '主键',
+  `menu_id` int UNSIGNED NOT NULL COMMENT '主键',
   PRIMARY KEY (`role_id`, `menu_id`) USING BTREE,
-  INDEX `fk_sys_role_menu_sys_menu`(`menu_id`) USING BTREE,
+  INDEX `fk_sys_role_menu_sys_menu`(`menu_id` ASC) USING BTREE,
   CONSTRAINT `fk_sys_role_menu_sys_menu` FOREIGN KEY (`menu_id`) REFERENCES `sys_menu` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `fk_sys_role_menu_sys_role` FOREIGN KEY (`role_id`) REFERENCES `sys_role` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_role_menu
@@ -1162,16 +1163,16 @@ INSERT INTO `sys_role_menu` VALUES (8, 121);
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_sms`;
 CREATE TABLE `sys_sms`  (
-  `id` int(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键编码',
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键编码',
   `phone` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '手机号',
   `code` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '验证码',
   `type` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '类型',
-  `status` tinyint(0) NULL DEFAULT NULL COMMENT '状态',
-  `use_status` tinyint(0) NULL DEFAULT NULL COMMENT '使用状态',
-  `created_at` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '创建时间',
-  `updated_at` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '最后更新时间',
+  `status` tinyint NULL DEFAULT NULL COMMENT '状态',
+  `use_status` tinyint NULL DEFAULT NULL COMMENT '使用状态',
+  `created_at` int UNSIGNED NULL DEFAULT NULL COMMENT '创建时间',
+  `updated_at` int UNSIGNED NULL DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '短信' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '短信' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_sms
@@ -1182,14 +1183,14 @@ CREATE TABLE `sys_sms`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_team`;
 CREATE TABLE `sys_team`  (
-  `id` int(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '团队名',
-  `owner` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '团队拥有者',
-  `status` tinyint(0) NULL DEFAULT NULL COMMENT '状态',
-  `created_at` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `updated_at` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  `owner` int UNSIGNED NULL DEFAULT NULL COMMENT '团队拥有者',
+  `status` tinyint NULL DEFAULT NULL COMMENT '状态',
+  `created_at` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `updated_at` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_team
@@ -1201,7 +1202,7 @@ INSERT INTO `sys_team` VALUES (1, '的卢好牙销售管理系统', 2, 2, '2023-
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user`  (
-  `id` int(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   `username` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户名',
   `phone` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '手机号',
   `email` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '邮箱',
@@ -1212,16 +1213,16 @@ CREATE TABLE `sys_user`  (
   `bio` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '签名',
   `birthday` date NULL DEFAULT NULL COMMENT '生日 格式 yyyy-MM-dd',
   `gender` tinyint(1) NULL DEFAULT 2 COMMENT '性别 1男 2女 3未知',
-  `platform_role_id` mediumint(0) NULL DEFAULT NULL COMMENT '平台角色ID 大于0为平台账户,0为团队账户',
+  `platform_role_id` mediumint NULL DEFAULT NULL COMMENT '平台角色ID 大于0为平台账户,0为团队账户',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   `lock_time` datetime(3) NULL DEFAULT NULL COMMENT '锁定结束时间',
-  `status` tinyint(0) NULL DEFAULT NULL COMMENT '状态 1正常 ',
-  `update_by` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
+  `status` tinyint NULL DEFAULT NULL COMMENT '状态 1正常 ',
+  `update_by` int UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
   `created_at` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
   `updated_at` datetime(3) NULL DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_sys_user_update_by`(`update_by`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户' ROW_FORMAT = Dynamic;
+  INDEX `idx_sys_user_update_by`(`update_by` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_user
@@ -1239,16 +1240,16 @@ INSERT INTO `sys_user` VALUES (7, NULL, NULL, NULL, NULL, '大雁', '大雁', NU
 -- ----------------------------
 DROP TABLE IF EXISTS `third_login`;
 CREATE TABLE `third_login`  (
-  `id` int(0) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键编码',
-  `user_id` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
-  `platform` tinyint(0) UNSIGNED NULL DEFAULT NULL COMMENT '平台 1 微信 2 钉钉',
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键编码',
+  `user_id` int UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
+  `platform` tinyint UNSIGNED NULL DEFAULT NULL COMMENT '平台 1 微信 2 钉钉',
   `open_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '第三方open_id',
   `union_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '第三方union_id',
   `third_data` json NULL COMMENT '第三方返回数据',
-  `created_at` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '创建时间',
-  `updated_at` int(0) UNSIGNED NULL DEFAULT NULL COMMENT '最后更新时间',
+  `created_at` int UNSIGNED NULL DEFAULT NULL COMMENT '创建时间',
+  `updated_at` int UNSIGNED NULL DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '三方登录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '三方登录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of third_login
