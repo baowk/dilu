@@ -164,7 +164,7 @@ func (e *UserNoticeApi) Del(c *gin.Context) {
 // @Product application/json
 // @Param teamId header int false "团队id"
 // @Param data body dto.UserNoticeGetPageReq true "body"
-// @Success 200 {object} base.Resp{data=dto.NoticeDto}} "{"code": 200, "data": [...]}"
+// @Success 200 {object} base.Resp{data=dto.NoticeDto} "{"code": 200, "data": [...]}"
 // @Router /api/v1/notice/user-notice/my [post]
 // @Security Bearer
 func (e *UserNoticeApi) GetUserNotice(c *gin.Context) {
@@ -199,4 +199,31 @@ func (e *UserNoticeApi) GetUserNotice(c *gin.Context) {
 		res.List = append(res.List, item)
 	}
 	e.Ok(c, res)
+}
+
+// Read 读一条消息
+// @Summary 获取用户通知
+// @Tags notice-UserNotice
+// @Accept application/json
+// @Product application/json
+// @Param teamId header int false "团队id"
+// @Param data body dto.ReadNoticeDto true "body"
+// @Success 200 {object} base.Resp{data=string} "{"code": 200, "data": [...]}"
+// @Router /api/v1/notice/user-notice/read [post]
+// @Security Bearer
+func (e *UserNoticeApi) Read(c *gin.Context) {
+	var req dto.ReadNoticeDto
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
+
+	if req.Key == "1" {
+		if err := service.SerUserNotice.ReadUserNotice(&req, e.GetReqId(c), utils.GetTeamId(c), utils.GetUserId(c)); err != nil {
+			e.Error(c, err)
+			return
+		}
+	}
+
+	e.Ok(c)
 }

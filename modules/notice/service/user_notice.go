@@ -62,3 +62,21 @@ func (s *UserNoticeService) UserNotices(req *dto.UserNoticeGetPageReq, list *[]m
 	}
 	return nil
 }
+
+func (s *UserNoticeService) ReadUserNotice(req *dto.ReadNoticeDto, reqId string, teamId int, userId int) error {
+	var nu models.UserNotice
+	if err := s.DB().First(&nu, req.Id).Error; err != nil {
+		return err
+	}
+	if nu.UserId != userId {
+		return fmt.Errorf("无权限")
+	}
+	if nu.Status == 1 {
+		nu.Status = 2
+		nu.UpdatedAt = time.Now()
+		if err := s.DB().Updates(&nu).Error; err != nil {
+			return err
+		}
+	}
+	return nil
+}

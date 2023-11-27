@@ -24,5 +24,6 @@ func registerUserNoticeRouter(v1 *gin.RouterGroup) {
 	r2 := v1.Group("user-notice").Use(middleware.JwtHandler())
 	{
 		r2.POST("my", apis.ApiUserNotice.GetUserNotice)
+		r2.POST("read", apis.ApiUserNotice.Read)
 	}
 }

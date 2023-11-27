@@ -151,7 +151,7 @@ func (e *TaskApi) Del(c *gin.Context) {
 // @Product application/json
 // @Param teamId header int false "团队id"
 // @Param data body dto.TaskGetPageReq true "body"
-// @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.Task}} "{"code": 200, "data": [...]}"
+// @Success 200 {object} base.Resp{data=dto.NoticeDto} "{"code": 200, "data": [...]}"
 // @Router /api/v1/notice/task/my [post]
 // @Security Bearer
 func (e *TaskApi) UserTasks(c *gin.Context) {
