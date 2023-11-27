@@ -23,6 +23,7 @@ var ApiAi = AiApi{}
 // @Param data body dto.AiMsg true "body"
 // @Success 200 {object} base.Resp{data=string} "{"code": 200, "data": [...]}"
 // @Router /api/v1/ai/chat [post]
+// @Security Bearer
 func (e *AiApi) Chat(c *gin.Context) {
 	var req dto.AiMsg
 	if err := c.ShouldBind(&req); err != nil {

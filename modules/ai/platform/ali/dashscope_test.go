@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-const token = "sk-bda12fce76524d98ac5912d934ea9ce6"
+const token = "sk"
 
 func TestQwen(t *testing.T) {
 	msg := []dto.Message{
@@ -24,7 +24,7 @@ func TestQwen(t *testing.T) {
 		// TopK:              1,
 		// IncrementalOutput: true,
 	}
-	resp, err := Qwen(token, QwenMax, msg, params)
+	resp, err := Dashscope(token, Llama27bChatV2, msg, params)
 	if err != nil {
 		t.Error(err)
 	} else {

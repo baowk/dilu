@@ -21,6 +21,11 @@ const docTemplate = `{
     "paths": {
         "/api/v1/ai/chat": {
             "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -7908,7 +7913,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "key": {
-                    "type": "string"
+                    "type": "integer"
                 }
             }
         },
