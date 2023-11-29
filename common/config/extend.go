@@ -1,6 +1,6 @@
 package config
 
-var Ext Extend
+var Ext *Extend
 
 type Extend struct {
 	Ding     DingCfg  `mapstructure:"ding" json:"ding" yaml:"ding"`

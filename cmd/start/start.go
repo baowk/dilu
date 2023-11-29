@@ -5,6 +5,9 @@ import (
 	"dilu/common/config"
 	"dilu/common/middleware"
 	"fmt"
+	"time"
+
+	coreCfg "github.com/baowk/dilu-core/config"
 
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/i18n"
@@ -12,6 +15,7 @@ import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	_ "github.com/spf13/viper/remote"
 )
 
 var (
@@ -37,27 +41,76 @@ func run() {
 	}
 	v := viper.New()
 	v.SetConfigFile(configYml)
-	v.SetConfigType("yaml")
+	//v.SetConfigType("yaml")
 	err := v.ReadInConfig()
 	if err != nil {
 		panic(fmt.Sprintf("Fatal error config file: %v \n", err))
 	}
-	v.WatchConfig()
-	v.OnConfigChange(func(e fsnotify.Event) {
-		fmt.Println("config file changed:", e.String())
-		if err = v.Unmarshal(&core.Cfg); err != nil {
-			fmt.Println(err)
-		}
-		extend := v.Sub("extend")
-		if extend != nil {
-			extend.Unmarshal(config.Ext)
-		}
-	})
-	if err = v.Unmarshal(&core.Cfg); err != nil {
+
+	var cfg coreCfg.AppCfg
+
+	if err = v.Unmarshal(&cfg); err != nil {
 		fmt.Println(err)
 	}
 
-	v.Sub("extend").Unmarshal(&config.Ext)
+	if cfg.Server.RemoteEnable {
+		rviper := viper.New()
+		if cfg.Remote.SecretKeyring == "" {
+			err = rviper.AddRemoteProvider(cfg.Remote.Provider, cfg.Remote.Endpoint, cfg.Remote.Path)
+		} else {
+			err = rviper.AddSecureRemoteProvider(cfg.Remote.Provider, cfg.Remote.Endpoint, cfg.Remote.Path, cfg.Remote.SecretKeyring)
+		}
+		if err != nil {
+			panic(fmt.Sprintf("Fatal error remote config : %v \n", err))
+		}
+		rviper.SetConfigType(cfg.Remote.GetConfigType())
+		err = rviper.ReadRemoteConfig()
+		if err != nil {
+			panic(fmt.Sprintf("Fatal error remote config : %v \n", err))
+		}
+		var remoteCfg coreCfg.AppCfg
+		rviper.Unmarshal(&remoteCfg)
+
+		mergeCfg(&cfg, &remoteCfg)
+
+		extend := rviper.Sub("extend")
+		if extend != nil {
+			extend.Unmarshal(config.Ext)
+		}
+		go func() {
+			for {
+				time.Sleep(time.Second * 5) // delay after each request
+				err := rviper.WatchRemoteConfig()
+				if err != nil {
+					fmt.Println(err)
+					continue
+				}
+				rviper.Unmarshal(&remoteCfg)
+
+				mergeCfg(&cfg, &remoteCfg)
+
+				extend := rviper.Sub("extend")
+				if extend != nil {
+					extend.Unmarshal(config.Ext)
+				}
+			}
+		}()
+	} else {
+		mergeCfg(&cfg, nil)
+		v.Sub("extend").Unmarshal(&config.Ext)
+		v.WatchConfig()
+		v.OnConfigChange(func(e fsnotify.Event) {
+			fmt.Println("config file changed:", e.String())
+			if err = v.Unmarshal(cfg); err != nil {
+				fmt.Println(err)
+			}
+			mergeCfg(&cfg, nil)
+			extend := v.Sub("extend")
+			if extend != nil {
+				extend.Unmarshal(config.Ext)
+			}
+		})
+	}
 
 	core.Init()
 
@@ -74,4 +127,19 @@ func run() {
 		f()
 	}
 	core.Run()
+}
+
+func mergeCfg(local, remote *coreCfg.AppCfg) {
+	if remote != nil {
+		core.Cfg = *local
+		core.Cfg = *remote
+		core.Cfg.Server.Mode = local.Server.Mode
+		core.Cfg.Server.RemoteEnable = local.Server.RemoteEnable
+		core.Cfg.Remote = local.Remote
+		core.Cfg.Server.Name = local.Server.Name
+		core.Cfg.Server.Port = local.Server.Port
+		core.Cfg.Server.Host = local.Server.Host
+	} else {
+		core.Cfg = *local
+	}
 }

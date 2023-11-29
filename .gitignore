@@ -9,11 +9,9 @@ dilu.exe
 temp/
 !temp
 vendor
-resources/config.dev.yml
 */.DS_Store
 **/**.log
 
 # go sum
 go.sum
-resources/config.test.yaml
 resources/config.local.yaml
