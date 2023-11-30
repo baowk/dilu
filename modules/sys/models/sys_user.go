@@ -22,7 +22,7 @@ type SysUser struct {
 	PlatformRoleId int       `json:"platformRoleId" gorm:"type:int;size:20;comment:平台角色ID 大于0为平台账户,0为团队账户"` //平台角色ID 大于0为平台账户,0为团队账户
 	Status         int       `json:"status" gorm:"type:tinyint;comment:状态 1正常 "`                            //状态 1正常
 	Remark         string    `json:"remark" gorm:"size:255;comment:备注"`                                     //备注
-	LockTime       time.Time `json:"lockTime" gorm:"comment:锁定结束时间"`                                        //锁定结束时间
+	LockTime       time.Time `json:"lockTime" gorm:"type:datetime;default:(-);comment:锁定结束时间"`              //锁定结束时间
 	CreatedAt      time.Time `json:"createdAt" gorm:"comment:创建时间"`                                         //创建时间
 	UpdatedAt      time.Time `json:"updatedAt" gorm:"comment:最后更新时间"`                                       //更新时间
 	UpdateBy       int       `json:"updateBy" gorm:"type:int unsigned;index;comment:更新者"`                   //更新者id

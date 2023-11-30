@@ -1066,7 +1066,7 @@ definitions:
         type: string
       gender:
         description: 性别 1男 2女 3未知
-        type: string
+        type: integer
       id:
         description: 主键
         type: integer

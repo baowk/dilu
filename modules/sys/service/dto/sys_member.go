@@ -31,7 +31,7 @@ type SysMemberDto struct {
 	PY         string    `json:"py"`         //姓名拼音
 	PostId     int       `json:"postId" `    //-1系统超管 1 团队拥有者 2主管 4副主管 8员工
 	Birthday   time.Time `json:"birthday"`   //生日
-	Gender     string    `json:"gender"`     //性别 1男 2女 3未知
+	Gender     int       `json:"gender"`     //性别 1男 2女 3未知
 	EntryTime  time.Time `json:"entryTime"`  //入职时间
 	RetireTime time.Time `json:"retireTime"` //离职时间
 }

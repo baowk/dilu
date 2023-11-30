@@ -138,6 +138,9 @@ func (e *SysMemberApi) Create(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
+
+	req.TeamId = utils.GetReqTeamId(c, req.TeamId)
+
 	var data models.SysMember
 	copier.Copy(&data, req)
 	if err := service.SerSysMember.Create(&data); err != nil {

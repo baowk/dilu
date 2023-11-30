@@ -6,6 +6,7 @@ import (
 	"dilu/modules/sys/models"
 	"dilu/modules/sys/service/dto"
 	"encoding/json"
+	"strings"
 	"time"
 
 	"github.com/baowk/dilu-core/common/consts"
@@ -24,10 +25,26 @@ func (e *SysMemberService) Create(m *models.SysMember) error {
 	if m.Name != "" {
 		m.PY = utils.GetPinyin(m.Name)
 	}
+	if m.UserId == 0 {
+		username := strings.ReplaceAll(m.PY, "-", "")
+		user := models.SysUser{
+			Username: username,
+			Phone:    m.Phone,
+			Nickname: m.Nickname,
+			Name:     m.Name,
+			Gender:   m.Gender,
+			Status:   1,
+		}
+		if err := SerSysUser.Create(&user); err != nil {
+			return err
+		}
+		m.UserId = user.Id
+	}
 	if m.DeptId > 0 {
 		var dept models.SysDept
 		if err := SerSysDept.Get(m.DeptId, &dept); err == nil {
 			m.DeptPath = dept.DeptPath
+			m.TeamId = dept.TeamId
 		}
 	} else {
 		m.DeptPath = ""
@@ -118,5 +135,5 @@ func (e *SysMemberService) GetMembers(teamId, userId int, deptPath string, name 
 	if name != "" {
 		db.Where("name like ?", "%"+name+"%")
 	}
-	return db.Find(members).Error
+	return db.Order("id").Find(members).Error
 }
