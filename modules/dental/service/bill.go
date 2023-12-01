@@ -499,8 +499,10 @@ func (s *BillService) Identify(req dto.BillTmplReq, bill *dto.IdentifyBillDto) e
 		bill.Pack = int(enums.PackHalf)
 	} else if bill.PrjName == "全口" {
 		bill.Pack = int(enums.PackFull)
-	} else {
+	} else if bill.DentalCount > 0 {
 		bill.Pack = int(enums.PackCnt)
+	} else {
+		bill.Pack = int(enums.General)
 	}
 
 	var members []smodels.SysMember
