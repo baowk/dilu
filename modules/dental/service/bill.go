@@ -835,16 +835,23 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	if err := SerTargetTask.GetTasks(enums.Month, today.Year()*100+int(today.Month()), teamId, 0, deptPath, &taskList); err != nil {
 		return texts, err
 	}
+	var tmpLen int
 	var memberLen int
 	var totalDeal int
 	for _, task := range taskList {
 		if task.Deal > 0 {
 			totalDeal += task.Deal
 			memberLen++
+		} else {
+			tmpLen++
 		}
 	}
 	texts = append(texts, fmt.Sprintf("本月团队任务：%s", utils.MoneyFmt(float64(totalDeal))))
-	texts = append(texts, fmt.Sprintf("人员数量：%d", memberLen))
+	if tmpLen > 0 {
+		texts = append(texts, fmt.Sprintf("未完成任务：%d+%d", memberLen, tmpLen))
+	} else {
+		texts = append(texts, fmt.Sprintf("人员数量：%d", memberLen))
+	}
 
 	var edList []models.EventDaySt
 	if err := SerEventDaySt.GetList(teamId, 0, deptPath, begin, end, &edList); err != nil {
@@ -895,7 +902,7 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	texts = append(texts, fmt.Sprintf("本月成交患者数：%d", tDeal))
 
 	if tFirD == 0 {
-		texts = append(texts, "本月患者成交率：0%%")
+		texts = append(texts, "本月患者成交率：0%")
 	} else {
 		f := fmt.Sprintf("%d%%", tDeal*100/tFirD)
 		texts = append(texts, fmt.Sprintf("本月患者成交率：%s", f))
@@ -909,7 +916,7 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	texts = append(texts, fmt.Sprintf("本月实收：%s", totalPaid.StringFixedBank(0)))
 	texts = append(texts, fmt.Sprintf("今日实收：%s", todayPaid.StringFixedBank(0)))
 	if tmDeal.IsZero() {
-		texts = append(texts, "实收率：0%%")
+		texts = append(texts, "实收率：0%")
 	} else {
 		texts = append(texts, fmt.Sprintf("实收率：%s", fmt.Sprintf("%s%%", totalPaid.Div(tmDeal).Mul(decimal.NewFromInt(100)).StringFixedBank(0))))
 	}
@@ -932,16 +939,16 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	texts = append(texts, fmt.Sprintf("本月时间进度：%s", dp))
 
 	if tmDeal.IsZero() {
-		texts = append(texts, "本月任务达成率：0%%")
+		texts = append(texts, "本月任务达成率：0%")
 	} else {
 		tp := fmt.Sprintf("%s%%", totalPaid.Div(decimal.NewFromInt(int64(totalDeal))).Mul(decimal.NewFromInt(100)).StringFixedBank(0))
 		texts = append(texts, fmt.Sprintf("本月任务达成率：%s", tp))
 	}
 
-	texts = append(texts, " ")
+	texts = append(texts, "")
 	texts = append(texts, "今日工作汇报：")
 	texts = append(texts, spday.Summary)
-	texts = append(texts, " ")
+	texts = append(texts, "")
 
 	texts = append(texts, fmt.Sprintf("今日留存：%s", strconv.Itoa(dayNc)))
 
