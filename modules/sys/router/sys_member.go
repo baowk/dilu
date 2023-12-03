@@ -27,5 +27,6 @@ func registerSysMemberRouter(v1 *gin.RouterGroup) {
 		r2.POST("myTeams", apis.ApiSysMember.MyTeams)
 		r2.POST("myInfo", apis.ApiSysMember.MyInfo)
 		r2.POST("changeMyInfo", apis.ApiSysMember.ChangeMyInfo)
+		r2.POST("members", apis.ApiSysMember.GetMembers)
 	}
 }

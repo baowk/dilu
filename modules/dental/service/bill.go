@@ -8,6 +8,8 @@ import (
 	"dilu/modules/dental/models"
 	"dilu/modules/dental/service/dto"
 	smodels "dilu/modules/sys/models"
+
+	senums "dilu/modules/sys/enums"
 	"dilu/modules/sys/service"
 	"fmt"
 	"strconv"
@@ -30,7 +32,17 @@ var SerBill = BillService{
 	base.NewService(consts.DB_CRM),
 }
 
-func (s *BillService) Page(teamId int, req dto.BillGetPageReq, list *[]dto.BillDto, total *int64) error {
+func (s *BillService) Page(teamId int, userId int, req dto.BillGetPageReq, list *[]dto.BillDto, total *int64) error {
+	var tu smodels.SysMember
+	service.SerSysMember.GetMember(teamId, userId, &tu)
+	uid := 0
+	var deptPath string
+	if tu.PostId == senums.Staff.Id {
+		uid = userId
+	} else if tu.PostId > senums.Admin.Id {
+		deptPath = tu.DeptPath
+	}
+
 	db := s.DB().Offset(req.GetOffset()).Limit(req.GetSize()).Order("id desc")
 	if teamId > 0 {
 		db.Where("team_id = ?", teamId)
@@ -46,6 +58,11 @@ func (s *BillService) Page(teamId int, req dto.BillGetPageReq, list *[]dto.BillD
 	}
 	if req.UserId > 0 {
 		db.Where("user_id = ?", req.UserId)
+	}
+	if uid > 0 {
+		db.Where("user_id =?", uid)
+	} else if deptPath != "" {
+		db.Where("dept_path like?", deptPath+"%")
 	}
 	var ds []models.Bill
 	db.Find(&ds).Offset(-1).Limit(-1).Count(total)
@@ -506,7 +523,7 @@ func (s *BillService) Identify(req dto.BillTmplReq, bill *dto.IdentifyBillDto) e
 	}
 
 	var members []smodels.SysMember
-	if err := service.SerSysMember.GetMembers(req.TeamId, 0, "", bill.Name, &members); err != nil {
+	if err := service.SerSysMember.GetMembers(req.TeamId, 0, "", bill.Name, 0, &members); err != nil {
 		core.Log.Error("获取咨询师错误", zap.Error(err))
 		return errs.Err(codes.FAILURE, "", err)
 	}
@@ -681,7 +698,7 @@ func (s *BillService) StQuery(teamId, userId int, deptPath string, begin, end ti
 
 	var members []smodels.SysMember
 
-	if err := service.SerSysMember.GetMembers(teamId, 0, deptPath, "", &members); err != nil {
+	if err := service.SerSysMember.GetMembers(teamId, 0, deptPath, "", 0, &members); err != nil {
 		return nil, err
 	}
 	if end.IsZero() {
@@ -785,7 +802,7 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	}
 
 	var members []smodels.SysMember
-	if err := service.SerSysMember.GetMembers(teamId, 0, deptPath, "", &members); err != nil {
+	if err := service.SerSysMember.GetMembers(teamId, 0, deptPath, "", 0, &members); err != nil {
 		return texts, err
 	}
 

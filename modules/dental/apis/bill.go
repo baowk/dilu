@@ -5,6 +5,9 @@ import (
 	"dilu/modules/dental/models"
 	"dilu/modules/dental/service"
 	"dilu/modules/dental/service/dto"
+	senums "dilu/modules/sys/enums"
+	smodels "dilu/modules/sys/models"
+	sService "dilu/modules/sys/service"
 	"time"
 
 	"github.com/baowk/dilu-core/core/base"
@@ -37,7 +40,7 @@ func (e *BillApi) QueryPage(c *gin.Context) {
 	list := make([]dto.BillDto, 0)
 	var total int64
 
-	if err := service.SerBill.Page(utils.GetTeamId(c), req, &list, &total); err != nil {
+	if err := service.SerBill.Page(utils.GetTeamId(c), utils.GetUserId(c), req, &list, &total); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -257,9 +260,16 @@ func (e *BillApi) StQuery(c *gin.Context) {
 	if teamId > 0 {
 		req.TeamId = teamId
 	}
-	// if req.UserId == 0 {
-	// 	req.UserId = utils.GetUserId(c)
-	// }
+	var tu smodels.SysMember
+	if err := sService.SerSysMember.GetMember(teamId, utils.GetUserId(c), &tu); err != nil {
+		e.Error(c, err)
+		return
+	}
+	if tu.PostId == senums.Staff.Id {
+		//req.UserId = userId
+	} else if tu.PostId > senums.Admin.Id {
+		req.DeptPath = tu.DeptPath
+	}
 	text, err := service.SerBill.StQuery(req.TeamId, req.UserId, req.DeptPath, req.Begin, req.End, e.GetReqId(c))
 	if err != nil {
 		e.Error(c, err)

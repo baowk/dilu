@@ -8,6 +8,9 @@ import (
 
 type SummaryPlanDayGetPageReq struct {
 	base.ReqPage `search:"-"`
+	TeamId       int    `json:"teamId"`
+	UserId       int    `json:"userId"`
+	DeptPath     string `json:"deptPath"`
 }
 
 // SummaryPlanDay

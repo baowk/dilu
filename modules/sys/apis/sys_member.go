@@ -3,6 +3,7 @@ package apis
 import (
 	"dilu/common/codes"
 	"dilu/common/utils"
+	"dilu/modules/sys/enums"
 	"dilu/modules/sys/models"
 	"dilu/modules/sys/service"
 	"dilu/modules/sys/service/dto"
@@ -34,6 +35,7 @@ func (e *SysMemberApi) QueryPage(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
+
 	req.TeamId = utils.GetReqTeamId(c, req.TeamId)
 	list := make([]models.SysMember, 10)
 	var total int64
@@ -43,6 +45,45 @@ func (e *SysMemberApi) QueryPage(c *gin.Context) {
 		return
 	}
 	e.Page(c, list, total, req.GetPage(), req.GetSize())
+}
+
+// GetMembers 获取我的会员列表
+// @Summary 获取会员列表
+// @Tags sys-SysMember
+// @Accept application/json
+// @Product application/json
+// @Param teamId header int false "团队id"
+// @Param data body dto.SysMemberGetPageReq true "body"
+// @Success 200 {object} base.Resp{data=[]models.SysMember} "{"code": 200, "data": [...]}"
+// @Router /api/v1/sys/sys-member/members [post]
+// @Security Bearer
+func (e *SysMemberApi) GetMembers(c *gin.Context) {
+	var req dto.SysMemberGetReq
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
+	teamId := utils.GetTeamId(c)
+	userId := utils.GetUserId(c)
+	var tu models.SysMember
+	if err := service.SerSysMember.GetMember(teamId, userId, &tu); err != nil {
+		e.Error(c, err)
+		return
+	}
+	uid := 0
+	if tu.PostId == enums.Staff.Id {
+		uid = tu.UserId
+	} else if tu.PostId > enums.Admin.Id {
+		req.DeptPath = tu.DeptPath
+	}
+	req.TeamId = utils.GetReqTeamId(c, req.TeamId)
+	list := make([]models.SysMember, 10)
+
+	if err := service.SerSysMember.GetMembers(req.TeamId, uid, req.DeptPath, req.Name, req.Status, &list); err != nil {
+		e.Error(c, err)
+		return
+	}
+	e.Ok(c, list)
 }
 
 // MyTeams 获取加入的团队

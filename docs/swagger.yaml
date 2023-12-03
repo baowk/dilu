@@ -5429,6 +5429,38 @@ paths:
       summary: 获取会员
       tags:
       - sys-SysMember
+  /api/v1/sys/sys-member/members:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SysMemberGetPageReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/models.SysMember'
+                  type: array
+              type: object
+      security:
+      - Bearer: []
+      summary: 获取会员列表
+      tags:
+      - sys-SysMember
   /api/v1/sys/sys-member/myInfo:
     post:
       consumes:

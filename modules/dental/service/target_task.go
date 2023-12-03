@@ -5,6 +5,7 @@ import (
 	"dilu/modules/dental/enums"
 	"dilu/modules/dental/models"
 	"dilu/modules/dental/service/dto"
+	senums "dilu/modules/sys/enums"
 	smodels "dilu/modules/sys/models"
 	"dilu/modules/sys/service"
 
@@ -20,8 +21,23 @@ var SerTargetTask = TargetTaskService{
 }
 
 func (s *TargetTaskService) Page(req dto.TargetTaskGetPageReq, teamId, userId int, list *[]models.TargetTask, total *int64) error {
-	return s.DB().Where("team_id = ?", teamId).Order("id desc").Limit(req.GetSize()).
-		Offset(req.GetOffset()).Find(list).Offset(-1).Limit(-1).Count(total).Error
+	var tu smodels.SysMember
+	if err := service.SerSysMember.GetMember(teamId, userId, &tu); err != nil {
+		return err
+	}
+	if tu.PostId == senums.Staff.Id {
+		req.UserId = userId
+	} else if tu.PostId > senums.Admin.Id {
+		req.DeptPath = tu.DeptPath
+	}
+	db := s.DB().Where("team_id = ?", teamId).Order("id desc").Limit(req.GetSize()).
+		Offset(req.GetOffset())
+	if req.UserId > 0 {
+		db.Where("user_id =?", req.UserId)
+	} else if req.DeptPath != "" {
+		db.Where("dept_path like?", req.DeptPath+"%")
+	}
+	return db.Find(list).Offset(-1).Limit(-1).Count(total).Error
 }
 
 func (s *TargetTaskService) GetTasks(dayType enums.DayType, day int, teamId int, userId int, deptPath string, list *[]models.TargetTask) error {

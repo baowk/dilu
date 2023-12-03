@@ -4,6 +4,7 @@ import (
 	"dilu/common/consts"
 	"dilu/modules/dental/models"
 	"dilu/modules/dental/service/dto"
+	senums "dilu/modules/sys/enums"
 	smodels "dilu/modules/sys/models"
 	"dilu/modules/sys/service"
 	"time"
@@ -63,6 +64,16 @@ func (s *EventDayStService) GetList(teamId, userId int, deptPath string, begin, 
 }
 
 func (s *EventDayStService) Page(teamId, userId int, req dto.EventDayStGetPageReq, list *[]models.EventDaySt, total *int64) error {
+	var tu smodels.SysMember
+	if err := service.SerSysMember.GetMember(teamId, userId, &tu); err != nil {
+		return err
+	}
+	if tu.PostId == senums.Staff.Id {
+		req.UserId = userId
+	} else if tu.PostId > senums.Admin.Id {
+		req.DeptPath = tu.DeptPath
+	}
+
 	db := s.DB().Where("team_id = ?", teamId)
 	if !req.Begin.IsZero() {
 		db.Where("day >=?", req.Begin)
@@ -75,6 +86,7 @@ func (s *EventDayStService) Page(teamId, userId int, req dto.EventDayStGetPageRe
 	} else if req.DeptPath != "" {
 		db.Where("dept_path like ?", req.DeptPath+"%")
 	}
+
 	return db.Offset(req.GetOffset()).Limit(req.GetSize()).Order("day desc").Order("id desc").Find(list).
 		Offset(-1).Limit(-1).Count(total).Error
 }

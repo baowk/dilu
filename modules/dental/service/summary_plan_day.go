@@ -4,6 +4,7 @@ import (
 	"dilu/common/consts"
 	"dilu/modules/dental/models"
 	"dilu/modules/dental/service/dto"
+	senums "dilu/modules/sys/enums"
 	smodels "dilu/modules/sys/models"
 	"dilu/modules/sys/service"
 	"time"
@@ -56,6 +57,23 @@ func (s *SummaryPlanDayService) Update(teamId, userId int, data *models.SummaryP
 }
 
 func (s *SummaryPlanDayService) Page(req dto.SummaryPlanDayGetPageReq, teamId, userId int, list *[]models.SummaryPlanDay, total *int64) error {
-	return s.DB().Where("team_id = ?", teamId).Order("id desc").Offset(req.GetOffset()).Limit(req.GetSize()).
+	var tu smodels.SysMember
+	if err := service.SerSysMember.GetMember(teamId, userId, &tu); err != nil {
+		return err
+	}
+	if tu.PostId == senums.Staff.Id {
+		req.UserId = userId
+	} else if tu.PostId > senums.Admin.Id {
+		req.DeptPath = tu.DeptPath
+	}
+
+	db := s.DB().Where("team_id = ?", teamId).Order("id desc").Offset(req.GetOffset()).Limit(req.GetSize())
+	if req.UserId > 0 {
+		db = db.Where("user_id =?", req.UserId)
+	} else if req.DeptPath != "" {
+		db = db.Where("dept_path like?", req.DeptPath+"%")
+	}
+
+	return db.
 		Find(list).Offset(-1).Limit(-1).Count(total).Error
 }

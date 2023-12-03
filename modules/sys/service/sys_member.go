@@ -125,7 +125,7 @@ func (e *SysMemberService) GetMembersByUids(teamId int, uids []int, members *[]m
 	return e.DB().Where("team_id = ?", teamId).Where("user_id in ?", uids).Find(members).Error
 }
 
-func (e *SysMemberService) GetMembers(teamId, userId int, deptPath string, name string, members *[]models.SysMember) error {
+func (e *SysMemberService) GetMembers(teamId, userId int, deptPath string, name string, status int, members *[]models.SysMember) error {
 	db := e.DB().Where("team_id = ?", teamId)
 	if userId != 0 {
 		db.Where("user_id = ?", userId)
@@ -134,6 +134,9 @@ func (e *SysMemberService) GetMembers(teamId, userId int, deptPath string, name 
 	}
 	if name != "" {
 		db.Where("name like ?", "%"+name+"%")
+	}
+	if status != 0 {
+		db.Where("status =?", status)
 	}
 	return db.Order("id").Find(members).Error
 }
