@@ -9,7 +9,7 @@ server:
   fs-type: local    #文件服务
 remote:
   provider: etcd #远程提供者 etcd etcd3 consul ...
-  endpoint: http://172.29.173.47:2379 #协议地址
+  endpoint: http://172.19.167.104:2379 #协议地址
   path: /dilu/config #路径 key
   secret-keyring: #加密 不填为非加密
 
