@@ -22,6 +22,8 @@ import (
 	"github.com/jinzhu/copier"
 	"github.com/shopspring/decimal"
 	"go.uber.org/zap"
+
+	"github.com/xuri/excelize/v2"
 )
 
 type BillService struct {
@@ -685,16 +687,16 @@ func (s *BillService) StDay(teamId, userId int, deptPath string, day time.Time, 
 /*
 * 时间段内每人统计
  */
-func (s *BillService) StQuery(teamId, userId int, deptPath string, begin, end time.Time, reqId string) ([]dto.BillUserStDto, error) {
+func (s *BillService) StQuery(teamId, userId int, deptPath string, begin, end *time.Time, reqId string) ([]dto.BillUserStDto, error) {
 	if teamId < 1 {
 		return nil, codes.ErrInvalidParameter(reqId, "teamId is nil")
 	}
 
-	var curM smodels.SysMember
-	if deptPath == "" {
-		service.SerSysMember.GetMember(teamId, userId, &curM)
-		deptPath = curM.DeptPath
-	}
+	// var curM smodels.SysMember
+	// if deptPath == "" {
+	// 	service.SerSysMember.GetMember(teamId, userId, &curM)
+	// 	deptPath = curM.DeptPath
+	// }
 
 	var members []smodels.SysMember
 
@@ -702,14 +704,14 @@ func (s *BillService) StQuery(teamId, userId int, deptPath string, begin, end ti
 		return nil, err
 	}
 	if end.IsZero() {
-		end = time.Now()
+		*end = time.Now()
 	}
 	if begin.IsZero() {
-		begin = utils.GetMonthFirstDayLocal(end)
+		*begin = utils.GetMonthFirstDayLocal(*end)
 	}
 
-	bt := utils.GetZoreTimeLocal(begin)
-	et := utils.GetZoreTimeLocal(end).Add(24 * time.Hour)
+	bt := utils.GetZoreTimeLocal(*begin)
+	et := utils.GetZoreTimeLocal(*end).Add(24 * time.Hour)
 
 	var taskList []models.TargetTask
 	if err := SerTargetTask.GetTasks(enums.Month, bt.Year()*100+int(bt.Month()), teamId, 0, deptPath, &taskList); err != nil {
@@ -720,8 +722,11 @@ func (s *BillService) StQuery(teamId, userId int, deptPath string, begin, end ti
 		br, ok := m[task.UserId]
 		if !ok {
 			br = dto.BillUserStDto{
-				UserId: task.UserId,
-				Target: decimal.NewFromInt(int64(task.Deal)),
+				UserId:      task.UserId,
+				Target:      decimal.NewFromInt(int64(task.Deal)),
+				TargetNew:   task.NewCustomerCnt,
+				TargetFirst: task.FirstDiagnosis,
+				//TargetDealCnt: task.De
 			}
 		}
 		for _, member := range members {
@@ -784,6 +789,417 @@ func (s *BillService) StQuery(teamId, userId int, deptPath string, begin, end ti
 		res = append(res, v)
 	}
 	return res, nil
+}
+
+func (s *BillService) ExportBill(teamId, userId int, name string, deptPath string, begin, end *time.Time, reqId string) (*excelize.File, string, error) {
+	var list []models.Bill
+
+	db := s.DB().Order("user_id asc,trade_type asc")
+	if teamId > 0 {
+		db.Where("team_id = ?", teamId)
+	}
+
+	// var members []smodels.SysMember
+
+	// if err := service.SerSysMember.GetMembers(teamId, 0, deptPath, "", 0, &members); err != nil {
+	// 	return nil, err
+	// }
+	if end.IsZero() {
+		*end = time.Now()
+	}
+	if begin.IsZero() {
+		*begin = utils.GetMonthFirstDayLocal(*end)
+	}
+
+	bt := utils.GetZoreTimeLocal(*begin)
+	et := utils.GetZoreTimeLocal(*end).Add(24 * time.Hour)
+
+	db.Where("trade_at > ?", bt).Where("trade_at < ?", et)
+
+	if userId > 0 {
+		db.Where("user_id =?", userId)
+	} else if deptPath != "" {
+		db.Where("dept_path like?", deptPath+"%")
+	}
+	var ds []models.Bill
+	db.Find(&ds)
+
+	month := begin.Month()
+	return s.BillExcel(int(month), name, list)
+}
+
+var billTitleClolumns = []string{"咨询师", "成交日期", "患者", "成交金额", "实收金额", "欠款金额", "奥齿泰", "皓圣", "雅定", "ITI", "诺贝尔", "延期", "备注"}
+
+func (s *BillService) BillExcel(month int, name string, list []models.Bill) (*excelize.File, string, error) {
+	f := excelize.NewFile()
+	defer func() {
+		if err := f.Close(); err != nil {
+			fmt.Println(err)
+		}
+	}()
+
+	borderColor := "696969"
+	fontColor := "696969"
+
+	err := f.SetColWidth("Sheet1", "A", "M", 12)
+
+	err = f.MergeCell("Sheet1", "A1", "M1")
+	if err != nil {
+		fmt.Println(err)
+		return nil, "", err
+	}
+	title := fmt.Sprintf("%s组%d月份小组成交明细", name, month)
+	f.SetCellValue("Sheet1", "A1", title)
+
+	f.SetSheetRow("Sheet1", "A2", &billTitleClolumns)
+	//f.SetCellStyle("Sheet1", "A2", fmt.Sprintf("A%d", len(titleClolumns)+1), style)
+
+	for i, v := range list {
+		f.SetCellValue("Sheet1", fmt.Sprintf("A%d", i+3), v.UserId)
+		f.SetCellValue("Sheet1", fmt.Sprintf("B%d", i+3), v.TradeAt.Format("01月02日"))
+		f.SetCellValue("Sheet1", fmt.Sprintf("C%d", i+3), v.CustomerId)
+		f.SetCellValue("Sheet1", fmt.Sprintf("D%d", i+3), v.RealAmount)
+		f.SetCellValue("Sheet1", fmt.Sprintf("E%d", i+3), v.PaidAmount)
+		if v.TradeType == 1 {
+			f.SetCellValue("Sheet1", fmt.Sprintf("F%d", i+3), v.RealAmount.Sub(v.PaidAmount))
+		} else if v.TradeType == 2 {
+			f.SetCellValue("Sheet1", fmt.Sprintf("F%d", i+3), v.PaidAmount.Mul(decimal.NewFromInt(-1)))
+		} else if v.TradeType == 3 {
+			f.SetCellValue("Sheet1", fmt.Sprintf("E%d", i+3), v.DebtAmount)
+		} else {
+			f.SetCellValue("Sheet1", fmt.Sprintf("E%d", i+3), v.RefundAmount.Mul(decimal.NewFromInt(-1)))
+		}
+		if v.Brand == enums.DentalBrands[0].Id {
+			f.SetCellValue("Sheet1", fmt.Sprintf("G%d", i+3), v.DentalCount)
+			f.SetCellValue("Sheet1", fmt.Sprintf("H%d", i+3), 0)
+			f.SetCellValue("Sheet1", fmt.Sprintf("I%d", i+3), 0)
+			f.SetCellValue("Sheet1", fmt.Sprintf("J%d", i+3), 0)
+			f.SetCellValue("Sheet1", fmt.Sprintf("K%d", i+3), 0)
+		} else if v.Brand == enums.DentalBrands[1].Id {
+			f.SetCellValue("Sheet1", fmt.Sprintf("G%d", i+3), 0)
+			f.SetCellValue("Sheet1", fmt.Sprintf("H%d", i+3), v.DentalCount)
+			f.SetCellValue("Sheet1", fmt.Sprintf("I%d", i+3), 0)
+			f.SetCellValue("Sheet1", fmt.Sprintf("J%d", i+3), 0)
+			f.SetCellValue("Sheet1", fmt.Sprintf("K%d", i+3), 0)
+		} else if v.Brand == enums.DentalBrands[2].Id {
+			f.SetCellValue("Sheet1", fmt.Sprintf("G%d", i+3), 0)
+			f.SetCellValue("Sheet1", fmt.Sprintf("H%d", i+3), 0)
+			f.SetCellValue("Sheet1", fmt.Sprintf("I%d", i+3), v.DentalCount)
+			f.SetCellValue("Sheet1", fmt.Sprintf("J%d", i+3), 0)
+			f.SetCellValue("Sheet1", fmt.Sprintf("K%d", i+3), 0)
+		} else if v.Brand == enums.DentalBrands[3].Id {
+			f.SetCellValue("Sheet1", fmt.Sprintf("G%d", i+3), 0)
+			f.SetCellValue("Sheet1", fmt.Sprintf("H%d", i+3), 0)
+			f.SetCellValue("Sheet1", fmt.Sprintf("I%d", i+3), 0)
+			f.SetCellValue("Sheet1", fmt.Sprintf("J%d", i+3), v.DentalCount)
+			f.SetCellValue("Sheet1", fmt.Sprintf("K%d", i+3), 0)
+		} else if v.Brand == enums.DentalBrands[4].Id {
+			f.SetCellValue("Sheet1", fmt.Sprintf("G%d", i+3), 0)
+			f.SetCellValue("Sheet1", fmt.Sprintf("H%d", i+3), 0)
+			f.SetCellValue("Sheet1", fmt.Sprintf("I%d", i+3), 0)
+			f.SetCellValue("Sheet1", fmt.Sprintf("J%d", i+3), 0)
+			f.SetCellValue("Sheet1", fmt.Sprintf("K%d", i+3), v.DentalCount)
+		}
+
+		f.SetCellValue("Sheet1", fmt.Sprintf("L%d", i+3), v.DentalCount-v.ImplantedCount)
+		f.SetCellValue("Sheet1", fmt.Sprintf("M%d", i+3), v.OtherPrj+" "+v.Remark)
+	}
+
+	last := len(list) + 3
+	f.SetCellValue("Sheet1", fmt.Sprintf("A%d", last), "合计")
+	for i := 4; i < len(billTitleClolumns); i++ {
+		cell, err := excelize.CoordinatesToCellName(i, last)
+		if err != nil {
+			fmt.Println(err)
+			return nil, "", err
+		}
+		f.SetCellFormula("Sheet1", cell, fmt.Sprintf("=SUM(%s%d:%s%d)", BASE_CLOUMN[i], 3, BASE_CLOUMN[i], last-1))
+	}
+
+	titleS, err2 := f.NewStyle(&excelize.Style{
+		Border: []excelize.Border{
+			{Type: "left", Color: borderColor, Style: 1},
+			{Type: "top", Color: borderColor, Style: 1},
+			{Type: "bottom", Color: borderColor, Style: 1},
+			{Type: "right", Color: borderColor, Style: 1},
+		},
+		Font: &excelize.Font{
+			Bold:   true,
+			Family: "微软雅黑",
+			Size:   12,
+			Color:  fontColor,
+		},
+		Alignment: &excelize.Alignment{
+			Horizontal:      "center",
+			Indent:          1,
+			JustifyLastLine: true,
+			ReadingOrder:    0,
+			RelativeIndent:  1,
+			ShrinkToFit:     true,
+			Vertical:        "",
+			WrapText:        true,
+		},
+		Fill: excelize.Fill{
+			Color:   []string{"8FBC8F"},
+			Type:    "pattern",
+			Pattern: 1,
+		},
+	})
+	if err2 != nil {
+		fmt.Println(err2)
+	}
+	f.SetCellStyle("Sheet1", "A1", "A1", titleS)
+
+	style, err := f.NewStyle(&excelize.Style{
+		Border: []excelize.Border{
+			{Type: "left", Color: borderColor, Style: 1},
+			{Type: "top", Color: borderColor, Style: 1},
+			{Type: "bottom", Color: borderColor, Style: 1},
+			{Type: "right", Color: borderColor, Style: 1},
+		},
+		Font: &excelize.Font{
+			//Bold:   true,
+			Family: "微软雅黑",
+			Size:   12,
+			Color:  fontColor,
+		},
+		Alignment: &excelize.Alignment{
+			Horizontal:      "center",
+			Indent:          1,
+			JustifyLastLine: true,
+			ReadingOrder:    0,
+			RelativeIndent:  1,
+			ShrinkToFit:     true,
+			Vertical:        "",
+			WrapText:        true,
+		},
+		Fill: excelize.Fill{
+			Color:   []string{"F5FFFA"},
+			Type:    "pattern",
+			Pattern: 1,
+		},
+	})
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	f.SetCellStyle("Sheet1", "A2", fmt.Sprintf("M%d", last), style)
+
+	titleC, err3 := f.NewStyle(&excelize.Style{
+		Border: []excelize.Border{
+			{Type: "left", Color: borderColor, Style: 1},
+			{Type: "top", Color: borderColor, Style: 1},
+			{Type: "bottom", Color: borderColor, Style: 1},
+			{Type: "right", Color: borderColor, Style: 1},
+		},
+		Font: &excelize.Font{
+			//Bold:   true,
+			Family: "微软雅黑",
+			Size:   11,
+			Color:  fontColor,
+		},
+		Alignment: &excelize.Alignment{
+			Horizontal:      "center",
+			Indent:          1,
+			JustifyLastLine: true,
+			ReadingOrder:    0,
+			RelativeIndent:  1,
+			ShrinkToFit:     true,
+			Vertical:        "",
+			WrapText:        true,
+		},
+		Fill: excelize.Fill{
+			Color:   []string{"FFFFFF"},
+			Type:    "pattern",
+			Pattern: 1,
+		},
+	})
+	if err3 != nil {
+		fmt.Println(err3)
+	}
+	f.SetCellStyle("Sheet1", "B3", fmt.Sprintf("M%d", last), titleC)
+	// if err := f.SaveAs("Book1.xlsx"); err != nil {
+	// 	fmt.Println(err)
+	// }
+
+	return f, title, nil
+}
+
+func (s *BillService) ExportSt(teamId, userId int, name string, deptPath string, begin, end *time.Time, reqId string) (*excelize.File, string, error) {
+	list, err := s.StQuery(teamId, userId, deptPath, begin, end, reqId)
+	if err != nil {
+		return nil, "", err
+	}
+	month := begin.Month()
+	return s.StExcel(int(month), name, list)
+}
+
+var titleClolumns = []string{"", "姓名", "信息留存任务", "信息留存数量", "留存达成率", "到诊任务", "实际到诊", "到诊达成率", "到诊成交数量", "成交率", "成交金额", "待收欠款", "当月补欠款", "实收任务", "当月实收", "完成度", "备注"}
+
+var BASE_CLOUMN = []string{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"}
+
+func (s *BillService) StExcel(month int, name string, list []dto.BillUserStDto) (*excelize.File, string, error) {
+	f := excelize.NewFile()
+	defer func() {
+		if err := f.Close(); err != nil {
+			fmt.Println(err)
+		}
+	}()
+
+	borderColor := "696969"
+	fontColor := "696969"
+
+	err := f.SetColWidth("Sheet1", "A", "Q", 16)
+
+	err = f.MergeCell("Sheet1", "A1", "Q1")
+	if err != nil {
+		fmt.Println(err)
+		return nil, "", err
+	}
+	title := fmt.Sprintf("%s组%d月份小组进度数据表", name, month)
+	f.SetCellValue("Sheet1", "A1", title)
+
+	f.SetSheetRow("Sheet1", "A2", &titleClolumns)
+	//f.SetCellStyle("Sheet1", "A2", fmt.Sprintf("A%d", len(titleClolumns)+1), style)
+
+	for i, v := range list {
+		f.SetCellValue("Sheet1", fmt.Sprintf("A%d", i+3), i+1)
+		f.SetCellValue("Sheet1", fmt.Sprintf("B%d", i+3), v.Name)
+		f.SetCellValue("Sheet1", fmt.Sprintf("C%d", i+3), v.TargetNew)
+		f.SetCellValue("Sheet1", fmt.Sprintf("D%d", i+3), v.NewCustomerCnt)
+		f.SetCellFormula("Sheet1", fmt.Sprintf("E%d", i+3), fmt.Sprintf("=D%d/C%d", i+3, i+3))
+		f.SetCellValue("Sheet1", fmt.Sprintf("F%d", i+3), v.TargetFirst)
+		f.SetCellValue("Sheet1", fmt.Sprintf("G%d", i+3), v.FirstDiagnosis)
+		f.SetCellFormula("Sheet1", fmt.Sprintf("H%d", i+3), fmt.Sprintf("=G%d/F%d", i+3, i+3))
+		f.SetCellValue("Sheet1", fmt.Sprintf("I%d", i+3), v.DealCnt)
+		f.SetCellFormula("Sheet1", fmt.Sprintf("J%d", i+3), fmt.Sprintf("=I%d/G%d", i+3, i+3))
+		f.SetCellValue("Sheet1", fmt.Sprintf("K%d", i+3), v.Deal)
+		f.SetCellValue("Sheet1", fmt.Sprintf("L%d", i+3), v.CurDebt)
+		f.SetCellValue("Sheet1", fmt.Sprintf("M%d", i+3), v.Debt)
+		f.SetCellValue("Sheet1", fmt.Sprintf("N%d", i+3), v.Target)
+		f.SetCellValue("Sheet1", fmt.Sprintf("O%d", i+3), v.Total)
+		f.SetCellFormula("Sheet1", fmt.Sprintf("P%d", i+3), fmt.Sprintf("=O%d/N%d", i+3, i+3))
+		f.SetCellValue("Sheet1", fmt.Sprintf("Q%d", i+3), "")
+	}
+
+	last := len(list) + 3
+	f.SetCellValue("Sheet1", fmt.Sprintf("A%d", last), "合计")
+	for i := 3; i < len(titleClolumns); i++ {
+		cell, err := excelize.CoordinatesToCellName(i, last)
+		if err != nil {
+			fmt.Println(err)
+			return nil, "", err
+		}
+		f.SetCellFormula("Sheet1", cell, fmt.Sprintf("=SUM(%s%d:%s%d)", BASE_CLOUMN[i], 3, BASE_CLOUMN[i], last-1))
+	}
+
+	titleS, err2 := f.NewStyle(&excelize.Style{
+		Border: []excelize.Border{
+			{Type: "left", Color: borderColor, Style: 1},
+			{Type: "top", Color: borderColor, Style: 1},
+			{Type: "bottom", Color: borderColor, Style: 1},
+			{Type: "right", Color: borderColor, Style: 1},
+		},
+		Font: &excelize.Font{
+			Bold:   true,
+			Family: "微软雅黑",
+			Size:   12,
+			Color:  fontColor,
+		},
+		Alignment: &excelize.Alignment{
+			Horizontal:      "center",
+			Indent:          1,
+			JustifyLastLine: true,
+			ReadingOrder:    0,
+			RelativeIndent:  1,
+			ShrinkToFit:     true,
+			Vertical:        "",
+			WrapText:        true,
+		},
+		Fill: excelize.Fill{
+			Color:   []string{"8FBC8F"},
+			Type:    "pattern",
+			Pattern: 1,
+		},
+	})
+	if err2 != nil {
+		fmt.Println(err2)
+	}
+	f.SetCellStyle("Sheet1", "A1", "A1", titleS)
+
+	style, err := f.NewStyle(&excelize.Style{
+		Border: []excelize.Border{
+			{Type: "left", Color: borderColor, Style: 1},
+			{Type: "top", Color: borderColor, Style: 1},
+			{Type: "bottom", Color: borderColor, Style: 1},
+			{Type: "right", Color: borderColor, Style: 1},
+		},
+		Font: &excelize.Font{
+			//Bold:   true,
+			Family: "微软雅黑",
+			Size:   12,
+			Color:  fontColor,
+		},
+		Alignment: &excelize.Alignment{
+			Horizontal:      "center",
+			Indent:          1,
+			JustifyLastLine: true,
+			ReadingOrder:    0,
+			RelativeIndent:  1,
+			ShrinkToFit:     true,
+			Vertical:        "",
+			WrapText:        true,
+		},
+		Fill: excelize.Fill{
+			Color:   []string{"F5FFFA"},
+			Type:    "pattern",
+			Pattern: 1,
+		},
+	})
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	f.SetCellStyle("Sheet1", "A2", fmt.Sprintf("Q%d", last), style)
+
+	titleC, err3 := f.NewStyle(&excelize.Style{
+		Border: []excelize.Border{
+			{Type: "left", Color: borderColor, Style: 1},
+			{Type: "top", Color: borderColor, Style: 1},
+			{Type: "bottom", Color: borderColor, Style: 1},
+			{Type: "right", Color: borderColor, Style: 1},
+		},
+		Font: &excelize.Font{
+			//Bold:   true,
+			Family: "微软雅黑",
+			Size:   11,
+			Color:  fontColor,
+		},
+		Alignment: &excelize.Alignment{
+			Horizontal:      "center",
+			Indent:          1,
+			JustifyLastLine: true,
+			ReadingOrder:    0,
+			RelativeIndent:  1,
+			ShrinkToFit:     true,
+			Vertical:        "",
+			WrapText:        true,
+		},
+		Fill: excelize.Fill{
+			Color:   []string{"FFFFFF"},
+			Type:    "pattern",
+			Pattern: 1,
+		},
+	})
+	if err3 != nil {
+		fmt.Println(err3)
+	}
+	f.SetCellStyle("Sheet1", "B3", fmt.Sprintf("Q%d", last), titleC)
+	// if err := f.SaveAs("Book1.xlsx"); err != nil {
+	// 	fmt.Println(err)
+	// }
+
+	return f, title, nil
 }
 
 func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time, reqId string) ([]string, error) {

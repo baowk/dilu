@@ -21,11 +21,13 @@ func registerBillRouter(v1 *gin.RouterGroup) {
 		r.POST("/page", apis.ApiBill.QueryPage)
 		r.POST("/del", apis.ApiBill.Del)
 		r.POST("identify", apis.ApiBill.Identify)
+		r.POST("export", apis.ApiBill.BillExport)
 	}
 	r1 := v1.Group("st").Use(middleware.JwtHandler()).Use(middleware.PermHandler())
 	{
 		r1.POST("day", apis.ApiBill.StDay)
 		r1.POST("month", apis.ApiBill.StMonth)
 		r1.POST("query", apis.ApiBill.StQuery)
+		r1.POST("export", apis.ApiBill.StExport)
 	}
 }

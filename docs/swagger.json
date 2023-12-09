@@ -170,6 +170,40 @@
                 }
             }
         },
+        "/api/v1/dental/bill/export": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-Bill"
+                ],
+                "summary": "导出账单",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.StQueryReq"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/api/v1/dental/bill/get": {
             "post": {
                 "security": [
@@ -1011,6 +1045,40 @@
                         }
                     }
                 }
+            }
+        },
+        "/api/v1/dental/st/export": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "dental-Bill"
+                ],
+                "summary": "查询统计",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "团队id",
+                        "name": "teamId",
+                        "in": "header"
+                    },
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.StQueryReq"
+                        }
+                    }
+                ],
+                "responses": {}
             }
         },
         "/api/v1/dental/st/month": {
@@ -8090,12 +8158,21 @@
         "dto.SummaryPlanDayGetPageReq": {
             "type": "object",
             "properties": {
+                "deptPath": {
+                    "type": "string"
+                },
                 "page": {
                     "description": "页码",
                     "type": "integer"
                 },
                 "pageSize": {
                     "description": "每页大小",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "type": "integer"
+                },
+                "userId": {
                     "type": "integer"
                 }
             }
@@ -8876,12 +8953,21 @@
         "dto.TargetTaskGetPageReq": {
             "type": "object",
             "properties": {
+                "deptPath": {
+                    "type": "string"
+                },
                 "page": {
                     "description": "页码",
                     "type": "integer"
                 },
                 "pageSize": {
                     "description": "每页大小",
+                    "type": "integer"
+                },
+                "teamId": {
+                    "type": "integer"
+                },
+                "userId": {
                     "type": "integer"
                 }
             }

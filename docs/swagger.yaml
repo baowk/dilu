@@ -880,11 +880,17 @@ definitions:
     type: object
   dto.SummaryPlanDayGetPageReq:
     properties:
+      deptPath:
+        type: string
       page:
         description: 页码
         type: integer
       pageSize:
         description: 每页大小
+        type: integer
+      teamId:
+        type: integer
+      userId:
         type: integer
     type: object
   dto.SysApiDto:
@@ -1444,11 +1450,17 @@ definitions:
     type: object
   dto.TargetTaskGetPageReq:
     properties:
+      deptPath:
+        type: string
       page:
         description: 页码
         type: integer
       pageSize:
         description: 每页大小
+        type: integer
+      teamId:
+        type: integer
+      userId:
         type: integer
     type: object
   dto.TaskDto:
@@ -2866,6 +2878,27 @@ paths:
       summary: 删除Bill
       tags:
       - dental-Bill
+  /api/v1/dental/bill/export:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.StQueryReq'
+      responses: {}
+      security:
+      - Bearer: []
+      summary: 导出账单
+      tags:
+      - dental-Bill
   /api/v1/dental/bill/get:
     post:
       consumes:
@@ -3337,6 +3370,27 @@ paths:
       security:
       - Bearer: []
       summary: 日统计
+      tags:
+      - dental-Bill
+  /api/v1/dental/st/export:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 团队id
+        in: header
+        name: teamId
+        type: integer
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.StQueryReq'
+      responses: {}
+      security:
+      - Bearer: []
+      summary: 查询统计
       tags:
       - dental-Bill
   /api/v1/dental/st/month:

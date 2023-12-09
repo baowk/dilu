@@ -8,6 +8,8 @@ import (
 	senums "dilu/modules/sys/enums"
 	smodels "dilu/modules/sys/models"
 	sService "dilu/modules/sys/service"
+	"fmt"
+	"net/url"
 	"time"
 
 	"github.com/baowk/dilu-core/core/base"
@@ -270,10 +272,98 @@ func (e *BillApi) StQuery(c *gin.Context) {
 	} else if tu.PostId > senums.Admin.Id {
 		req.DeptPath = tu.DeptPath
 	}
-	text, err := service.SerBill.StQuery(req.TeamId, req.UserId, req.DeptPath, req.Begin, req.End, e.GetReqId(c))
+	text, err := service.SerBill.StQuery(req.TeamId, req.UserId, req.DeptPath, &req.Begin, &req.End, e.GetReqId(c))
 	if err != nil {
 		e.Error(c, err)
 	} else {
 		e.Ok(c, text)
 	}
+}
+
+// StQuery 查询统计
+// @Summary 查询统计
+// @Tags dental-Bill
+// @Accept application/json
+// @Product application/msexcel
+// @Param teamId header int false "团队id"
+// @Param data body dto.StQueryReq true "body"
+// @Router /api/v1/dental/st/export [post]
+// @Security Bearer
+func (e *BillApi) StExport(c *gin.Context) {
+	var req dto.StQueryReq
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
+
+	teamId := utils.GetTeamId(c)
+	if teamId > 0 {
+		req.TeamId = teamId
+	}
+	var tu smodels.SysMember
+	if err := sService.SerSysMember.GetMember(teamId, utils.GetUserId(c), &tu); err != nil {
+		e.Error(c, err)
+		return
+	}
+	if tu.PostId == senums.Staff.Id {
+		//req.UserId = userId
+	} else if tu.PostId > senums.Admin.Id {
+		req.DeptPath = tu.DeptPath
+	}
+	file, title, err := service.SerBill.ExportSt(req.TeamId, req.UserId, tu.Name, req.DeptPath, &req.Begin, &req.End, e.GetReqId(c))
+	if err != nil {
+		e.Error(c, err)
+	} else {
+		if title == "" {
+			title = "月统计"
+		}
+		title = url.PathEscape(title)
+		c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=%s.xlsx;filename*=UTF-8", title))
+		c.Writer.Header().Add("Content-Type", "application/msexcel")
+		file.WriteTo(c.Writer)
+	}
+}
+
+// BillExport 导出账单
+// @Summary 导出账单
+// @Tags dental-Bill
+// @Accept application/json
+// @Product application/msexcel
+// @Param teamId header int false "团队id"
+// @Param data body dto.StQueryReq true "body"
+// @Router /api/v1/dental/bill/export [post]
+// @Security Bearer
+func (e *BillApi) BillExport(c *gin.Context) {
+	var req dto.StQueryReq
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
+	teamId := utils.GetTeamId(c)
+	if teamId > 0 {
+		req.TeamId = teamId
+	}
+	var tu smodels.SysMember
+	if err := sService.SerSysMember.GetMember(teamId, utils.GetUserId(c), &tu); err != nil {
+		e.Error(c, err)
+		return
+	}
+	if tu.PostId == senums.Staff.Id {
+		//req.UserId = userId
+	} else if tu.PostId > senums.Admin.Id {
+		req.DeptPath = tu.DeptPath
+	}
+
+	file, title, err := service.SerBill.ExportBill(req.TeamId, req.UserId, tu.Name, req.DeptPath, &req.Begin, &req.End, e.GetReqId(c))
+	if err != nil {
+		e.Error(c, err)
+		return
+	}
+	if title == "" {
+		title = "bill"
+	}
+	title = url.PathEscape(title)
+	c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=%s.xlsx;filename*=UTF-8", title))
+	c.Writer.Header().Add("Content-Type", "application/msexcel")
+	file.WriteTo(c.Writer)
 }

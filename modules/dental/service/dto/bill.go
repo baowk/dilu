@@ -116,6 +116,8 @@ type BillUserStDto struct {
 	UserId           int             `json:"userId"`
 	Name             string          `json:"name"`             //姓名
 	Target           decimal.Decimal `json:"target"`           //目标
+	TargetNew        int             `json:"targetNew"`        //留存任务
+	TargetFirst      int             `json:"targetFirst"`      //出诊任务
 	NewCustomerCnt   int             `json:"newCustomerCnt"`   //留存任务
 	FirstDiagnosis   int             `json:"firstDiagnosis"`   //导诊任务
 	DealCnt          int             `json:"dealCnt"`          //成交患者
