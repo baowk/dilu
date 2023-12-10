@@ -792,18 +792,11 @@ func (s *BillService) StQuery(teamId, userId int, deptPath string, begin, end *t
 }
 
 func (s *BillService) ExportBill(teamId, userId int, name string, deptPath string, begin, end *time.Time, reqId string) (*excelize.File, string, error) {
-	var list []models.Bill
-
-	db := s.DB().Order("user_id asc,trade_type asc")
+	db := s.DB().Order("user_id asc,trade_type asc,id asc")
 	if teamId > 0 {
 		db.Where("team_id = ?", teamId)
 	}
 
-	// var members []smodels.SysMember
-
-	// if err := service.SerSysMember.GetMembers(teamId, 0, deptPath, "", 0, &members); err != nil {
-	// 	return nil, err
-	// }
 	if end.IsZero() {
 		*end = time.Now()
 	}
@@ -824,13 +817,30 @@ func (s *BillService) ExportBill(teamId, userId int, name string, deptPath strin
 	var ds []models.Bill
 	db.Find(&ds)
 
+	var mids []int
+	var cids []int
+	for _, v := range ds {
+		mids = append(mids, v.UserId)
+		cids = append(cids, v.CustomerId)
+	}
+
+	var members []smodels.SysMember
+	if err := service.SerSysMember.GetMembersByUids(teamId, mids, &members); err != nil {
+		return nil, "", err
+	}
+
+	var customers []models.Customer
+	if err := SerCustomer.GetByIds(teamId, cids, &customers); err != nil {
+		return nil, "", err
+	}
+
 	month := begin.Month()
-	return s.BillExcel(int(month), name, list)
+	return s.BillExcel(int(month), name, ds, members, customers)
 }
 
 var billTitleClolumns = []string{"咨询师", "成交日期", "患者", "成交金额", "实收金额", "欠款金额", "奥齿泰", "皓圣", "雅定", "ITI", "诺贝尔", "延期", "备注"}
 
-func (s *BillService) BillExcel(month int, name string, list []models.Bill) (*excelize.File, string, error) {
+func (s *BillService) BillExcel(month int, name string, list []models.Bill, members []smodels.SysMember, customers []models.Customer) (*excelize.File, string, error) {
 	f := excelize.NewFile()
 	defer func() {
 		if err := f.Close(); err != nil {
@@ -841,12 +851,14 @@ func (s *BillService) BillExcel(month int, name string, list []models.Bill) (*ex
 	borderColor := "696969"
 	fontColor := "696969"
 
-	err := f.SetColWidth("Sheet1", "A", "M", 12)
+	err := f.SetColWidth("Sheet1", "A", "M", 13)
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	err = f.MergeCell("Sheet1", "A1", "M1")
 	if err != nil {
 		fmt.Println(err)
-		return nil, "", err
 	}
 	title := fmt.Sprintf("%s组%d月份小组成交明细", name, month)
 	f.SetCellValue("Sheet1", "A1", title)
@@ -856,18 +868,39 @@ func (s *BillService) BillExcel(month int, name string, list []models.Bill) (*ex
 
 	for i, v := range list {
 		f.SetCellValue("Sheet1", fmt.Sprintf("A%d", i+3), v.UserId)
+		for _, m := range members {
+			if v.UserId == m.UserId {
+				f.SetCellValue("Sheet1", fmt.Sprintf("A%d", i+3), m.Name)
+				break
+			}
+		}
 		f.SetCellValue("Sheet1", fmt.Sprintf("B%d", i+3), v.TradeAt.Format("01月02日"))
 		f.SetCellValue("Sheet1", fmt.Sprintf("C%d", i+3), v.CustomerId)
-		f.SetCellValue("Sheet1", fmt.Sprintf("D%d", i+3), v.RealAmount)
-		f.SetCellValue("Sheet1", fmt.Sprintf("E%d", i+3), v.PaidAmount)
+		for _, c := range customers {
+			if v.CustomerId == c.Id {
+				f.SetCellValue("Sheet1", fmt.Sprintf("C%d", i+3), c.Name)
+				break
+			}
+		}
+		ar, _ := v.RealAmount.Float64()
+		f.SetCellFloat("Sheet1", fmt.Sprintf("D%d", i+3), ar, 2, 32)
+		pa, _ := v.PaidAmount.Float64()
+		f.SetCellFloat("Sheet1", fmt.Sprintf("E%d", i+3), pa, 2, 32)
+		var remark string
 		if v.TradeType == 1 {
-			f.SetCellValue("Sheet1", fmt.Sprintf("F%d", i+3), v.RealAmount.Sub(v.PaidAmount))
+			d, _ := v.RealAmount.Sub(v.PaidAmount).Float64()
+			f.SetCellFloat("Sheet1", fmt.Sprintf("F%d", i+3), d, 2, 32)
 		} else if v.TradeType == 2 {
-			f.SetCellValue("Sheet1", fmt.Sprintf("F%d", i+3), v.PaidAmount.Mul(decimal.NewFromInt(-1)))
+			d, _ := v.PaidAmount.Mul(decimal.NewFromInt(-1)).Float64()
+			f.SetCellFloat("Sheet1", fmt.Sprintf("F%d", i+3), d, 2, 32)
 		} else if v.TradeType == 3 {
-			f.SetCellValue("Sheet1", fmt.Sprintf("E%d", i+3), v.DebtAmount)
+			d, _ := v.DebtAmount.Float64()
+			f.SetCellFloat("Sheet1", fmt.Sprintf("E%d", i+3), d, 2, 32)
+			remark = "补上月;"
 		} else {
-			f.SetCellValue("Sheet1", fmt.Sprintf("E%d", i+3), v.RefundAmount.Mul(decimal.NewFromInt(-1)))
+			d, _ := v.RefundAmount.Mul(decimal.NewFromInt(-1)).Float64()
+			f.SetCellFloat("Sheet1", fmt.Sprintf("E%d", i+3), d, 2, 32)
+			remark = "退款;"
 		}
 		if v.Brand == enums.DentalBrands[0].Id {
 			f.SetCellValue("Sheet1", fmt.Sprintf("G%d", i+3), v.DentalCount)
@@ -900,9 +933,14 @@ func (s *BillService) BillExcel(month int, name string, list []models.Bill) (*ex
 			f.SetCellValue("Sheet1", fmt.Sprintf("J%d", i+3), 0)
 			f.SetCellValue("Sheet1", fmt.Sprintf("K%d", i+3), v.DentalCount)
 		}
+		if v.Pack == int(enums.PackHalf) {
+			remark += "半口;"
+		} else if v.Pack == int(enums.PackFull) {
+			remark += "全口;"
+		}
 
 		f.SetCellValue("Sheet1", fmt.Sprintf("L%d", i+3), v.DentalCount-v.ImplantedCount)
-		f.SetCellValue("Sheet1", fmt.Sprintf("M%d", i+3), v.OtherPrj+" "+v.Remark)
+		f.SetCellValue("Sheet1", fmt.Sprintf("M%d", i+3), remark+v.OtherPrj+" "+v.Remark)
 	}
 
 	last := len(list) + 3
@@ -913,7 +951,7 @@ func (s *BillService) BillExcel(month int, name string, list []models.Bill) (*ex
 			fmt.Println(err)
 			return nil, "", err
 		}
-		f.SetCellFormula("Sheet1", cell, fmt.Sprintf("=SUM(%s%d:%s%d)", BASE_CLOUMN[i], 3, BASE_CLOUMN[i], last-1))
+		f.SetCellFormula("Sheet1", cell, fmt.Sprintf("=SUM(%s%d:%s%d)", BASE_CLOUMN[i-1], 3, BASE_CLOUMN[i-1], last-1))
 	}
 
 	titleS, err2 := f.NewStyle(&excelize.Style{
@@ -1049,7 +1087,11 @@ func (s *BillService) StExcel(month int, name string, list []dto.BillUserStDto) 
 	borderColor := "696969"
 	fontColor := "696969"
 
-	err := f.SetColWidth("Sheet1", "A", "Q", 16)
+	err := f.SetColWidth("Sheet1", "A", "Q", 17)
+	if err != nil {
+		fmt.Println(err)
+		//return nil, "", err
+	}
 
 	err = f.MergeCell("Sheet1", "A1", "Q1")
 	if err != nil {
@@ -1065,19 +1107,24 @@ func (s *BillService) StExcel(month int, name string, list []dto.BillUserStDto) 
 	for i, v := range list {
 		f.SetCellValue("Sheet1", fmt.Sprintf("A%d", i+3), i+1)
 		f.SetCellValue("Sheet1", fmt.Sprintf("B%d", i+3), v.Name)
-		f.SetCellValue("Sheet1", fmt.Sprintf("C%d", i+3), v.TargetNew)
-		f.SetCellValue("Sheet1", fmt.Sprintf("D%d", i+3), v.NewCustomerCnt)
+		f.SetCellInt("Sheet1", fmt.Sprintf("C%d", i+3), v.TargetNew)
+		f.SetCellInt("Sheet1", fmt.Sprintf("D%d", i+3), v.NewCustomerCnt)
 		f.SetCellFormula("Sheet1", fmt.Sprintf("E%d", i+3), fmt.Sprintf("=D%d/C%d", i+3, i+3))
-		f.SetCellValue("Sheet1", fmt.Sprintf("F%d", i+3), v.TargetFirst)
-		f.SetCellValue("Sheet1", fmt.Sprintf("G%d", i+3), v.FirstDiagnosis)
+		f.SetCellInt("Sheet1", fmt.Sprintf("F%d", i+3), v.TargetFirst)
+		f.SetCellInt("Sheet1", fmt.Sprintf("G%d", i+3), v.FirstDiagnosis)
 		f.SetCellFormula("Sheet1", fmt.Sprintf("H%d", i+3), fmt.Sprintf("=G%d/F%d", i+3, i+3))
-		f.SetCellValue("Sheet1", fmt.Sprintf("I%d", i+3), v.DealCnt)
+		f.SetCellInt("Sheet1", fmt.Sprintf("I%d", i+3), v.DealCnt)
 		f.SetCellFormula("Sheet1", fmt.Sprintf("J%d", i+3), fmt.Sprintf("=I%d/G%d", i+3, i+3))
-		f.SetCellValue("Sheet1", fmt.Sprintf("K%d", i+3), v.Deal)
-		f.SetCellValue("Sheet1", fmt.Sprintf("L%d", i+3), v.CurDebt)
-		f.SetCellValue("Sheet1", fmt.Sprintf("M%d", i+3), v.Debt)
-		f.SetCellValue("Sheet1", fmt.Sprintf("N%d", i+3), v.Target)
-		f.SetCellValue("Sheet1", fmt.Sprintf("O%d", i+3), v.Total)
+		d, _ := v.Deal.Float64()
+		f.SetCellFloat("Sheet1", fmt.Sprintf("K%d", i+3), d, 2, 32)
+		cd, _ := v.CurDebt.Float64()
+		f.SetCellFloat("Sheet1", fmt.Sprintf("L%d", i+3), cd, 2, 32)
+		debt, _ := v.Debt.Float64()
+		f.SetCellFloat("Sheet1", fmt.Sprintf("M%d", i+3), debt, 2, 32)
+		t, _ := v.Target.Float64()
+		f.SetCellFloat("Sheet1", fmt.Sprintf("N%d", i+3), t, 2, 32)
+		total, _ := v.Total.Float64()
+		f.SetCellFloat("Sheet1", fmt.Sprintf("O%d", i+3), total, 2, 32)
 		f.SetCellFormula("Sheet1", fmt.Sprintf("P%d", i+3), fmt.Sprintf("=O%d/N%d", i+3, i+3))
 		f.SetCellValue("Sheet1", fmt.Sprintf("Q%d", i+3), "")
 	}
@@ -1090,7 +1137,18 @@ func (s *BillService) StExcel(month int, name string, list []dto.BillUserStDto) 
 			fmt.Println(err)
 			return nil, "", err
 		}
-		f.SetCellFormula("Sheet1", cell, fmt.Sprintf("=SUM(%s%d:%s%d)", BASE_CLOUMN[i], 3, BASE_CLOUMN[i], last-1))
+		if i == 5 {
+			f.SetCellFormula("Sheet1", cell, fmt.Sprintf("=%s%d/%s%d", BASE_CLOUMN[i-2], last, BASE_CLOUMN[i-3], last))
+		} else if i == 8 {
+			f.SetCellFormula("Sheet1", cell, fmt.Sprintf("=%s%d/%s%d", BASE_CLOUMN[i-2], last, BASE_CLOUMN[i-3], last))
+		} else if i == 16 {
+			f.SetCellFormula("Sheet1", cell, fmt.Sprintf("=%s%d/%s%d", BASE_CLOUMN[i-2], last, BASE_CLOUMN[i-3], last))
+		} else if i == 10 {
+			f.SetCellFormula("Sheet1", cell, fmt.Sprintf("=%s%d/%s%d", BASE_CLOUMN[i-2], last, BASE_CLOUMN[i-4], last))
+		} else {
+			f.SetCellFormula("Sheet1", cell, fmt.Sprintf("=SUM(%s%d:%s%d)", BASE_CLOUMN[i-1], 3, BASE_CLOUMN[i-1], last-1))
+		}
+
 	}
 
 	titleS, err2 := f.NewStyle(&excelize.Style{
@@ -1195,6 +1253,7 @@ func (s *BillService) StExcel(month int, name string, list []dto.BillUserStDto) 
 		fmt.Println(err3)
 	}
 	f.SetCellStyle("Sheet1", "B3", fmt.Sprintf("Q%d", last), titleC)
+
 	// if err := f.SaveAs("Book1.xlsx"); err != nil {
 	// 	fmt.Println(err)
 	// }

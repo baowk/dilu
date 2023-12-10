@@ -9,6 +9,7 @@ import (
 	smodels "dilu/modules/sys/models"
 	sService "dilu/modules/sys/service"
 	"fmt"
+	"net/http"
 	"net/url"
 	"time"
 
@@ -284,7 +285,7 @@ func (e *BillApi) StQuery(c *gin.Context) {
 // @Summary 查询统计
 // @Tags dental-Bill
 // @Accept application/json
-// @Product application/msexcel
+// @Product application/vnd.ms-excel
 // @Param teamId header int false "团队id"
 // @Param data body dto.StQueryReq true "body"
 // @Router /api/v1/dental/st/export [post]
@@ -313,15 +314,16 @@ func (e *BillApi) StExport(c *gin.Context) {
 	file, title, err := service.SerBill.ExportSt(req.TeamId, req.UserId, tu.Name, req.DeptPath, &req.Begin, &req.End, e.GetReqId(c))
 	if err != nil {
 		e.Error(c, err)
-	} else {
-		if title == "" {
-			title = "月统计"
-		}
-		title = url.PathEscape(title)
-		c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=%s.xlsx;filename*=UTF-8", title))
-		c.Writer.Header().Add("Content-Type", "application/msexcel")
-		file.WriteTo(c.Writer)
+		return
 	}
+	if title == "" {
+		title = "月统计"
+	}
+	title = url.PathEscape(title)
+	c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%s.xlsx;filename*=UTF-8", title))
+	c.Header("response-type", "blob")
+	data, _ := file.WriteToBuffer()
+	c.Data(http.StatusOK, "application/vnd.ms-excel", data.Bytes())
 }
 
 // BillExport 导出账单
@@ -362,8 +364,13 @@ func (e *BillApi) BillExport(c *gin.Context) {
 	if title == "" {
 		title = "bill"
 	}
+	//title = url.PathEscape(title)
+	// c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=%s.xlsx;filename*=UTF-8", title))
+	// c.Writer.Header().Add("Content-Type", "application/msexcel")
+	// file.WriteTo(c.Writer)
 	title = url.PathEscape(title)
-	c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=%s.xlsx;filename*=UTF-8", title))
-	c.Writer.Header().Add("Content-Type", "application/msexcel")
-	file.WriteTo(c.Writer)
+	c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%s.xlsx;filename*=UTF-8", title))
+	c.Header("response-type", "blob")
+	data, _ := file.WriteToBuffer()
+	c.Data(http.StatusOK, "application/vnd.ms-excel", data.Bytes())
 }
