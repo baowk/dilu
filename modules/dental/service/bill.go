@@ -1123,20 +1123,20 @@ func (s *BillService) StExcel(month int, name string, list []dto.BillUserStDto) 
 		if v.TargetNew == 0 {
 			f.SetCellValue("Sheet1", fmt.Sprintf("E%d", i+3), "0%")
 		} else {
-			f.SetCellValue("Sheet1", fmt.Sprintf("E%d", i+3), fmt.Sprintf("%d%%", v.NewCustomerCnt*100.0/v.TargetNew))
+			f.SetCellValue("Sheet1", fmt.Sprintf("E%d", i+3), fmt.Sprintf("%.f%%", float64(v.NewCustomerCnt)*100.0/float64(v.TargetNew)))
 		}
 		f.SetCellInt("Sheet1", fmt.Sprintf("F%d", i+3), v.TargetFirst)
 		f.SetCellInt("Sheet1", fmt.Sprintf("G%d", i+3), v.FirstDiagnosis)
 		if v.TargetFirst == 0 {
 			f.SetCellValue("Sheet1", fmt.Sprintf("H%d", i+3), "0%")
 		} else {
-			f.SetCellValue("Sheet1", fmt.Sprintf("H%d", i+3), fmt.Sprintf("%d%%", v.FirstDiagnosis*100.0/v.TargetFirst))
+			f.SetCellValue("Sheet1", fmt.Sprintf("H%d", i+3), fmt.Sprintf("%.f%%", float64(v.FirstDiagnosis)*100.0/float64(v.TargetFirst)))
 		}
 		f.SetCellInt("Sheet1", fmt.Sprintf("I%d", i+3), v.DealCnt)
 		if v.FirstDiagnosis == 0 {
 			f.SetCellValue("Sheet1", fmt.Sprintf("J%d", i+3), "0%")
 		} else {
-			f.SetCellValue("Sheet1", fmt.Sprintf("J%d", i+3), fmt.Sprintf("%d%%", v.DealCnt*100.0/v.FirstDiagnosis))
+			f.SetCellValue("Sheet1", fmt.Sprintf("J%d", i+3), fmt.Sprintf("%.f%%", float64(v.DealCnt)*100.0/float64(v.FirstDiagnosis)))
 		}
 
 		d, _ := v.Deal.Float64()
@@ -1169,13 +1169,13 @@ func (s *BillService) StExcel(month int, name string, list []dto.BillUserStDto) 
 			if targetNew == 0 {
 				f.SetCellValue("Sheet1", cell, "0%")
 			} else {
-				f.SetCellValue("Sheet1", cell, fmt.Sprintf("%d%%", newCustomerCnt*100.0/targetNew))
+				f.SetCellValue("Sheet1", cell, fmt.Sprintf("%.f%%", float64(newCustomerCnt)*100.0/float64(targetNew)))
 			}
 		} else if i == 8 {
 			if targetFirst == 0 {
 				f.SetCellValue("Sheet1", cell, "0%")
 			} else {
-				f.SetCellValue("Sheet1", cell, fmt.Sprintf("%d%%", firstDiagnosis*100.0/targetFirst))
+				f.SetCellValue("Sheet1", cell, fmt.Sprintf("%.f%%", float64(firstDiagnosis)*100.0/float64(targetFirst)))
 			}
 		} else if i == 16 {
 			if target.IsZero() {
@@ -1187,7 +1187,7 @@ func (s *BillService) StExcel(month int, name string, list []dto.BillUserStDto) 
 			if firstDiagnosis == 0 {
 				f.SetCellValue("Sheet1", cell, "0%")
 			} else {
-				f.SetCellValue("Sheet1", cell, fmt.Sprintf("%d%%", dealCnt*100.0/firstDiagnosis))
+				f.SetCellValue("Sheet1", cell, fmt.Sprintf("%.f%%", float64(dealCnt)*100.0/float64(firstDiagnosis)))
 			}
 		} else {
 			f.SetCellFormula("Sheet1", cell, fmt.Sprintf("=SUM(%s%d:%s%d)", BASE_CLOUMN[i-1], 3, BASE_CLOUMN[i-1], last-1))
