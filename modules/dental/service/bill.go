@@ -897,7 +897,7 @@ func (s *BillService) BillExcel(month int, name string, list []models.Bill, memb
 		} else if v.TradeType == 3 {
 			d, _ := v.DebtAmount.Float64()
 			f.SetCellFloat("Sheet1", fmt.Sprintf("E%d", i+3), d, 2, 32)
-			remark = "补上月;"
+			remark = "补上月款;"
 		} else {
 			d, _ := v.RefundAmount.Mul(decimal.NewFromInt(-1)).Float64()
 			f.SetCellFloat("Sheet1", fmt.Sprintf("E%d", i+3), d, 2, 32)
@@ -939,8 +939,12 @@ func (s *BillService) BillExcel(month int, name string, list []models.Bill, memb
 		} else if v.Pack == int(enums.PackFull) {
 			remark += "全口;"
 		}
+		extension := v.DentalCount - v.ImplantedCount
+		if extension < 0 {
+			extension = 0
+		}
 
-		f.SetCellValue("Sheet1", fmt.Sprintf("L%d", i+3), v.DentalCount-v.ImplantedCount)
+		f.SetCellValue("Sheet1", fmt.Sprintf("L%d", i+3), extension)
 		f.SetCellValue("Sheet1", fmt.Sprintf("M%d", i+3), remark+v.OtherPrj+" "+v.Remark)
 	}
 
