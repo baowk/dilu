@@ -11,7 +11,7 @@
  Target Server Version : 80032 (8.0.32)
  File Encoding         : 65001
 
- Date: 18/11/2023 20:36:43
+ Date: 10/12/2023 16:59:36
 */
 
 SET NAMES utf8mb4;
@@ -55,7 +55,7 @@ CREATE TABLE `bill`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_bill_create_by`(`create_by` ASC) USING BTREE,
   INDEX `idx_bill_update_by`(`update_by` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 33 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of bill
@@ -67,6 +67,16 @@ INSERT INTO `bill` VALUES (19, '20231102212456325620', 11, 2, 1, '/0/1/2/', 0.00
 INSERT INTO `bill` VALUES (20, '20231104203621052718', 14, 2, 1, '/0/1/2/', 0.00, 240.00, 240.00, 0.00, 0.00, 0, '2023-11-04 20:36:21', 1, 0, 0, 0, 1, NULL, '', 4, NULL, '', '', '补牙', '', '2023-11-04 20:36:21', '2023-11-04 20:36:21', 2, 0);
 INSERT INTO `bill` VALUES (21, '20231106214421763149', 15, 2, 1, '/0/1/2/', 0.00, 400.00, 400.00, 0.00, 0.00, 0, '2023-11-06 08:00:00', 1, 0, 0, 0, 1, NULL, '', 4, NULL, '', '', '临时牙', '', '2023-11-06 21:44:22', '2023-11-06 21:44:22', 2, 0);
 INSERT INTO `bill` VALUES (22, '20231113212040295399', 16, 2, 1, '/0/1/2/', 0.00, 0.00, 1000.00, 0.00, 0.00, 0, '2023-11-13 21:20:40', 1, 0, 0, 0, 1, NULL, '', 4, NULL, '', '', '', '', '2023-11-13 21:20:40', '2023-11-13 21:20:40', 2, 0);
+INSERT INTO `bill` VALUES (23, '20231201212811386201', 17, 2, 1, '/0/1/2/', 0.00, 100.00, 100.00, 0.00, 0.00, 0, '2023-12-01 21:28:11', 1, 1, 1, 1, 3, '2023-12-01 21:28:11', '', 0, NULL, '', '', '', '', '2023-12-01 21:28:11', '2023-12-01 21:28:11', 2, 0);
+INSERT INTO `bill` VALUES (24, '20231201213132340876', 18, 8, 1, '/0/10/9/', 0.00, 100.00, 100.00, 0.00, 0.00, 0, '2023-12-01 21:31:32', 1, 1, 4, 1, 3, '2023-12-01 21:31:32', '', 0, NULL, '', '', '', '', '2023-12-01 21:31:32', '2023-12-01 21:31:32', 2, 0);
+INSERT INTO `bill` VALUES (25, '20231210125509472481', 19, 3, 1, '/0/1/2/', 0.00, 1111.00, 1111.00, 0.00, 0.00, 0, '2023-12-10 12:55:09', 1, 1, 1, 1, 3, '2023-12-10 12:55:09', '', 0, NULL, '', '', '', '', '2023-12-10 12:55:09', '2023-12-10 16:52:45', 2, 2);
+INSERT INTO `bill` VALUES (26, '20231210125739043993', 16, 5, 1, '/0/1/2/', 0.00, 46000.00, 22000.00, 0.00, 0.00, 0, '2023-12-09 08:00:00', 1, 6, 2, 6, 3, '2023-12-09 08:00:00', '', 1, NULL, '', '', '', '', '2023-12-10 12:57:39', '2023-12-10 12:57:39', 2, 0);
+INSERT INTO `bill` VALUES (27, '20231210162845510225', 20, 2, 1, '/0/1/2/', 0.00, 36000.00, 26000.00, 0.00, 0.00, 0, '2023-12-09 08:00:00', 1, 6, 1, 6, 3, '2023-12-09 08:00:00', '', 2, NULL, '', '', '', '', '2023-12-10 16:28:46', '2023-12-10 16:28:46', 2, 0);
+INSERT INTO `bill` VALUES (28, '20231210162914276523', 21, 6, 1, '/0/1/2/', 0.00, 36000.00, 20000.00, 0.00, 0.00, 0, '2023-12-09 08:00:00', 1, 6, 1, 6, 3, '2023-12-09 08:00:00', '', 4, NULL, '', '', '', '', '2023-12-10 16:29:14', '2023-12-10 16:29:14', 2, 0);
+INSERT INTO `bill` VALUES (29, '20231210162957085971', 22, 2, 1, '/0/1/2/', 0.00, 0.00, 0.00, 1000.00, 0.00, 0, '2023-12-10 16:29:57', 3, 0, 0, 0, 1, NULL, '', 0, NULL, '', '', '', '', '2023-12-10 16:29:57', '2023-12-10 16:29:57', 2, 0);
+INSERT INTO `bill` VALUES (30, '20231210163039647619', 12, 2, 1, '/0/1/2/', 0.00, 0.00, 0.00, 10000.00, 0.00, 0, '2023-12-10 16:30:40', 3, 0, 0, 0, 1, NULL, '', 0, NULL, '', '', '', '', '2023-12-10 16:30:40', '2023-12-10 16:30:40', 2, 0);
+INSERT INTO `bill` VALUES (31, '20231210163100826331', 16, 2, 1, '/0/1/2/', 0.00, 0.00, 0.00, 0.00, 100.00, 0, '2023-12-10 16:31:01', 10, 0, 0, 0, 1, NULL, '', 0, NULL, '', '', '', '', '2023-12-10 16:31:01', '2023-12-10 16:31:01', 2, 0);
+INSERT INTO `bill` VALUES (32, '20231210164211432319', 23, 2, 1, '/0/1/2/', 0.00, 0.00, 1234.00, 0.00, 0.00, 0, '2023-12-10 16:42:11', 2, 0, 0, 0, 1, NULL, '', 0, NULL, '', '', '', '', '2023-12-10 16:42:11', '2023-12-10 16:42:11', 2, 0);
 
 -- ----------------------------
 -- Table structure for customer
@@ -98,7 +108,7 @@ CREATE TABLE `customer`  (
   INDEX `idx_customer_team_id`(`team_id` ASC) USING BTREE,
   INDEX `idx_customer_create_by`(`create_by` ASC) USING BTREE,
   INDEX `idx_customer_update_by`(`update_by` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of customer
@@ -119,6 +129,13 @@ INSERT INTO `customer` VALUES (13, '凌曼卿', 'ling-man-qing', '', '', 0, 0, 0
 INSERT INTO `customer` VALUES (14, '宋国甄', 'song-guo-zhen', '', '', 0, 0, 0, '', '', '', 2, 1, '/0/1/2/', 0, '', '2023-11-04 20:36:21', '2023-11-04 20:36:21', 2, 0);
 INSERT INTO `customer` VALUES (15, '谢军', 'xie-jun', '', '', 0, 0, 0, '', '', '', 2, 1, '/0/1/2/', 0, '', '2023-11-06 21:44:22', '2023-11-06 21:44:22', 2, 0);
 INSERT INTO `customer` VALUES (16, '订单到', 'ding-dan-dao', '', '', 0, 0, 0, '', '', '', 2, 1, '/0/1/2/', 0, '', '2023-11-13 21:20:40', '2023-11-13 21:20:40', 2, 0);
+INSERT INTO `customer` VALUES (17, '啊啊啊', 'a-a-a', '', '', 0, 0, 0, '', '', '', 2, 1, '/0/1/2/', 0, '', '2023-12-01 21:28:11', '2023-12-01 21:28:11', 2, 0);
+INSERT INTO `customer` VALUES (18, '大金的顾客', 'da-jin-de-gu-ke', '', '', 0, 0, 0, '', '', '', 8, 1, '/0/10/9/', 0, '', '2023-12-01 21:31:32', '2023-12-01 21:31:32', 2, 0);
+INSERT INTO `customer` VALUES (19, '订单到', 'ding-dan-dao', '', '', 0, 0, 0, '', '', '', 3, 1, '/0/1/2/', 0, '', '2023-12-10 12:55:09', '2023-12-10 12:55:09', 2, 0);
+INSERT INTO `customer` VALUES (20, '来形庄', 'lai-xing-zhuang', '', '', 0, 0, 0, '', '', '', 2, 1, '/0/1/2/', 0, '', '2023-12-10 16:28:46', '2023-12-10 16:28:46', 2, 0);
+INSERT INTO `customer` VALUES (21, '吴利祥', 'wu-li-xiang', '', '', 0, 0, 0, '', '', '', 6, 1, '/0/1/2/', 0, '', '2023-12-10 16:29:14', '2023-12-10 16:29:14', 2, 0);
+INSERT INTO `customer` VALUES (22, '都发大水', 'dou-fa-da-shui', '', '', 0, 0, 0, '', '', '', 2, 1, '/0/1/2/', 0, '', '2023-12-10 16:29:57', '2023-12-10 16:29:57', 2, 0);
+INSERT INTO `customer` VALUES (23, '发的单', 'fa-de-dan', '', '', 0, 0, 0, '', '', '', 2, 1, '/0/1/2/', 0, '', '2023-12-10 16:42:11', '2023-12-10 16:42:11', 2, 0);
 
 -- ----------------------------
 -- Table structure for event_day_st
@@ -143,7 +160,7 @@ CREATE TABLE `event_day_st`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_event_day_st_create_by`(`create_by` ASC) USING BTREE,
   INDEX `idx_event_day_st_update_by`(`update_by` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 40 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 44 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of event_day_st
@@ -187,6 +204,10 @@ INSERT INTO `event_day_st` VALUES (36, '2023-11-04', 1, 5, '/0/1/2/', 4, 0, 0, 0
 INSERT INTO `event_day_st` VALUES (37, '2023-11-04', 1, 6, '/0/1/2/', 4, 0, 0, 0, 0, 1, '2023-11-04 20:38:32', '2023-11-04 20:38:32', 2, 0);
 INSERT INTO `event_day_st` VALUES (38, '2023-11-04', 1, 7, '/0/1/2/', 5, 0, 0, 0, 0, 1, '2023-11-04 20:38:45', '2023-11-04 20:38:45', 2, 0);
 INSERT INTO `event_day_st` VALUES (39, '2023-11-06', 1, 2, '/0/1/2/', 4, 1, 0, 0, 0, 1, '2023-11-06 21:44:58', '2023-11-06 21:44:58', 2, 0);
+INSERT INTO `event_day_st` VALUES (40, '2023-11-30', 1, 8, '/0/1/2/', 1, 0, 0, 0, 0, 1, '2023-11-30 22:30:19', '2023-11-30 22:30:19', 2, 0);
+INSERT INTO `event_day_st` VALUES (41, '2023-12-01', 1, 2, '/0/1/2/', 1, 0, 0, 1, 0, 1, '2023-12-01 21:28:54', '2023-12-01 21:28:54', 2, 0);
+INSERT INTO `event_day_st` VALUES (42, '2023-12-01', 1, 8, '/0/1/2/', 1, 1, 0, 0, 0, 1, '2023-12-01 21:29:03', '2023-12-01 21:29:03', 2, 0);
+INSERT INTO `event_day_st` VALUES (43, '2023-12-03', 1, 8, '/0/10/9/', 0, 0, 0, 0, 0, 1, '2023-12-03 15:33:04', '2023-12-03 15:33:04', 8, 0);
 
 -- ----------------------------
 -- Table structure for summary_plan_day
@@ -207,7 +228,7 @@ CREATE TABLE `summary_plan_day`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_summary_plan_day_create_by`(`create_by` ASC) USING BTREE,
   INDEX `idx_summary_plan_day_update_by`(`update_by` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of summary_plan_day
@@ -217,6 +238,7 @@ INSERT INTO `summary_plan_day` VALUES (7, '2023-11-02', 1, 2, '/0/1/2/', '今日
 INSERT INTO `summary_plan_day` VALUES (8, '2023-11-03', 1, 2, '/0/1/2/', '上午接待三个复诊患者，下午邀约初诊患者，安抚组员的半口戴牙患者，因为咬模没咬好，下次还要来试戴，督促组员邀约', '明天上午三个初诊，促成交，另有6个复诊患者要接待，督促组员打邀约，自己打回访', '2023-11-03 21:05:35', '2023-11-03 21:05:35', 0, 0);
 INSERT INTO `summary_plan_day` VALUES (9, '2023-11-04', 1, 2, '/0/1/2/', '上午接待3个复查患者，下午去一个小区看望几位种牙患者，开发另外的患者，然后回到医院带初诊和复诊，因为ITI的价格比别的医院贵500没成交，后面推了诺贝尔患者回去考虑，督促组员邀约明日初诊', '明日组内有初诊，协助促成交，另有几位复查患者要接待，督促组员月初发力月底才不累', '2023-11-04 20:44:54', '2023-11-04 21:08:01', 0, 0);
 INSERT INTO `summary_plan_day` VALUES (11, '2023-11-06', 1, 2, '/0/1/2/', '的萨芬士大夫士大夫撒旦的', '打发士大夫撒旦发射点发', '2023-11-06 21:45:19', '2023-11-06 21:45:19', 0, 0);
+INSERT INTO `summary_plan_day` VALUES (12, '2023-12-01', 1, 2, '/0/1/2/', '111', '222', '2023-12-01 21:28:35', '2023-12-01 21:28:35', 0, 0);
 
 -- ----------------------------
 -- Table structure for target_task
@@ -240,7 +262,7 @@ CREATE TABLE `target_task`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_target_task_create_by`(`create_by` ASC) USING BTREE,
   INDEX `idx_target_task_update_by`(`update_by` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of target_task
@@ -257,5 +279,11 @@ INSERT INTO `target_task` VALUES (11, 30, 202311, 1, 4, '/0/1/2/', 0, 72, 16, 80
 INSERT INTO `target_task` VALUES (12, 30, 202311, 1, 5, '/0/1/2/', 0, 72, 16, 80000, 2, 0, '2023-11-01 20:48:08', '2023-11-01 20:48:08');
 INSERT INTO `target_task` VALUES (13, 30, 202311, 1, 6, '/0/1/2/', 0, 72, 16, 80000, 2, 0, '2023-11-01 20:48:35', '2023-11-01 20:48:35');
 INSERT INTO `target_task` VALUES (14, 30, 202311, 1, 7, '/0/1/2/', 0, 72, 16, 80000, 2, 0, '2023-11-01 20:49:23', '2023-11-01 20:49:23');
+INSERT INTO `target_task` VALUES (15, 30, 202311, 1, 8, '/0/1/2/', 0, 100, 0, 0, 2, 2, '2023-11-30 22:31:04', '2023-11-30 22:35:32');
+INSERT INTO `target_task` VALUES (16, 30, 202312, 1, 2, '/0/1/2/', 0, 72, 16, 1000, 2, 0, '2023-12-01 21:25:17', '2023-12-01 21:25:17');
+INSERT INTO `target_task` VALUES (17, 30, 202312, 1, 8, '/0/1/2/', 0, 0, 0, 0, 2, 0, '2023-12-01 21:25:36', '2023-12-01 21:25:36');
+INSERT INTO `target_task` VALUES (18, 30, 202312, 1, 8, '/0/10/9/', 0, 10, 10, 20, 8, 0, '2023-12-03 15:33:40', '2023-12-03 15:33:40');
+INSERT INTO `target_task` VALUES (19, 30, 202312, 1, 3, '/0/1/2/', 0, 10, 10, 10000, 2, 0, '2023-12-10 12:59:07', '2023-12-10 12:59:07');
+INSERT INTO `target_task` VALUES (20, 30, 202312, 1, 5, '/0/1/2/', 0, 10, 10, 80000, 2, 0, '2023-12-10 12:59:24', '2023-12-10 12:59:24');
 
 SET FOREIGN_KEY_CHECKS = 1;

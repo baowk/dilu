@@ -11,7 +11,7 @@
  Target Server Version : 80032 (8.0.32)
  File Encoding         : 65001
 
- Date: 27/11/2023 22:17:49
+ Date: 10/12/2023 16:59:26
 */
 
 SET NAMES utf8mb4;
@@ -489,7 +489,7 @@ CREATE TABLE `sys_api`  (
   `updated_at` datetime(3) NULL DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_method_path`(`method` ASC, `path` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 109 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '接口' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 111 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '接口' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_api
@@ -601,6 +601,8 @@ INSERT INTO `sys_api` VALUES (105, '根据id获取Task', 'POST', '/api/v1/notice
 INSERT INTO `sys_api` VALUES (106, '创建Task', 'POST', '/api/v1/notice/task/create', 3, 3, 0, '2023-11-24 15:39:24.125');
 INSERT INTO `sys_api` VALUES (107, '修改Task', 'POST', '/api/v1/notice/task/update', 3, 3, 0, '2023-11-24 15:39:24.139');
 INSERT INTO `sys_api` VALUES (108, '删除Task', 'POST', '/api/v1/notice/task/del', 3, 3, 0, '2023-11-24 15:39:24.150');
+INSERT INTO `sys_api` VALUES (109, '账单统计导出', 'POST', '/api/v1/dental/st/export', 3, 3, 0, '2023-12-09 11:17:59.000');
+INSERT INTO `sys_api` VALUES (110, '账单导出', 'POST', '/api/v1/dental/bill/export', 3, 3, 0, '2023-12-09 16:57:59.000');
 
 -- ----------------------------
 -- Table structure for sys_cfg
@@ -621,6 +623,29 @@ CREATE TABLE `sys_cfg`  (
 
 -- ----------------------------
 -- Records of sys_cfg
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for sys_data_access_peam
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_data_access_peam`;
+CREATE TABLE `sys_data_access_peam`  (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `team_id` int NULL DEFAULT NULL COMMENT '团队id',
+  `user_id` int NULL DEFAULT NULL COMMENT '用户id',
+  `data_src` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '表',
+  `level` tinyint NULL DEFAULT NULL COMMENT '权限等级',
+  `access_id` int NULL DEFAULT NULL COMMENT '可访问的id',
+  `create_by` int NULL DEFAULT NULL COMMENT '创建者',
+  `update_by` int NULL DEFAULT NULL COMMENT '更新者',
+  `created_at` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `updated_at` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `deleted_at` datetime NULL DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_data_access_peam
 -- ----------------------------
 
 -- ----------------------------
@@ -734,17 +759,19 @@ CREATE TABLE `sys_member`  (
   `created_at` datetime(3) NULL DEFAULT NULL COMMENT '创建时间',
   `updated_at` datetime(3) NULL DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_member
 -- ----------------------------
 INSERT INTO `sys_member` VALUES (1, 1, 2, '糖糖', '小唐', 'xiao-tang', '', '/0/1/2/', 2, '-1', 2, '2023-02-20 00:00:00.000', NULL, 2, '1991-02-01', 1, NULL, NULL, NULL, '2023-11-18 20:10:52.435');
 INSERT INTO `sys_member` VALUES (2, 1, 3, '梅梅', '小梅', 'xiao-mei', NULL, '/0/1/2/', 2, '8', 8, '2021-01-13 00:00:00.000', NULL, 2, NULL, 1, NULL, NULL, NULL, '2023-11-16 19:34:27.378');
-INSERT INTO `sys_member` VALUES (3, 1, 4, '小雷', '大雷', 'da-lei', NULL, '/0/1/2/', 2, '5,6', 8, '2023-06-19 00:00:00.000', NULL, 1, NULL, 1, NULL, NULL, NULL, '2023-11-16 17:17:12.626');
+INSERT INTO `sys_member` VALUES (3, 1, 4, '小雷', '大雷', 'da-lei', NULL, '/0/1/2/', 2, '5,6', 2, '2023-06-19 00:00:00.000', '2023-11-30 00:00:00.000', 1, '2023-11-30', 2, NULL, NULL, NULL, '2023-11-30 22:21:43.622');
 INSERT INTO `sys_member` VALUES (4, 1, 5, '小丽', '小丽', 'xiao-li', NULL, '/0/1/2/', 2, NULL, 8, '2022-11-18 00:00:00.000', NULL, 2, NULL, 1, NULL, NULL, NULL, '2023-11-16 16:40:46.733');
 INSERT INTO `sys_member` VALUES (5, 1, 6, '小珊', '小珊', 'xiao-shan', NULL, '/0/1/2/', 2, '6,7,8', 8, '2023-06-02 00:00:00.000', NULL, 2, NULL, 1, NULL, NULL, NULL, '2023-11-16 17:21:26.525');
 INSERT INTO `sys_member` VALUES (6, 1, 7, '大雁', '大雁', 'da-yan', NULL, '/0/1/2/', 2, '7', 8, '2023-08-07 00:00:00.000', NULL, 2, NULL, 1, NULL, NULL, NULL, '2023-11-16 17:22:18.461');
+INSERT INTO `sys_member` VALUES (7, 1, 9, '小琪', '小琪', 'xiao-qi', '', '/0/1/2/', 2, '', 8, '2023-11-23 00:00:00.000', '2023-11-30 00:00:00.000', 2, '2023-11-30', 1, 0, 0, '2023-11-30 22:26:39.916', '2023-11-30 22:26:39.916');
+INSERT INTO `sys_member` VALUES (8, 1, 8, '大金', '大金', 'da-jin', '', '/0/10/9/', 9, '-1', 2, '2023-11-30 00:00:00.000', NULL, 2, NULL, 1, 0, 0, '2023-11-30 22:54:28.922', '2023-11-30 22:54:28.922');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -773,7 +800,7 @@ CREATE TABLE `sys_menu`  (
   INDEX `idx_sys_menu_deleted_at`(`deleted_at` ASC) USING BTREE,
   INDEX `idx_sys_menu_create_by`(`create_by` ASC) USING BTREE,
   INDEX `idx_sys_menu_update_by`(`update_by` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 144 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 146 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '菜单' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -880,6 +907,8 @@ INSERT INTO `sys_menu` VALUES (140, '', 'Task创建', '', 'task_create', 2, 3, '
 INSERT INTO `sys_menu` VALUES (141, '', 'Task修改', '', 'task_update', 2, 3, 'notice:task:edit', 138, 0, '', 0, 0, 1, 1, '2023-11-24 15:39:24.142', '2023-11-24 15:39:24.142', NULL);
 INSERT INTO `sys_menu` VALUES (142, '', 'Task删除', '', 'task_del', 2, 3, 'notice:task:remove', 138, 0, '', 0, 0, 1, 1, '2023-11-24 15:39:24.155', '2023-11-24 15:39:24.155', NULL);
 INSERT INTO `sys_menu` VALUES (143, 'AiChat', 'AiChat', 'ai', '/ai/chat', 2, 2, 'ai:chat', 1, 0, '/ai/chat/index', 0, 0, 1, 1, '2023-11-27 21:09:36.000', '2023-11-27 21:09:40.000', NULL);
+INSERT INTO `sys_menu` VALUES (144, NULL, '账单统计导出', NULL, 'st_bill_export', 2, 3, 'st:bill:export', 62, 0, NULL, 0, 0, 1, 1, '2023-12-09 11:21:15.000', '2023-12-09 11:21:18.000', NULL);
+INSERT INTO `sys_menu` VALUES (145, NULL, '账单导出', NULL, 'bill_export', 2, 3, 'bill:export', 62, 0, NULL, 0, 0, 1, 1, '2023-12-09 16:58:57.000', '2023-12-09 16:59:00.000', NULL);
 
 -- ----------------------------
 -- Table structure for sys_menu_api_rule
@@ -994,6 +1023,8 @@ INSERT INTO `sys_menu_api_rule` VALUES (139, 105);
 INSERT INTO `sys_menu_api_rule` VALUES (140, 106);
 INSERT INTO `sys_menu_api_rule` VALUES (141, 107);
 INSERT INTO `sys_menu_api_rule` VALUES (142, 108);
+INSERT INTO `sys_menu_api_rule` VALUES (144, 109);
+INSERT INTO `sys_menu_api_rule` VALUES (145, 110);
 
 -- ----------------------------
 -- Table structure for sys_opera_log
@@ -1222,7 +1253,7 @@ CREATE TABLE `sys_user`  (
   `updated_at` datetime(3) NULL DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_sys_user_update_by`(`update_by` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_user
@@ -1234,6 +1265,8 @@ INSERT INTO `sys_user` VALUES (4, 'liyanlei', NULL, NULL, '$2a$10$sPJOyDdh/J4OFV
 INSERT INTO `sys_user` VALUES (5, NULL, NULL, NULL, NULL, '小丽', '小丽', NULL, NULL, NULL, 2, NULL, NULL, NULL, 1, NULL, NULL, NULL);
 INSERT INTO `sys_user` VALUES (6, NULL, NULL, NULL, NULL, '小珊', '小珊', NULL, NULL, NULL, 2, NULL, NULL, NULL, 1, NULL, NULL, NULL);
 INSERT INTO `sys_user` VALUES (7, NULL, NULL, NULL, NULL, '大雁', '大雁', NULL, NULL, NULL, 2, NULL, NULL, NULL, 1, NULL, NULL, NULL);
+INSERT INTO `sys_user` VALUES (8, 'dajin', '', '', '$2a$10$hpISaioe30s6d3LYPdFaw.23rm29Yw9a44t8hl9G.tCNYKYoA72iW', '大金', '大金', '', NULL, NULL, 2, 0, '', NULL, 1, 0, '2023-11-30 22:54:28.914', '2023-11-30 22:54:28.914');
+INSERT INTO `sys_user` VALUES (9, 'xiaoqi', NULL, NULL, NULL, '小琪', '小琪', NULL, NULL, NULL, 2, NULL, NULL, NULL, 1, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for third_login
