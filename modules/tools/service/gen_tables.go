@@ -524,6 +524,9 @@ func (e *GenTablesService) Update(tab *models.GenTables) (err error) {
 }
 
 func ParseDsn(dsn string) string {
+	if len(dsn) < 3 {
+		return ""
+	}
 	idx := strings.LastIndex(dsn, ")/")
 	end := strings.LastIndex(dsn, "?")
 	if end < 0 {

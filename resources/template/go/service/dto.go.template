@@ -11,7 +11,7 @@ type {{.ClassName}}GetPageReq struct {
     {{- range .Columns -}}
     {{$z := .IsQuery}}
     {{- if ($z) -}}
-    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" query:"column:{{.ColumnName}}"` //{{.ColumnComment}}
+    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" form:"{{.JsonField}}" query:"column:{{.ColumnName}}"` //{{.ColumnComment}}
     {{- end }}
     {{- $x := .Pk -}}
     {{ if ($x) }}
@@ -38,7 +38,7 @@ type {{.ClassName}}Dto struct {
     {{- else if eq .GoField "CreateBy" -}}
     {{- else if eq .GoField "UpdateBy" -}}
     {{- else }}
-    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}"` //{{.ColumnComment}} {{end -}}
+    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" form:"{{.JsonField}}"` //{{.ColumnComment}} {{end -}}
     {{- end }}
 }
 
