@@ -25,6 +25,10 @@ var ApiAi = AiApi{}
 // @Router /api/v1/ai/chat [post]
 // @Security Bearer
 func (e *AiApi) Chat(c *gin.Context) {
+	// lock, err := core.RedisLock.Lock("Chat", 1, nil)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
 	var req dto.AiMsg
 	if err := c.ShouldBind(&req); err != nil {
 		e.Error(c, err)
@@ -35,5 +39,9 @@ func (e *AiApi) Chat(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
+	// if err := lock.Release(context.TODO()); err != nil {
+	// 	fmt.Println(err)
+	// }
+
 	e.Ok(c, res)
 }

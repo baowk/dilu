@@ -61,7 +61,8 @@ func (e *SSO) SendCode(c *gin.Context) {
 				return
 			}
 		}
-		service.SerSms.Send(req.Username)
+		var tempId string
+		service.SerSms.Send(req.Username, tempId)
 
 	} else if regexps.CheckEmail(req.Username) { //是否邮箱
 		if req.CheckExist {

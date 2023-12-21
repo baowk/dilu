@@ -20,7 +20,7 @@ var SerSms = SysSms{
 	base.NewService(consts.DB_DEF),
 }
 
-func (e *SysSms) Send(phone string) error {
+func (e *SysSms) Send(phone string, tempId string) error {
 	var err error
 	code := utils.RandNumberByLen(6)
 	data := models.SysSms{
@@ -37,7 +37,7 @@ func (e *SysSms) Send(phone string) error {
 		core.Log.Error("EmailLogService Insert error", zap.Error(err))
 		return err
 	}
-	sms.Send(phone, code)
+	sms.SMSSend.Send(phone, code, tempId)
 	return nil
 }
 
