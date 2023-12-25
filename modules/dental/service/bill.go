@@ -894,6 +894,7 @@ func (s *BillService) BillExcel(month int, name string, list []models.Bill, memb
 		} else if v.TradeType == 2 {
 			d, _ := v.PaidAmount.Mul(decimal.NewFromInt(-1)).Float64()
 			f.SetCellFloat("Sheet1", fmt.Sprintf("F%d", i+3), d, 2, 32)
+			remark = "补当月款;"
 		} else if v.TradeType == 3 {
 			d, _ := v.DebtAmount.Float64()
 			f.SetCellFloat("Sheet1", fmt.Sprintf("E%d", i+3), d, 2, 32)
@@ -1346,9 +1347,10 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	var tmDeal, tPaid, tbDebt, tRefund, deal, paid, bdebt, refund decimal.Decimal
 	var dealCnt, dCnt, iCnt, tdCnt, tiCnt int
 	for _, b := range list {
-		dCnt += b.DentalCount
-		iCnt += b.ImplantedCount
-
+		if b.TradeType == int(enums.TradeDeal) || b.TradeType == int(enums.TradeBalance) {
+			dCnt += b.DentalCount
+			iCnt += b.ImplantedCount
+		}
 		tmDeal = tmDeal.Add(b.RealAmount)
 		tPaid = tPaid.Add(b.PaidAmount)
 		tbDebt = tbDebt.Add(b.DebtAmount)
