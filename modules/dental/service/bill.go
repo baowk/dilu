@@ -672,7 +672,7 @@ func (s *BillService) StDay(teamId, userId int, deptPath string, day time.Time, 
 		firstCnt += ed.FirstDiagnosis
 		dealCnt += ed.Deal
 	}
-	todayPaid := paid.Add(debt).Sub(refund)
+	todayPaid := paid.Add(debt)
 	tPaid := totalPaid.Add(totalDebt).Sub(totalrRefund)
 	var texts utils.StringBuilder
 	texts.Append(fmt.Sprintf("今日初诊数：%d\n", firstCnt))
@@ -1367,7 +1367,7 @@ func (s *BillService) StMonth(teamId, userId int, deptPath string, day time.Time
 	}
 
 	totalPaid := tPaid.Add(tbDebt).Sub(tRefund)
-	todayPaid := paid.Add(bdebt).Sub(refund)
+	todayPaid := paid.Add(bdebt)
 	totalDebt := tmDeal.Sub(tPaid) //欠款
 
 	dayFmt := day.Format("2006年01月02日\n")
