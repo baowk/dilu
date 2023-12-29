@@ -32,7 +32,7 @@ func (e *{{.ClassName}}Api) QueryPage(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	list := make([]models.{{.ClassName}}, 10)
+	list := make([]models.{{.ClassName}}, 0, req.GetSize())
 	var total int64
 
 	if req.SortOrder == "" {
