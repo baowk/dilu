@@ -7,9 +7,9 @@ import (
 
 	"github.com/baowk/dilu-core/common/consts"
 	"github.com/baowk/dilu-core/common/utils"
-	"github.com/baowk/dilu-core/common/utils/email"
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/base"
+	"github.com/baowk/dilu-plugin/email"
 	"go.uber.org/zap"
 )
 
