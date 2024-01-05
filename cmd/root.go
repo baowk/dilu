@@ -38,6 +38,7 @@ func tip() {
 
 func init() {
 	rootCmd.AddCommand(start.StartCmd)
+	rootCmd.AddCommand(start.GenCmd)
 	rootCmd.AddCommand(version.StartCmd)
 }
 
