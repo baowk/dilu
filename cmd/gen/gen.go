@@ -1,4 +1,4 @@
-package start
+package gen
 
 import (
 	"dilu/common/config"
@@ -19,6 +19,7 @@ import (
 )
 
 var (
+	configYml string
 	dbName    string
 	tableName string
 	force     bool
@@ -144,5 +145,20 @@ func TypeGo2Ts(t string) string {
 		return "boolean"
 	} else {
 		return t
+	}
+}
+
+func mergeCfg(local, remote *coreCfg.AppCfg) {
+	if remote != nil {
+		core.Cfg = *local
+		core.Cfg = *remote
+		core.Cfg.Server.Mode = local.Server.Mode
+		core.Cfg.Server.RemoteEnable = local.Server.RemoteEnable
+		core.Cfg.Remote = local.Remote
+		core.Cfg.Server.Name = local.Server.Name
+		core.Cfg.Server.Port = local.Server.Port
+		core.Cfg.Server.Host = local.Server.Host
+	} else {
+		core.Cfg = *local
 	}
 }

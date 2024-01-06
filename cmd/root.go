@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"dilu/cmd/gen"
 	"dilu/cmd/start"
 	"dilu/cmd/version"
 
@@ -38,7 +39,7 @@ func tip() {
 
 func init() {
 	rootCmd.AddCommand(start.StartCmd)
-	rootCmd.AddCommand(start.GenCmd)
+	rootCmd.AddCommand(gen.GenCmd)
 	rootCmd.AddCommand(version.StartCmd)
 }
 
