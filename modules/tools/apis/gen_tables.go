@@ -145,7 +145,7 @@ func (e *GenTablesApi) Insert(c *gin.Context) {
 	}
 	for _, tableName := range req.Tables {
 		fmt.Println(tableName)
-		data, err := service.SerGenTables.GenTableInit(req.DbName, tableName)
+		data, err := service.SerGenTables.GenTableInit(req.DbName, tableName, false)
 		if err != nil {
 			core.Log.Error("Gen", zap.Error(err))
 			e.Error(c, err)
