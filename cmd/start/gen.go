@@ -37,7 +37,7 @@ func init() {
 	GenCmd.PersistentFlags().StringVarP(&configYml, "config", "c", "resources/config.dev.yml", "Start server with provided configuration file")
 	GenCmd.PersistentFlags().StringVarP(&dbName, "db", "d", "", "database name")
 	GenCmd.PersistentFlags().StringVarP(&tableName, "table", "t", "", "table name")
-	GenCmd.PersistentFlags().BoolVar(&force, "force", false, "if set to true, will overwrite existing files")
+	GenCmd.PersistentFlags().BoolVarP(&force, "force", "f", false, "if set to true, will overwrite existing files")
 }
 
 func gen() {
@@ -121,7 +121,7 @@ func gen() {
 
 	// 生成
 	fmt.Printf("db %s table %s", dbName, tableName)
-	tab, err := service.SerGenTables.GenTableInit(dbName, tableName)
+	tab, err := service.SerGenTables.GenTableInit(dbName, tableName, true)
 	if err != nil {
 		fmt.Println(err)
 		return

@@ -105,19 +105,26 @@ var (
 	frontPath = "../dilu-admin/src"
 )
 
-func (e *GenTablesService) GenTableInit(dbname string, tableName string) (models.GenTables, error) {
+func (e *GenTablesService) GenTableInit(dbname string, tableName string, force bool) (models.GenTables, error) {
 	var data models.GenTables
 	var dbTable tools.DBTables
 	var dbColumn tools.DBColumns
 	data.CreateBy = 0
 
 	dbTable.TableName = tableName
-	_, _, sdbn := GetDb(dbname)
+	dstdb, _, sdbn := GetDb(dbname)
 	dbTable.TableSchema = sdbn
 	data.DbName = sdbn
 	data.TBName = tableName
 
-	dbtable, err := dbTable.Get(e.DB(), sdbn)
+	var db *gorm.DB
+	if force {
+		db = dstdb
+	} else {
+		db = e.DB()
+	}
+
+	dbtable, err := dbTable.Get(db, sdbn)
 	if err != nil {
 		return data, err
 	}
@@ -144,7 +151,7 @@ func (e *GenTablesService) GenTableInit(dbname string, tableName string) (models
 	data.Crud = true
 	// 中横线表名称，接口路径、前端文件夹名称和js名称使用
 	data.ModuleName = strings.Replace(tableName, "_", "-", -1)
-	dbcolumn, err := dbColumn.GetList(e.DB(), sdbn)
+	dbcolumn, err := dbColumn.GetList(db, sdbn)
 	data.CreateBy = 0
 	data.TableComment = dbtable.TableComment
 	if dbtable.TableComment == "" {
