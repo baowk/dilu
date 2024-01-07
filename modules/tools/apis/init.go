@@ -1,10 +1,6 @@
 package apis
 
 import (
-	dm "dilu/modules/dental/models"
-	nm "dilu/modules/notice/models"
-	"dilu/modules/sys/models"
-	tm "dilu/modules/tools/models"
 	"dilu/modules/tools/utils"
 	"time"
 
@@ -34,43 +30,8 @@ func (e *Init) DoInit(c *gin.Context) {
 	// service.ImportSql("resources/dbs/dental-db.sql", "dental")
 
 	result := "执行成功"
-	if err := core.DB().AutoMigrate(
-		&models.SysEmail{},
-		&models.SysSms{},
-		&models.SysApi{},
-		&models.SysCfg{},
-		&models.SysDept{},
-		&models.SysJob{},
-		&models.SysMenu{},
-		&models.SysOperaLog{},
-		&models.SysRole{},
-		&models.SysUser{},
-		&models.ThirdLogin{},
-		&models.SysMember{},
-		&models.SysTeam{},
-		&models.SysRoleMenu{},
-		&tm.GenTables{},
-		&tm.GenColumns{},
-		// &tools.GenColumn{},
-		// &tools.GenTable{},
-	); err != nil {
+	if err := core.DB().AutoMigrate(); err != nil {
 		result = "sys执行失败"
-	}
-	if err := core.Db("dental").AutoMigrate(
-		&dm.Bill{},
-		&dm.Customer{},
-		&dm.EventDaySt{},
-		&dm.SummaryPlanDay{},
-		&dm.TargetTask{},
-	); err != nil {
-		result = "dental执行失败"
-	}
-	if err := core.Db("notice").AutoMigrate(
-		&nm.PubNotice{},
-		&nm.UserNotice{},
-		&nm.Task{},
-	); err != nil {
-		result = "notice执行失败"
 	}
 
 	// t1, err := template.ParseFiles("modules/tools/apis/tmpls/result.html")

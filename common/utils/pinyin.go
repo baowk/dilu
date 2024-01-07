@@ -1,11 +1,11 @@
 package utils
 
-import (
-	"strings"
+// import (
+// 	"strings"
 
-	"github.com/mozillazg/go-pinyin"
-)
+// 	"github.com/mozillazg/go-pinyin"
+// )
 
-func GetPinyin(text string) string {
-	return strings.Join(pinyin.LazyConvert(text, nil), "-")
-}
+// func GetPinyin(text string) string {
+// 	return strings.Join(pinyin.LazyConvert(text, nil), "-")
+// }

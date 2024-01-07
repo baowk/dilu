@@ -6,7 +6,6 @@ const (
 
 const (
 	ApiRoot = "/api/v1"
-	DB_CRM  = "dental"
 )
 
 // 私钥

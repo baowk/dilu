@@ -2,7 +2,7 @@ package router
 
 import (
 	"dilu/modules/{{.PackageName}}/apis"
-	"dilu/common/middleware"
+	//"dilu/common/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,7 +12,7 @@ func init() {
 
 // 默认需登录认证的路由
 func register{{.ClassName}}Router(v1 *gin.RouterGroup) {
-	r := v1.Group("{{.ModuleName}}").Use(middleware.JwtHandler()).Use(middleware.PermHandler())
+	r := v1.Group("{{.ModuleName}}") //.Use(middleware.JwtHandler()).Use(middleware.PermHandler())
 	{
 		r.POST("/get", apis.Api{{.ClassName}}.Get)
 		r.POST("/create", apis.Api{{.ClassName}}.Create)

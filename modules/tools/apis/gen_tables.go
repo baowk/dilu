@@ -7,13 +7,10 @@ import (
 	"dilu/modules/tools/service"
 	"dilu/modules/tools/service/dto"
 
-	sModels "dilu/modules/sys/models"
-	sService "dilu/modules/sys/service"
 	"errors"
 	"fmt"
 	"strings"
 
-	"github.com/baowk/dilu-core/common/consts"
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/base"
 	"github.com/gin-gonic/gin"
@@ -192,191 +189,191 @@ func (e *GenTablesApi) Update(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// GenMenuAndApi
-// @Summary 生成菜单
-// @Description 生成菜单
-// @Tags 工具 / 生成工具
-// @Accept  application/json
-// @Product application/json
-// @Param data body dto.GenMenuReq true "body"
-// @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
-// @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
-// @Router /api/v1/tools/gen/menu [post]
-func (e *GenTablesApi) GenMenuAndApi(c *gin.Context) {
-	if !core.Cfg.Gen.Enable {
-		e.Error(c, errors.New("api和菜单已关闭"))
-		return
-	}
-	table := models.GenTables{}
-	var req dto.GenMenuReq
-	if err := c.ShouldBind(&req); err != nil {
-		e.Error(c, err)
-		return
-	}
-	menuPid := req.MenuId
-	table.TableId = req.TableId
-	db, _, _ := service.GetDb(consts.DB_DEF)
-	tab, _ := service.SerGenTables.Get(db, true, req.TableId)
-	tab.MLTBName = strings.Replace(tab.TBName, "_", "-", -1)
-	tab.ApiRoot = cons.ApiRoot
-	if menuPid == 0 {
-		Mmenu := sModels.SysMenu{}
-		Mmenu.Title = tab.TableComment
-		Mmenu.Icon = "pass"
-		Mmenu.Path = "/" + tab.PackageName
-		Mmenu.MenuType = 1
-		Mmenu.ParentId = 0
-		Mmenu.NoCache = false
-		Mmenu.Component = "Layout"
-		Mmenu.Sort = 0
-		Mmenu.Hidden = false
-		Mmenu.CreateBy = 1
-		Mmenu.PlatformType = 2
-		sService.SerSysMenu.Insert(&Mmenu)
-		menuPid = Mmenu.Id
-	}
+// // GenMenuAndApi
+// // @Summary 生成菜单
+// // @Description 生成菜单
+// // @Tags 工具 / 生成工具
+// // @Accept  application/json
+// // @Product application/json
+// // @Param data body dto.GenMenuReq true "body"
+// // @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
+// // @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
+// // @Router /api/v1/tools/gen/menu [post]
+// func (e *GenTablesApi) GenMenuAndApi(c *gin.Context) {
+// 	if !core.Cfg.Gen.Enable {
+// 		e.Error(c, errors.New("api和菜单已关闭"))
+// 		return
+// 	}
+// 	table := models.GenTables{}
+// 	var req dto.GenMenuReq
+// 	if err := c.ShouldBind(&req); err != nil {
+// 		e.Error(c, err)
+// 		return
+// 	}
+// 	menuPid := req.MenuId
+// 	table.TableId = req.TableId
+// 	db, _, _ := service.GetDb(consts.DB_DEF)
+// 	tab, _ := service.SerGenTables.Get(db, true, req.TableId)
+// 	tab.MLTBName = strings.Replace(tab.TBName, "_", "-", -1)
+// 	tab.ApiRoot = cons.ApiRoot
+// 	if menuPid == 0 {
+// 		Mmenu := sModels.SysMenu{}
+// 		Mmenu.Title = tab.TableComment
+// 		Mmenu.Icon = "pass"
+// 		Mmenu.Path = "/" + tab.PackageName
+// 		Mmenu.MenuType = 1
+// 		Mmenu.ParentId = 0
+// 		Mmenu.NoCache = false
+// 		Mmenu.Component = "Layout"
+// 		Mmenu.Sort = 0
+// 		Mmenu.Hidden = false
+// 		Mmenu.CreateBy = 1
+// 		Mmenu.PlatformType = 2
+// 		sService.SerSysMenu.Insert(&Mmenu)
+// 		menuPid = Mmenu.Id
+// 	}
 
-	curPath := fmt.Sprintf("%s/%s/%s/page", tab.ApiRoot, tab.PackageName, tab.ModuleName)
-	where := map[string]any{
-		"path":   curPath,
-		"method": "POST",
-	}
-	mApi := sModels.NewSysApi()
-	sService.SerSysApi.GetByWhere(where, mApi)
-	if mApi.Id == 0 {
-		mApi = mApi.SetMethod("POST").SetPermType(3).SetPath(curPath).
-			SetStatus(3).SetTitle("分页获取" + tab.TableComment)
-		sService.SerSysApi.Create(mApi)
-	}
-	Cmenu := sModels.SysMenu{}
-	Cmenu.MenuName = tab.ClassName + "Manage"
-	Cmenu.Title = tab.TableComment + "管理"
-	Cmenu.Icon = "pass"
-	Cmenu.Path = "/" + tab.PackageName + "/" + tab.MLTBName
-	Cmenu.MenuType = 2
-	Cmenu.Permission = tab.PackageName + ":" + tab.BusinessName + ":list"
-	Cmenu.ParentId = menuPid
-	Cmenu.NoCache = false
-	Cmenu.Component = "/" + tab.PackageName + "/" + tab.MLTBName + "/index"
-	Cmenu.Sort = 0
-	Cmenu.Hidden = false
-	Cmenu.CreateBy = 1
-	Cmenu.UpdateBy = 1
-	Cmenu.PlatformType = 2
-	Cmenu.SysApi = []sModels.SysApi{*mApi}
-	sService.SerSysMenu.Insert(&Cmenu)
+// 	curPath := fmt.Sprintf("%s/%s/%s/page", tab.ApiRoot, tab.PackageName, tab.ModuleName)
+// 	where := map[string]any{
+// 		"path":   curPath,
+// 		"method": "POST",
+// 	}
+// 	mApi := sModels.NewSysApi()
+// 	sService.SerSysApi.GetByWhere(where, mApi)
+// 	if mApi.Id == 0 {
+// 		mApi = mApi.SetMethod("POST").SetPermType(3).SetPath(curPath).
+// 			SetStatus(3).SetTitle("分页获取" + tab.TableComment)
+// 		sService.SerSysApi.Create(mApi)
+// 	}
+// 	Cmenu := sModels.SysMenu{}
+// 	Cmenu.MenuName = tab.ClassName + "Manage"
+// 	Cmenu.Title = tab.TableComment + "管理"
+// 	Cmenu.Icon = "pass"
+// 	Cmenu.Path = "/" + tab.PackageName + "/" + tab.MLTBName
+// 	Cmenu.MenuType = 2
+// 	Cmenu.Permission = tab.PackageName + ":" + tab.BusinessName + ":list"
+// 	Cmenu.ParentId = menuPid
+// 	Cmenu.NoCache = false
+// 	Cmenu.Component = "/" + tab.PackageName + "/" + tab.MLTBName + "/index"
+// 	Cmenu.Sort = 0
+// 	Cmenu.Hidden = false
+// 	Cmenu.CreateBy = 1
+// 	Cmenu.UpdateBy = 1
+// 	Cmenu.PlatformType = 2
+// 	Cmenu.SysApi = []sModels.SysApi{*mApi}
+// 	sService.SerSysMenu.Insert(&Cmenu)
 
-	curPath = fmt.Sprintf("%s/%s/%s/get", tab.ApiRoot, tab.PackageName, tab.ModuleName)
-	where["path"] = curPath
+// 	curPath = fmt.Sprintf("%s/%s/%s/get", tab.ApiRoot, tab.PackageName, tab.ModuleName)
+// 	where["path"] = curPath
 
-	gApi := sModels.NewSysApi()
-	sService.SerSysApi.GetByWhere(where, gApi)
-	if gApi.Id == 0 {
-		gApi := gApi.SetMethod("POST").SetPermType(3).SetPath(curPath).
-			SetStatus(3).SetTitle("根据id获取" + tab.TableComment)
-		sService.SerSysApi.Create(gApi)
-	}
+// 	gApi := sModels.NewSysApi()
+// 	sService.SerSysApi.GetByWhere(where, gApi)
+// 	if gApi.Id == 0 {
+// 		gApi := gApi.SetMethod("POST").SetPermType(3).SetPath(curPath).
+// 			SetStatus(3).SetTitle("根据id获取" + tab.TableComment)
+// 		sService.SerSysApi.Create(gApi)
+// 	}
 
-	MList := sModels.SysMenu{}
-	MList.MenuName = ""
-	MList.Title = tab.TableComment + "详情"
-	MList.Icon = ""
-	MList.Path = tab.TBName + "_detail"
-	MList.MenuType = 3
-	MList.Permission = tab.PackageName + ":" + tab.BusinessName + ":query"
-	MList.ParentId = Cmenu.Id
-	MList.NoCache = false
-	MList.Sort = 0
-	MList.Hidden = false
-	MList.CreateBy = 1
-	MList.UpdateBy = 1
-	MList.PlatformType = 2
-	MList.SysApi = []sModels.SysApi{*gApi}
-	sService.SerSysMenu.Insert(&MList)
+// 	MList := sModels.SysMenu{}
+// 	MList.MenuName = ""
+// 	MList.Title = tab.TableComment + "详情"
+// 	MList.Icon = ""
+// 	MList.Path = tab.TBName + "_detail"
+// 	MList.MenuType = 3
+// 	MList.Permission = tab.PackageName + ":" + tab.BusinessName + ":query"
+// 	MList.ParentId = Cmenu.Id
+// 	MList.NoCache = false
+// 	MList.Sort = 0
+// 	MList.Hidden = false
+// 	MList.CreateBy = 1
+// 	MList.UpdateBy = 1
+// 	MList.PlatformType = 2
+// 	MList.SysApi = []sModels.SysApi{*gApi}
+// 	sService.SerSysMenu.Insert(&MList)
 
-	curPath = fmt.Sprintf("%s/%s/%s/create", tab.ApiRoot, tab.PackageName, tab.ModuleName)
-	where["path"] = curPath
-	cApi := sModels.NewSysApi()
-	sService.SerSysApi.GetByWhere(where, cApi)
-	if cApi.Id == 0 {
-		cApi := cApi.SetMethod("POST").SetPermType(3).SetPath(curPath).
-			SetStatus(3).SetTitle("创建" + tab.TableComment)
-		sService.SerSysApi.Create(cApi)
-	}
+// 	curPath = fmt.Sprintf("%s/%s/%s/create", tab.ApiRoot, tab.PackageName, tab.ModuleName)
+// 	where["path"] = curPath
+// 	cApi := sModels.NewSysApi()
+// 	sService.SerSysApi.GetByWhere(where, cApi)
+// 	if cApi.Id == 0 {
+// 		cApi := cApi.SetMethod("POST").SetPermType(3).SetPath(curPath).
+// 			SetStatus(3).SetTitle("创建" + tab.TableComment)
+// 		sService.SerSysApi.Create(cApi)
+// 	}
 
-	MCreate := sModels.SysMenu{}
-	MCreate.MenuName = ""
-	MCreate.Title = tab.TableComment + "创建"
-	MCreate.Icon = ""
-	MCreate.Path = tab.TBName + "_create"
-	MCreate.MenuType = 3
-	MCreate.Permission = tab.PackageName + ":" + tab.BusinessName + ":add"
-	MCreate.ParentId = Cmenu.Id
-	MCreate.NoCache = false
-	MCreate.Sort = 0
-	MCreate.Hidden = false
-	MCreate.CreateBy = 1
-	MCreate.UpdateBy = 1
-	MCreate.PlatformType = 2
-	MCreate.SysApi = []sModels.SysApi{*cApi}
-	sService.SerSysMenu.Insert(&MCreate)
+// 	MCreate := sModels.SysMenu{}
+// 	MCreate.MenuName = ""
+// 	MCreate.Title = tab.TableComment + "创建"
+// 	MCreate.Icon = ""
+// 	MCreate.Path = tab.TBName + "_create"
+// 	MCreate.MenuType = 3
+// 	MCreate.Permission = tab.PackageName + ":" + tab.BusinessName + ":add"
+// 	MCreate.ParentId = Cmenu.Id
+// 	MCreate.NoCache = false
+// 	MCreate.Sort = 0
+// 	MCreate.Hidden = false
+// 	MCreate.CreateBy = 1
+// 	MCreate.UpdateBy = 1
+// 	MCreate.PlatformType = 2
+// 	MCreate.SysApi = []sModels.SysApi{*cApi}
+// 	sService.SerSysMenu.Insert(&MCreate)
 
-	curPath = fmt.Sprintf("%s/%s/%s/update", tab.ApiRoot, tab.PackageName, tab.ModuleName)
-	where["path"] = curPath
-	uApi := sModels.NewSysApi()
-	sService.SerSysApi.GetByWhere(where, uApi)
-	if uApi.Id == 0 {
-		uApi = uApi.SetMethod("POST").SetPermType(3).SetPath(curPath).
-			SetStatus(3).SetTitle("修改" + tab.TableComment)
-		sService.SerSysApi.Create(uApi)
-	}
+// 	curPath = fmt.Sprintf("%s/%s/%s/update", tab.ApiRoot, tab.PackageName, tab.ModuleName)
+// 	where["path"] = curPath
+// 	uApi := sModels.NewSysApi()
+// 	sService.SerSysApi.GetByWhere(where, uApi)
+// 	if uApi.Id == 0 {
+// 		uApi = uApi.SetMethod("POST").SetPermType(3).SetPath(curPath).
+// 			SetStatus(3).SetTitle("修改" + tab.TableComment)
+// 		sService.SerSysApi.Create(uApi)
+// 	}
 
-	MUpdate := sModels.SysMenu{}
-	MUpdate.MenuName = ""
-	MUpdate.Title = tab.TableComment + "修改"
-	MUpdate.Icon = ""
-	MUpdate.Path = tab.TBName + "_update"
-	MUpdate.MenuType = 3
-	MUpdate.Permission = tab.PackageName + ":" + tab.BusinessName + ":edit"
-	MUpdate.ParentId = Cmenu.Id
-	MUpdate.NoCache = false
-	MUpdate.Sort = 0
-	MUpdate.Hidden = false
-	MUpdate.CreateBy = 1
-	MUpdate.UpdateBy = 1
-	MUpdate.PlatformType = 2
-	MUpdate.SysApi = []sModels.SysApi{*uApi}
-	sService.SerSysMenu.Insert(&MUpdate)
+// 	MUpdate := sModels.SysMenu{}
+// 	MUpdate.MenuName = ""
+// 	MUpdate.Title = tab.TableComment + "修改"
+// 	MUpdate.Icon = ""
+// 	MUpdate.Path = tab.TBName + "_update"
+// 	MUpdate.MenuType = 3
+// 	MUpdate.Permission = tab.PackageName + ":" + tab.BusinessName + ":edit"
+// 	MUpdate.ParentId = Cmenu.Id
+// 	MUpdate.NoCache = false
+// 	MUpdate.Sort = 0
+// 	MUpdate.Hidden = false
+// 	MUpdate.CreateBy = 1
+// 	MUpdate.UpdateBy = 1
+// 	MUpdate.PlatformType = 2
+// 	MUpdate.SysApi = []sModels.SysApi{*uApi}
+// 	sService.SerSysMenu.Insert(&MUpdate)
 
-	curPath = fmt.Sprintf("%s/%s/%s/del", tab.ApiRoot, tab.PackageName, tab.ModuleName)
-	where["path"] = curPath
-	dApi := sModels.NewSysApi()
-	sService.SerSysApi.GetByWhere(where, dApi)
-	if dApi.Id == 0 {
-		dApi = dApi.SetMethod("POST").SetPermType(3).SetPath(curPath).
-			SetStatus(3).SetTitle("删除" + tab.TableComment)
-		sService.SerSysApi.Create(dApi)
-	}
+// 	curPath = fmt.Sprintf("%s/%s/%s/del", tab.ApiRoot, tab.PackageName, tab.ModuleName)
+// 	where["path"] = curPath
+// 	dApi := sModels.NewSysApi()
+// 	sService.SerSysApi.GetByWhere(where, dApi)
+// 	if dApi.Id == 0 {
+// 		dApi = dApi.SetMethod("POST").SetPermType(3).SetPath(curPath).
+// 			SetStatus(3).SetTitle("删除" + tab.TableComment)
+// 		sService.SerSysApi.Create(dApi)
+// 	}
 
-	MDelete := sModels.SysMenu{}
-	MDelete.MenuName = ""
-	MDelete.Title = tab.TableComment + "删除"
-	MDelete.Icon = ""
-	MDelete.Path = tab.TBName + "_del"
-	MDelete.MenuType = 3
-	MDelete.Permission = tab.PackageName + ":" + tab.BusinessName + ":remove"
-	MDelete.ParentId = Cmenu.Id
-	MDelete.NoCache = false
-	MDelete.Sort = 0
-	MDelete.Hidden = false
-	MDelete.CreateBy = 1
-	MDelete.UpdateBy = 1
-	MDelete.PlatformType = 2
-	MDelete.SysApi = []sModels.SysApi{*dApi}
-	sService.SerSysMenu.Insert(&MDelete)
+// 	MDelete := sModels.SysMenu{}
+// 	MDelete.MenuName = ""
+// 	MDelete.Title = tab.TableComment + "删除"
+// 	MDelete.Icon = ""
+// 	MDelete.Path = tab.TBName + "_del"
+// 	MDelete.MenuType = 3
+// 	MDelete.Permission = tab.PackageName + ":" + tab.BusinessName + ":remove"
+// 	MDelete.ParentId = Cmenu.Id
+// 	MDelete.NoCache = false
+// 	MDelete.Sort = 0
+// 	MDelete.Hidden = false
+// 	MDelete.CreateBy = 1
+// 	MDelete.UpdateBy = 1
+// 	MDelete.PlatformType = 2
+// 	MDelete.SysApi = []sModels.SysApi{*dApi}
+// 	sService.SerSysMenu.Insert(&MDelete)
 
-	e.Ok(c, "数据生成成功！")
-}
+// 	e.Ok(c, "数据生成成功！")
+// }
 
 // // Preview
 // // @Summary 生成预览

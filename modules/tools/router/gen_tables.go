@@ -1,7 +1,6 @@
 package router
 
 import (
-	"dilu/common/middleware"
 	"dilu/modules/tools/apis"
 
 	"github.com/gin-gonic/gin"
@@ -18,14 +17,14 @@ func registerGenTablesRouter(v1 *gin.RouterGroup) {
 		r.POST("/dbs", apis.ApiGenTables.GetDBS)
 		r.POST("db/tables", apis.ApiGenTables.GetDBTableList)
 		r.POST("/page", apis.ApiGenTables.QueryPage)
-		r.POST("/menu", apis.ApiGenTables.GenMenuAndApi)
+		//r.POST("/menu", apis.ApiGenTables.GenMenuAndApi)
 		r.POST("/update", apis.ApiGenTables.Update)
 		r.POST("/del", apis.ApiGenTables.Del)
 		r.POST("/add", apis.ApiGenTables.Insert)
 		r.POST("/code", apis.ApiGenTables.GenCode)
 	}
-	r2 := v1.Use().Use(middleware.JwtHandler()).Use(middleware.PermHandler())
-	{
-		r2.POST("/monitor", apis.InitApi.Monitor)
-	}
+	// r2 := v1.Use().Use(middleware.JwtHandler()).Use(middleware.PermHandler())
+	// {
+	// 	r2.POST("/monitor", apis.InitApi.Monitor)
+	// }
 }
