@@ -60,10 +60,10 @@ func (e *DBColumns) GetList(tx *gorm.DB, dbname, driver string) ([]DBColumns, er
 
 		table = table.Where("TABLE_NAME = ?", e.TableName).Order("ORDINAL_POSITION asc")
 	} else if driver == "pgsql" {
-		table = tx.Table("information_schema.columns")
-		table = table.Where("table_schema= ? ", "public") // 使用默认 public，将来可配置
+		table = tx.Table("information_schema.columns AS col").Joins("LEFT JOIN pg_catalog.pg_description AS pgd ON (col.table_name::regclass = pgd.objoid AND col.ordinal_position = pgd.objsubid)").Select("col.*, pgd.description AS column_comment")
+		table = table.Where("col.table_schema= ? ", "public") // 使用默认 public，将来可配置
 
-		table = table.Where("table_name = ?", e.TableName).Order("ORDINAL_POSITION asc")
+		table = table.Where("col.table_name = ?", e.TableName).Order("col.ORDINAL_POSITION asc")
 	} else {
 		return doc, errors.New("只支持mysql、postgresql")
 	}
