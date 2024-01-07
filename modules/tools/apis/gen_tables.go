@@ -53,7 +53,7 @@ func (e *GenTablesApi) GetDBTableList(c *gin.Context) {
 	}
 
 	var dbname = req.DBName
-	db, mdbn, sdbn := service.GetDb(dbname)
+	db, mdbn, sdbn, _ := service.GetDb(dbname)
 
 	result, total, err := data.GetPage(db, req.GetSize(), req.GetPage(), sdbn, mdbn)
 	if err != nil {
@@ -215,7 +215,7 @@ func (e *GenTablesApi) GenMenuAndApi(c *gin.Context) {
 	}
 	menuPid := req.MenuId
 	table.TableId = req.TableId
-	db, _, _ := service.GetDb(consts.DB_DEF)
+	db, _, _, _ := service.GetDb(consts.DB_DEF)
 	tab, _ := service.SerGenTables.Get(db, true, req.TableId)
 	tab.MLTBName = strings.Replace(tab.TBName, "_", "-", -1)
 	tab.ApiRoot = cons.ApiRoot

@@ -8,14 +8,14 @@ import (
 )
 
 type DBTables struct {
-	TableName      string `gorm:"column:TABLE_NAME" json:"tableName"`
-	TableSchema    string `gorm:"column:TABLE_SCHEMA" json:"tableSchema"`
-	Engine         string `gorm:"column:ENGINE" json:"engine"`
-	TableRows      string `gorm:"column:TABLE_ROWS" json:"tableRows"`
-	TableCollation string `gorm:"column:TABLE_COLLATION" json:"tableCollation"`
-	CreateTime     string `gorm:"column:CREATE_TIME" json:"createTime"`
-	UpdateTime     string `gorm:"column:UPDATE_TIME" json:"updateTime"`
-	TableComment   string `gorm:"column:TABLE_COMMENT" json:"tableComment"`
+	TableName      string `gorm:"column:table_name" json:"tableName"`
+	TableSchema    string `gorm:"column:table_schema" json:"tableSchema"`
+	Engine         string `gorm:"column:engine" json:"engine"`
+	TableRows      string `gorm:"column:table_rows" json:"tableRows"`
+	TableCollation string `gorm:"column:table_collation" json:"tableCollation"`
+	CreateTime     string `gorm:"column:create_time" json:"createTime"`
+	UpdateTime     string `gorm:"column:update_time" json:"updateTime"`
+	TableComment   string `gorm:"column:table_comment" json:"tableComment"`
 }
 
 func (e *DBTables) GetPage(tx *gorm.DB, pageSize int, pageIndex int, dbname string, defDbName string) ([]DBTables, int64, error) {
@@ -26,7 +26,7 @@ func (e *DBTables) GetPage(tx *gorm.DB, pageSize int, pageIndex int, dbname stri
 	if core.Cfg.DBCfg.Driver == "mysql" {
 
 		table = tx.Table("information_schema.tables")
-		table = table.Where("TABLE_NAME not in (select table_name from `" + defDbName + "`.gen_tables where db_name = ? )", dbname)
+		table = table.Where("TABLE_NAME not in (select table_name from `"+defDbName+"`.gen_tables where db_name = ? )", dbname)
 		table = table.Where("table_schema= ? ", dbname)
 
 		if e.TableName != "" {
@@ -43,9 +43,9 @@ func (e *DBTables) GetPage(tx *gorm.DB, pageSize int, pageIndex int, dbname stri
 	return doc, count, nil
 }
 
-func (e *DBTables) Get(tx *gorm.DB, dbname string) (DBTables, error) {
+func (e *DBTables) Get(tx *gorm.DB, dbname, driver string) (DBTables, error) {
 	var doc DBTables
-	if core.Cfg.DBCfg.Driver == "mysql" {
+	if driver == "mysql" {
 		table := tx.Table("information_schema.tables")
 		table = table.Where("table_schema= ? ", dbname)
 		if e.TableName == "" {
@@ -55,8 +55,18 @@ func (e *DBTables) Get(tx *gorm.DB, dbname string) (DBTables, error) {
 		if err := table.First(&doc).Error; err != nil {
 			return doc, err
 		}
+	} else if driver == "pgsql" {
+		table := tx.Table("information_schema.tables")
+		table = table.Where("table_schema= ? ", "public") // 使用默认 public，将来可配置
+		if e.TableName == "" {
+			return doc, errors.New("table name cannot be empty！")
+		}
+		table = table.Where("TABLE_NAME = ?", e.TableName)
+		if err := table.First(&doc).Error; err != nil {
+			return doc, err
+		}
 	} else {
-		return doc, errors.New("只支持mysql")
+		return doc, errors.New("只支持mysql、postgresql")
 	}
 	return doc, nil
 }
