@@ -8,18 +8,18 @@ import (
 )
 
 type DBColumns struct {
-	TableSchema            string `gorm:"column:TABLE_SCHEMA" json:"tableSchema"`
-	TableName              string `gorm:"column:TABLE_NAME" json:"tableName"`
-	ColumnName             string `gorm:"column:COLUMN_NAME" json:"columnName"`
-	ColumnDefault          string `gorm:"column:COLUMN_DEFAULT" json:"columnDefault"`
-	IsNullable             string `gorm:"column:IS_NULLABLE" json:"isNullable"`
-	DataType               string `gorm:"column:DATA_TYPE" json:"dataType"`
-	CharacterMaximumLength string `gorm:"column:CHARACTER_MAXIMUM_LENGTH" json:"characterMaximumLength"`
-	CharacterSetName       string `gorm:"column:CHARACTER_SET_NAME" json:"characterSetName"`
-	ColumnType             string `gorm:"column:COLUMN_TYPE" json:"columnType"`
-	ColumnKey              string `gorm:"column:COLUMN_KEY" json:"columnKey"`
-	Extra                  string `gorm:"column:EXTRA" json:"extra"`
-	ColumnComment          string `gorm:"column:COLUMN_COMMENT" json:"columnComment"`
+	TableSchema            string `gorm:"column:table_schema" json:"tableSchema"`
+	TableName              string `gorm:"column:table_name" json:"tableName"`
+	ColumnName             string `gorm:"column:column_name" json:"columnName"`
+	ColumnDefault          string `gorm:"column:column_default" json:"columnDefault"`
+	IsNullable             string `gorm:"column:is_nullable" json:"isNullable"`
+	DataType               string `gorm:"column:data_type" json:"dataType"`
+	CharacterMaximumLength string `gorm:"column:character_maximum_length" json:"characterMaximumLength"`
+	CharacterSetName       string `gorm:"column:character_set_name" json:"characterSetName"`
+	ColumnType             string `gorm:"column:column_type" json:"columnType"`
+	ColumnKey              string `gorm:"column:column_key" json:"columnKey"`
+	Extra                  string `gorm:"column:extra" json:"extra"`
+	ColumnComment          string `gorm:"column:column_comment" json:"columnComment"`
 }
 
 func (e *DBColumns) GetPage(tx *gorm.DB, pageSize int, pageIndex int, dbname string) ([]DBColumns, int64, error) {
@@ -46,7 +46,7 @@ func (e *DBColumns) GetPage(tx *gorm.DB, pageSize int, pageIndex int, dbname str
 
 }
 
-func (e *DBColumns) GetList(tx *gorm.DB, dbname string) ([]DBColumns, error) {
+func (e *DBColumns) GetList(tx *gorm.DB, dbname, driver string) ([]DBColumns, error) {
 	var doc []DBColumns
 	table := new(gorm.DB)
 
@@ -54,13 +54,18 @@ func (e *DBColumns) GetList(tx *gorm.DB, dbname string) ([]DBColumns, error) {
 		return nil, errors.New("table name cannot be empty！")
 	}
 
-	if core.Cfg.DBCfg.Driver == "mysql" {
+	if driver == "mysql" {
 		table = tx.Table("information_schema.columns")
 		table = table.Where("table_schema= ? ", dbname)
 
 		table = table.Where("TABLE_NAME = ?", e.TableName).Order("ORDINAL_POSITION asc")
+	} else if driver == "pgsql" {
+		table = tx.Table("information_schema.columns AS col").Joins("LEFT JOIN pg_catalog.pg_description AS pgd ON (col.table_name::regclass = pgd.objoid AND col.ordinal_position = pgd.objsubid)").Select("col.*, pgd.description AS column_comment")
+		table = table.Where("col.table_schema= ? ", "public") // 使用默认 public，将来可配置
+
+		table = table.Where("col.table_name = ?", e.TableName).Order("col.ORDINAL_POSITION asc")
 	} else {
-		return doc, errors.New("只支持mysql")
+		return doc, errors.New("只支持mysql、postgresql")
 	}
 	if err := table.Find(&doc).Error; err != nil {
 		return doc, err

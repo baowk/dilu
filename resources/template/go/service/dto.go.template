@@ -1,6 +1,20 @@
 package dto
 
 import (
+    {{- $bb := false -}}
+	{{- range .Columns -}}
+        {{$z := .IsQuery}}
+        {{- if ($z) }}
+            {{if eq .GoType "time.Time"}}{{- $bb = true -}}{{- end -}}
+        {{- end -}}
+    {{- end -}}
+    {{- range .Columns -}}
+        {{if eq .GoType "time.Time"}}{{- $bb = true -}}{{- end -}}
+        {{if eq .GoField "DeletedAt" }}"gorm.io/gorm"{{ end -}}
+    {{- end -}}
+    {{- if eq $bb true }}
+    "time"
+    {{- end }}
     "github.com/baowk/dilu-core/core/base"
     "dilu/modules/{{.PackageName}}/models"
 )

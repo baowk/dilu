@@ -5,6 +5,7 @@ import (
 	"dilu/modules/tools/models"
 	"dilu/modules/tools/models/tools"
 	"dilu/modules/tools/service/dto"
+	"regexp"
 	"strings"
 	"text/template"
 
@@ -112,7 +113,7 @@ func (e *GenTablesService) GenTableInit(dbname string, tableName string, force b
 	data.CreateBy = 0
 
 	dbTable.TableName = tableName
-	dstdb, _, sdbn := GetDb(dbname)
+	dstdb, _, sdbn, driver := GetDb(dbname)
 	dbTable.TableSchema = sdbn
 	data.DbName = sdbn
 	data.TBName = tableName
@@ -124,7 +125,7 @@ func (e *GenTablesService) GenTableInit(dbname string, tableName string, force b
 		db = e.DB()
 	}
 
-	dbtable, err := dbTable.Get(db, sdbn)
+	dbtable, err := dbTable.Get(db, sdbn, driver)
 	if err != nil {
 		return data, err
 	}
@@ -151,7 +152,7 @@ func (e *GenTablesService) GenTableInit(dbname string, tableName string, force b
 	data.Crud = true
 	// 中横线表名称，接口路径、前端文件夹名称和js名称使用
 	data.ModuleName = strings.Replace(tableName, "_", "-", -1)
-	dbcolumn, err := dbColumn.GetList(db, sdbn)
+	dbcolumn, err := dbColumn.GetList(db, sdbn, driver)
 	data.CreateBy = 0
 	data.TableComment = dbtable.TableComment
 	if dbtable.TableComment == "" {
@@ -205,16 +206,20 @@ func (e *GenTablesService) GenTableInit(dbname string, tableName string, force b
 			column.Required = true
 		}
 
-		if strings.Contains(dbcolumn[i].ColumnType, "int") {
+		columnType := dbcolumn[i].ColumnType
+		if columnType == "" {
+			columnType = dbcolumn[i].DataType
+		}
+		if strings.Contains(columnType, "int") {
 			column.GoType = "int"
 			column.HtmlType = "input"
 			column.IsEdit = "1"
 			column.IsList = "1"
-		} else if strings.Contains(dbcolumn[i].ColumnType, "timestamp") {
+		} else if strings.Contains(columnType, "timestamp") {
 			column.GoType = "time.Time"
 			column.HtmlType = "datetime"
 			column.IsList = "1"
-		} else if strings.Contains(dbcolumn[i].ColumnType, "datetime") {
+		} else if strings.Contains(columnType, "datetime") {
 			column.GoType = "time.Time"
 			column.HtmlType = "datetime"
 			column.IsList = "1"
@@ -542,7 +547,30 @@ func ParseDsn(dsn string) string {
 	return dsn[idx+2 : end]
 }
 
-func GetDb(dbname string) (db *gorm.DB, mdb string, sdb string) {
+func ParsePgsqlDsn(dsn string) string {
+	if strings.HasPrefix(dsn, "postgres://") || strings.HasPrefix(dsn, "postgresql://") {
+		if len(dsn) < 3 {
+			return ""
+		}
+		idx := strings.LastIndex(dsn, "/")
+		end := strings.LastIndex(dsn, "?")
+		if end < 0 {
+			end = len(dsn)
+		}
+		return dsn[idx+1 : end]
+	}
+
+	re := regexp.MustCompile(`dbname=([^\s]*)`)
+
+	match := re.FindStringSubmatch(dsn)
+	if len(match) <= 1 {
+		return ""
+	}
+	return match[1]
+
+}
+
+func GetDb(dbname string) (db *gorm.DB, mdb string, sdb, driver string) {
 	mdsn := core.Cfg.DBCfg.DSN
 	mdb = ParseDsn(mdsn)
 	if dbname != consts.DB_DEF {
@@ -550,8 +578,15 @@ func GetDb(dbname string) (db *gorm.DB, mdb string, sdb string) {
 		if !ok {
 			return
 		}
-		sdb = ParseDsn(gdsn.DSN)
+		core.Log.Debug("driver", zap.String("test", gdsn.Driver))
+		if gdsn.Driver == "pgsql" {
+			sdb = ParsePgsqlDsn(gdsn.DSN)
+		} else {
+			sdb = ParseDsn(gdsn.DSN)
+		}
+		driver = gdsn.Driver
 	} else {
+		driver = core.Cfg.DBCfg.Driver
 		sdb = mdb
 	}
 	db = core.Db(dbname)
