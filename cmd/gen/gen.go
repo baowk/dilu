@@ -121,7 +121,7 @@ func gen() {
 	core.Init()
 
 	// 生成
-	fmt.Printf("db %s table %s", dbName, tableName)
+	fmt.Printf("db %s table %s\n", dbName, tableName)
 	tab, err := service.SerGenTables.GenTableInit(dbName, tableName, true)
 	if err != nil {
 		fmt.Println(err)

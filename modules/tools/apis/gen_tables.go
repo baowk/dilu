@@ -50,7 +50,7 @@ func (e *GenTablesApi) GetDBTableList(c *gin.Context) {
 	}
 
 	var dbname = req.DBName
-	db, mdbn, sdbn := service.GetDb(dbname)
+	db, mdbn, sdbn, _ := service.GetDb(dbname)
 
 	result, total, err := data.GetPage(db, req.GetSize(), req.GetPage(), sdbn, mdbn)
 	if err != nil {
