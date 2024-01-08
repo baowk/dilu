@@ -173,6 +173,11 @@ func (e *GenTablesService) GenTableInit(dbname string, tableName string, force b
 		column.ColumnComment = dbcolumn[i].ColumnComment
 		column.ColumnName = dbcolumn[i].ColumnName
 		column.ColumnType = dbcolumn[i].ColumnType
+
+		if column.ColumnType == "" {
+			column.ColumnType = dbcolumn[i].DataType
+		}
+
 		column.Sort = i + 1
 		column.Insert = true
 		column.IsInsert = "1"
@@ -206,20 +211,16 @@ func (e *GenTablesService) GenTableInit(dbname string, tableName string, force b
 			column.Required = true
 		}
 
-		columnType := dbcolumn[i].ColumnType
-		if columnType == "" {
-			columnType = dbcolumn[i].DataType
-		}
-		if strings.Contains(columnType, "int") {
+		if strings.Contains(column.ColumnType, "int") {
 			column.GoType = "int"
 			column.HtmlType = "input"
 			column.IsEdit = "1"
 			column.IsList = "1"
-		} else if strings.Contains(columnType, "timestamp") {
+		} else if strings.Contains(column.ColumnType, "timestamp") {
 			column.GoType = "time.Time"
 			column.HtmlType = "datetime"
 			column.IsList = "1"
-		} else if strings.Contains(columnType, "datetime") {
+		} else if strings.Contains(column.ColumnType, "datetime") {
 			column.GoType = "time.Time"
 			column.HtmlType = "datetime"
 			column.IsList = "1"
