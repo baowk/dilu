@@ -4,10 +4,22 @@ import (
 	"errors"
 
 	"github.com/baowk/dilu-core/core"
+	"github.com/jinzhu/copier"
 	"gorm.io/gorm"
 )
 
 type DBTables struct {
+	TableName      string `gorm:"column:TABLE_NAME" json:"tableName"`
+	TableSchema    string `gorm:"column:TABLE_SCHEMA" json:"tableSchema"`
+	Engine         string `gorm:"column:ENGINE" json:"engine"`
+	TableRows      string `gorm:"column:TABLE_ROWS" json:"tableRows"`
+	TableCollation string `gorm:"column:TABLE_COLLATION" json:"tableCollation"`
+	CreateTime     string `gorm:"column:CREATE_TIME" json:"createTime"`
+	UpdateTime     string `gorm:"column:UPDATE_TIME" json:"updateTime"`
+	TableComment   string `gorm:"column:TABLE_COMMENT" json:"tableComment"`
+}
+
+type PgDBTables struct {
 	TableName      string `gorm:"column:table_name" json:"tableName"`
 	TableSchema    string `gorm:"column:table_schema" json:"tableSchema"`
 	Engine         string `gorm:"column:engine" json:"engine"`
@@ -62,9 +74,12 @@ func (e *DBTables) Get(tx *gorm.DB, dbname, driver string) (DBTables, error) {
 			return doc, errors.New("table name cannot be empty！")
 		}
 		table = table.Where("TABLE_NAME = ?", e.TableName)
-		if err := table.First(&doc).Error; err != nil {
+
+		var pgdoc []PgDBTables
+		if err := table.First(&pgdoc).Error; err != nil {
 			return doc, err
 		}
+		copier.Copy(&doc, pgdoc)
 	} else {
 		return doc, errors.New("只支持mysql、postgresql")
 	}

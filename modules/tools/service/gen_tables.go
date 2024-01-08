@@ -584,7 +584,12 @@ func GetDb(dbname string) (db *gorm.DB, mdb string, sdb, driver string) {
 		} else {
 			sdb = ParseDsn(gdsn.DSN)
 		}
-		driver = gdsn.Driver
+
+		if gdsn.Driver != "" {
+			driver = gdsn.Driver
+		} else {
+			driver = core.Cfg.DBCfg.Driver
+		}
 	} else {
 		driver = core.Cfg.DBCfg.Driver
 		sdb = mdb
