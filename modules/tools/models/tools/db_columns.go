@@ -4,10 +4,26 @@ import (
 	"errors"
 
 	"github.com/baowk/dilu-core/core"
+	"github.com/jinzhu/copier"
 	"gorm.io/gorm"
 )
 
 type DBColumns struct {
+	TableSchema            string `gorm:"column:TABLE_SCHEMA" json:"tableSchema"`
+	TableName              string `gorm:"column:TABLE_NAME" json:"tableName"`
+	ColumnName             string `gorm:"column:COLUMN_NAME" json:"columnName"`
+	ColumnDefault          string `gorm:"column:COLUMN_DEFAULT" json:"columnDefault"`
+	IsNullable             string `gorm:"column:IS_NULLABLE" json:"isNullable"`
+	DataType               string `gorm:"column:DATA_TYPE" json:"dataType"`
+	CharacterMaximumLength string `gorm:"column:CHARACTER_MAXIMUM_LENGTH" json:"characterMaximumLength"`
+	CharacterSetName       string `gorm:"column:CHARACTER_SET_NAME" json:"characterSetName"`
+	ColumnType             string `gorm:"column:COLUMN_TYPE" json:"columnType"`
+	ColumnKey              string `gorm:"column:COLUMN_KEY" json:"columnKey"`
+	Extra                  string `gorm:"column:EXTRA" json:"extra"`
+	ColumnComment          string `gorm:"column:COLUMN_COMMENT" json:"columnComment"`
+}
+
+type PgDBColumns struct {
 	TableSchema            string `gorm:"column:table_schema" json:"tableSchema"`
 	TableName              string `gorm:"column:table_name" json:"tableName"`
 	ColumnName             string `gorm:"column:column_name" json:"columnName"`
@@ -59,16 +75,22 @@ func (e *DBColumns) GetList(tx *gorm.DB, dbname, driver string) ([]DBColumns, er
 		table = table.Where("table_schema= ? ", dbname)
 
 		table = table.Where("TABLE_NAME = ?", e.TableName).Order("ORDINAL_POSITION asc")
+		if err := table.Find(&doc).Error; err != nil {
+			return doc, err
+		}
 	} else if driver == "pgsql" {
 		table = tx.Table("information_schema.columns AS col").Joins("LEFT JOIN pg_catalog.pg_description AS pgd ON (col.table_name::regclass = pgd.objoid AND col.ordinal_position = pgd.objsubid)").Select("col.*, pgd.description AS column_comment")
 		table = table.Where("col.table_schema= ? ", "public") // 使用默认 public，将来可配置
 
 		table = table.Where("col.table_name = ?", e.TableName).Order("col.ORDINAL_POSITION asc")
+
+		var pgdoc []PgDBColumns
+		if err := table.Find(&pgdoc).Error; err != nil {
+			return doc, err
+		}
+		copier.Copy(&doc, pgdoc)
 	} else {
 		return doc, errors.New("只支持mysql、postgresql")
-	}
-	if err := table.Find(&doc).Error; err != nil {
-		return doc, err
 	}
 	return doc, nil
 }
