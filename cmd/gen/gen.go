@@ -19,11 +19,12 @@ import (
 )
 
 var (
-	configYml string
-	dbName    string
-	tableName string
-	force     bool
-	GenCmd    = &cobra.Command{
+	configYml   string
+	dbName      string
+	tableName   string
+	packageName string
+	force       bool
+	GenCmd      = &cobra.Command{
 		Use:     "gen",
 		Short:   "Generate code",
 		Long:    "Generate code based on database tables",
@@ -38,6 +39,7 @@ func init() {
 	GenCmd.PersistentFlags().StringVarP(&configYml, "config", "c", "resources/config.dev.yml", "Start server with provided configuration file")
 	GenCmd.PersistentFlags().StringVarP(&dbName, "db", "d", "", "database name")
 	GenCmd.PersistentFlags().StringVarP(&tableName, "table", "t", "", "table name")
+	GenCmd.PersistentFlags().StringVarP(&packageName, "package", "p", "", "package name")
 	GenCmd.PersistentFlags().BoolVarP(&force, "force", "f", false, "if set to true, will overwrite existing files")
 }
 
@@ -121,13 +123,16 @@ func gen() {
 	core.Init()
 
 	// 生成
-	fmt.Printf("db %s table %s\n", dbName, tableName)
+	fmt.Printf("packageName %s db %s table %s\n", packageName, dbName, tableName)
 	tab, err := service.SerGenTables.GenTableInit(dbName, tableName, true)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-
+	// 自定义包名
+	if packageName != "" {
+		tab.PackageName = packageName
+	}
 	tab.ApiRoot = cons.ApiRoot
 
 	for i, v := range tab.Columns {

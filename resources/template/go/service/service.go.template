@@ -9,6 +9,6 @@ type {{.ClassName}}Service struct {
 }
 
 var Ser{{.ClassName}} = {{.ClassName}}Service{
-	base.NewService("{{.PackageName}}"),
+	base.NewService("{{.ConfDbName}}"),
 }
 

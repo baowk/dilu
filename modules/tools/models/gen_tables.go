@@ -41,6 +41,7 @@ type GenTables struct {
 	Columns             []GenColumns `gorm:"-" json:"columns"`
 	ApiRoot             string       `gorm:"-" json:"apiRoot"`
 	MLTBName            string       `gorm:"-" json:"-"` //表名称
+	ConfDbName          string       `gorm:"-" json:"-"` //配置文件定义的数据库名
 }
 
 func (GenTables) TableName() string {

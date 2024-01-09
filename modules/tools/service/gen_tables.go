@@ -116,6 +116,7 @@ func (e *GenTablesService) GenTableInit(dbname string, tableName string, force b
 	dstdb, _, sdbn, driver := GetDb(dbname)
 	dbTable.TableSchema = sdbn
 	data.DbName = sdbn
+	data.ConfDbName = dbname
 	data.TBName = tableName
 
 	var db *gorm.DB
