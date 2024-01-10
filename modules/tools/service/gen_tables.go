@@ -174,6 +174,7 @@ func (e *GenTablesService) GenTableInit(dbname string, tableName string, force b
 		column.ColumnComment = dbcolumn[i].ColumnComment
 		column.ColumnName = dbcolumn[i].ColumnName
 		column.ColumnType = dbcolumn[i].ColumnType
+		column.ColumnDefault = dbcolumn[i].ColumnDefault
 
 		if column.ColumnType == "" {
 			column.ColumnType = dbcolumn[i].DataType
@@ -216,6 +217,10 @@ func (e *GenTablesService) GenTableInit(dbname string, tableName string, force b
 			column.GoType = "int"
 			column.HtmlType = "input"
 			column.IsEdit = "1"
+			column.IsList = "1"
+		} else if strings.Contains(column.ColumnType, "decimal") || strings.Contains(column.ColumnType, "float") {
+			column.GoType = "float64"
+			column.HtmlType = "input"
 			column.IsList = "1"
 		} else if strings.Contains(column.ColumnType, "timestamp") {
 			column.GoType = "time.Time"
