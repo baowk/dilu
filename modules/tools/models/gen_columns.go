@@ -45,6 +45,7 @@ type GenColumns struct {
 	CreatedAt          time.Time `json:"createdAt" gorm:"type:datetime(3);comment:创建时间"`                     //创建时间
 	UpdatedAt          time.Time `json:"updatedAt" gorm:"type:datetime(3);comment:最后更新时间"`                   //最后更新时间
 	TsType             string    `gorm:"-" json:"tsType"`
+	ColumnDefault      string    `json:"-" gorm:"-"` //默认值
 }
 
 func (GenColumns) TableName() string {

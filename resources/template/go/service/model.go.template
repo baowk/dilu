@@ -20,14 +20,15 @@ import (
 
 //{{.TableComment}}
 type {{.ClassName}} struct {
-    {{ range .Columns -}}
+    {{- range .Columns -}}
     {{$x := .Pk}}
     {{- if ($x) }}
     {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" gorm:"type:{{.ColumnType}};primaryKey;autoIncrement;comment:主键"` //主键
     {{- else if eq .GoField "DeletedAt" }}
     DeletedAt gorm.DeletedAt `json:"-" gorm:"index;comment:删除时间"`     //删除时间
     {{- else }}
-    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" gorm:"type:{{.ColumnType}};comment:{{- if eq .ColumnComment "" -}}{{.GoField}}{{- else -}}{{.ColumnComment}}{{ end -}}"` //{{.ColumnComment}} {{ end -}}
+    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" gorm:"type:{{.ColumnType}};{{- if ne .ColumnDefault "" -}}default:{{.ColumnDefault}};{{ end -}}comment:{{- if eq .ColumnComment "" -}}{{.GoField}}{{- else -}}{{.ColumnComment}}{{ end -}}"` //{{.ColumnComment}}
+    {{- end -}}
     {{- end }}
 }
 
