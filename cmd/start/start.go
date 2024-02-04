@@ -75,7 +75,7 @@ func run() {
 
 		extend := rviper.Sub("extend")
 		if extend != nil {
-			extend.Unmarshal(config.Ext)
+			extend.Unmarshal(&config.Ext)
 		}
 		go func() {
 			for {
@@ -91,7 +91,7 @@ func run() {
 
 				extend := rviper.Sub("extend")
 				if extend != nil {
-					extend.Unmarshal(config.Ext)
+					extend.Unmarshal(&config.Ext)
 				}
 			}
 		}()
@@ -107,7 +107,7 @@ func run() {
 			mergeCfg(&cfg, nil)
 			extend := v.Sub("extend")
 			if extend != nil {
-				extend.Unmarshal(config.Ext)
+				extend.Unmarshal(&config.Ext)
 			}
 		})
 	}
