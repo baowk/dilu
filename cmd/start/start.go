@@ -126,6 +126,12 @@ func run() {
 	for _, f := range AppRouters {
 		f()
 	}
+	go func() {
+		fmt.Println("等待服务启动")
+		<-core.Started
+		//TODO 你要执行的初始化操作
+		fmt.Println("服务启动后，执行初始化")
+	}()
 	core.Run()
 }
 
