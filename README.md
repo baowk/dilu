@@ -53,6 +53,11 @@ gen 为生成代码命令，c为配置文件，d为数据库（默认为sys）�
 go run main.go start -c resources/config.dev.yaml
 ```
 
+- 交流群
+
+  欢迎家人们star，欢迎入交流群![image](https://github.com/baowk/dilu/assets/142554979/de2001a6-2850-41ea-8036-d2870afbf55a)
+
+
 前端使用请[跳至前端](https://github.com/baowk/dilu-admin)
 ![d7f4b2513f7440d6c4c9bd932b4800f](https://github.com/baowk/dilu/assets/142554979/ee341fb7-f98e-4f18-9658-f89b4f7d466f)
 
