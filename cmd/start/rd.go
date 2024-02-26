@@ -6,6 +6,7 @@ package start
 
 import (
 	"dilu/common/config"
+	"fmt"
 	"net/http"
 
 	"github.com/baowk/dilu-core/core"
@@ -52,6 +53,22 @@ func rdInit() {
 	//注册中心
 	if config.Ext.RdConfig.Enable {
 		rdcfg := config.Ext.RdConfig
+		for _, v := range rdcfg.Registers {
+			if v.Addr == "" {
+				if v.Protocol == "http" {
+					v.Addr = core.Cfg.Server.GetHost()
+					v.Port = core.Cfg.Server.GetPort()
+					v.HealthCheck = fmt.Sprintf("http://%s:%d/api/health", core.Cfg.Server.GetHost(), core.Cfg.Server.GetPort())
+				} else {
+					v.Addr = core.Cfg.GrpcServer.GetHost()
+					v.Port = core.Cfg.GrpcServer.GetPort()
+					v.HealthCheck = fmt.Sprintf("%s:%d/Health", core.Cfg.GrpcServer.GetHost(), core.Cfg.GrpcServer.GetPort())
+				}
+			}
+			if len(v.Tags) == 0 {
+				v.Tags = []string{core.Cfg.Server.Mode}
+			}
+		}
 		core.Log.Debug("注册中心连接", zap.Any("rdcfg", rdcfg))
 		var err error
 		rdclient, err = rd.NewRDClient(&rdcfg, core.Log.Sugar())
