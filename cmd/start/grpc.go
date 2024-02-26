@@ -8,6 +8,7 @@ import (
 
 	"github.com/baowk/dilu-core/common/utils/text"
 	"github.com/baowk/dilu-core/core"
+	"github.com/baowk/dilu-rd/grpc/pb/health"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )
@@ -17,7 +18,7 @@ var grpcServer *grpc.Server
 func grpcInit() {
 	grpcServer = grpc.NewServer()
 	//注册grpc服务
-	//health.RegisterHealthServer(grpcServer, &health.HealthServerImpl{})//健康检测服务
+	health.RegisterHealthServer(grpcServer, &health.HealthServerImpl{}) //健康检测服务
 	//service.RegisterGreeterServer(grpcServer, &impl.TempimplementedGreeterServer{})
 
 	//注册服务完成

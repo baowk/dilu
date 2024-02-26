@@ -160,7 +160,7 @@ func startedInit() {
 	if core.Cfg.GrpcServer.Enable {
 		grpcInit()
 	}
-	//rdInit()
+	rdInit()
 	core.Log.Debug("服务启动，初始化执行完成")
 }
 
@@ -169,6 +169,6 @@ func toClose() {
 	if core.Cfg.GrpcServer.Enable {
 		closeGrpc()
 	}
-	//rdRelease()
+	rdRelease()
 	core.Log.Debug("服务关闭需要释放的资源")
 }
