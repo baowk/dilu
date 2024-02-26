@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/baowk/dilu-core/common/utils/ips"
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-rd/rd"
 	"github.com/gin-gonic/gin"
@@ -30,7 +31,6 @@ func InitRouter() {
 }
 
 func noCheckRoleRouter(r *gin.Engine) {
-	// 可根据业务需求来设置接口版本
 	v := r.Group("")
 
 	for _, f := range routerNoCheckRole {
@@ -54,21 +54,52 @@ func rdInit() {
 	if config.Ext.RdConfig.Enable {
 		rdcfg := config.Ext.RdConfig
 		for _, v := range rdcfg.Registers {
+			if v.Protocol != "grpc" && v.Protocol != "http" {
+				core.Log.Error("rd register error", zap.String("protocol", v.Protocol))
+				continue
+			}
+			if v.Protocol == "grpc" && !core.Cfg.GrpcServer.Enable {
+				core.Log.Error("rd register error", zap.String("protocol", v.Protocol), zap.Bool("GrpcServer enable", false))
+				continue
+			}
+			if v.Name == "" {
+				if v.Protocol == "http" {
+					v.Name = core.Cfg.Server.Name
+				} else {
+					if core.Cfg.GrpcServer.Name != "" {
+						v.Name = core.Cfg.GrpcServer.Name
+					} else {
+						v.Name = core.Cfg.Server.Name + "_grpc"
+					}
+				}
+			}
 			if v.Addr == "" {
 				if v.Protocol == "http" {
-					v.Addr = core.Cfg.Server.GetHost()
+					if core.Cfg.Server.GetHost() != "0.0.0.0" {
+						v.Addr = core.Cfg.Server.GetHost()
+					} else {
+						v.Addr = ips.GetLocalHost()
+					}
 					v.Port = core.Cfg.Server.GetPort()
-					v.HealthCheck = fmt.Sprintf("http://%s:%d/api/health", core.Cfg.Server.GetHost(), core.Cfg.Server.GetPort())
+					v.HealthCheck = fmt.Sprintf("http://%s:%d/api/health", v.Addr, core.Cfg.Server.GetPort())
 				} else {
-					v.Addr = core.Cfg.GrpcServer.GetHost()
+					if core.Cfg.GrpcServer.GetHost() != "0.0.0.0" {
+						v.Addr = core.Cfg.GrpcServer.GetHost()
+					} else {
+						v.Addr = ips.GetLocalHost()
+					}
 					v.Port = core.Cfg.GrpcServer.GetPort()
-					v.HealthCheck = fmt.Sprintf("%s:%d/Health", core.Cfg.GrpcServer.GetHost(), core.Cfg.GrpcServer.GetPort())
+					v.HealthCheck = fmt.Sprintf("%s:%d/Health", v.Addr, core.Cfg.GrpcServer.GetPort())
 				}
 			}
 			if len(v.Tags) == 0 {
 				v.Tags = []string{core.Cfg.Server.Mode}
 			}
+			if v.Id == "" {
+				v.Id = fmt.Sprintf("%s:%d", v.Addr, v.Port)
+			}
 		}
+
 		core.Log.Debug("注册中心连接", zap.Any("rdcfg", rdcfg))
 		var err error
 		rdclient, err = rd.NewRDClient(&rdcfg, core.Log.Sugar())
