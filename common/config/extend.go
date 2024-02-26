@@ -1,11 +1,14 @@
 package config
 
+//import "github.com/baowk/dilu-rd/config"
+
 var Ext *Extend
 
 type Extend struct {
 	Ding     DingCfg  `mapstructure:"ding" json:"ding" yaml:"ding"`
 	WechatMp WechatMp `mapstructure:"wechat-mp" json:"wechat-mp" yaml:"wechat-mp"`
 	Ai       Ai       `mapstructure:"ai" json:"ai" yaml:"ai"`
+	//RdConfig config.Config `mapstructure:"rd-config" json:"rd-config" yaml:"rd-config"`
 }
 
 type DingCfg struct {

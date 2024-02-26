@@ -6,6 +6,10 @@ server:
   #read-timeout    #读超时 单位秒 默认20
   #write-timeout   #写超时 单位秒 默认20
   fs-type: local    #文件服务
+grpc-server:
+  enable: false
+  host: 0.0.0.0
+  port: 7889
 logger:             # 日志配置
   level: debug # 级别
   prefix:    # 日志前缀
@@ -47,6 +51,38 @@ gen:
   enable: true #开启生成
   front-path: ../dilu-admin/src #前端生成路径 默认：../dilu-admin/src
 extend:             # 扩展项（此处没有提供具体说明）
+  rd-config:
+    enable: true
+    driver: consul
+    endpoints:
+      - 172.19.167.104:8500
+    scheme: http
+    timeout: 5s
+    registers:
+      - id: 172.19.167.104:7888
+        name: dilu-app
+        addr: 172.19.167.104
+        port: 7888
+        protocol: http
+        health-check: http://172.19.167.104:7888/api/health
+        tags:
+          - "dev"
+        interval: 5s
+        timeout: 10s
+      - id: 172.19.167.104:7889
+        name: dilu-app-grpc
+        addr: 172.19.167.104
+        port: 7889
+        protocol: grpc
+        health-check: 172.19.167.104:7889/Health
+        tags:
+          - "dev"
+        interval: 5s
+        timeout: 10s
+    discoveries:
+      - name: name
+        enable: false
+        fail-limit: 3
   ding: 
     agent-id:
     app-key:

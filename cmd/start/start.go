@@ -126,13 +126,18 @@ func run() {
 	for _, f := range AppRouters {
 		f()
 	}
-	go func() {
-		fmt.Println("等待服务启动")
+	go func() { //主服务启动后回调
 		<-core.Started
-		//TODO 你要执行的初始化操作
-		fmt.Println("服务启动后，执行初始化")
+		startedInit()
+	}()
+
+	go func() { //服务关闭释放资源
+		<-core.ToClose
+		toClose()
+
 	}()
 	core.Run()
+	core.Log.Info("Server exited")
 }
 
 func mergeCfg(local, remote *coreCfg.AppCfg) {
@@ -148,4 +153,22 @@ func mergeCfg(local, remote *coreCfg.AppCfg) {
 	} else {
 		core.Cfg = *local
 	}
+}
+
+// 服务启动后要初始化的资源
+func startedInit() {
+	if core.Cfg.GrpcServer.Enable {
+		grpcInit()
+	}
+	//rdInit()
+	core.Log.Debug("服务启动，初始化执行完成")
+}
+
+// 服务关闭要释放的资源
+func toClose() {
+	if core.Cfg.GrpcServer.Enable {
+		closeGrpc()
+	}
+	//rdRelease()
+	core.Log.Debug("服务关闭需要释放的资源")
 }
