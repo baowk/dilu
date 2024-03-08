@@ -57,9 +57,8 @@ go run main.go start -c resources/config.dev.yaml
 
     欢迎家人们star，微信群二维码一周就过期，有问题或者想进行技术交流的先加我微信(注明 的卢 )，我拉你进群!![微信图片_20240308215943](https://github.com/baowk/dilu/assets/142554979/29a6863c-4bdc-4963-99c2-0c400e132f6f)
 
-
-
 前端使用请[跳至前端](https://github.com/baowk/dilu-admin)
+
 ![d7f4b2513f7440d6c4c9bd932b4800f](https://github.com/baowk/dilu/assets/142554979/ee341fb7-f98e-4f18-9658-f89b4f7d466f)
 
 
