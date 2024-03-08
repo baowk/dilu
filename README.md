@@ -55,7 +55,8 @@ go run main.go start -c resources/config.dev.yaml
 
 - 交流群
 
-  欢迎家人们star，欢迎入交流群![image](https://github.com/baowk/dilu/assets/142554979/de2001a6-2850-41ea-8036-d2870afbf55a)
+  欢迎家人们star，微信群二维码一周就过期，想进交流群的加我微信，我拉进群!![微信图片_20240308215943](https://github.com/baowk/dilu/assets/142554979/29a6863c-4bdc-4963-99c2-0c400e132f6f)
+
 
 
 前端使用请[跳至前端](https://github.com/baowk/dilu-admin)
