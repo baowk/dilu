@@ -55,7 +55,7 @@ go run main.go start -c resources/config.dev.yaml
 
 - 交流群
 
-  欢迎家人们star，微信群二维码一周就过期，有问题或者想进行技术交流的先加我微信，我拉你进群!![微信图片_20240308215943](https://github.com/baowk/dilu/assets/142554979/29a6863c-4bdc-4963-99c2-0c400e132f6f)
+    欢迎家人们star，微信群二维码一周就过期，有问题或者想进行技术交流的先加我微信(注明 的卢 )，我拉你进群!![微信图片_20240308215943](https://github.com/baowk/dilu/assets/142554979/29a6863c-4bdc-4963-99c2-0c400e132f6f)
 
 
 
