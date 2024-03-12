@@ -4,6 +4,10 @@ import "github.com/baowk/dilu-rd/config"
 
 var Ext *Extend
 
+func init() {
+	Ext = new(Extend)
+}
+
 type Extend struct {
 	Ding     DingCfg       `mapstructure:"ding" json:"ding" yaml:"ding"`
 	WechatMp WechatMp      `mapstructure:"wechat-mp" json:"wechat-mp" yaml:"wechat-mp"`

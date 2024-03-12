@@ -75,7 +75,7 @@ func run() {
 
 		extend := rviper.Sub("extend")
 		if extend != nil {
-			extend.Unmarshal(&config.Ext)
+			extend.Unmarshal(config.Ext)
 		}
 		go func() {
 			for {
@@ -91,13 +91,13 @@ func run() {
 
 				extend := rviper.Sub("extend")
 				if extend != nil {
-					extend.Unmarshal(&config.Ext)
+					extend.Unmarshal(config.Ext)
 				}
 			}
 		}()
 	} else {
 		mergeCfg(&cfg, nil)
-		v.Sub("extend").Unmarshal(&config.Ext)
+		v.Sub("extend").Unmarshal(config.Ext)
 		v.WatchConfig()
 		v.OnConfigChange(func(e fsnotify.Event) {
 			fmt.Println("config file changed:", e.String())
@@ -107,7 +107,7 @@ func run() {
 			mergeCfg(&cfg, nil)
 			extend := v.Sub("extend")
 			if extend != nil {
-				extend.Unmarshal(&config.Ext)
+				extend.Unmarshal(config.Ext)
 			}
 		})
 	}
