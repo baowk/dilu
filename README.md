@@ -21,6 +21,8 @@ dilu 是一套基于gin+gorm封装的web快速框架，系统基于gin+gorm封�
 - 获取项目代码
 ```bash
 git clone https://github.com/baowk/dilu.git
+or
+git clone https://gitee.com/walkbao/dilu.git
 ```
 
 - 安装依赖
