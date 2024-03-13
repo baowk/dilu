@@ -3,7 +3,7 @@ module dilu
 go 1.20
 
 require (
-	github.com/baowk/dilu-core v0.3.6
+	github.com/baowk/dilu-core v0.3.7
 	github.com/baowk/dilu-rd v0.1.0
 	github.com/fsnotify/fsnotify v1.7.0
 	github.com/gin-gonic/gin v1.9.1
