@@ -67,6 +67,7 @@ func run() {
 	})
 
 	//初始化gin
+	core.RunMode()
 	r := core.GetGinEngine()
 	middleware.InitMiddleware(r, &core.Cfg)
 	//初始化路由
