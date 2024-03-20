@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"io"
+	"log/slog"
 	"net/http"
 	"time"
 
@@ -11,7 +12,6 @@ import (
 	"github.com/baowk/dilu-core/common/utils/ips"
 	"github.com/baowk/dilu-core/core"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 // LogLayout 日志layout
@@ -41,7 +41,7 @@ func LoggerToFile() gin.HandlerFunc {
 			wt := bufio.NewWriter(bf)
 			_, err := io.Copy(wt, c.Request.Body)
 			if err != nil {
-				core.Log.Warn("copy body error", zap.Error(err))
+				slog.Warn("copy body error", err)
 				err = nil
 			}
 			rb, _ := io.ReadAll(bf)
@@ -63,14 +63,14 @@ func writeLog(startTime time.Time, body string, c *gin.Context) {
 	cost := time.Since(startTime)
 
 	if cost.Milliseconds() < 200 {
-		core.Log.Info("request", zap.String("ip", ips.GetIP(c)), zap.String("method", c.Request.Method), zap.String("path", c.Request.RequestURI),
-			zap.Duration("cost", cost), zap.String("userAgent", c.Request.UserAgent()), zap.String("query", c.Request.URL.RawQuery),
-			zap.String("body", body), zap.String("source", core.Cfg.Server.Name), zap.String("reqId", utils.GetReqId(c)))
-		//,zap.String("error", strings.TrimRight(c.Errors.ByType(gin.ErrorTypePrivate).String(), "\n")))
+		slog.Info("request", "ip", ips.GetIP(c), "method", c.Request.Method, "path", c.Request.RequestURI,
+			"cost", cost, "userAgent", c.Request.UserAgent(), "query", c.Request.URL.RawQuery,
+			"body", body, "source", core.Cfg.Server.Name, "reqId", utils.GetReqId(c))
+		//,"error", strings.TrimRight(c.Errors.ByType(gin.ErrorTypePrivate).String(), "\n")))
 	} else {
-		core.Log.Warn("request", zap.String("ip", ips.GetIP(c)), zap.String("method", c.Request.Method), zap.String("path", c.Request.RequestURI),
-			zap.Duration("cost", cost), zap.String("userAgent", c.Request.UserAgent()), zap.String("query", c.Request.URL.RawQuery),
-			zap.String("body", body), zap.String("source", core.Cfg.Server.Name), zap.String("reqId", utils.GetReqId(c)))
-		//,zap.String("error", strings.TrimRight(c.Errors.ByType(gin.ErrorTypePrivate).String(), "\n")))
+		slog.Warn("request", "ip", ips.GetIP(c), "method", c.Request.Method, "path", c.Request.RequestURI,
+			"cost", cost, "userAgent", c.Request.UserAgent(), "query", c.Request.URL.RawQuery,
+			"body", body, "source", core.Cfg.Server.Name, "reqId", utils.GetReqId(c))
+		//,"error", strings.TrimRight(c.Errors.ByType(gin.ErrorTypePrivate).String(), "\n")))
 	}
 }

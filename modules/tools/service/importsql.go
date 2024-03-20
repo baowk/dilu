@@ -5,13 +5,12 @@ import (
 	"strings"
 
 	"github.com/baowk/dilu-core/core"
-	"go.uber.org/zap"
 )
 
 func ImportSql(sqlFile, dbName string) error {
 	_, err := os.Stat(sqlFile)
 	if os.IsNotExist(err) {
-		core.Log.Error("Sql 文件不存在", zap.Error(err))
+		core.Log.Error("Sql 文件不存在", err)
 		return err
 	}
 	db := core.Db(dbName)
@@ -24,10 +23,10 @@ func ImportSql(sqlFile, dbName string) error {
 		}
 		err := db.Exec(sql).Error
 		if err != nil {
-			core.Log.Error("数据库导入失败:", zap.Error(err))
+			core.Log.Error("数据库导入失败:", err)
 			return err
 		} else {
-			core.Log.Info("[success]", zap.String("sql", sql))
+			core.Log.Info("[success]", "sql", sql)
 		}
 	}
 	return nil

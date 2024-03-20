@@ -7,8 +7,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"dilu/modules/tools/apis"
-
 	"github.com/baowk/dilu-core/core"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -27,10 +25,10 @@ func InitRouter() {
 		//初始化swagger
 		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	}
-	if core.Cfg.Gen.Enable {
-		//r.GET("/init", apis.InitApi.Init)
-		r.POST("/doInit", apis.InitApi.DoInit)
-	}
+	// if core.Cfg.Gen.Enable {
+	// 	//r.GET("/init", apis.InitApi.Init)
+	// 	r.POST("/doInit", apis.InitApi.DoInit)
+	// }
 	noCheckRoleRouter(r)
 }
 

@@ -313,25 +313,6 @@ info:
   title: Dilu API
   version: V0.0.1
 paths:
-  /api/v1/tools/doInit:
-    post:
-      consumes:
-      - application/json
-      responses:
-        "200":
-          description: '{"code": 200, "data": [...]}'
-          schema:
-            allOf:
-            - $ref: '#/definitions/base.Resp'
-            - properties:
-                data:
-                  type: string
-              type: object
-      security:
-      - Bearer: []
-      summary: 初始化
-      tags:
-      - 工具 / 初始化
   /api/v1/tools/gen/add:
     post:
       consumes:

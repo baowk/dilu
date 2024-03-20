@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"log/slog"
 	"net/http"
 	"runtime"
 	"strconv"
@@ -10,7 +11,6 @@ import (
 	"github.com/baowk/dilu-core/common/utils/ips"
 	"github.com/baowk/dilu-core/core"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 func CustomError(c *gin.Context) {
@@ -30,9 +30,9 @@ func CustomError(c *gin.Context) {
 					}
 					c.Status(statusCode)
 
-					core.Log.Warn("request", zap.String("ip", ips.GetIP(c)), zap.String("method", c.Request.Method), zap.String("path", c.Request.RequestURI),
-						zap.String("query", c.Request.URL.RawQuery), zap.String("source", core.Cfg.Server.Name), zap.String("reqId", utils.GetReqId(c)),
-						zap.String("error", p[2]))
+					slog.Warn("request", "ip", ips.GetIP(c), "method", c.Request.Method, "path", c.Request.RequestURI,
+						"query", c.Request.URL.RawQuery, "source", core.Cfg.Server.Name, "reqId", utils.GetReqId(c),
+						"error", p[2])
 
 					c.JSON(http.StatusOK, gin.H{
 						"code": statusCode,

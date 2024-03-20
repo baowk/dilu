@@ -11,42 +11,6 @@
         "version": "V0.0.1"
     },
     "paths": {
-        "/api/v1/tools/doInit": {
-            "post": {
-                "security": [
-                    {
-                        "Bearer": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "工具 / 初始化"
-                ],
-                "summary": "初始化",
-                "responses": {
-                    "200": {
-                        "description": "{\"code\": 200, \"data\": [...]}",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/base.Resp"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/tools/gen/add": {
             "post": {
                 "description": "添加表结构",

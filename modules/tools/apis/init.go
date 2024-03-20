@@ -4,9 +4,6 @@ import (
 	"dilu/modules/tools/utils"
 	"time"
 
-	"fmt"
-
-	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/base"
 	"github.com/gin-gonic/gin"
 )
@@ -15,34 +12,34 @@ type Init struct {
 	base.BaseApi
 }
 
-// DoInit 初始化
-// @Summary 初始化
-// @Tags 工具 / 初始化
-// @Accept application/json
-// @Product application/json
-// @Success 200 {object} base.Resp{data=string} "{"code": 200, "data": [...]}"
-// @Router /api/v1/tools/doInit [post]
-// @Security Bearer
-func (e *Init) DoInit(c *gin.Context) {
-	fmt.Println("开始运行初始化")
+// // DoInit 初始化
+// // @Summary 初始化
+// // @Tags 工具 / 初始化
+// // @Accept application/json
+// // @Product application/json
+// // @Success 200 {object} base.Resp{data=string} "{"code": 200, "data": [...]}"
+// // @Router /api/v1/tools/doInit [post]
+// // @Security Bearer
+// func (e *Init) DoInit(c *gin.Context) {
+// 	fmt.Println("开始运行初始化")
 
-	// service.ImportSql("resources/dbs/dilu-db.sql", "sys")
-	// service.ImportSql("resources/dbs/dental-db.sql", "dental")
+// 	// service.ImportSql("resources/dbs/dilu-db.sql", "sys")
+// 	// service.ImportSql("resources/dbs/dental-db.sql", "dental")
 
-	result := "执行成功"
-	if err := core.DB().AutoMigrate(); err != nil {
-		result = "sys执行失败"
-	}
+// 	result := "执行成功"
+// 	if err := core.DB().AutoMigrate(); err != nil {
+// 		result = "sys执行失败"
+// 	}
 
-	// t1, err := template.ParseFiles("modules/tools/apis/tmpls/result.html")
-	// if err != nil {
-	// 	panic(err)
-	// }
+// 	// t1, err := template.ParseFiles("modules/tools/apis/tmpls/result.html")
+// 	// if err != nil {
+// 	// 	panic(err)
+// 	// }
 
-	// t1.Execute(c.Writer, result)
-	e.Ok(c, result)
+// 	// t1.Execute(c.Writer, result)
+// 	e.Ok(c, result)
 
-}
+// }
 
 var last time.Time
 

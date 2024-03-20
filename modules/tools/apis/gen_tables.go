@@ -14,7 +14,6 @@ import (
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/base"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 type GenTablesApi struct {
@@ -144,13 +143,13 @@ func (e *GenTablesApi) Insert(c *gin.Context) {
 		fmt.Println(tableName)
 		data, err := service.SerGenTables.GenTableInit(req.DbName, tableName, false)
 		if err != nil {
-			core.Log.Error("Gen", zap.Error(err))
+			core.Log.Error("Gen", err)
 			e.Error(c, err)
 			return
 		}
 		err = service.SerGenTables.Create(&data)
 		if err != nil {
-			core.Log.Error("Gen", zap.Error(err))
+			core.Log.Error("Gen", err)
 			e.Error(c, err)
 			return
 		}
@@ -182,7 +181,7 @@ func (e *GenTablesApi) Update(c *gin.Context) {
 	data.UpdateBy = 0
 	err := service.SerGenTables.Update(&data)
 	if err != nil {
-		core.Log.Error("Gen", zap.Error(err))
+		core.Log.Error("Gen", err)
 		e.Error(c, err)
 		return
 	}
@@ -389,50 +388,50 @@ func (e *GenTablesApi) Update(c *gin.Context) {
 // 	table := models.GenTables{}
 // 	id, err := strconv.Atoi(c.Param("tableId"))
 // 	if err != nil {
-// 		core.Log.Error("Gen", zap.Error(err))
+// 		core.Log.Error("Gen", err)
 // 		e.Error(c, err)
 // 		return
 // 	}
 // 	table.TableId = id
 // 	t1, err := template.ParseFiles("resources/template/go/service/model.go.template")
 // 	if err != nil {
-// 		core.Log.Error("Gen", zap.Error(err))
+// 		core.Log.Error("Gen", err)
 // 		e.Error(c, err)
 // 		return
 // 	}
 // 	t2, err := template.ParseFiles("resources/template/go/service/apis.go.template")
 // 	if err != nil {
-// 		core.Log.Error("Gen", zap.Error(err))
+// 		core.Log.Error("Gen", err)
 // 		e.Error(c, err)
 // 		return
 // 	}
 // 	t3, err := template.ParseFiles("resources/template/vue/api/api.ts.template")
 // 	if err != nil {
-// 		core.Log.Error("Gen", zap.Error(err))
+// 		core.Log.Error("Gen", err)
 // 		e.Error(c, err)
 // 		return
 // 	}
 // 	t4, err := template.ParseFiles("resources/template/vue/views/index.vue.template")
 // 	if err != nil {
-// 		core.Log.Error("Gen", zap.Error(err))
+// 		core.Log.Error("Gen", err)
 // 		e.Error(c, err)
 // 		return
 // 	}
 // 	t5, err := template.ParseFiles("resources/template/go/service/router_no_check_role.go.template")
 // 	if err != nil {
-// 		core.Log.Error("Gen", zap.Error(err))
+// 		core.Log.Error("Gen", err)
 // 		e.Error(c, err)
 // 		return
 // 	}
 // 	t6, err := template.ParseFiles("resources/template/go/service/dto.go.template")
 // 	if err != nil {
-// 		core.Log.Error("Gen", zap.Error(err))
+// 		core.Log.Error("Gen", err)
 // 		e.Error(c, err)
 // 		return
 // 	}
 // 	t7, err := template.ParseFiles("resources/template/go/service/service.go.template")
 // 	if err != nil {
-// 		core.Log.Error("Gen", zap.Error(err))
+// 		core.Log.Error("Gen", err)
 // 		e.Error(c, err)
 // 		return
 // 	}
@@ -443,37 +442,37 @@ func (e *GenTablesApi) Update(c *gin.Context) {
 // 	var b1 bytes.Buffer
 // 	err = t1.Execute(&b1, tab)
 // 	if err != nil {
-// 		core.Log.Error("gen err", zap.Error(err))
+// 		core.Log.Error("gen err", err)
 // 	}
 // 	var b2 bytes.Buffer
 // 	err = t2.Execute(&b2, tab)
 // 	if err != nil {
-// 		core.Log.Error("gen err", zap.Error(err))
+// 		core.Log.Error("gen err", err)
 // 	}
 // 	var b3 bytes.Buffer
 // 	err = t3.Execute(&b3, tab)
 // 	if err != nil {
-// 		core.Log.Error("gen err", zap.Error(err))
+// 		core.Log.Error("gen err", err)
 // 	}
 // 	var b4 bytes.Buffer
 // 	err = t4.Execute(&b4, tab)
 // 	if err != nil {
-// 		core.Log.Error("gen err", zap.Error(err))
+// 		core.Log.Error("gen err", err)
 // 	}
 // 	var b5 bytes.Buffer
 // 	err = t5.Execute(&b5, tab)
 // 	if err != nil {
-// 		core.Log.Error("gen err", zap.Error(err))
+// 		core.Log.Error("gen err", err)
 // 	}
 // 	var b6 bytes.Buffer
 // 	err = t6.Execute(&b6, tab)
 // 	if err != nil {
-// 		core.Log.Error("gen err", zap.Error(err))
+// 		core.Log.Error("gen err", err)
 // 	}
 // 	var b7 bytes.Buffer
 // 	err = t7.Execute(&b7, tab)
 // 	if err != nil {
-// 		core.Log.Error("gen err", zap.Error(err))
+// 		core.Log.Error("gen err", err)
 // 	}
 
 // 	mp := make(map[string]interface{})
