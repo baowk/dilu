@@ -1,5 +1,5 @@
 # 声明镜像来源为golang:alpine
-FROM golang:1.20 as builder
+FROM golang:1.22 as builder
 
 # 声明工作目录
 WORKDIR /go/src/dilu
