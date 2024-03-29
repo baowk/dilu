@@ -212,20 +212,81 @@ func (e *GenTablesService) GenTableInit(dbname string, tableName string, force b
 			column.Required = true
 		}
 
-		if strings.Contains(column.ColumnType, "int") {
-			column.GoType = "int"
+		if strings.Contains(dbcolumn[i].ColumnKey, "tinyint unsigned") {
+			column.GoType = "uint8"
 			column.HtmlType = "input"
 			column.IsEdit = "1"
 			column.IsList = "1"
-		} else if strings.Contains(column.ColumnType, "decimal") || strings.Contains(column.ColumnType, "float") {
+		} else if strings.Contains(column.ColumnType, "tinyint") {
+			column.GoType = "int8"
+			column.HtmlType = "input"
+			column.IsEdit = "1"
+			column.IsList = "1"
+		} else if strings.Contains(column.ColumnType, "float") {
 			column.GoType = "float64"
+			column.HtmlType = "input"
+			column.IsEdit = "1"
+			column.IsList = "1"
+		} else if strings.Contains(column.ColumnType, "double") {
+			column.GoType = "float64"
+			column.HtmlType = "input"
+			column.IsEdit = "1"
+			column.IsList = "1"
+		} else if strings.Contains(column.ColumnType, "bigint unsigned") {
+			column.GoType = "uint64"
+			column.HtmlType = "input"
+			column.IsEdit = "1"
+			column.IsList = "1"
+		} else if strings.Contains(column.ColumnType, "bigint") {
+			column.GoType = "int64"
+			column.HtmlType = "input"
+			column.IsEdit = "1"
+			column.IsList = "1"
+		} else if strings.Contains(column.ColumnType, "smallint unsigned") {
+			column.GoType = "uint16"
+			column.HtmlType = "input"
+			column.IsEdit = "1"
+			column.IsList = "1"
+		} else if strings.Contains(column.ColumnType, "smallint") {
+			column.GoType = "int16"
+			column.HtmlType = "input"
+			column.IsEdit = "1"
+			column.IsList = "1"
+		} else if strings.Contains(column.ColumnType, "int unsigned") {
+			column.GoType = "uint"
+			column.HtmlType = "input"
+			column.IsEdit = "1"
+			column.IsList = "1"
+		} else if strings.Contains(column.ColumnType, "int") {
+			column.GoType = "int64"
+			column.HtmlType = "input"
+			column.IsEdit = "1"
+			column.IsList = "1"
+		} else if strings.Contains(column.ColumnType, "decimal") {
+			column.GoType = "float64"
+			column.HtmlType = "input"
+			column.IsEdit = "1"
+			column.IsList = "1"
+		} else if strings.Contains(column.ColumnType, "numeric") {
+			column.GoType = "float64"
+			column.HtmlType = "input"
+			column.IsEdit = "1"
+			column.IsList = "1"
+		} else if strings.Contains(column.ColumnType, "binary") {
+			column.GoType = "[]byte"
+			column.HtmlType = "input"
+		} else if strings.Contains(column.ColumnType, "blob") {
+			column.GoType = "[]byte"
+			column.HtmlType = "input"
+		} else if strings.Contains(column.ColumnType, "bool") {
+			column.GoType = "bool"
 			column.HtmlType = "input"
 			column.IsList = "1"
 		} else if strings.Contains(column.ColumnType, "timestamp") {
 			column.GoType = "time.Time"
 			column.HtmlType = "datetime"
 			column.IsList = "1"
-		} else if strings.Contains(column.ColumnType, "datetime") {
+		} else if strings.Contains(column.ColumnType, "date") {
 			column.GoType = "time.Time"
 			column.HtmlType = "datetime"
 			column.IsList = "1"
