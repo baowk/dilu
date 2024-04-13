@@ -26,7 +26,7 @@ jwt:                # JWT配置
   refresh: 14400    # Token 刷新时长（单位：分钟）
 cache:              # 缓存配置
   type: memory #redis/memory
-  addr: localhost:6379    # Redis服务器地址
+  addr: localhost:6379    # Redis cluster模式以;隔开（redis本身必须是cluster模式），eg：localhost:6379;localhost:6380
   #password: redis             # Redis密码
   db: 5                       # Redis数据库索引
 dbcfg: # 数据库配置
