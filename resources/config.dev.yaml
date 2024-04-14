@@ -28,7 +28,8 @@ cache:              # 缓存配置
   type: memory #redis/memory
   addr: localhost:6379    # Redis cluster模式以;隔开（redis本身必须是cluster模式），eg：localhost:6379;localhost:6380
   #password: redis             # Redis密码
-  db: 5                       # Redis数据库索引
+  db: 5                       # 设置 DB, 只针对 `Redis Client` 和 `Failover Client`
+  master-name:  #不为空 Failover模式
 dbcfg: # 数据库配置
   driver: mysql  
   dns: root:123456@tcp(127.0.0.1:3306)/dilu-db?charset=utf8&parseTime=True&loc=Local&timeout=1000ms  # 数据库连接字符串
