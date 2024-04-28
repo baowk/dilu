@@ -523,6 +523,8 @@ func (e *GenTablesApi) GenCode(c *gin.Context) {
 func TypeGo2Ts(t string) string {
 	if strings.Contains(t, "int") {
 		return "number"
+	} else if strings.Contains(t, "float") {
+		return "number"
 	} else if strings.Contains(t, "time") {
 		return "Date"
 	} else if strings.Contains(t, "bool") {

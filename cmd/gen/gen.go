@@ -3,9 +3,9 @@ package gen
 import (
 	"dilu/common/config"
 	cons "dilu/common/consts"
+	"dilu/modules/tools/apis"
 	"dilu/modules/tools/service"
 	"fmt"
-	"strings"
 	"time"
 
 	coreCfg "github.com/baowk/dilu-core/config"
@@ -136,21 +136,9 @@ func gen() {
 	tab.ApiRoot = cons.ApiRoot
 
 	for i, v := range tab.Columns {
-		tab.Columns[i].TsType = TypeGo2Ts(v.GoType)
+		tab.Columns[i].TsType = apis.TypeGo2Ts(v.GoType)
 	}
 	service.SerGenTables.NOMethodsGen(tab, force)
-}
-
-func TypeGo2Ts(t string) string {
-	if strings.Contains(t, "int") {
-		return "number"
-	} else if strings.Contains(t, "time") {
-		return "Date"
-	} else if strings.Contains(t, "bool") {
-		return "boolean"
-	} else {
-		return t
-	}
 }
 
 func mergeCfg(local, remote *coreCfg.AppCfg) {

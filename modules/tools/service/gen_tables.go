@@ -258,7 +258,7 @@ func (e *GenTablesService) GenTableInit(dbname string, tableName string, force b
 			column.IsEdit = "1"
 			column.IsList = "1"
 		} else if strings.Contains(column.ColumnType, "int") {
-			column.GoType = "int64"
+			column.GoType = "int"
 			column.HtmlType = "input"
 			column.IsEdit = "1"
 			column.IsList = "1"
