@@ -7,6 +7,9 @@ import (
 
 func InitMiddleware(r *gin.Engine, cfg *config.AppCfg) {
 	r.Use(LoggerToFile())
+	if cfg.AccessLimit.Enable {
+		r.Use(AccessLimitfunc())
+	}
 	if cfg.Cors.Enable {
 		r.Use(CorsByRules(&cfg.Cors))
 	}

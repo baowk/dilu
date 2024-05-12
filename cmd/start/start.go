@@ -5,6 +5,7 @@ import (
 	"dilu/common/config"
 	"dilu/common/middleware"
 	"fmt"
+	"log/slog"
 	"time"
 
 	coreCfg "github.com/baowk/dilu-core/config"
@@ -137,7 +138,7 @@ func run() {
 
 	}()
 	core.Run()
-	core.Log.Info("Server exited")
+	slog.Info("Server exited")
 }
 
 func mergeCfg(local, remote *coreCfg.AppCfg) {
@@ -161,7 +162,7 @@ func startedInit() {
 		grpcInit()
 	}
 	rdInit()
-	core.Log.Debug("服务启动，初始化执行完成")
+	slog.Debug("服务启动，初始化执行完成")
 }
 
 // 服务关闭要释放的资源
@@ -170,5 +171,5 @@ func toClose() {
 		closeGrpc()
 	}
 	rdRelease()
-	core.Log.Debug("服务关闭需要释放的资源")
+	slog.Debug("服务关闭需要释放的资源")
 }

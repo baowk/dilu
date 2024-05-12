@@ -20,6 +20,10 @@ logger:             # 日志配置
   #max-age: 7                         # 日志留存时间 默认7天
   show-line: true # 显示行
   log-in-console: true # 输出控制台
+access-limit: #访问频率限制
+  enable: true #是否访问限制
+  duration: 5s #时长
+  total: 300 #300次
 jwt:                # JWT配置
   sign-key: 56n1KywHIPEkWWIxffGpp8Dfl3z5SjE5WBeDStc1T64klnpoAqHrHN01vnete123   # Token密钥
   expires: 10080    # Token过期时长（单位：分钟）
