@@ -10,7 +10,7 @@ import (
 func ImportSql(sqlFile, dbName string) error {
 	_, err := os.Stat(sqlFile)
 	if os.IsNotExist(err) {
-		core.Log.Error("Sql 文件不存在", err)
+		core.Log.Error("Sql 文件不存在", "err", err)
 		return err
 	}
 	db := core.Db(dbName)
@@ -23,7 +23,7 @@ func ImportSql(sqlFile, dbName string) error {
 		}
 		err := db.Exec(sql).Error
 		if err != nil {
-			core.Log.Error("数据库导入失败:", err)
+			core.Log.Error("数据库导入失败:", "err", err)
 			return err
 		} else {
 			core.Log.Info("[success]", "sql", sql)

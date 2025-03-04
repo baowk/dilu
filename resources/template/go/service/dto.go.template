@@ -59,7 +59,7 @@ type {{.ClassName}}Dto struct {
     {{- else if eq .GoField "CreateBy" -}}
     {{- else if eq .GoField "UpdateBy" -}}
     {{- else }}
-    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" form:"{{.JsonField}}"` //{{.ColumnComment}} {{end -}}
+    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}"` //{{.ColumnComment}} {{end -}}
     {{- end }}
 }
 

@@ -38,7 +38,4 @@ func ({{.ClassName}}) TableName() string {
     return TB{{.ClassName}}
 }
 
-//func New{{.ClassName}}() *{{.ClassName}}{
-//    return &{{.ClassName}}{}
-//}
 

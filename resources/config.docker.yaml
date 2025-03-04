@@ -27,7 +27,7 @@ cache:              # 缓存配置
   db: 5                       # Redis数据库索引
 dbcfg: # 数据库配置
   driver: mysql  
-  dns: root:123456@tcp(mysql:3306)/dilu-db?charset=utf8&parseTime=True&loc=Local&timeout=1000ms  # 数据库连接字符串
+  dns: root:123456@tcp(mysql:3306)/dilu-db?charset=utf8mb4&parseTime=True&loc=Local&timeout=1000ms  # 数据库连接字符串
   log-mode: info #日志类型 GORM 定义了这些日志级别：silent、error、warn、info
   #slow-threshold: 200 #慢日志
   #max-idle-conns: 20 #最大空闲连接数 默认10
@@ -35,7 +35,7 @@ dbcfg: # 数据库配置
 # prefix: 日志前缀
   dbs:      
     - dental:    #子配置会继承父配置
-        dns: root:123456@tcp(mysql:3306)/dental-db?charset=utf8&parseTime=True&loc=Local&timeout=1000ms  # 数据库连接字符串
+        dns: root:123456@tcp(mysql:3306)/dental-db?charset=utf8mb4&parseTime=True&loc=Local&timeout=1000ms  # 数据库连接字符串
 #       disable: true
 #       driver: mysql          
 #       prefix: 日志前缀
