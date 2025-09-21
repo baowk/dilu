@@ -2,6 +2,7 @@ server:
   mode: dev         # 应用程序运行模式（dev开发环境、test测试环境、prod线上环境）
   host: 0.0.0.0     # 服务器IP地址，默认使用0.0.0.0
   name: dilu-app      # 服务名称
+  node: 1           # 服务节点ID，建议每个节点设置不同的ID，范围0-1023  
   port: 7888       # 服务端口号
   #read-timeout    #读超时 单位秒 默认20
   #write-timeout   #写超时 单位秒 默认20
@@ -14,12 +15,13 @@ logger:             # 日志配置
   level: debug # 级别
   prefix:    # 日志前缀
   format:  # 输出格式 json
-  director: temp/log      # 日志文件夹
+  director: temp      # 日志文件夹
   encode-level: LowercaseColorLevelEncoder # 编码级
   stacktrace-key: # 栈名
   #max-age: 7                         # 日志留存时间 默认7天
   show-line: true # 显示行
   log-in-console: true # 输出控制台
+  output-mode: level # 输出模式 level 根据日志等级输出 single 单文件输出
 access-limit: #访问频率限制
   enable: true #是否访问限制
   duration: 5s #时长
