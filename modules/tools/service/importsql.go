@@ -10,10 +10,10 @@ import (
 func ImportSql(sqlFile, dbName string) error {
 	_, err := os.Stat(sqlFile)
 	if os.IsNotExist(err) {
-		core.Log.Error("Sql 文件不存在", "err", err)
+		core.GetApp().GetLogger().Error("Sql 文件不存在", "err", err)
 		return err
 	}
-	db := core.Db(dbName)
+	db := core.GetApp().Db(dbName)
 	sqls, _ := os.ReadFile(sqlFile)
 	sqlArr := strings.Split(string(sqls), ";")
 	for _, sql := range sqlArr {
@@ -23,10 +23,10 @@ func ImportSql(sqlFile, dbName string) error {
 		}
 		err := db.Exec(sql).Error
 		if err != nil {
-			core.Log.Error("数据库导入失败:", "err", err)
+			core.GetApp().GetLogger().Error("数据库导入失败:", "err", err)
 			return err
 		} else {
-			core.Log.Info("[success]", "sql", sql)
+			core.GetApp().GetLogger().Info("[success]", "sql", sql)
 		}
 	}
 	return nil

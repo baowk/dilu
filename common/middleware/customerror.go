@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"dilu/common/config"
 	"log/slog"
 	"net/http"
 	"runtime"
@@ -9,7 +10,6 @@ import (
 
 	"github.com/baowk/dilu-core/common/utils"
 	"github.com/baowk/dilu-core/common/utils/ips"
-	"github.com/baowk/dilu-core/core"
 	"github.com/gin-gonic/gin"
 )
 
@@ -31,7 +31,7 @@ func CustomError(c *gin.Context) {
 					c.Status(statusCode)
 
 					slog.Warn("request", "ip", ips.GetIP(c), "method", c.Request.Method, "path", c.Request.RequestURI,
-						"query", c.Request.URL.RawQuery, "source", core.Cfg.Server.Name, "reqId", utils.GetReqId(c),
+						"query", c.Request.URL.RawQuery, "source", config.Get().Server.Name, "reqId", utils.GetReqId(c),
 						"error", p[2])
 
 					c.JSON(http.StatusOK, gin.H{

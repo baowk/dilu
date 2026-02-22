@@ -3,6 +3,7 @@ package middleware
 import (
 	"bufio"
 	"bytes"
+	"dilu/common/config"
 	"io"
 	"log/slog"
 	"net/http"
@@ -10,7 +11,6 @@ import (
 
 	"github.com/baowk/dilu-core/common/utils"
 	"github.com/baowk/dilu-core/common/utils/ips"
-	"github.com/baowk/dilu-core/core"
 	"github.com/gin-gonic/gin"
 )
 
@@ -65,12 +65,12 @@ func writeLog(startTime time.Time, body string, c *gin.Context) {
 	if cost.Milliseconds() < 200 {
 		slog.Info("request", "ip", ips.GetIP(c), "method", c.Request.Method, "path", c.Request.RequestURI,
 			"cost", cost, "userAgent", c.Request.UserAgent(), "query", c.Request.URL.RawQuery,
-			"body", body, "source", core.Cfg.Server.Name, "reqId", utils.GetReqId(c))
+			"body", body, "source", config.Get().Server.Name, "reqId", utils.GetReqId(c))
 		//,"error", strings.TrimRight(c.Errors.ByType(gin.ErrorTypePrivate).String(), "\n")))
 	} else {
 		slog.Warn("request", "ip", ips.GetIP(c), "method", c.Request.Method, "path", c.Request.RequestURI,
 			"cost", cost, "userAgent", c.Request.UserAgent(), "query", c.Request.URL.RawQuery,
-			"body", body, "source", core.Cfg.Server.Name, "reqId", utils.GetReqId(c))
+			"body", body, "source", config.Get().Server.Name, "reqId", utils.GetReqId(c))
 		//,"error", strings.TrimRight(c.Errors.ByType(gin.ErrorTypePrivate).String(), "\n")))
 	}
 }

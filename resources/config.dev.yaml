@@ -57,51 +57,37 @@ cors:
 gen: 
   enable: true #开启生成
   front-path: ../dilu-admin/src #前端生成路径 默认：../dilu-admin/src
-extend:             # 扩展项（此处没有提供具体说明）
-  rd-config:
-    enable: false
-    driver: consul
-    endpoints:
-      - 172.19.167.104:8500
-    scheme: http
-    timeout: 5s
-    registers:
-      - id:  #172.19.167.104:7888
-        protocol: http
-        #name: dilu-app
-        #addr: 172.19.167.104
-        #port: 7888
-        #health-check: http://172.19.167.104:7888/api/health
-        #tags:
-        #  - "dev"
-        #interval: 5s
-        #timeout: 10s
-      - id:  #172.19.167.104:7889
-        protocol: grpc
-        #name: dilu-app-grpc
-        #addr: 172.19.167.104
-        #port: 7889
-        #health-check: 172.19.167.104:7889/Health
-        #tags:
-        #  - "dev"
-        #interval: 5s
-        #timeout: 10s
-    discoveries:
-      - name: name
-        enable: false
-        fail-limit: 3
-  ding: 
-    agent-id:
-    app-key:
-    app-secret:
-    crop-id:
-  wechat-mp:
-    app-id: 
-    app-secret: 
-    wx-token: 
-    encoding-aes-key: 
-  ai:
-    ali:
-      sk: 
 
+rd-config:
+  enable: false
+  driver: consul
+  endpoints:
+    - 172.19.167.104:8500
+  scheme: http
+  timeout: 5s
+  registers:
+    - id:  #172.19.167.104:7888
+      protocol: http
+      #name: dilu-app
+      #addr: 172.19.167.104
+      #port: 7888
+      #health-check: http://172.19.167.104:7888/api/health
+      #tags:
+      #  - "dev"
+      #interval: 5s
+      #timeout: 10s
+    - id:  #172.19.167.104:7889
+      protocol: grpc
+      #name: dilu-app-grpc
+      #addr: 172.19.167.104
+      #port: 7889
+      #health-check: 172.19.167.104:7889/Health
+      #tags:
+      #  - "dev"
+      #interval: 5s
+      #timeout: 10s
+  discoveries:
+    - name: name
+      enable: false
+      fail-limit: 3
     

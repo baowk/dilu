@@ -8,8 +8,6 @@ import (
 	"fmt"
 	"time"
 
-	coreCfg "github.com/baowk/dilu-core/config"
-
 	"github.com/baowk/dilu-core/core"
 
 	"github.com/fsnotify/fsnotify"
@@ -55,7 +53,7 @@ func gen() {
 		panic(fmt.Sprintf("Fatal error config file: %v \n", err))
 	}
 
-	var cfg coreCfg.AppCfg
+	var cfg config.Config
 
 	if err = v.Unmarshal(&cfg); err != nil {
 		fmt.Println(err)
@@ -76,15 +74,11 @@ func gen() {
 		if err != nil {
 			panic(fmt.Sprintf("Fatal error remote config : %v \n", err))
 		}
-		var remoteCfg coreCfg.AppCfg
+		var remoteCfg config.Config
 		rviper.Unmarshal(&remoteCfg)
 
-		mergeCfg(&cfg, &remoteCfg)
+		config.SaveConfig(&cfg, &remoteCfg)
 
-		extend := rviper.Sub("extend")
-		if extend != nil {
-			extend.Unmarshal(config.Ext)
-		}
 		go func() {
 			for {
 				time.Sleep(time.Second * 5) // delay after each request
@@ -95,32 +89,24 @@ func gen() {
 				}
 				rviper.Unmarshal(&remoteCfg)
 
-				mergeCfg(&cfg, &remoteCfg)
-
-				extend := rviper.Sub("extend")
-				if extend != nil {
-					extend.Unmarshal(config.Ext)
-				}
+				config.SaveConfig(&cfg, &remoteCfg)
 			}
 		}()
 	} else {
-		mergeCfg(&cfg, nil)
-		v.Sub("extend").Unmarshal(config.Ext)
+		config.SaveConfig(&cfg, nil)
 		v.WatchConfig()
 		v.OnConfigChange(func(e fsnotify.Event) {
 			fmt.Println("config file changed:", e.String())
 			if err = v.Unmarshal(cfg); err != nil {
 				fmt.Println(err)
 			}
-			mergeCfg(&cfg, nil)
-			extend := v.Sub("extend")
-			if extend != nil {
-				extend.Unmarshal(config.Ext)
-			}
+			config.SaveConfig(&cfg, nil)
 		})
 	}
 
-	core.Init()
+	if err := core.Init(&cfg); err != nil {
+		panic(err)
+	}
 
 	// 生成
 	fmt.Printf("packageName %s db %s table %s\n", packageName, dbName, tableName)
@@ -139,19 +125,4 @@ func gen() {
 		tab.Columns[i].TsType = apis.TypeGo2Ts(v.GoType)
 	}
 	service.SerGenTables.NOMethodsGen(tab, force)
-}
-
-func mergeCfg(local, remote *coreCfg.AppCfg) {
-	if remote != nil {
-		core.Cfg = *local
-		core.Cfg = *remote
-		core.Cfg.Server.Mode = local.Server.Mode
-		core.Cfg.Server.RemoteEnable = local.Server.RemoteEnable
-		core.Cfg.Remote = local.Remote
-		core.Cfg.Server.Name = local.Server.Name
-		core.Cfg.Server.Port = local.Server.Port
-		core.Cfg.Server.Host = local.Server.Host
-	} else {
-		core.Cfg = *local
-	}
 }

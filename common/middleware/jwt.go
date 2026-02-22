@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 
+	"dilu/common/config"
 	"dilu/common/utils"
 
-	"github.com/baowk/dilu-core/core"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -24,7 +24,7 @@ func JwtHandler() gin.HandlerFunc {
 		}
 		customClaims := new(utils.CustomClaims)
 		// 解析Token
-		err = Parse(accessToken, customClaims, core.Cfg.JWT.SignKey, jwt.WithSubject(core.Cfg.JWT.Subject))
+		err = Parse(accessToken, customClaims, config.Get().JWT.SignKey, jwt.WithSubject(config.Get().JWT.Subject))
 		if err != nil || customClaims == nil {
 			Fail(c, 401, err.Error())
 			return
@@ -38,15 +38,15 @@ func JwtHandler() gin.HandlerFunc {
 		}
 
 		// 刷新时间大于0则判断剩余时间小于刷新时间时刷新Token并在Response header中返回
-		if core.Cfg.JWT.Refresh > 0 {
+		if config.Get().JWT.Refresh > 0 {
 			now := time.Now()
 			diff := exp.Time.Sub(now)
-			refreshTTL := time.Duration(core.Cfg.JWT.Refresh) * time.Minute
+			refreshTTL := time.Duration(config.Get().JWT.Refresh) * time.Minute
 			//fmt.Println(diff.Seconds(), refreshTTL)
 			if diff < refreshTTL {
-				exp := time.Now().Add(time.Duration(core.Cfg.JWT.Expires) * time.Minute)
+				exp := time.Now().Add(time.Duration(config.Get().JWT.Expires) * time.Minute)
 				customClaims.ExpiresAt(exp)
-				newToken, _ := Refresh(customClaims, core.Cfg.JWT.SignKey)
+				newToken, _ := Refresh(customClaims, config.Get().JWT.SignKey)
 				c.Writer.Header().Set("refresh-access-token", newToken)
 				c.Writer.Header().Set("refresh-exp", strconv.FormatInt(exp.Unix(), 10))
 			}

@@ -3,6 +3,7 @@ server:
   host: 0.0.0.0     # 服务器IP地址，默认使用0.0.0.0
   name: dilu-app      # 服务名称
   port: 7888       # 服务端口号
+  node: 1
   #read-timeout    #读超时 单位秒 默认20
   #write-timeout   #写超时 单位秒 默认20
   fs-type: local    #文件服务

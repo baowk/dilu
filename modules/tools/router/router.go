@@ -1,6 +1,7 @@
 package router
 
 import (
+	"dilu/common/config"
 	"dilu/common/consts"
 	"dilu/docs"
 	"fmt"
@@ -19,13 +20,13 @@ var (
 
 // InitRouter 路由初始化
 func InitRouter() {
-	r := core.GetGinEngine()
-	if core.Cfg.Server.Mode != core.ModeProd.String() {
+	r := core.GetApp().GetGinEngine()
+	if config.Get().Server.Mode != core.ModeProd.String() {
 		fmt.Printf("%s %s  \r\n", docs.SwaggerInfo.Title, docs.SwaggerInfo.Version)
 		//初始化swagger
 		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	}
-	// if core.Cfg.Gen.Enable {
+	// if config.Get().Gen.Enable {
 	// 	//r.GET("/init", apis.InitApi.Init)
 	// 	r.POST("/doInit", apis.InitApi.DoInit)
 	// }

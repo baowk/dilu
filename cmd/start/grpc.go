@@ -2,13 +2,13 @@
 package start
 
 import (
+	"dilu/common/config"
 	"fmt"
 	"log"
 	"log/slog"
 	"net"
 
 	"github.com/baowk/dilu-core/common/utils/text"
-	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-rd/grpc/pb/health"
 	"google.golang.org/grpc"
 )
@@ -22,7 +22,7 @@ func grpcInit() {
 	//service.RegisterGreeterServer(grpcServer, &impl.TempimplementedGreeterServer{})
 
 	//注册服务完成
-	grpcAddr := fmt.Sprintf("%s:%d", core.Cfg.GrpcServer.GetHost(), core.Cfg.GrpcServer.GetPort())
+	grpcAddr := fmt.Sprintf("%s:%d", config.Get().GrpcServer.GetHost(), config.Get().GrpcServer.GetPort())
 	lis, err := net.Listen("tcp", grpcAddr)
 	if err != nil {
 		slog.Error("failed to listen", err)

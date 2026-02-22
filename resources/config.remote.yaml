@@ -7,6 +7,7 @@ server:
   read-timeout: 60    #读超时 单位秒 默认20
   write-timeout: 60   #写超时 单位秒 默认20
   fs-type: local    #文件服务
+  node: 1
 remote:
   provider: etcd #远程提供者 etcd etcd3 consul ...
   endpoint: http://172.19.167.104:2379 #协议地址

@@ -1,6 +1,7 @@
 package apis
 
 import (
+	"dilu/common/config"
 	cons "dilu/common/consts"
 	"dilu/modules/tools/models"
 	"dilu/modules/tools/models/tools"
@@ -39,7 +40,7 @@ func (e *GenTablesApi) GetDBTableList(c *gin.Context) {
 		return
 	}
 
-	if core.Cfg.DBCfg.Driver == "sqlite3" || core.Cfg.DBCfg.Driver == "postgres" {
+	if config.Get().DBCfg.Driver == "sqlite3" || config.Get().DBCfg.Driver == "postgres" {
 		err = errors.New("对不起，sqlite3 或 postgres 不支持代码生成！")
 		e.Error(c, err)
 		return
@@ -91,7 +92,7 @@ func (e *GenTablesApi) QueryPage(c *gin.Context) {
 // @Success 200 {object} base.Resp{data=models.GenTables} "{"code": 200, "data": [...]}"
 // @Router /api/v1/tools/gen/del [post]
 func (e *GenTablesApi) Del(c *gin.Context) {
-	if !core.Cfg.Gen.Enable {
+	if !config.Get().Gen.Enable {
 		e.Error(c, errors.New("当前生成表已关闭"))
 		return
 	}
@@ -130,7 +131,7 @@ func (e *GenTablesApi) GetDBS(c *gin.Context) {
 // @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
 // @Router /api/v1/tools/gen/add [post]
 func (e *GenTablesApi) Insert(c *gin.Context) {
-	if !core.Cfg.Gen.Enable {
+	if !config.Get().Gen.Enable {
 		e.Error(c, errors.New("添加表结构已关闭"))
 		return
 	}
@@ -143,13 +144,13 @@ func (e *GenTablesApi) Insert(c *gin.Context) {
 		fmt.Println(tableName)
 		data, err := service.SerGenTables.GenTableInit(req.DbName, tableName, false)
 		if err != nil {
-			core.Log.Error("Gen", err)
+			core.GetApp().GetLogger().Error("Gen", "err", err)
 			e.Error(c, err)
 			return
 		}
 		err = service.SerGenTables.Create(&data)
 		if err != nil {
-			core.Log.Error("Gen", err)
+			core.GetApp().GetLogger().Error("Gen", "err", err)
 			e.Error(c, err)
 			return
 		}
@@ -169,7 +170,7 @@ func (e *GenTablesApi) Insert(c *gin.Context) {
 // @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
 // @Router /api/v1/tools/gen/update [POST]
 func (e *GenTablesApi) Update(c *gin.Context) {
-	if !core.Cfg.Gen.Enable {
+	if !config.Get().Gen.Enable {
 		e.Error(c, errors.New("修改表结构已关闭"))
 		return
 	}
@@ -181,7 +182,7 @@ func (e *GenTablesApi) Update(c *gin.Context) {
 	data.UpdateBy = 0
 	err := service.SerGenTables.Update(&data)
 	if err != nil {
-		core.Log.Error("Gen", err)
+		core.GetApp().GetLogger().Error("Gen", "err", err)
 		e.Error(c, err)
 		return
 	}
@@ -199,7 +200,7 @@ func (e *GenTablesApi) Update(c *gin.Context) {
 // // @Success 200 {string} string	"{"code": -1, "message": "添加失败"}"
 // // @Router /api/v1/tools/gen/menu [post]
 // func (e *GenTablesApi) GenMenuAndApi(c *gin.Context) {
-// 	if !core.Cfg.Gen.Enable {
+// 	if !config.Get().Gen.Enable {
 // 		e.Error(c, errors.New("api和菜单已关闭"))
 // 		return
 // 	}
@@ -496,7 +497,7 @@ func (e *GenTablesApi) Update(c *gin.Context) {
 // @Success 200 {string} string	"{"code": 200, "message": "添加成功"}"
 // @Router /api/v1/tools/gen/code [post]
 func (e *GenTablesApi) GenCode(c *gin.Context) {
-	if !core.Cfg.Gen.Enable {
+	if !config.Get().Gen.Enable {
 		e.Error(c, errors.New("生成代码已关闭"))
 		return
 	}

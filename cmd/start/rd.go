@@ -26,7 +26,7 @@ func init() {
 }
 
 func InitRouter() {
-	r := core.GetGinEngine()
+	r := core.GetApp().GetGinEngine()
 	noCheckRoleRouter(r)
 }
 
@@ -51,49 +51,49 @@ var rdclient rd.RDClient
 
 func rdInit() {
 	//注册中心
-	if config.Ext.RdConfig.Enable {
-		rdcfg := config.Ext.RdConfig
+	if config.Get().RdConfig.Enable {
+		rdcfg := config.Get().RdConfig
 		for _, v := range rdcfg.Registers {
 			if v.Protocol != "grpc" && v.Protocol != "http" {
 				slog.Error("rd register error", "protocol", v.Protocol)
 				continue
 			}
-			if v.Protocol == "grpc" && !core.Cfg.GrpcServer.Enable {
+			if v.Protocol == "grpc" && !config.Get().GrpcServer.Enable {
 				slog.Error("rd register error", "protocol", v.Protocol, "GrpcServer enable", false)
 				continue
 			}
 			if v.Name == "" {
 				if v.Protocol == "http" {
-					v.Name = core.Cfg.Server.Name
+					v.Name = config.Get().Server.Name
 				} else {
-					if core.Cfg.GrpcServer.Name != "" {
-						v.Name = core.Cfg.GrpcServer.Name
+					if config.Get().GrpcServer.Name != "" {
+						v.Name = config.Get().GrpcServer.Name
 					} else {
-						v.Name = core.Cfg.Server.Name + "_grpc"
+						v.Name = config.Get().Server.Name + "_grpc"
 					}
 				}
 			}
 			if v.Addr == "" {
 				if v.Protocol == "http" {
-					if core.Cfg.Server.GetHost() != "0.0.0.0" {
-						v.Addr = core.Cfg.Server.GetHost()
+					if config.Get().Server.GetHost() != "0.0.0.0" {
+						v.Addr = config.Get().Server.GetHost()
 					} else {
 						v.Addr = ips.GetLocalHost()
 					}
-					v.Port = core.Cfg.Server.GetPort()
-					v.HealthCheck = fmt.Sprintf("http://%s:%d/api/health", v.Addr, core.Cfg.Server.GetPort())
+					v.Port = config.Get().Server.GetPort()
+					v.HealthCheck = fmt.Sprintf("http://%s:%d/api/health", v.Addr, config.Get().Server.GetPort())
 				} else {
-					if core.Cfg.GrpcServer.GetHost() != "0.0.0.0" {
-						v.Addr = core.Cfg.GrpcServer.GetHost()
+					if config.Get().GrpcServer.GetHost() != "0.0.0.0" {
+						v.Addr = config.Get().GrpcServer.GetHost()
 					} else {
 						v.Addr = ips.GetLocalHost()
 					}
-					v.Port = core.Cfg.GrpcServer.GetPort()
-					v.HealthCheck = fmt.Sprintf("%s:%d/Health", v.Addr, core.Cfg.GrpcServer.GetPort())
+					v.Port = config.Get().GrpcServer.GetPort()
+					v.HealthCheck = fmt.Sprintf("%s:%d/Health", v.Addr, config.Get().GrpcServer.GetPort())
 				}
 			}
 			if len(v.Tags) == 0 {
-				v.Tags = []string{core.Cfg.Server.Mode}
+				v.Tags = []string{config.Get().Server.Mode}
 			}
 			if v.Id == "" {
 				v.Id = fmt.Sprintf("%s:%d", v.Addr, v.Port)

@@ -1,9 +1,9 @@
 package tools
 
 import (
+	"dilu/common/config"
 	"errors"
 
-	"github.com/baowk/dilu-core/core"
 	"github.com/jinzhu/copier"
 	"gorm.io/gorm"
 )
@@ -35,7 +35,7 @@ func (e *DBTables) GetPage(tx *gorm.DB, pageSize int, pageIndex int, dbname stri
 	table := new(gorm.DB)
 	var count int64
 
-	if core.Cfg.DBCfg.Driver == "mysql" {
+	if config.Get().DBCfg.Driver == "mysql" {
 
 		table = tx.Table("information_schema.tables")
 		table = table.Where("TABLE_NAME not in (select table_name from `"+defDbName+"`.gen_tables where db_name = ? )", dbname)

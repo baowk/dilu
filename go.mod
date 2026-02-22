@@ -1,11 +1,10 @@
 module dilu
 
-go 1.25
+go 1.26
 
 require (
-	github.com/baowk/dilu-core v1.0.27
+	github.com/baowk/dilu-core v1.1.0
 	github.com/baowk/dilu-rd v1.0.0
-	github.com/bwmarrin/snowflake v0.3.0
 	github.com/fsnotify/fsnotify v1.7.0
 	github.com/gin-gonic/gin v1.11.0
 	github.com/golang-jwt/jwt/v5 v5.2.0
@@ -22,6 +21,8 @@ require (
 	gorm.io/gorm v1.31.0
 )
 
+//replace github.com/baowk/dilu-core => ../dilu-core
+
 require (
 	cloud.google.com/go v0.112.0 // indirect
 	cloud.google.com/go/compute v1.23.3 // indirect
@@ -35,6 +36,7 @@ require (
 	github.com/andybalholm/brotli v1.1.1 // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect
 	github.com/bsm/redislock v0.9.4 // indirect
+	github.com/bwmarrin/snowflake v0.3.0 // indirect
 	github.com/bytedance/sonic v1.14.0 // indirect
 	github.com/bytedance/sonic/loader v0.3.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect

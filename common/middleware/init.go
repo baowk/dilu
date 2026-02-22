@@ -1,11 +1,12 @@
 package middleware
 
 import (
-	"github.com/baowk/dilu-core/config"
+	"dilu/common/config"
+
 	"github.com/gin-gonic/gin"
 )
 
-func InitMiddleware(r *gin.Engine, cfg *config.AppCfg) {
+func InitMiddleware(r *gin.Engine, cfg *config.Config) {
 	r.Use(LoggerToFile())
 	if cfg.AccessLimit.Enable {
 		r.Use(AccessLimitfunc())

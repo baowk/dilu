@@ -1,9 +1,9 @@
 package tools
 
 import (
+	"dilu/common/config"
 	"errors"
 
-	"github.com/baowk/dilu-core/core"
 	"github.com/jinzhu/copier"
 	"gorm.io/gorm"
 )
@@ -43,7 +43,7 @@ func (e *DBColumns) GetPage(tx *gorm.DB, pageSize int, pageIndex int, dbname str
 	var count int64
 	table := new(gorm.DB)
 
-	if core.Cfg.DBCfg.Driver == "mysql" {
+	if config.Get().DBCfg.Driver == "mysql" {
 		table = tx.Table("information_schema.`COLUMNS`")
 		table = table.Where("table_schema= ? ", dbname)
 
