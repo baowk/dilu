@@ -1,10 +1,8 @@
 package sms
 
 import (
-	"fmt"
-	"math/rand"
+	"math/rand/v2"
 	"strings"
-	"time"
 )
 
 type SmsSend interface {
@@ -18,11 +16,10 @@ func Setup(smsSend SmsSend) {
 }
 
 func GenerateSmsCode(length int) string {
-	numberic := [10]byte{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
-	rand.Seed(time.Now().Unix())
+	numberic := [10]byte{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
 	var sb strings.Builder
 	for i := 0; i < length; i++ {
-		fmt.Fprintf(&sb, "%d", numberic[rand.Intn(len(numberic))])
+		sb.WriteByte(numberic[rand.IntN(len(numberic))])
 	}
 	return sb.String()
 }

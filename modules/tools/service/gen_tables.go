@@ -9,8 +9,9 @@ import (
 	"strings"
 	"text/template"
 
+	"dilu/common/utils/files"
+
 	"github.com/baowk/dilu-core/common/consts"
-	"github.com/baowk/dilu-core/common/utils/files"
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/base"
 	"gorm.io/gorm"
