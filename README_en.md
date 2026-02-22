@@ -7,7 +7,7 @@
 <h3 align="center">Modern Web Development Framework Based on Gin + GORM</h3>
 
 <p align="center">
-  <a href="../README.md">🇨🇳 中文版本</a> • 
+  <a href="./README.md">🇨🇳 中文版本</a> • 🇺🇸 English
 </p>
 
 <p align="center">

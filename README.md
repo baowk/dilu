@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="./README_en.md">🇺🇸 English</a>
+  🇨🇳 中文版本 • <a href="./README_en.md">🇺🇸 English</a>
 </p>
 
 <p align="center">
