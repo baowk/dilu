@@ -25,7 +25,7 @@ func JwtHandler() gin.HandlerFunc {
 		customClaims := new(utils.CustomClaims)
 		// 解析Token
 		err = Parse(accessToken, customClaims, config.Get().JWT.SignKey, jwt.WithSubject(config.Get().JWT.Subject))
-		if err != nil || customClaims == nil {
+		if err != nil {
 			Fail(c, 401, err.Error())
 			return
 		}

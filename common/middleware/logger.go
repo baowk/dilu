@@ -41,7 +41,7 @@ func LoggerToFile() gin.HandlerFunc {
 			wt := bufio.NewWriter(bf)
 			_, err := io.Copy(wt, c.Request.Body)
 			if err != nil {
-				slog.Warn("copy body error", err)
+				slog.Warn("copy body error", "err", err)
 				err = nil
 			}
 			rb, _ := io.ReadAll(bf)
