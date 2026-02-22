@@ -7,6 +7,10 @@
 <h3 align="center">Modern Web Development Framework Based on Gin + GORM</h3>
 
 <p align="center">
+  <a href="../README.md">🇨🇳 中文版本</a> • 
+</p>
+
+<p align="center">
   <a href="https://github.com/baowk/dilu/stargazers">
     <img src="https://img.shields.io/github/stars/baowk/dilu" alt="GitHub stars">
   </a>

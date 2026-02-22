@@ -1,10 +1,16 @@
-# Dilu - Go Web快速开发框架
+<div align="center">
+  <img src="https://github.com/baowk/dilu/assets/142554979/ee341fb7-f98e-4f18-9658-f89b4f7d466f" alt="Dilu Logo" width="200">
+</div>
+
+<h1 align="center">Dilu - Go Web快速开发框架</h1>
 
 <p align="center">
-  <img src="https://github.com/baowk/dilu/assets/142554979/ee341fb7-f98e-4f18-9658-f89b4f7d466f" alt="Dilu Logo" width="200">
+  基于 Gin + GORM 的现代化Web开发框架
 </p>
 
-<h3 align="center">基于 Gin + GORM 的现代化Web开发框架</h3>
+<p align="center">
+  <a href="./README_en.md">🇺🇸 English</a>
+</p>
 
 <p align="center">
   <a href="https://github.com/baowk/dilu/stargazers">
