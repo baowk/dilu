@@ -52,18 +52,14 @@ func (e *{{.ClassName}}Api) QueryPage(c *gin.Context) {
 // @Accept application/json
 // @Product application/json
 // @Param teamId header int false "团队id"
-// @Param data body base.ReqId true "body"
+// @Param id path int true "记录ID"
 // @Success 200 {object} base.Resp{data=models.{{.ClassName}}} "{"code": 200, "data": [...]}"
-// @Router {{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/get [post]
+// @Router {{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/{id} [get]
 // @Security Bearer
 func (e *{{.ClassName}}Api) Get(c *gin.Context) {
-	var req base.ReqId
-	if err := c.ShouldBind(&req); err != nil {
-		e.Error(c, err)
-		return
-	}
+	id := c.Param("id")
 	var data models.{{.ClassName}}
-	if err := service.Ser{{.ClassName}}.Get(req.Id, &data); err != nil {
+	if err := service.Ser{{.ClassName}}.Get(id, &data); err != nil {
 		e.Error(c, err)
 		return
 	}

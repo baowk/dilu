@@ -2,6 +2,8 @@ import { http } from "@/utils/http";
 import { Result, PageResult } from "@/api/common";
 //import { {{.ClassName}} } from "@/api/{{.PackageName}}/{{.ModuleName}}.d";
 
+const baseURL = "{{.ApiRoot}}";
+
 //Api 
 
 /** 获取{{.TableComment}}管理列表 */
@@ -16,10 +18,8 @@ export const get{{.ClassName}}Page = (data?: object) => {
 };
 
 /** 获取{{.TableComment}} */
-export const get{{.ClassName}} = (data?: object) => {
-  return http.request<Result<{{.ClassName}}>>("post", "{{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/get", {
-    data
-  });
+export const get{{.ClassName}} = (id: number | string) => {
+  return http.request<Result<{{.ClassName}}>>("get", `${baseURL}/{{.PackageName}}/{{.ModuleName}}/${id}`);
 };
 
 /** 创建{{.TableComment}} */
