@@ -40,8 +40,8 @@ func (e *GenTablesApi) GetDBTableList(c *gin.Context) {
 		return
 	}
 
-	if config.Get().DBCfg.Driver == "sqlite3" || config.Get().DBCfg.Driver == "postgres" {
-		err = errors.New("对不起，sqlite3 或 postgres 不支持代码生成！")
+	if config.Get().DBCfg.Driver == "postgres" || config.Get().DBCfg.Driver == "pgsql" {
+		err = errors.New("对不起，postgres 暂不支持数据库表分页读取！")
 		e.Error(c, err)
 		return
 	}

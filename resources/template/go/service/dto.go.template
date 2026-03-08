@@ -23,12 +23,13 @@ import (
     "time"
     {{- end }}
     "github.com/baowk/dilu-core/core/base"
-    "dilu/internal/{{.PackageName}}/models"
 )
+
+{{- $pkType := "int" -}}
+{{- range .Columns }}{{- if .Pk }}{{- $pkType = .GoType -}}{{- end -}}{{- end }}
 
 type {{.ClassName}}GetPageReq struct {
 	base.ReqPage `query:"-"`
-    {{- $tablename := .TBName -}}
     {{- range .Columns -}}
     {{$z := .IsQuery}}
     {{- if ($z) -}}
@@ -39,13 +40,11 @@ type {{.ClassName}}GetPageReq struct {
     SortOrder  string `json:"-" query:"type:order;column:{{.ColumnName}}"`
     {{ end -}}
     {{- end }}
-    
 }
 
 func ({{.ClassName}}GetPageReq) TableName() string {
-	return models.TB{{.ClassName}}
+	return "{{.TBName}}"
 }
-
 
 //{{.TableComment}}
 type {{.ClassName}}Dto struct {
@@ -61,6 +60,10 @@ type {{.ClassName}}Dto struct {
     {{- else }}
     {{.GoField}} {{.GoType}} `json:"{{.JsonField}}"` //{{.ColumnComment}} {{end -}}
     {{- end }}
+    FullUpdate bool `json:"fullUpdate"` // true=全量更新（0值/空字符串也更新）
+    UpdateMask []string `json:"updateMask"` // 特殊场景：强制更新字段（支持 column/json/goField）
 }
 
-
+type {{.ClassName}}DelReq struct {
+	Ids []{{$pkType}} `json:"ids" form:"ids[]"`
+}

@@ -3,6 +3,9 @@ package tools
 import (
 	"dilu/common/config"
 	"errors"
+	"fmt"
+	"regexp"
+	"strings"
 
 	"github.com/jinzhu/copier"
 	"gorm.io/gorm"
@@ -38,6 +41,17 @@ type PgDBColumns struct {
 	ColumnComment          string `gorm:"column:column_comment" json:"columnComment"`
 }
 
+type SqliteDBColumn struct {
+	CID       int    `gorm:"column:cid"`
+	Name      string `gorm:"column:name"`
+	Type      string `gorm:"column:type"`
+	NotNull   int    `gorm:"column:notnull"`
+	DfltValue string `gorm:"column:dflt_value"`
+	PK        int    `gorm:"column:pk"`
+}
+
+var tableNamePattern = regexp.MustCompile(`^[A-Za-z_][A-Za-z0-9_]*$`)
+
 func (e *DBColumns) GetPage(tx *gorm.DB, pageSize int, pageIndex int, dbname string) ([]DBColumns, int64, error) {
 	var doc []DBColumns
 	var count int64
@@ -52,6 +66,21 @@ func (e *DBColumns) GetPage(tx *gorm.DB, pageSize int, pageIndex int, dbname str
 		}
 
 		table = table.Where("TABLE_NAME = ?", e.TableName)
+	} else if config.Get().DBCfg.Driver == "sqlite" {
+		cols, err := e.GetList(tx, dbname, "sqlite")
+		if err != nil {
+			return nil, 0, err
+		}
+		count = int64(len(cols))
+		start := (pageIndex - 1) * pageSize
+		if start >= len(cols) {
+			return []DBColumns{}, count, nil
+		}
+		end := start + pageSize
+		if end > len(cols) {
+			end = len(cols)
+		}
+		return cols[start:end], count, nil
 	}
 
 	if err := table.Offset((pageIndex - 1) * pageSize).Limit(pageSize).Find(&doc).Offset(-1).Limit(-1).Count(&count).Error; err != nil {
@@ -78,7 +107,7 @@ func (e *DBColumns) GetList(tx *gorm.DB, dbname, driver string) ([]DBColumns, er
 		if err := table.Find(&doc).Error; err != nil {
 			return doc, err
 		}
-	} else if driver == "pgsql" {
+	} else if driver == "pgsql" || driver == "postgres" {
 		table = tx.Table("information_schema.columns AS col").Joins("LEFT JOIN pg_catalog.pg_description AS pgd ON (col.table_name::regclass = pgd.objoid AND col.ordinal_position = pgd.objsubid)").Select("col.*, pgd.description AS column_comment")
 		table = table.Where("col.table_schema= ? ", "public") // 使用默认 public，将来可配置
 
@@ -89,8 +118,50 @@ func (e *DBColumns) GetList(tx *gorm.DB, dbname, driver string) ([]DBColumns, er
 			return doc, err
 		}
 		copier.Copy(&doc, pgdoc)
+	} else if driver == "sqlite" {
+		if !tableNamePattern.MatchString(e.TableName) {
+			return doc, errors.New("invalid sqlite table name")
+		}
+
+		var sqliteCols []SqliteDBColumn
+		sql := fmt.Sprintf("PRAGMA table_info(`%s`)", e.TableName)
+		if err := tx.Raw(sql).Scan(&sqliteCols).Error; err != nil {
+			return doc, err
+		}
+
+		doc = make([]DBColumns, 0, len(sqliteCols))
+		for _, col := range sqliteCols {
+			columnType := strings.ToLower(strings.TrimSpace(col.Type))
+			dataType := columnType
+			if idx := strings.IndexAny(dataType, "( "); idx > 0 {
+				dataType = dataType[:idx]
+			}
+
+			isNullable := "YES"
+			if col.NotNull == 1 || col.PK > 0 {
+				isNullable = "NO"
+			}
+
+			columnKey := ""
+			if col.PK > 0 {
+				columnKey = "PRI"
+			}
+
+			doc = append(doc, DBColumns{
+				TableSchema:   "main",
+				TableName:     e.TableName,
+				ColumnName:    col.Name,
+				ColumnDefault: col.DfltValue,
+				IsNullable:    isNullable,
+				DataType:      dataType,
+				ColumnType:    columnType,
+				ColumnKey:     columnKey,
+				Extra:         "",
+				ColumnComment: "",
+			})
+		}
 	} else {
-		return doc, errors.New("只支持mysql、postgresql")
+		return doc, errors.New("只支持mysql、postgresql、sqlite")
 	}
 	return doc, nil
 }

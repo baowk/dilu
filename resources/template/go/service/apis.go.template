@@ -1,14 +1,18 @@
 package apis
 
 import (
-	"dilu/internal/{{.PackageName}}/models"
+	"dilu/internal/{{.PackageName}}/repository/model"
 	"dilu/internal/{{.PackageName}}/service"
 	"dilu/internal/{{.PackageName}}/service/dto"
+	"strconv"
 
 	"github.com/baowk/dilu-core/core/base"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 )
+
+{{- $pkType := "int" -}}
+{{- range .Columns }}{{- if .Pk }}{{- $pkType = .GoType -}}{{- end -}}{{- end }}
 
 type {{.ClassName}}Api struct {
 	base.BaseApi
@@ -23,7 +27,7 @@ var Api{{.ClassName}} = {{.ClassName}}Api{}
 // @Product application/json
 // @Param teamId header int false "团队id"
 // @Param data body dto.{{.ClassName}}GetPageReq true "body"
-// @Success 200 {object} base.Resp{data=base.PageResp{list=[]models.{{.ClassName}}}} "{"code": 200, "data": [...]}"
+// @Success 200 {object} base.Resp{data=base.PageResp{list=[]model.{{.ClassName}}}} "{"code": 200, "data": [...]}"
 // @Router {{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/page [post]
 // @Security Bearer
 func (e *{{.ClassName}}Api) QueryPage(c *gin.Context) {
@@ -32,7 +36,7 @@ func (e *{{.ClassName}}Api) QueryPage(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	list := make([]models.{{.ClassName}}, 0, req.GetSize())
+	list := make([]model.{{.ClassName}}, 0, req.GetSize())
 	var total int64
 
 	if req.SortOrder == "" {
@@ -52,14 +56,18 @@ func (e *{{.ClassName}}Api) QueryPage(c *gin.Context) {
 // @Accept application/json
 // @Product application/json
 // @Param teamId header int false "团队id"
-// @Param id path int true "记录ID"
-// @Success 200 {object} base.Resp{data=models.{{.ClassName}}} "{"code": 200, "data": [...]}"
+// @Param id path {{if eq $pkType "string"}}string{{else}}int{{end}} true "记录ID"
+// @Success 200 {object} base.Resp{data=model.{{.ClassName}}} "{"code": 200, "data": [...]}"
 // @Router {{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/{id} [get]
 // @Security Bearer
 func (e *{{.ClassName}}Api) Get(c *gin.Context) {
-	id := c.Param("id")
-	var data models.{{.ClassName}}
-	if err := service.Ser{{.ClassName}}.Get(id, &data); err != nil {
+	id, err := parse{{.ClassName}}ID(c.Param("id"))
+	if err != nil {
+		e.Error(c, err)
+		return
+	}
+	var data model.{{.ClassName}}
+	if err = service.Ser{{.ClassName}}.Get(id, &data); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -73,7 +81,7 @@ func (e *{{.ClassName}}Api) Get(c *gin.Context) {
 // @Product application/json
 // @Param teamId header int false "团队id"
 // @Param data body dto.{{.ClassName}}Dto true "body"
-// @Success 200 {object} base.Resp{data=models.{{.ClassName}}} "{"code": 200, "data": [...]}"
+// @Success 200 {object} base.Resp{data=model.{{.ClassName}}} "{"code": 200, "data": [...]}"
 // @Router {{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/create [post]
 // @Security Bearer
 func (e *{{.ClassName}}Api) Create(c *gin.Context) {
@@ -82,7 +90,7 @@ func (e *{{.ClassName}}Api) Create(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	var data models.{{.ClassName}}
+	var data model.{{.ClassName}}
 	copier.Copy(&data, req)
 	if err := service.Ser{{.ClassName}}.Create(&data); err != nil {
 		e.Error(c, err)
@@ -98,7 +106,7 @@ func (e *{{.ClassName}}Api) Create(c *gin.Context) {
 // @Product application/json
 // @Param teamId header int false "团队id"
 // @Param data body dto.{{.ClassName}}Dto true "body"
-// @Success 200 {object} base.Resp{data=models.{{.ClassName}}} "{"code": 200, "data": [...]}"
+// @Success 200 {object} base.Resp{data=model.{{.ClassName}}} "{"code": 200, "data": [...]}"
 // @Router {{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/update [post]
 // @Security Bearer
 func (e *{{.ClassName}}Api) Update(c *gin.Context) {
@@ -107,9 +115,19 @@ func (e *{{.ClassName}}Api) Update(c *gin.Context) {
 		e.Error(c, err)
 		return
 	}
-	var data models.{{.ClassName}}
-	copier.Copy(&data, req)
-	if err := service.Ser{{.ClassName}}.UpdateById(&data); err != nil {
+	var data model.{{.ClassName}}
+	if req.FullUpdate {
+		if err := copier.Copy(&data, req); err != nil {
+			e.Error(c, err)
+			return
+		}
+	} else {
+		if err := copier.CopyWithOption(&data, req, copier.Option{IgnoreEmpty: true}); err != nil {
+			e.Error(c, err)
+			return
+		}
+	}
+	if err := service.Ser{{.ClassName}}.UpdateById(&data, req.FullUpdate, req.UpdateMask); err != nil {
 		e.Error(c, err)
 		return
 	}
@@ -122,19 +140,46 @@ func (e *{{.ClassName}}Api) Update(c *gin.Context) {
 // @Accept application/json
 // @Product application/json
 // @Param teamId header int false "团队id"
-// @Param data body base.ReqIds true "body"
-// @Success 200 {object} base.Resp{data=models.{{.ClassName}}} "{"code": 200, "data": [...]}"
+// @Param data body dto.{{.ClassName}}DelReq true "body"
+// @Success 200 {object} base.Resp{data=model.{{.ClassName}}} "{"code": 200, "data": [...]}"
 // @Router {{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/del [post]
 // @Security Bearer
 func (e *{{.ClassName}}Api) Del(c *gin.Context) {
-	var req base.ReqIds
+	var req dto.{{.ClassName}}DelReq
 	if err := c.ShouldBind(&req); err != nil {
 		e.Error(c, err)
 		return
 	}
-	if err := service.Ser{{.ClassName}}.DelIds(&models.{{.ClassName}}{}, req.Ids); err != nil {
+	if err := service.Ser{{.ClassName}}.DelIds(req.Ids); err != nil {
 		e.Error(c, err)
 		return
 	}
 	e.Ok(c)
+}
+
+func parse{{.ClassName}}ID(id string) ({{$pkType}}, error) {
+	{{- if eq $pkType "string" }}
+	return id, nil
+	{{- else if eq $pkType "int" }}
+	v, err := strconv.Atoi(id)
+	return v, err
+	{{- else if eq $pkType "int64" }}
+	v, err := strconv.ParseInt(id, 10, 64)
+	return v, err
+	{{- else if eq $pkType "int32" }}
+	v, err := strconv.ParseInt(id, 10, 32)
+	return int32(v), err
+	{{- else if eq $pkType "uint" }}
+	v, err := strconv.ParseUint(id, 10, 64)
+	return uint(v), err
+	{{- else if eq $pkType "uint64" }}
+	v, err := strconv.ParseUint(id, 10, 64)
+	return v, err
+	{{- else if eq $pkType "uint32" }}
+	v, err := strconv.ParseUint(id, 10, 32)
+	return uint32(v), err
+	{{- else }}
+	v, err := strconv.Atoi(id)
+	return {{$pkType}}(v), err
+	{{- end }}
 }

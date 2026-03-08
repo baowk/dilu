@@ -47,8 +47,19 @@ func (e *DBTables) GetPage(tx *gorm.DB, pageSize int, pageIndex int, dbname stri
 		if err := table.Offset((pageIndex - 1) * pageSize).Limit(pageSize).Find(&doc).Offset(-1).Limit(-1).Count(&count).Error; err != nil {
 			return nil, 0, err
 		}
+	} else if config.Get().DBCfg.Driver == "sqlite" {
+		table = tx.Table("sqlite_master").
+			Select("name AS TABLE_NAME, '' AS TABLE_SCHEMA, '' AS ENGINE, '' AS TABLE_ROWS, '' AS TABLE_COLLATION, '' AS CREATE_TIME, '' AS UPDATE_TIME, '' AS TABLE_COMMENT").
+			Where("type = 'table'").
+			Where("name NOT LIKE 'sqlite_%'")
+		if e.TableName != "" {
+			table = table.Where("name = ?", e.TableName)
+		}
+		if err := table.Offset((pageIndex - 1) * pageSize).Limit(pageSize).Find(&doc).Offset(-1).Limit(-1).Count(&count).Error; err != nil {
+			return nil, 0, err
+		}
 	} else {
-		return doc, 500, errors.New("只支持mysql")
+		return doc, 500, errors.New("只支持mysql、sqlite")
 	}
 
 	//table.Count(&count)
@@ -67,7 +78,7 @@ func (e *DBTables) Get(tx *gorm.DB, dbname, driver string) (DBTables, error) {
 		if err := table.First(&doc).Error; err != nil {
 			return doc, err
 		}
-	} else if driver == "pgsql" {
+	} else if driver == "pgsql" || driver == "postgres" {
 		table := tx.Table("information_schema.tables")
 		table = table.Where("table_schema= ? ", "public") // 使用默认 public，将来可配置
 		if e.TableName == "" {
@@ -80,8 +91,23 @@ func (e *DBTables) Get(tx *gorm.DB, dbname, driver string) (DBTables, error) {
 			return doc, err
 		}
 		copier.Copy(&doc, pgdoc)
+	} else if driver == "sqlite" {
+		if e.TableName == "" {
+			return doc, errors.New("table name cannot be empty！")
+		}
+		table := tx.Table("sqlite_master").
+			Select("name AS TABLE_NAME, '' AS TABLE_SCHEMA, '' AS ENGINE, '' AS TABLE_ROWS, '' AS TABLE_COLLATION, '' AS CREATE_TIME, '' AS UPDATE_TIME, '' AS TABLE_COMMENT").
+			Where("type = 'table'").
+			Where("name NOT LIKE 'sqlite_%'").
+			Where("name = ?", e.TableName)
+		if err := table.Limit(1).Scan(&doc).Error; err != nil {
+			return doc, err
+		}
+		if doc.TableName == "" {
+			return doc, gorm.ErrRecordNotFound
+		}
 	} else {
-		return doc, errors.New("只支持mysql、postgresql")
+		return doc, errors.New("只支持mysql、postgresql、sqlite")
 	}
 	return doc, nil
 }

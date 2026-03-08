@@ -18,6 +18,7 @@ import (
 	"github.com/baowk/dilu-core/common/consts"
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/base"
+	"gorm.io/gen"
 	"gorm.io/gorm"
 )
 
@@ -192,16 +193,8 @@ func (e *GenTablesService) GenTableInit(dbname string, tableName string, force b
 		column.IsPk = "0"
 
 		namelist := strings.Split(dbcolumn[i].ColumnName, "_")
-		for i := 0; i < len(namelist); i++ {
-			strStart := string([]byte(namelist[i])[:1])
-			strend := string([]byte(namelist[i])[1:])
-			column.GoField += strings.ToUpper(strStart) + strend
-			if i == 0 {
-				column.JsonField = strings.ToLower(strStart) + strend
-			} else {
-				column.JsonField += strings.ToUpper(strStart) + strend
-			}
-		}
+		column.GoField = toGoField(namelist)
+		column.JsonField = toJSONField(namelist)
 		if strings.Contains(dbcolumn[i].ColumnKey, "PR") {
 			column.IsPk = "1"
 			column.Pk = true
@@ -259,12 +252,12 @@ func (e *GenTablesService) GenTableInit(dbname string, tableName string, force b
 			column.IsEdit = "1"
 			column.IsList = "1"
 		} else if strings.Contains(column.ColumnType, "int unsigned") {
-			column.GoType = "uint"
+			column.GoType = "uint32"
 			column.HtmlType = "input"
 			column.IsEdit = "1"
 			column.IsList = "1"
 		} else if strings.Contains(column.ColumnType, "int") {
-			column.GoType = "int"
+			column.GoType = "int32"
 			column.HtmlType = "input"
 			column.IsEdit = "1"
 			column.IsList = "1"
@@ -328,9 +321,15 @@ func (e *GenTablesService) NOMethodsGen(tab models.GenTables, force bool) error 
 	}
 
 	_ = files.PathCreate(ROOT + tab.PackageName + "/apis/")
-	_ = files.PathCreate(ROOT + tab.PackageName + "/models/")
+	_ = files.PathCreate(ROOT + tab.PackageName + "/repository/")
 	_ = files.PathCreate(ROOT + tab.PackageName + "/router/")
 	_ = files.PathCreate(ROOT + tab.PackageName + "/service/dto/")
+
+	if err := e.generateRepository(tab); err != nil {
+		core.GetApp().GetLogger().Error("Gen repository", "err", err)
+		return err
+	}
+
 	if genFront {
 		_ = files.PathCreate(frontPath + "/api/" + tab.PackageName + "/")
 		err := files.PathCreate(frontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/utils")
@@ -376,22 +375,6 @@ func (e *GenTablesService) NOMethodsGen(tab models.GenTables, force bool) error 
 	}
 
 	//golang
-
-	modelgo := ROOT + tab.PackageName + "/models/" + tab.TBName + ".go"
-	if files.CheckExist(modelgo) || force {
-		t1, err := parseTemplate("go/service/model.go.template")
-		if err != nil {
-			core.GetApp().GetLogger().Error("Gen", "err", err)
-			return err
-		}
-		var b1 bytes.Buffer
-		err = t1.Execute(&b1, tab)
-		if err != nil {
-			core.GetApp().GetLogger().Error("gen err", "err", err)
-			return err
-		}
-		files.FileCreate(b1, modelgo)
-	}
 
 	apigo := ROOT + tab.PackageName + "/apis/" + tab.TBName + ".go"
 	if files.CheckExist(apigo) || force {
@@ -640,14 +623,43 @@ func templateBasePaths() []string {
 	return roots
 }
 
+func (e *GenTablesService) generateRepository(tab models.GenTables) error {
+	db := core.GetApp().Db(tab.ConfDbName)
+	if db == nil {
+		return fmt.Errorf("database not found: %s", tab.ConfDbName)
+	}
+
+	outPath := filepath.Join(ROOT, tab.PackageName, "repository", "query")
+	g := gen.NewGenerator(gen.Config{
+		OutPath:           outPath,
+		Mode:              gen.WithDefaultQuery | gen.WithQueryInterface,
+		FieldNullable:     false,
+		FieldSignable:     true,
+		FieldWithIndexTag: true,
+		FieldWithTypeTag:  true,
+	})
+	g.UseDB(db)
+	g.ApplyBasic(g.GenerateModelAs(tab.TBName, tab.ClassName))
+	g.Execute()
+	return nil
+}
+
 func ParseDsn(dsn string) string {
 	if len(dsn) < 3 {
 		return ""
+	}
+	if strings.HasSuffix(strings.ToLower(dsn), ".db") || strings.HasSuffix(strings.ToLower(dsn), ".sqlite") || strings.HasSuffix(strings.ToLower(dsn), ".sqlite3") {
+		base := filepath.Base(dsn)
+		ext := filepath.Ext(base)
+		return strings.TrimSuffix(base, ext)
 	}
 	idx := strings.LastIndex(dsn, ")/")
 	end := strings.LastIndex(dsn, "?")
 	if end < 0 {
 		end = len(dsn)
+	}
+	if idx < 0 || idx+2 > end {
+		return dsn
 	}
 	return dsn[idx+2 : end]
 }
@@ -684,8 +696,10 @@ func GetDb(dbname string) (db *gorm.DB, mdb string, sdb, driver string) {
 			return
 		}
 		core.GetApp().GetLogger().Debug("driver", "test", gdsn.Driver)
-		if gdsn.Driver == "pgsql" {
+		if gdsn.Driver == "pgsql" || gdsn.Driver == "postgres" {
 			sdb = ParsePgsqlDsn(gdsn.DSN)
+		} else if gdsn.Driver == "sqlite" {
+			sdb = ParseDsn(gdsn.DSN)
 		} else {
 			sdb = ParseDsn(gdsn.DSN)
 		}
@@ -697,8 +711,66 @@ func GetDb(dbname string) (db *gorm.DB, mdb string, sdb, driver string) {
 		}
 	} else {
 		driver = config.Get().DBCfg.Driver
-		sdb = mdb
+		if driver == "sqlite" {
+			sdb = ParseDsn(config.Get().DBCfg.DSN)
+		} else {
+			sdb = mdb
+		}
+	}
+	if driver == "postgres" {
+		driver = "pgsql"
 	}
 	db = core.GetApp().Db(dbname)
 	return
+}
+
+var goInitialisms = map[string]string{
+	"api":   "API",
+	"id":    "ID",
+	"ip":    "IP",
+	"url":   "URL",
+	"uri":   "URI",
+	"uuid":  "UUID",
+	"http":  "HTTP",
+	"https": "HTTPS",
+	"json":  "JSON",
+	"sql":   "SQL",
+}
+
+func toGoField(parts []string) string {
+	var b strings.Builder
+	for _, p := range parts {
+		if p == "" {
+			continue
+		}
+		lower := strings.ToLower(p)
+		if v, ok := goInitialisms[lower]; ok {
+			b.WriteString(v)
+			continue
+		}
+		b.WriteString(strings.ToUpper(lower[:1]))
+		if len(lower) > 1 {
+			b.WriteString(lower[1:])
+		}
+	}
+	return b.String()
+}
+
+func toJSONField(parts []string) string {
+	var b strings.Builder
+	for i, p := range parts {
+		if p == "" {
+			continue
+		}
+		lower := strings.ToLower(p)
+		if i == 0 {
+			b.WriteString(lower)
+			continue
+		}
+		b.WriteString(strings.ToUpper(lower[:1]))
+		if len(lower) > 1 {
+			b.WriteString(lower[1:])
+		}
+	}
+	return b.String()
 }
