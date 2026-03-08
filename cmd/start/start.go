@@ -4,6 +4,7 @@ import (
 	"dilu/common/codes"
 	"dilu/common/config"
 	"dilu/common/middleware"
+	"errors"
 	"fmt"
 	"log/slog"
 	"time"
@@ -23,8 +24,8 @@ var (
 		Use:     "start",
 		Short:   "Get Application config info",
 		Example: "dilu start -c resources/config.dev.yml",
-		Run: func(cmd *cobra.Command, args []string) {
-			run()
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return run()
 		},
 	}
 )
@@ -33,16 +34,16 @@ func init() {
 	StartCmd.PersistentFlags().StringVarP(&configYml, "config", "c", "resources/config.dev.yaml", "Start server with provided configuration file")
 }
 
-func run() {
+func run() error {
 	if configYml == "" {
-		panic("找不到配置文件")
+		return errors.New("找不到配置文件")
 	}
 	v := viper.New()
 	v.SetConfigFile(configYml)
 	//v.SetConfigType("yaml")
 	err := v.ReadInConfig()
 	if err != nil {
-		panic(fmt.Sprintf("Fatal error config file: %v \n", err))
+		return fmt.Errorf("fatal error config file: %w", err)
 	}
 
 	var cfg config.Config // 修改为使用Extend结构体
@@ -59,12 +60,12 @@ func run() {
 			err = rviper.AddSecureRemoteProvider(cfg.Remote.Provider, cfg.Remote.Endpoint, cfg.Remote.Path, cfg.Remote.SecretKeyring)
 		}
 		if err != nil {
-			panic(fmt.Sprintf("Fatal error remote config : %v \n", err))
+			return fmt.Errorf("fatal error remote config: %w", err)
 		}
 		rviper.SetConfigType(cfg.Remote.GetConfigType())
 		err = rviper.ReadRemoteConfig()
 		if err != nil {
-			panic(fmt.Sprintf("Fatal error remote config : %v \n", err))
+			return fmt.Errorf("fatal error remote config: %w", err)
 		}
 		var remoteCfg config.Config // 修改为使用Extend结构体
 		rviper.Unmarshal(&remoteCfg)
@@ -96,7 +97,7 @@ func run() {
 	}
 
 	if err := core.Init(&cfg); err != nil {
-		panic(err)
+		return err
 	}
 
 	i18n.Register(&codes.Code{
@@ -121,8 +122,11 @@ func run() {
 		toClose()
 
 	}()
-	core.GetApp().Run()
+	if err := core.GetApp().Run(); err != nil {
+		return err
+	}
 	slog.Info("Server exited")
+	return nil
 }
 
 // 服务启动后要初始化的资源

@@ -3,6 +3,7 @@ package files
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"io"
 	"log"
 	"mime/multipart"
@@ -82,7 +83,6 @@ func Open(name string, flag int, perm os.FileMode) (*os.File, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer f.Close()
 	return f, nil
 }
 
@@ -90,8 +90,7 @@ func Open(name string, flag int, perm os.FileMode) (*os.File, error) {
 func GetImgType(p string) (string, error) {
 	file, err := os.Open(p)
 	if err != nil {
-		log.Println(err)
-		os.Exit(1)
+		return "", err
 	}
 	defer file.Close()
 	buff := make([]byte, 512)
@@ -99,8 +98,7 @@ func GetImgType(p string) (string, error) {
 	_, err = file.Read(buff)
 
 	if err != nil {
-		log.Println(err)
-		os.Exit(1)
+		return "", err
 	}
 
 	filetype := http.DetectContentType(buff)
@@ -113,15 +111,14 @@ func GetImgType(p string) (string, error) {
 		}
 	}
 
-	return "", errors.New("Invalid image type")
+	return "", errors.New("invalid image type")
 }
 
 // GetType 获取文件类型
 func GetType(p string) (string, error) {
 	file, err := os.Open(p)
 	if err != nil {
-		log.Println(err)
-		os.Exit(1)
+		return "", err
 	}
 	defer file.Close()
 	buff := make([]byte, 512)
@@ -129,7 +126,7 @@ func GetType(p string) (string, error) {
 	_, err = file.Read(buff)
 
 	if err != nil {
-		log.Println(err)
+		return "", err
 	}
 
 	filetype := http.DetectContentType(buff)
@@ -156,17 +153,17 @@ func PathExist(addr string) bool {
 
 func FileCreate(content bytes.Buffer, name string) {
 	file, err := os.Create(name)
-	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-			log.Fatalln(err)
-		}
-	}(file)
 	if err != nil {
 		log.Println(err)
+		return
 	}
-	_, err = file.WriteString(content.String())
-	if err != nil {
+	defer func(file *os.File) {
+		if closeErr := file.Close(); closeErr != nil {
+			log.Println(fmt.Errorf("close file %s failed: %w", name, closeErr))
+		}
+	}(file)
+
+	if _, err = file.WriteString(content.String()); err != nil {
 		log.Println(err)
 	}
 }

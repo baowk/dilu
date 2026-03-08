@@ -5,6 +5,7 @@ import (
 	cons "dilu/common/consts"
 	"dilu/modules/tools/apis"
 	"dilu/modules/tools/service"
+	"errors"
 	"fmt"
 	"time"
 
@@ -27,8 +28,8 @@ var (
 		Short:   "Generate code",
 		Long:    "Generate code based on database tables",
 		Example: "dilu gen -c resources/config.dev.yml -d sys -t sys_users",
-		Run: func(cmd *cobra.Command, args []string) {
-			gen()
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return gen()
 		},
 	}
 )
@@ -41,16 +42,16 @@ func init() {
 	GenCmd.PersistentFlags().BoolVarP(&force, "force", "f", false, "if set to true, will overwrite existing files")
 }
 
-func gen() {
+func gen() error {
 	if configYml == "" {
-		panic("找不到配置文件")
+		return errors.New("找不到配置文件")
 	}
 	v := viper.New()
 	v.SetConfigFile(configYml)
 	//v.SetConfigType("yaml")
 	err := v.ReadInConfig()
 	if err != nil {
-		panic(fmt.Sprintf("Fatal error config file: %v \n", err))
+		return fmt.Errorf("fatal error config file: %w", err)
 	}
 
 	var cfg config.Config
@@ -67,12 +68,12 @@ func gen() {
 			err = rviper.AddSecureRemoteProvider(cfg.Remote.Provider, cfg.Remote.Endpoint, cfg.Remote.Path, cfg.Remote.SecretKeyring)
 		}
 		if err != nil {
-			panic(fmt.Sprintf("Fatal error remote config : %v \n", err))
+			return fmt.Errorf("fatal error remote config: %w", err)
 		}
 		rviper.SetConfigType(cfg.Remote.GetConfigType())
 		err = rviper.ReadRemoteConfig()
 		if err != nil {
-			panic(fmt.Sprintf("Fatal error remote config : %v \n", err))
+			return fmt.Errorf("fatal error remote config: %w", err)
 		}
 		var remoteCfg config.Config
 		rviper.Unmarshal(&remoteCfg)
@@ -97,7 +98,7 @@ func gen() {
 		v.WatchConfig()
 		v.OnConfigChange(func(e fsnotify.Event) {
 			fmt.Println("config file changed:", e.String())
-			if err = v.Unmarshal(cfg); err != nil {
+			if err = v.Unmarshal(&cfg); err != nil {
 				fmt.Println(err)
 			}
 			config.SaveConfig(&cfg, nil)
@@ -105,7 +106,7 @@ func gen() {
 	}
 
 	if err := core.Init(&cfg); err != nil {
-		panic(err)
+		return err
 	}
 
 	// 生成
@@ -113,7 +114,7 @@ func gen() {
 	tab, err := service.SerGenTables.GenTableInit(dbName, tableName, true)
 	if err != nil {
 		fmt.Println(err)
-		return
+		return err
 	}
 	// 自定义包名
 	if packageName != "" {
@@ -125,4 +126,5 @@ func gen() {
 		tab.Columns[i].TsType = apis.TypeGo2Ts(v.GoType)
 	}
 	service.SerGenTables.NOMethodsGen(tab, force)
+	return nil
 }

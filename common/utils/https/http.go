@@ -2,8 +2,10 @@ package https
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"net/http"
+	"time"
 )
 
 func New() *HTTPClient {
@@ -20,6 +22,7 @@ func NewUrl(baseUrl string) *HTTPClient {
 type HTTPClient struct {
 	BaseURL string
 	Headers map[string]string
+	Client  *http.Client
 }
 
 func (c *HTTPClient) SetHeaders(headers map[string]string) *HTTPClient {
@@ -40,6 +43,11 @@ func (c *HTTPClient) SetBaseUrl(baseUrl string) *HTTPClient {
 	return c
 }
 
+func (c *HTTPClient) SetClient(client *http.Client) *HTTPClient {
+	c.Client = client
+	return c
+}
+
 // Get 发送GET请求
 func (c *HTTPClient) Get(endpoint string) ([]byte, error) {
 	var url string
@@ -57,7 +65,7 @@ func (c *HTTPClient) Get(endpoint string) ([]byte, error) {
 	for key, value := range c.Headers {
 		req.Header.Set(key, value)
 	}
-	return do(req)
+	return do(req, c.Client)
 }
 
 // Post 发送POST请求
@@ -79,17 +87,25 @@ func (c *HTTPClient) Post(endpoint string, data []byte) ([]byte, error) {
 		req.Header.Set(key, value)
 	}
 
-	return do(req)
+	return do(req, c.Client)
 }
 
-func do(req *http.Request) ([]byte, error) {
-	client := &http.Client{}
-	defer client.CloseIdleConnections()
+func do(req *http.Request, client *http.Client) ([]byte, error) {
+	if client == nil {
+		client = http.DefaultClient
+	}
+	if client.Timeout == 0 {
+		client = &http.Client{Timeout: 10 * time.Second}
+	}
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode < http.StatusOK || resp.StatusCode >= http.StatusMultipleChoices {
+		return nil, fmt.Errorf("http status error: %d", resp.StatusCode)
+	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {

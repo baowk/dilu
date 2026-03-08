@@ -19,7 +19,8 @@ export const get{{.ClassName}}Page = (data?: object) => {
 
 /** 获取{{.TableComment}} */
 export const get{{.ClassName}} = (id: number | string) => {
-  return http.request<Result<{{.ClassName}}>>("get", `${baseURL}/{{.PackageName}}/{{.ModuleName}}/${id}`);
+  const safeId = encodeURIComponent(String(id));
+  return http.request<Result<{{.ClassName}}>>("get", `${baseURL}/{{.PackageName}}/{{.ModuleName}}/${safeId}`);
 };
 
 /** 创建{{.TableComment}} */

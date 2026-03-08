@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"dilu/common/config"
+	"sync"
 	"time"
 
 	"github.com/baowk/dilu-core/common/utils/ips"
@@ -15,30 +16,38 @@ type Access struct {
 
 var (
 	accessMap = make(map[string]*Access, 0)
+	accessMu  sync.Mutex
 )
 
 func AccessLimitfunc() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ip := ips.GetIP(c)
+		blocked := false
+
+		accessMu.Lock()
 		v, ok := accessMap[ip]
-		if !ok { //首次访
+		if !ok {
 			accessMap[ip] = &Access{beginTime: time.Now(), accessCnt: 1}
 		} else {
 			curT := time.Now()
-			if curT.Sub(v.beginTime) > config.Get().AccessLimit.Duration { //当前时间和开始时间的周期
+			if curT.Sub(v.beginTime) > config.Get().AccessLimit.Duration {
 				v.accessCnt = 1
 				v.beginTime = curT
-			} else if v.accessCnt > config.Get().AccessLimit.GetTotal() { //时间范围内数量超标
+			} else if v.accessCnt > config.Get().AccessLimit.GetTotal() {
 				v.accessCnt++
 				if v.accessCnt/config.Get().AccessLimit.GetTotal() > 1 {
 					v.beginTime = curT
 				}
-				//http.Error(c.Writer, "too many requests", http.StatusTooManyRequests)
-				Fail(c, 429, "too many requests")
-				return
+				blocked = true
 			} else {
 				v.accessCnt++
 			}
+		}
+		accessMu.Unlock()
+
+		if blocked {
+			Fail(c, 429, "too many requests")
+			return
 		}
 		c.Next()
 	}
