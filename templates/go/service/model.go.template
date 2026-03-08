@@ -1,0 +1,41 @@
+package models
+
+import (
+    {{- $bb := false -}}
+	{{- range .Columns -}}
+        {{$z := .IsQuery}}
+        {{- if ($z) }}
+            {{if eq .GoType "time.Time"}}{{- $bb = true -}}{{- end -}}
+        {{- end -}}
+    {{- end -}}
+    {{- range .Columns -}}
+        {{if eq .GoType "time.Time"}}{{- $bb = true -}}{{- end -}}
+        {{if eq .GoField "DeletedAt" }}"gorm.io/gorm"{{ end -}}
+    {{- end -}}
+    {{- if eq $bb true }}
+    "time"
+    {{- end }}
+    
+)
+
+//{{.TableComment}}
+type {{.ClassName}} struct {
+    {{- range .Columns -}}
+    {{$x := .Pk}}
+    {{- if ($x) }}
+    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" gorm:"type:{{.ColumnType}};primaryKey;autoIncrement;comment:主键"` //主键
+    {{- else if eq .GoField "DeletedAt" }}
+    DeletedAt gorm.DeletedAt `json:"-" gorm:"index;comment:删除时间"`     //删除时间
+    {{- else }}
+    {{.GoField}} {{.GoType}} `json:"{{.JsonField}}" gorm:"type:{{.ColumnType}};{{- if ne .ColumnDefault "" -}}default:{{.ColumnDefault}};{{ end -}}comment:{{- if eq .ColumnComment "" -}}{{.GoField}}{{- else -}}{{.ColumnComment}}{{ end -}}"` //{{.ColumnComment}}
+    {{- end -}}
+    {{- end }}
+}
+
+const TB{{.ClassName}} = "{{.TBName}}"
+
+func ({{.ClassName}}) TableName() string {
+    return TB{{.ClassName}}
+}
+
+

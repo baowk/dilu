@@ -1,7 +1,7 @@
 package service
 
 import (
-	"dilu/modules/tools/models"
+	"dilu/internal/tools/models"
 
 	"github.com/baowk/dilu-core/core/base"
 	"gorm.io/gorm"

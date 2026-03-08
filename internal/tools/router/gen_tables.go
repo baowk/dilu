@@ -1,7 +1,7 @@
 package router
 
 import (
-	"dilu/modules/tools/apis"
+	"dilu/internal/tools/apis"
 
 	"github.com/gin-gonic/gin"
 )

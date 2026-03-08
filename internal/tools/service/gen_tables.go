@@ -2,9 +2,12 @@ package service
 
 import (
 	"bytes"
-	"dilu/modules/tools/models"
-	"dilu/modules/tools/models/tools"
-	"dilu/modules/tools/service/dto"
+	"dilu/internal/tools/models"
+	"dilu/internal/tools/models/tools"
+	"dilu/internal/tools/service/dto"
+	"fmt"
+	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
 	"text/template"
@@ -150,6 +153,7 @@ func (e *GenTablesService) GenTableInit(dbname string, tableName string, force b
 	} else {
 		data.PackageName = dbname
 	}
+	data.PackageName = resolveModuleName(data.PackageName)
 	data.TplCategory = "crud"
 	data.Crud = true
 	// 中横线表名称，接口路径、前端文件夹名称和js名称使用
@@ -312,15 +316,14 @@ func (e *GenTablesService) GenTableInit(dbname string, tableName string, force b
 	return data, err
 }
 
-const ROOT = "./modules/"
+const ROOT = "./internal/"
 
 func (e *GenTablesService) NOMethodsGen(tab models.GenTables, force bool) error {
 
 	tab.MLTBName = strings.Replace(tab.TBName, "_", "-", -1)
+	genFront := config.Get().Gen.GenFront
 
-	basePath := "resources/template/"
-
-	if config.Get().Gen.FrontPath != "" {
+	if genFront && config.Get().Gen.FrontPath != "" {
 		frontPath = config.Get().Gen.FrontPath
 	}
 
@@ -328,11 +331,13 @@ func (e *GenTablesService) NOMethodsGen(tab models.GenTables, force bool) error 
 	_ = files.PathCreate(ROOT + tab.PackageName + "/models/")
 	_ = files.PathCreate(ROOT + tab.PackageName + "/router/")
 	_ = files.PathCreate(ROOT + tab.PackageName + "/service/dto/")
-	_ = files.PathCreate(frontPath + "/api/" + tab.PackageName + "/")
-	err := files.PathCreate(frontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/utils")
-	if err != nil {
-		core.GetApp().GetLogger().Error("Gen", "err", err)
-		return err
+	if genFront {
+		_ = files.PathCreate(frontPath + "/api/" + tab.PackageName + "/")
+		err := files.PathCreate(frontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/utils")
+		if err != nil {
+			core.GetApp().GetLogger().Error("Gen", "err", err)
+			return err
+		}
 	}
 
 	m := map[string]string{}
@@ -341,7 +346,7 @@ func (e *GenTablesService) NOMethodsGen(tab models.GenTables, force bool) error 
 	//路由
 	cmdApi := "cmd/start/" + tab.PackageName + ".go"
 	if files.CheckExist(cmdApi) || force {
-		rt1, err := template.ParseFiles(basePath + "go/router/cmd_api.template")
+		rt1, err := parseTemplate("go/router/cmd_api.template")
 		if err != nil {
 			core.GetApp().GetLogger().Error("Gen", "err", err)
 			return err
@@ -357,7 +362,7 @@ func (e *GenTablesService) NOMethodsGen(tab models.GenTables, force bool) error 
 
 	baseRouter := ROOT + tab.PackageName + "/router/router.go"
 	if files.CheckExist(baseRouter) || force {
-		rt2, err := template.ParseFiles(basePath + "go/router/router.template")
+		rt2, err := parseTemplate("go/router/router.template")
 		if err != nil {
 			core.GetApp().GetLogger().Error("Gen", "err", err)
 		}
@@ -374,7 +379,7 @@ func (e *GenTablesService) NOMethodsGen(tab models.GenTables, force bool) error 
 
 	modelgo := ROOT + tab.PackageName + "/models/" + tab.TBName + ".go"
 	if files.CheckExist(modelgo) || force {
-		t1, err := template.ParseFiles(basePath + "go/service/model.go.template")
+		t1, err := parseTemplate("go/service/model.go.template")
 		if err != nil {
 			core.GetApp().GetLogger().Error("Gen", "err", err)
 			return err
@@ -390,7 +395,7 @@ func (e *GenTablesService) NOMethodsGen(tab models.GenTables, force bool) error 
 
 	apigo := ROOT + tab.PackageName + "/apis/" + tab.TBName + ".go"
 	if files.CheckExist(apigo) || force {
-		t2, err := template.ParseFiles(basePath + "go/service/apis.go.template")
+		t2, err := parseTemplate("go/service/apis.go.template")
 		if err != nil {
 			core.GetApp().GetLogger().Error("Gen", "err", err)
 			return err
@@ -406,8 +411,7 @@ func (e *GenTablesService) NOMethodsGen(tab models.GenTables, force bool) error 
 
 	routergo := ROOT + tab.PackageName + "/router/" + tab.TBName + ".go"
 	if files.CheckExist(routergo) || force {
-		routerFile := basePath + "go/service/router_no_check_role.go.template"
-		t3, err := template.ParseFiles(routerFile)
+		t3, err := parseTemplate("go/service/router_no_check_role.go.template")
 		if err != nil {
 			core.GetApp().GetLogger().Error("Gen", "err", err)
 			return err
@@ -423,7 +427,7 @@ func (e *GenTablesService) NOMethodsGen(tab models.GenTables, force bool) error 
 
 	dto := ROOT + tab.PackageName + "/service/dto/" + tab.TBName + ".go"
 	if files.CheckExist(dto) || force {
-		t6, err := template.ParseFiles(basePath + "go/service/dto.go.template")
+		t6, err := parseTemplate("go/service/dto.go.template")
 		if err != nil {
 			core.GetApp().GetLogger().Error("Gen", "err", err)
 			return err
@@ -439,7 +443,7 @@ func (e *GenTablesService) NOMethodsGen(tab models.GenTables, force bool) error 
 
 	service := ROOT + tab.PackageName + "/service/" + tab.TBName + ".go"
 	if files.CheckExist(service) || force {
-		t7, err := template.ParseFiles(basePath + "go/service/service.go.template")
+		t7, err := parseTemplate("go/service/service.go.template")
 		if err != nil {
 			core.GetApp().GetLogger().Error("Gen", "err", err)
 			return err
@@ -453,85 +457,87 @@ func (e *GenTablesService) NOMethodsGen(tab models.GenTables, force bool) error 
 		files.FileCreate(b7, service)
 	}
 
-	//前端部分
-	js := frontPath + "/api/" + tab.PackageName + "/" + tab.MLTBName + ".ts"
-	if files.CheckExist(js) || force {
-		t4, err := template.ParseFiles(basePath + "vue/api/api.ts.template")
-		if err != nil {
-			core.GetApp().GetLogger().Error("Gen", "err", err)
-			return err
+	if genFront {
+		//前端部分
+		js := frontPath + "/api/" + tab.PackageName + "/" + tab.MLTBName + ".ts"
+		if files.CheckExist(js) || force {
+			t4, err := parseTemplate("vue/api/api.ts.template")
+			if err != nil {
+				core.GetApp().GetLogger().Error("Gen", "err", err)
+				return err
+			}
+			var b4 bytes.Buffer
+			err = t4.Execute(&b4, tab)
+			if err != nil {
+				core.GetApp().GetLogger().Error("gen err", "err", err)
+				return err
+			}
+			files.FileCreate(b4, js)
 		}
-		var b4 bytes.Buffer
-		err = t4.Execute(&b4, tab)
-		if err != nil {
-			core.GetApp().GetLogger().Error("gen err", "err", err)
-			return err
-		}
-		files.FileCreate(b4, js)
-	}
 
-	// types := FrontPath + "/api/" + tab.PackageName + "/" + tab.MLTBName + ".d.ts"
-	// if files.CheckExist(types) || force {
-	// 	t5, err := template.ParseFiles(basePath + "vue/api/types.ts.template")
-	// 	if err != nil {
-	// 		core.GetApp().GetLogger().Error("Gen", err)
-	// 		e.Error(c, err)
-	// 		return
-	// 	}
-	// 	var b5 bytes.Buffer
-	// 	err = t5.Execute(&b5, tab)
-	// 	if err != nil {
-	// 		core.GetApp().GetLogger().Error("gen err", err)
-	// 	}
-	// 	files.FileCreate(b5, types)
-	// }
+		// types := FrontPath + "/api/" + tab.PackageName + "/" + tab.MLTBName + ".d.ts"
+		// if files.CheckExist(types) || force {
+		// 	t5, err := template.ParseFiles(basePath + "vue/api/types.ts.template")
+		// 	if err != nil {
+		// 		core.GetApp().GetLogger().Error("Gen", err)
+		// 		e.Error(c, err)
+		// 		return
+		// 	}
+		// 	var b5 bytes.Buffer
+		// 	err = t5.Execute(&b5, tab)
+		// 	if err != nil {
+		// 		core.GetApp().GetLogger().Error("gen err", err)
+		// 	}
+		// 	files.FileCreate(b5, types)
+		// }
 
-	vue := frontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/index.vue"
-	if files.CheckExist(vue) || force {
-		t5, err := template.ParseFiles(basePath + "vue/views/index.vue.template")
-		if err != nil {
-			core.GetApp().GetLogger().Error("Gen", "err", err)
-			return err
+		vue := frontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/index.vue"
+		if files.CheckExist(vue) || force {
+			t5, err := parseTemplate("vue/views/index.vue.template")
+			if err != nil {
+				core.GetApp().GetLogger().Error("Gen", "err", err)
+				return err
+			}
+			var b5 bytes.Buffer
+			err = t5.Execute(&b5, tab)
+			if err != nil {
+				core.GetApp().GetLogger().Error("gen err", "err", err)
+				return err
+			}
+			files.FileCreate(b5, vue)
 		}
-		var b5 bytes.Buffer
-		err = t5.Execute(&b5, tab)
-		if err != nil {
-			core.GetApp().GetLogger().Error("gen err", "err", err)
-			return err
-		}
-		files.FileCreate(b5, vue)
-	}
 
-	form := frontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/form.vue"
-	if files.CheckExist(form) || force {
-		t5, err := template.ParseFiles(basePath + "vue/views/form.vue.template")
-		if err != nil {
-			core.GetApp().GetLogger().Error("Gen", "err", err)
-			return err
+		form := frontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/form.vue"
+		if files.CheckExist(form) || force {
+			t5, err := parseTemplate("vue/views/form.vue.template")
+			if err != nil {
+				core.GetApp().GetLogger().Error("Gen", "err", err)
+				return err
+			}
+			var b5 bytes.Buffer
+			err = t5.Execute(&b5, tab)
+			if err != nil {
+				core.GetApp().GetLogger().Error("gen err", "err", err)
+				return err
+			}
+			files.FileCreate(b5, form)
 		}
-		var b5 bytes.Buffer
-		err = t5.Execute(&b5, tab)
-		if err != nil {
-			core.GetApp().GetLogger().Error("gen err", "err", err)
-			return err
-		}
-		files.FileCreate(b5, form)
-	}
 
-	hook := frontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/utils/hook.tsx"
-	if files.CheckExist(hook) || force {
-		t5, err := template.ParseFiles(basePath + "vue/views/utils/hook.tsx.template")
-		if err != nil {
-			core.GetApp().GetLogger().Error("Gen", "err", err)
-			return err
+		hook := frontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/utils/hook.tsx"
+		if files.CheckExist(hook) || force {
+			t5, err := parseTemplate("vue/views/utils/hook.tsx.template")
+			if err != nil {
+				core.GetApp().GetLogger().Error("Gen", "err", err)
+				return err
+			}
+			var b5 bytes.Buffer
+			err = t5.Execute(&b5, tab)
+			if err != nil {
+				core.GetApp().GetLogger().Error("gen err", "err", err)
+				return err
+			}
+			files.FileCreate(b5, hook)
 		}
-		var b5 bytes.Buffer
-		err = t5.Execute(&b5, tab)
-		if err != nil {
-			core.GetApp().GetLogger().Error("gen err", "err", err)
-			return err
-		}
-		files.FileCreate(b5, hook)
 	}
 
 	// rule := FrontPath + "/views/" + tab.PackageName + "/" + tab.MLTBName + "/utils/rule.ts"
@@ -602,6 +608,36 @@ func (e *GenTablesService) Update(tab *models.GenTables) (err error) {
 		SerGenColumns.UpdateById(v)
 	}
 	return
+}
+
+func resolveModuleName(defaultName string) string {
+	m := config.Get().Gen.ModuleMap
+	if len(m) == 0 {
+		return defaultName
+	}
+	if mapped, ok := m[defaultName]; ok && strings.TrimSpace(mapped) != "" {
+		return strings.TrimSpace(mapped)
+	}
+	return defaultName
+}
+
+func parseTemplate(relativePath string) (*template.Template, error) {
+	for _, base := range templateBasePaths() {
+		full := filepath.Join(base, filepath.FromSlash(relativePath))
+		if _, err := os.Stat(full); err == nil {
+			return template.ParseFiles(full)
+		}
+	}
+	return nil, fmt.Errorf("template not found: %s", relativePath)
+}
+
+func templateBasePaths() []string {
+	roots := make([]string, 0, 3)
+	if custom := strings.TrimSpace(config.Get().Gen.TemplatePath); custom != "" {
+		roots = append(roots, custom)
+	}
+	roots = append(roots, "templates", "resources/template")
+	return roots
 }
 
 func ParseDsn(dsn string) string {

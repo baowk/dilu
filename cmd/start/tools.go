@@ -1,7 +1,7 @@
 package start
 
 import (
-	"dilu/modules/tools/router"
+	"dilu/internal/tools/router"
 )
 
 func init() {

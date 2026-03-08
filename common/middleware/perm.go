@@ -1,8 +1,8 @@
 package middleware
 
 // import (
-// 	"dilu/modules/sys/models"
-// 	"dilu/modules/sys/service"
+// 	"dilu/internal/sys/models"
+// 	"dilu/internal/sys/service"
 // 	"regexp"
 // 	"strings"
 

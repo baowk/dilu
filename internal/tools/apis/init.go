@@ -1,7 +1,7 @@
 package apis
 
 import (
-	"dilu/modules/tools/utils"
+	"dilu/internal/tools/utils"
 	"time"
 
 	"github.com/baowk/dilu-core/core/base"

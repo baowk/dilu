@@ -1,20 +1,14 @@
 package gen
 
 import (
-	"dilu/common/config"
 	cons "dilu/common/consts"
-	"dilu/modules/tools/apis"
-	"dilu/modules/tools/service"
-	"errors"
+	"dilu/internal/bootstrap"
+	"dilu/internal/tools/apis"
+	"dilu/internal/tools/service"
 	"fmt"
-	"time"
 
 	"github.com/baowk/dilu-core/core"
-
-	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-	_ "github.com/spf13/viper/remote"
 )
 
 var (
@@ -43,69 +37,12 @@ func init() {
 }
 
 func gen() error {
-	if configYml == "" {
-		return errors.New("找不到配置文件")
-	}
-	v := viper.New()
-	v.SetConfigFile(configYml)
-	//v.SetConfigType("yaml")
-	err := v.ReadInConfig()
+	cfg, err := bootstrap.LoadConfig(configYml)
 	if err != nil {
-		return fmt.Errorf("fatal error config file: %w", err)
+		return err
 	}
 
-	var cfg config.Config
-
-	if err = v.Unmarshal(&cfg); err != nil {
-		fmt.Println(err)
-	}
-
-	if cfg.Server.RemoteEnable {
-		rviper := viper.New()
-		if cfg.Remote.SecretKeyring == "" {
-			err = rviper.AddRemoteProvider(cfg.Remote.Provider, cfg.Remote.Endpoint, cfg.Remote.Path)
-		} else {
-			err = rviper.AddSecureRemoteProvider(cfg.Remote.Provider, cfg.Remote.Endpoint, cfg.Remote.Path, cfg.Remote.SecretKeyring)
-		}
-		if err != nil {
-			return fmt.Errorf("fatal error remote config: %w", err)
-		}
-		rviper.SetConfigType(cfg.Remote.GetConfigType())
-		err = rviper.ReadRemoteConfig()
-		if err != nil {
-			return fmt.Errorf("fatal error remote config: %w", err)
-		}
-		var remoteCfg config.Config
-		rviper.Unmarshal(&remoteCfg)
-
-		config.SaveConfig(&cfg, &remoteCfg)
-
-		go func() {
-			for {
-				time.Sleep(time.Second * 5) // delay after each request
-				err := rviper.WatchRemoteConfig()
-				if err != nil {
-					fmt.Println(err)
-					continue
-				}
-				rviper.Unmarshal(&remoteCfg)
-
-				config.SaveConfig(&cfg, &remoteCfg)
-			}
-		}()
-	} else {
-		config.SaveConfig(&cfg, nil)
-		v.WatchConfig()
-		v.OnConfigChange(func(e fsnotify.Event) {
-			fmt.Println("config file changed:", e.String())
-			if err = v.Unmarshal(&cfg); err != nil {
-				fmt.Println(err)
-			}
-			config.SaveConfig(&cfg, nil)
-		})
-	}
-
-	if err := core.Init(&cfg); err != nil {
+	if err := core.Init(cfg); err != nil {
 		return err
 	}
 

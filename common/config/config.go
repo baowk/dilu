@@ -20,7 +20,7 @@ type Config struct {
 	Cache       config.CacheCfg      `mapstructure:"cache" json:"cache" yaml:"cache"`
 	JWT         config.JWT           `mapstructure:"jwt" json:"jwt" yaml:"jwt"`
 	Cors        config.CORS          `mapstructure:"cors" json:"cors" yaml:"cors"`
-	Gen         config.GenCfg        `mapstructure:"gen" json:"gen" yaml:"gen"`
+	Gen         GenCfg               `mapstructure:"gen" json:"gen" yaml:"gen"`
 	AccessLimit config.AccessLimit   `mapstructure:"access-limit" json:"access-limit" yaml:"access-limit"`
 	GrpcServer  config.GrpcServerCfg `mapstructure:"grpc-server" json:"grpc-server" yaml:"grpc-server"`
 	// 扩展配置

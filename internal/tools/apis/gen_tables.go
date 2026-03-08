@@ -3,10 +3,10 @@ package apis
 import (
 	"dilu/common/config"
 	cons "dilu/common/consts"
-	"dilu/modules/tools/models"
-	"dilu/modules/tools/models/tools"
-	"dilu/modules/tools/service"
-	"dilu/modules/tools/service/dto"
+	"dilu/internal/tools/models"
+	"dilu/internal/tools/models/tools"
+	"dilu/internal/tools/service"
+	"dilu/internal/tools/service/dto"
 
 	"errors"
 	"fmt"

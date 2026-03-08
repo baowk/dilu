@@ -1,0 +1,60 @@
+<script setup lang="ts">
+import { ref, reactive } from "vue";
+import type { FormRules } from "element-plus";
+import { {{.ClassName}}FormProps } from "@/api/{{.PackageName}}/{{.ModuleName}}";
+
+const props = withDefaults(defineProps<{{.ClassName}}FormProps>(), {
+  formInline: () => ({
+   {{- range .Columns }}
+    {{- if eq .JsonField "createdAt" }}
+    {{- else if eq .JsonField "updatedAt" }}
+    {{- else if eq .JsonField "deletedAt" }}
+    {{- else if eq .JsonField "createBy" }}
+    {{- else if eq .JsonField "updateBy" }}
+    {{- else }}
+    {{ .JsonField }}: {{if eq .GoType "int" -}}0{{ else }}null{{- end }},
+    {{- end}}
+  {{- end }}
+  })
+});
+
+/** 自定义表单规则校验 */
+const formRules = reactive<FormRules>({
+  name: [{ required: true, message: "名称为必填项", trigger: "blur" }]
+});
+
+const ruleFormRef = ref();
+const newFormInline = ref(props.formInline);
+
+function getRef() {
+  return ruleFormRef.value;
+}
+
+defineExpose({ getRef });
+</script>
+
+<template>
+  <el-form
+    ref="ruleFormRef"
+    :model="newFormInline"
+    :rules="formRules"
+    label-width="82px"
+  >
+  {{ range .Columns}}
+    {{- if eq .JsonField "createdAt" }}
+    {{- else if eq .JsonField "updatedAt" }}
+    {{- else if eq .JsonField "deletedAt" }}
+    {{- else if eq .JsonField "createBy" }}
+    {{- else if eq .JsonField "updateBy" }}
+    {{- else -}}
+    <el-form-item label="{{.ColumnComment}}" prop="{{.JsonField}}">
+      <el-input
+        v-model{{- if eq .GoType "int" }}.number{{- end }}="newFormInline.{{.JsonField}}"
+        clearable
+        placeholder="请输入{{.ColumnComment}}"
+      />
+    </el-form-item>
+    {{- end}}
+  {{ end }}
+  </el-form>
+</template>

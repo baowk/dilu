@@ -56,7 +56,11 @@ cors:
   #  allow-credentials: true
 gen: 
   enable: true #开启生成
+  gen-front: false #是否生成前端代码，默认 false
   front-path: ../dilu-admin/src #前端生成路径 默认：../dilu-admin/src
+  template-path: templates #模板路径，默认优先 templates，回退 resources/template
+  #module-map: #可选：按数据库名映射业务模块名
+  #  sys: user
 extend:             # 扩展项（此处没有提供具体说明）
   ding: 
     agent-id:
