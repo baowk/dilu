@@ -137,7 +137,7 @@ ls internal/sys/repository/query/sys_user.gen.go
 ```
 
 ### 步骤 4：扩展实现
-``go
+```go
 // ✅ 创建扩展文件（不要修改 .gen.go）
 // internal/sys/repository/model/sys_user_extend.go
 package model
@@ -162,7 +162,7 @@ type SysUserWithRoles struct {
 ```
 
 ### 统一响应格式
-``go
+```go
 // 成功响应（带数据）
 e.Ok(c, data)
 // 返回：{"code": 200, "message": "success", "data": {...}}
