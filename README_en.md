@@ -11,14 +11,16 @@
 </p>
 
 <p align="center">
+  <a href="#project-overview">📖 Overview</a> •
+  <a href="#core-features">✨ Features</a> •
+  <a href="#quick-start">🚀 Quick Start</a> •
+  <a href="#directory-structure">📁 Directory</a> •
+  <a href="#ai-development-guide">🤖 AI Guide</a>
+</p>
+
+<p align="center">
   <a href="https://github.com/baowk/dilu/stargazers">
     <img src="https://img.shields.io/github/stars/baowk/dilu" alt="GitHub stars">
-  </a>
-  <a href="https://github.com/baowk/dilu/issues">
-    <img src="https://img.shields.io/github/issues/baowk/dilu" alt="GitHub issues">
-  </a>
-  <a href="https://github.com/baowk/dilu/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/baowk/dilu" alt="GitHub">
   </a>
   <a href="https://goreportcard.com/report/github.com/baowk/dilu">
     <img src="https://goreportcard.com/badge/github.com/baowk/dilu" alt="Go Report Card">
@@ -32,11 +34,9 @@ Dilu is a modern web rapid development framework built on top of Gin + GORM, des
 ### 🔧 Version Information
 
 - **Dilu Core**: Core simplified version focusing on basic web development functions
-- **Dilu All**: Full version with all plugins and advanced features
-- **Dilu Plugin**: Plugin library for extended functionality modules
 - **Dilu Ctl**: Scaffolding tool for rapid project creation
 
-> 💡 **Recommendation**: Beginners are recommended to use the [Dilu Ctl](https://github.com/baowk/dilu-ctl) scaffolding tool to quickly create projects, or start learning from [Dilu All](https://github.com/baowk/dilu-all).
+> 💡 **Recommendation**: Beginners are recommended to use the [Dilu Ctl](https://github.com/baowk/dilu-ctl) scaffolding tool to quickly create projects. In the AI era, [Dilu All](https://github.com/baowk/dilu-all) is not recommended.
 
 ## ✨ Core Features
 
@@ -53,155 +53,127 @@ Dilu is a modern web rapid development framework built on top of Gin + GORM, des
 - 📊 Automatic Swagger API documentation generation
 - 🐳 Docker containerized deployment support
 - 📱 RESTful API design standards
+- 🤖 **AI-Assisted Development** - Full support for Lingma, GitHub Copilot and other AI tools
 
 ## 🚀 Quick Start
 
-### Method 1: Using Scaffolding Tool (Recommended)
-
-Use the [Dilu Ctl](https://github.com/baowk/dilu-ctl) scaffolding tool to create projects with one command:
-
+### Install Dependencies
 ```bash
-# Install scaffolding tool
-go install github.com/baowk/dilu-ctl@latest
-
-# Create basic Dilu project
-dilu-ctl -n myproject
-
-# Create complete project (including admin frontend)
-dilu-ctl -n myproject -a
-
-# Enter project directory and start
-cd myproject
-go run main.go start -c resources/config.dev.yaml
-```
-
-### Method 2: Manual Installation
-
-1. **Get Source Code**
-```bash
-git clone https://github.com/baowk/dilu.git
-# or
-git clone https://gitee.com/walkbao/dilu.git
-```
-
-2. **Install Dependencies**
-```bash
-cd dilu
 go mod tidy
 ```
 
-3. **Database Configuration**
-```sql
--- Create database
-CREATE DATABASE `dilu-db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-```
-
-Modify configuration file `resources/config.dev.yaml`:
+### Configure Database
+Edit `resources/config.dev.yaml` configuration file:
 ```yaml
 dbcfg:
   driver: mysql
-  dns: root:password@tcp(127.0.0.1:3306)/dilu-db?charset=utf8&parseTime=True&loc=Local
+  dns: root:password@tcp(127.0.0.1:3306)/dilu-db?charset=utf8mb4&parseTime=True
 ```
 
-4. **Code Generation Example**
-```bash
-# Generate code for sys_user table
-go run main.go gen -c resources/config.dev.yaml -d sys -t sys_user -f false
-```
-
-5. **Start Service**
+### Start Service
 ```bash
 go run main.go start -c resources/config.dev.yaml
 ```
 
-Service runs by default on `http://localhost:8000`
+Access Swagger documentation at: http://localhost:7888/swagger/index.html
 
-## 🏗️ Project Structure
+## 📁 Directory Structure
 
 ```
 dilu/
-├── cmd/           # Command line tools
-├── common/        # Common components
-├── docs/          # Documentation
-├── modules/       # Business modules
-├── resources/     # Configuration files and resources
-├── temp/          # Temporary files
-├── main.go        # Application entry point
-└── go.mod         # Dependency management
+├── cmd/                    # Command line tool entry (gen, start, version, etc.)
+├── common/                 # Common utilities (tools, middleware, constants)
+├── internal/               # Core business logic layer
+│   ├── bootstrap/         # Application initialization
+│   ├── tools/             # Code generator core implementation
+│   │   ├── apis/          # API interface layer
+│   │   ├── service/       # Business logic layer
+│   │   ├── router/        # Router configuration layer
+│   │   └── repository/    # Data access layer
+│   │       ├── model/     # Model layer
+│   │       └── query/     # Query layer
+│   └── sys/               # System management module (auto-generated + manual extension)
+│       ├── repository/    # Data access layer (Model, Query)
+│       │   ├── model/     # Model layer (*.gen.go)
+│       │   └── query/     # Query layer (*.gen.go)
+│       ├── apis/          # API interface layer
+│       ├── service/       # Business logic layer
+│       └── router/        # Router configuration layer
+├── resources/              # Configuration files (different environments)
+├── scripts/                # Scripts (database initialization, migration, etc.)
+├── temp/                   # Temporary files (logs, SQLite database, etc.)
+├── docs/                   # User documentation (API docs, Swagger auto-generated)
+├── dev-docs/               # Development docs (design docs, AI development memory docs)
+├── tests/                  # Test code (unit tests, integration tests)
+├── main.go                 # Program entry point
+└── go.mod                  # Dependency management
 ```
 
-## 📚 Usage Guide
+### 📂 Important Directories
 
-### Command Line Tools
-```bash
-# View help
-go run main.go --help
+- **`docs/`** - **User Documentation Directory**
+  - API Documentation (Swagger auto-generated)
+  - User manuals
+  - Deployment guides
+  - Public technical documentation
 
-# Start service
-go run main.go start -c config.yaml
+- **`dev-docs/`** - **Development Documentation Directory**
+  - System design documents
+  - Architecture design documents
+  - Necessary memory documents during AI development process
+  - Technical specification documents
+  - Internal development references
 
-# Generate code
-go run main.go gen -c config.yaml -d database -t table -f true
+- **`tests/`** - **Test Code Directory**
+  - Unit tests (`*_test.go`)
+  - Integration tests
+  - Performance tests
+  - Test data and Mock objects
 
-# Build project
-go build -o dilu main.go
+## 🤖 AI Development Guide
+
+Dilu framework provides comprehensive AI-assisted development support to help you efficiently build enterprise-grade Go applications.
+
+### 📋 AI Code Specifications
+
+- 🇨🇳 **[Chinese AI Code Spec](./AI_CODE_SPEC.md)** - Development specifications and conventions for AI code generation
+- 🌐 **[English AI Code Spec](./AI_CODE_SPEC_en.md)** - AI code generation specifications and conventions
+
+### Read AI Development Guides
+
+- 🇨🇳 **[Chinese AI Development Guide](./README_AI_DEV.md)** - Detailed Chinese tutorial
+- 🌐 **[English AI Dev Guide](./README_AI_DEV_en.md)** - Complete English guide
+
+### Core AI Development Capabilities
+
+- ✅ **Intelligent Code Generation** - Use built-in gen command to rapidly generate Model, Service, Api, Router code
+- ✅ **API Development Assistant** - AI-assisted RESTful API design with automatic Swagger documentation
+- ✅ **Database Design** - AI-assisted table structure design, GORM model and migration script generation
+- ✅ **Frontend Development** - AI generates Vue3 components and TypeScript API wrappers
+- ✅ **Test Writing** - AI automatically generates unit tests and integration tests
+- ✅ **Documentation** - AI-assisted API documentation and technical writing
+
+### Quick Example
+
+```
+# 1. Prepare database (using SQLite)
+go run scripts/init_sqlite.go
+
+# 2. Call gen command to generate code
+go run main.go gen -c resources/config.sqlite.yaml -t sys_user -f false
+
+# 3. View generated files
+ls internal/sys/repository/model/sys_user.gen.go
+ls internal/sys/repository/query/sys_user.gen.go
+
+# 4. Extend business logic in Service layer
+vim internal/sys/service/sys_user_extend.go
+
+# 5. Start service
+go run main.go start -c resources/config.sqlite.yaml
 ```
 
-### API Documentation
-After starting the service, visit: `http://localhost:8000/swagger/index.html`
-
-## 🛠️ Development Tools
-
-### Dilu Ctl Scaffolding Tool
-[Dilu Ctl](https://github.com/baowk/dilu-ctl) is a scaffolding tool specially designed for the Dilu framework, with main features including:
-
-- ✅ Rapid project creation via command line
-- ✅ Support for different template repositories (Core/All versions)
-- ✅ Intelligent package name replacement and configuration updates
-- ✅ Automatic generation of correct go.mod files
-- ✅ Support for both SSH and HTTPS Git protocols
-- ✅ Option to create accompanying admin frontend projects
-
-**Installation and Usage:**
-```bash
-# Installation
-go install github.com/baowk/dilu-ctl@latest
-
-# Create project
-dilu-ctl -n project-name [-a] [--https] [-u username]
-
-# View help
-dilu-ctl -h
-```
-
-## 🤝 Community
-
-Welcome to join our technical discussion group!
-
-<div align="center">
-  <img src="https://github.com/baowk/dilu/assets/142554979/29a6863c-4bdc-4963-99c2-0c400e132f6f" width="300" alt="WeChat Group QR Code">
-  <br>
-  <sub>Please note "Dilu" when adding WeChat</sub>
-</div>
-
-### Contribution Guidelines
-We welcome all forms of contributions:
-- 🐛 Submit bug reports
-- 💡 Propose feature suggestions
-- 🔧 Submit code improvements
-- 📝 Improve documentation
-
-## 🔗 Related Projects
-
-- [Dilu Admin](https://github.com/baowk/dilu-admin) - Frontend admin interface
-- [Dilu All](https://github.com/baowk/dilu-all) - Full-featured version
-- [Dilu Plugin](https://github.com/baowk/dilu-plugin) - Plugin extension library
-- [Dilu Ctl](https://github.com/baowk/dilu-ctl) - Project scaffolding tool ⭐
-- [Online Demo](http://dilu.youwan.art) - System demonstration environment
-
-## 📄 License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+For detailed usage methods and best practices, please refer to the **AI Development Guide** documents above.
 
 ---
 

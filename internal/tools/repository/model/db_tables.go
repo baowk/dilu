@@ -1,4 +1,4 @@
-package tools
+package model
 
 import (
 	"dilu/common/config"

@@ -2,8 +2,7 @@ package service
 
 import (
 	"bytes"
-	"dilu/internal/tools/models"
-	"dilu/internal/tools/models/tools"
+	"dilu/internal/tools/repository/model"
 	"dilu/internal/tools/service/dto"
 	"fmt"
 	"os"
@@ -27,10 +26,10 @@ type GenTablesService struct {
 }
 
 var SerGenTables = GenTablesService{
-	base.NewService("sys"),
+	base.NewService(consts.DB_DEF),
 }
 
-func (s *GenTablesService) Page(req *dto.GenTablesGetPageReq, list *[]models.GenTables, total *int64) error {
+func (s *GenTablesService) Page(req *dto.GenTablesGetPageReq, list *[]model.GenTables, total *int64) error {
 	db := s.DB().Order("table_id desc").Offset(req.GetOffset()).Limit(req.GetSize())
 	if req.DbName != "" {
 		db.Where("db_name = ?", req.DbName)
@@ -42,15 +41,15 @@ func (s *GenTablesService) Page(req *dto.GenTablesGetPageReq, list *[]models.Gen
 }
 
 func (s *GenTablesService) Del(req base.ReqIds) error {
-	err := s.DB().Where("table_id in ?", req.Ids).Delete(&models.GenColumns{}).Error
+	err := s.DB().Where("table_id in ?", req.Ids).Delete(&model.GenColumns{}).Error
 	if err != nil {
 		return err
 	}
-	return s.DB().Delete(&models.GenTables{}, req.Ids).Error
+	return s.DB().Delete(&model.GenTables{}, req.Ids).Error
 }
 
-func (e *GenTablesService) Get(tx *gorm.DB, exclude bool, tableId int) (models.GenTables, error) {
-	var doc models.GenTables
+func (e *GenTablesService) Get(tx *gorm.DB, exclude bool, tableId int) (model.GenTables, error) {
+	var doc model.GenTables
 	var err error
 	table := tx
 	if tx == nil {
@@ -64,7 +63,7 @@ func (e *GenTablesService) Get(tx *gorm.DB, exclude bool, tableId int) (models.G
 	if err := table.First(&doc).Error; err != nil {
 		return doc, err
 	}
-	var col models.GenColumns
+	var col model.GenColumns
 	col.TableId = doc.TableId
 	if doc.Columns, err = SerGenColumns.GetList(tx, exclude, tableId); err != nil {
 		return doc, err
@@ -73,7 +72,7 @@ func (e *GenTablesService) Get(tx *gorm.DB, exclude bool, tableId int) (models.G
 	return doc, nil
 }
 
-func (e *GenTablesService) Create(m *models.GenTables) error {
+func (e *GenTablesService) Create(m *model.GenTables) error {
 	m.CreateBy = 0
 	err := e.DB().Create(m).Error
 	if err != nil {
@@ -111,10 +110,10 @@ var (
 	frontPath = "../dilu-admin/src"
 )
 
-func (e *GenTablesService) GenTableInit(dbname string, tableName string, force bool) (models.GenTables, error) {
-	var data models.GenTables
-	var dbTable tools.DBTables
-	var dbColumn tools.DBColumns
+func (e *GenTablesService) GenTableInit(dbname string, tableName string, force bool) (model.GenTables, error) {
+	var data model.GenTables
+	var dbTable model.DBTables
+	var dbColumn model.DBColumns
 	data.CreateBy = 0
 
 	dbTable.TableName = tableName
@@ -176,7 +175,7 @@ func (e *GenTablesService) GenTableInit(dbname string, tableName string, force b
 
 	data.FunctionAuthor = "baowk"
 	for i := 0; i < len(dbcolumn); i++ {
-		var column models.GenColumns
+		var column model.GenColumns
 		column.ColumnComment = dbcolumn[i].ColumnComment
 		column.ColumnName = dbcolumn[i].ColumnName
 		column.ColumnType = dbcolumn[i].ColumnType
@@ -311,7 +310,7 @@ func (e *GenTablesService) GenTableInit(dbname string, tableName string, force b
 
 const ROOT = "./internal/"
 
-func (e *GenTablesService) NOMethodsGen(tab models.GenTables, force bool) error {
+func (e *GenTablesService) NOMethodsGen(tab model.GenTables, force bool) error {
 
 	tab.MLTBName = strings.Replace(tab.TBName, "_", "-", -1)
 	genFront := config.Get().Gen.GenFront
@@ -542,7 +541,7 @@ func (e *GenTablesService) NOMethodsGen(tab models.GenTables, force bool) error 
 
 }
 
-func (e *GenTablesService) Update(tab *models.GenTables) (err error) {
+func (e *GenTablesService) Update(tab *model.GenTables) (err error) {
 
 	//参数1:是要修改的数据
 	//参数2:是修改的数据
@@ -558,8 +557,8 @@ func (e *GenTablesService) Update(tab *models.GenTables) (err error) {
 		}
 	}
 
-	tables := make([]models.GenTables, 0)
-	tableMap := make(map[string]*models.GenTables)
+	tables := make([]model.GenTables, 0)
+	tableMap := make(map[string]*model.GenTables)
 	if len(tableNames) > 0 {
 		if err = e.DB().Where("table_name in (?)", tableNames).Find(&tables).Error; err != nil {
 			return
@@ -623,7 +622,7 @@ func templateBasePaths() []string {
 	return roots
 }
 
-func (e *GenTablesService) generateRepository(tab models.GenTables) error {
+func (e *GenTablesService) generateRepository(tab model.GenTables) error {
 	db := core.GetApp().Db(tab.ConfDbName)
 	if db == nil {
 		return fmt.Errorf("database not found: %s", tab.ConfDbName)

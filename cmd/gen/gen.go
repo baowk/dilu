@@ -7,6 +7,7 @@ import (
 	"dilu/internal/tools/service"
 	"fmt"
 
+	"github.com/baowk/dilu-core/common/consts"
 	"github.com/baowk/dilu-core/core"
 	"github.com/spf13/cobra"
 )
@@ -47,7 +48,10 @@ func gen() error {
 	}
 
 	// 生成
-	fmt.Printf("packageName %s db %s table %s\n", packageName, dbName, tableName)
+	// 如果未指定数据库名，使用默认值 sys
+	if dbName == "" {
+		dbName = consts.DB_DEF
+	}
 	tab, err := service.SerGenTables.GenTableInit(dbName, tableName, true)
 	if err != nil {
 		fmt.Println(err)
