@@ -1,4 +1,4 @@
-# 发布说明 v2.0 - AI 代码规范与目录结构优化
+# 发布说明 v1.2.0 - AI 代码规范与目录结构优化
 
 **发布日期**: 2026-03-14  
 **版本类型**: 重大更新  
@@ -39,7 +39,7 @@
 - [`AI_CODE_SPEC_en.md`](./AI_CODE_SPEC_en.md) - English AI Code Generation Specifications
 
 #### 核心特点
-```markdown
+```
 # Dilu AI 代码生成规范
 
 > ⚠️ 重要说明：本文档是**给 AI 助手阅读和遵循的代码生成规范**，
@@ -110,7 +110,7 @@ internal/sys/
 #### 主 README 更新
 
 **中文版 [`README.md`](./README.md)**：
-```markdown
+````
 ## 📁 目录结构
 
 dilu/
@@ -130,7 +130,7 @@ dilu/
 ```
 
 **英文版 [`README_en.md`](./README_en.md)**：
-```markdown
+```
 ## 📁 Directory Structure
 
 dilu/
@@ -152,7 +152,7 @@ dilu/
 #### 版本说明简化
 
 **之前**：
-```markdown
+```
 - Dilu Core: 核心简化版本
 - Dilu All: 完整版（包含所有插件）
 - Dilu Plugin: 插件库
@@ -160,7 +160,7 @@ dilu/
 ```
 
 **现在**：
-```markdown
+```
 - **Dilu Core**: 核心简化版本，专注于基础 Web 开发功能
 - **Dilu Ctl**: 脚手架工具，快速搭建项目
 
@@ -173,12 +173,12 @@ dilu/
 #### 绝对路径 → 相对路径
 
 **之前**（错误）：
-```markdown
+```
 [`service/gen_tables.go`](file:///Users/walker/works/gos/dilus/dilu/internal/tools/service/gen_tables.go)
 ```
 
 **现在**（正确）：
-```markdown
+```
 [`service/gen_tables.go`](internal/tools/service/gen_tables.go)
 ```
 
@@ -189,7 +189,7 @@ dilu/
 - ✅ docs/ 下的文档
 
 **验证命令**：
-```bash
+```
 # 搜索是否还有绝对路径
 grep -r "file:///Users/walker" *.md
 # 结果：0 matches ✅
@@ -332,7 +332,7 @@ dilu/
 ### 从旧版本升级
 
 #### 步骤 1：备份现有代码
-```bash
+```
 # 备份整个项目
 cp -r dilu dilu_backup_$(date +%Y%m%d)
 
@@ -341,7 +341,7 @@ git checkout -b backup_before_v2_update
 ```
 
 #### 步骤 2：更新目录结构
-```bash
+```
 cd dilu
 
 # 创建新的目录结构
@@ -356,7 +356,7 @@ rm -rf internal/tools/models
 ```
 
 #### 步骤 3：更新 package 声明
-```bash
+```
 # 批量替换 package 声明
 find internal/tools/repository/model -name "*.go" -exec \
   sed -i '' 's/^package models$/package model/' {} \;
@@ -364,7 +364,7 @@ find internal/tools/repository/model -name "*.go" -exec \
 
 #### 步骤 4：更新导入路径
 检查并更新所有引用这些文件的导入路径：
-```go
+```
 // 旧的导入
 import "github.com/baowk/dilu/internal/tools/models"
 
@@ -373,7 +373,7 @@ import "github.com/baowk/dilu/internal/tools/repository/model"
 ```
 
 #### 步骤 5：更新文档链接
-```bash
+```
 # 查找所有旧文档引用
 grep -r "README_AI_DEV" . --include="*.md"
 
@@ -382,7 +382,7 @@ grep -r "README_AI_DEV" . --include="*.md"
 ```
 
 #### 步骤 6：验证编译
-```bash
+```
 # 清理并重新编译
 go clean
 go build -o dilu main.go
@@ -395,7 +395,7 @@ go test ./...
 
 如果是新项目，直接使用最新版本即可：
 
-```bash
+```
 # 1. 克隆项目
 git clone https://github.com/baowk/dilu.git
 cd dilu
@@ -512,7 +512,7 @@ cat AI_CODE_SPEC.md    # AI 代码规范
 
 欢迎提交 PR 帮助我们改进：
 
-```bash
+```
 # Fork 项目
 git clone https://github.com/YOUR_USERNAME/dilu.git
 

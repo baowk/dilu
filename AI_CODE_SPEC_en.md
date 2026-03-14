@@ -417,9 +417,10 @@ dilu/
 │   ├── decisions/                 # Technical decision records (ADR)
 │   ├── ai-memory/                 # AI development process memory documents
 │   └── releases/                  # Release documentation directory ⭐ New
-│       ├── RELEASE_NOTES_V1.md    # v1.0 release notes
+│       ├── RELEASE_NOTES_V1.1.3.md    # v1.1.3 release notes
+│       ├── RELEASE_NOTES_V1.2.0.md    # v1.2.0 release notes ⭐ New
 │       ├── RELEASE_NOTES_V2.md    # v2.0 release notes
-│       └── CHANGELOG.md           # Change log
+│       ├── CHANGELOG.md           # Change log
 └── tests/                         # Test code directory
 ```
 
@@ -436,7 +437,7 @@ dilu/
 
 | Document Type | Naming Format | Example |
 |---------------|--------------|---------|
-| Release Notes | `RELEASE_NOTES_V{major}.md` | `RELEASE_NOTES_V2.md` |
+| Release Notes | `RELEASE_NOTES_V{version}.md` | `RELEASE_NOTES_V1.2.0.md` |
 | Change Log | `CHANGELOG.md` | `CHANGELOG.md` |
 | Upgrade Guide | `UPGRADE_GUIDE_V{major}.md` | `UPGRADE_GUIDE_V2.md` |
 | Migration Document | `MIGRATION_{from}_to_{to}.md` | `MIGRATION_V1_to_V2.md` |
@@ -519,14 +520,14 @@ AI must accurately identify the target audience and content characteristics when
 ✅ **Correct Examples**:
 ```
 [AI Code Specifications](./AI_CODE_SPEC.md)
-[Release Notes](./dev-docs/releases/RELEASE_NOTES_V2.md)
+[Release Notes](./dev-docs/releases/RELEASE_NOTES_V1.2.0.md)
 [Project Structure](./README.md#directory-structure)
 ```
 
 ❌ **Wrong Examples**:
 ```
 [AI Code Specifications](file:///Users/walker/works/gos/dilus/dilu/AI_CODE_SPEC.md)
-[Release Notes](/Users/walker/works/gos/dilus/dilu/dev-docs/releases/RELEASE_NOTES_V2.md)
+[Release Notes](/Users/walker/works/gos/dilus/dilu/dev-docs/releases/RELEASE_NOTES_V1.2.0.md)
 ```
 
 ### Multi-Version Document Consistency

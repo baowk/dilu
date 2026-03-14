@@ -15,3 +15,5 @@ vendor
 # go sum
 go.sum
 resources/config.local.yaml
+
+.DS_Store

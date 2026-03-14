@@ -100,7 +100,7 @@ Dilu 项目包含以下重要目录：
 ### 1. 准备数据库
 
 **使用 SQLite（推荐用于开发测试）**：
-```bash
+```
 # 初始化 SQLite 数据库（包含示例数据）
 go run scripts/init_sqlite.go
 
@@ -124,7 +124,7 @@ vim resources/config.dev.yaml
 ### 2. 调用 gen 命令生成代码
 
 **基本语法**：
-```bash
+```
 go run main.go gen \
   -c <配置文件> \      # 必需：指定配置文件路径
   -t <表名> \         # 必需：指定数据库表名
@@ -135,7 +135,7 @@ go run main.go gen \
 
 **完整示例**：
 
-```bash
+```
 # 示例 1：生成 sys_user 表代码（SQLite）
 go run main.go gen \
   -c resources/config.sqlite.yaml \
@@ -415,9 +415,10 @@ dilu/
 │   ├── decisions/                 # 技术决策记录 (ADR)
 │   ├── ai-memory/                 # AI 开发过程记忆文档
 │   └── releases/                  # 发布文档目录 ⭐ 新增
-│       ├── RELEASE_NOTES_V1.md    # v1.0 发布说明
+│       ├── RELEASE_NOTES_V1.1.3.md    # v1.1.3 发布说明
+│       ├── RELEASE_NOTES_V1.2.0.md    # v1.2.0 发布说明 ⭐ 新增
 │       ├── RELEASE_NOTES_V2.md    # v2.0 发布说明
-│       └── CHANGELOG.md           # 变更日志
+│       ├── CHANGELOG.md           # 变更日志
 └── tests/                         # 测试代码目录
 ```
 
@@ -434,7 +435,7 @@ dilu/
 
 | 文档类型 | 命名格式 | 示例 |
 |----------|---------|------|
-| 版本发布说明 | `RELEASE_NOTES_V{major}.md` | `RELEASE_NOTES_V2.md` |
+| 版本发布说明 | `RELEASE_NOTES_V{version}.md` | `RELEASE_NOTES_V1.2.0.md` |
 | 变更日志 | `CHANGELOG.md` | `CHANGELOG.md` |
 | 升级指南 | `UPGRADE_GUIDE_V{major}.md` | `UPGRADE_GUIDE_V2.md` |
 | 迁移文档 | `MIGRATION_{from}_to_{to}.md` | `MIGRATION_V1_to_V2.md` |
@@ -517,14 +518,14 @@ AI 在生成文档时必须准确识别文档的读者对象和内容特点：
 ✅ **正确示例**：
 ```
 [AI 代码规范](./AI_CODE_SPEC.md)
-[发布说明](./dev-docs/releases/RELEASE_NOTES_V2.md)
+[发布说明](./dev-docs/releases/RELEASE_NOTES_V1.2.0.md)
 [项目结构](./README.md#目录结构)
 ```
 
 ❌ **错误示例**：
 ```
 [AI 代码规范](file:///Users/walker/works/gos/dilus/dilu/AI_CODE_SPEC.md)
-[发布说明](/Users/walker/works/gos/dilus/dilu/dev-docs/releases/RELEASE_NOTES_V2.md)
+[发布说明](/Users/walker/works/gos/dilus/dilu/dev-docs/releases/RELEASE_NOTES_V1.2.0.md)
 ```
 
 ### 多版本文档一致性
@@ -554,7 +555,7 @@ AI 应使用并维护以下文档模板：
 
 位置：`dev-docs/templates/RELEASE_NOTES_TEMPLATE.md`
 
-````
+```
 # 发布说明 v{version} - {标题}
 
 **发布日期**: {{DATE}}  
