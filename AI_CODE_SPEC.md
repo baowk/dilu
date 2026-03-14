@@ -4,601 +4,263 @@
   🇨🇳 中文版本 • <a href="./AI_CODE_SPEC_en.md">🇺🇸 English</a>
 </p>
 
-<p align="center">
-  <a href="./README.md">🏠 返回项目首页</a>
-</p>
+> **⚠️ 重要说明**：本文档是**给 AI 助手遵循的代码生成规范**，AI 必须严格遵守。
 
-> **⚠️ 重要说明**：本文档是**给 AI 助手阅读和遵循的代码生成规范**，不是给人阅读的教程。AI 在生成代码时必须严格遵守以下规范和约定。
+---
 
-## 📖 目录
+## 🎯 核心原则（必须遵守）
 
-- [🎯 核心原则](#-核心原则)
-- [💻 代码生成快速开始](#-代码生成快速开始)
-- [🌐 AI 辅助 API 开发](#-ai-辅助-api-开发)
-- [🗄️ AI 辅助数据库设计](#-ai-辅助数据库设计)
-- [📋 文档管理规范](#-文档管理规范)
+1. **优先使用gen生成代码** - 保持代码结构整洁
+2. **使用TDD开发模式** - 测试先行
+3. **生成的代码禁止修改** - gen 命令生成的 Repository/Model/Query 层代码严禁手动修改
+4. **业务逻辑在 Service层** - 所有业务逻辑必须在 Service 层实现
+5. **职责边界清晰** - Repository 管数据、Service 管业务、Api 管接口
+6. **安全迭代** - 修改数据库 → 重新生成 → Service 层适配
+7. **使用结构化日志** - 使用 log/slog
+8. **不重复造轮子** - 标准库优先，三方库使用需谨慎
+9. **swagger文档** - 接口采用swagger做文档，注释清晰，使用 go generate 生成
+10. **遵守 golang 代码规范** - 版本 go 1.26 +
 
-## 🎯 核心原则
+---
 
-本规范是 AI 生成代码的基本准则，必须严格遵守：
+## 📋 基础规范
 
-1. **生成的代码禁止修改**：由 gen 命令生成的 Repository/Model/Query 层代码严禁手动修改
-2. **业务逻辑集中于Service层**：所有业务逻辑必须在 Service 层实现
-3. **清晰的职责边界**：Repository 层负责数据持久化，Service 层负责业务逻辑，Api 层封装 HTTP 接口
-4. **安全迭代流程**：修改数据库 → 重新生成代码 → 在 Service层适配
-
-### 开发优势
-
-- ⚡ **快速生成**: 自动生成 Model、Query 层代码
-- 🎨 **规范统一**: 遵循 GORM 最佳实践
-- 🔍 **类型安全**: 强类型的查询操作
-- 📝 **易于扩展**: 在生成的基础上轻松添加业务逻辑
-- 🐛 **减少错误**: 自动化生成减少人为失误
-
-### 📂 项目目录说明
-
-Dilu 项目包含以下重要目录：
-
-#### 核心目录
-
-- **`cmd/`** - 命令行工具入口（gen、start、version 等命令）
-- **`common/`** - 公共组件库（工具函数、中间件、常量定义）
-- **`internal/`** - 核心业务逻辑层（替代了旧的 modules 目录）
-  - `bootstrap/` - 应用初始化引导
-  - `tools/` - 代码生成器核心实现
-    - `apis/` - API 接口层
-    - `service/` - 业务逻辑层
-    - `router/` - 路由配置层
-    - `repository/` - 数据访问层
-      - `model/` - Model 模型层
-      - `query/` - Query 查询层
-  - `sys/` - 系统管理模块（自动生成 + 手动扩展）
-    - `repository/` - 数据访问层（Model、Query，由 gen 生成）
-      - `model/` - Model 模型层 (*.gen.go)
-      - `query/` - Query 查询层 (*.gen.go)
-    - `apis/` - API 接口层（手动创建）
-    - `service/` - 业务逻辑层（手动创建，核心工作区）
-    - `router/` - 路由配置层（手动创建）
-- **`resources/`** - 配置文件区（不同环境配置）
-- **`scripts/`** - 脚本工具区（数据库初始化、迁移脚本等）
-- **`temp/`** - 临时文件区（日志、SQLite 数据库等运行时文件）
-- **`docs/`** - **用户文档目录**
-  - API 文档（Swagger 自动生成）
-  - 用户使用手册
-  - 部署指南
-  - 对外公开的技术文档
-  - **用途**：提供给最终用户和 API 使用者查看
-
-- **`dev-docs/`** - **开发文档目录**
-  - 系统设计文档
-  - 架构设计文档
-  - AI 开发过程中的必要记忆文档
-  - 技术规范文档
-  - 内部开发参考资料
-  - **用途**：开发团队内部使用，记录设计思路和决策过程
-
-- **`tests/`** - **测试代码目录**
-  - 单元测试（`*_test.go`）
-  - 集成测试
-  - 性能测试
-  - 测试数据和 Mock 对象
-  - **用途**：保证代码质量，支持持续集成
-
-### ⚠️ 重要原则
-
-在使用本框架进行开发时，必须遵循以下核心原则：
-
-1. **生成的代码禁止修改**：由 gen 命令生成的 Repository/Model/Query 层代码严禁手动修改
-2. **业务逻辑集中于Service层**：所有业务逻辑必须在 Service 层实现
-3. **清晰的职责边界**：Repository 层负责数据持久化，Service 层负责业务逻辑，Api 层封装 HTTP 接口
-4. **安全迭代流程**：修改数据库 → 重新生成代码 → 在 Service层适配
-
-详细的规范和实践将在后续章节中详细说明。
-
-## 💻 代码生成快速开始
-
-### 1. 准备数据库
-
-**使用 SQLite（推荐用于开发测试）**：
+### 项目结构
 ```
-# 初始化 SQLite 数据库（包含示例数据）
+dilu/
+├── cmd/                    # 命令行工具
+├── common/                 # 公共组件
+├── internal/               # 核心业务
+│   ├── bootstrap/         # 初始化
+│   ├── tools/             # 代码生成器
+│   │   ├── apis/          # API 接口
+│   │   ├── service/       # 业务逻辑
+│   │   ├── router/        # 路由配置
+│   │   └── repository/    # 数据访问 ⭐
+│   │       ├── model/     # Model 层
+│   │       └── query/     # Query 层
+│   └── sys/               # 此模块由gen生成，默认sys
+├── resources/              # 配置文件
+├── docs/                   # 用户文档
+├── dev-docs/               # 开发文档
+│   └── releases/          # 发布文档
+└── tests/                  # 测试代码
+```
+
+### 分层职责
+| 层级 | 职责 | 文件示例 |
+|------|------|---------|
+| **Repository** | 数据持久化 | `*.gen.go` (禁止修改,字段改变从新生成，默认会覆盖) |
+| **Service** | 业务逻辑 | `sys_user_service.go` |
+| **Api** | HTTP 接口封装 | `sys_user_api.go` |
+| **Router** | 路由配置 | `sys_user_router.go` |
+
+### 命名规范
+- **Model**: 大驼峰，如 `SysUser`
+- **方法**: 小驼峰，如 `GetUserByID`
+- **变量**: 小驼峰，如 `userName`
+- **常量**: 全大写，如 `TableNameSysUser`
+- **包名**: 全小写，如 `model`, `query`, `service`
+
+### 错误处理
+```go
+// ✅ 正确：立即返回错误
+if err != nil {
+    return nil, err
+}
+
+// ✅ 正确：包装错误上下文
+if err != nil {
+    return fmt.Errorf("get user failed: %w", err)
+}
+
+// ❌ 错误：忽略错误
+getUser(id) // 未处理 err
+```
+
+### 日志规范
+```go
+// ✅ 正确：结构化日志（使用 slog）
+slog.Debug("get user success", "user", user)   // Debug 级别
+slog.Info("get user success", "user", user)    // Info 级别
+slog.Warn("get user timeout", "user", user)    // Warn 级别
+slog.Error("get user failed", "error", err)    // Error 级别
+
+// ❌ 错误：无意义日志
+log.Println("error occurred")
+```
+
+---
+
+## 💻 代码生成流程（多库架构）
+
+Dilu 支持多数据库架构，可以通过 `-d` 参数指定不同的数据库。
+
+### 步骤 1：准备数据库
+```bash
+# SQLite（推荐开发使用）
 go run scripts/init_sqlite.go
 
-# 验证数据库已创建
-ls -lh temp/dilu.db
+# MySQL（生产环境）
+mysql -u root -p -e "CREATE DATABASE dilu_db"
 ```
 
-**使用 MySQL/PostgreSQL（生产环境）**：
+### 步骤 2：运行生成器
+
+#### 示例 1：生成系统库的 sys_user 表（默认数据库）
 ```bash
-# 1. 创建数据库
-mysql -u root -p -e "CREATE DATABASE dilu_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-
-# 2. 导入 SQL 脚本或手动创建表
-mysql -u root -p dilu_db < scripts/dilu.sql
-
-# 3. 更新配置文件
-vim resources/config.dev.yaml
-# 修改 dbcfg.driver 和 dbcfg.dns 为实际连接字符串
-```
-
-### 2. 调用 gen 命令生成代码
-
-**基本语法**：
-```
-go run main.go gen \
-  -c <配置文件> \      # 必需：指定配置文件路径
-  -t <表名> \         # 必需：指定数据库表名
-  [-d <数据库名>] \   # 可选：默认"sys"
-  [-f <true|false>] \ # 可选：是否覆盖，默认 false
-  [-p <包名>]         # 可选：自定义包名
-```
-
-**完整示例**：
-
-```
-# 示例 1：生成 sys_user 表代码（SQLite）
 go run main.go gen \
   -c resources/config.sqlite.yaml \
-  -t sys_user \
-  -f false
+  -t sys_user
+```
 
-# 示例 2：生成多个表（循环调用）
-for table in sys_user sys_role sys_dept; do
-  go run main.go gen \
-    -c resources/config.sqlite.yaml \
-    -t $table \
-    -f false
-done
-
-# 示例 3：强制覆盖已存在的文件
+#### 示例 2：生成 notice 库的 message 表（指定数据库）
+```bash
 go run main.go gen \
   -c resources/config.sqlite.yaml \
-  -t sys_user \
-  -f true
+  -d notice \
+  -t message
 ```
 
-**gen 命令参数详解**：
+**参数说明**：
+- `-c`：配置文件路径
+- `-d`：数据库名称（可选，默认为 `sys`）
+- `-t`：表名
+- `-f`：覆盖已存在的文件（可选）
+- `-p`：包名（可选，默认 根 -d 参数一致）
 
-| 参数 | 简写 | 必需 | 默认值 | 说明 | 示例 |
-|------|------|------|--------|------|------|
-| --config | -c | ✅ | resources/config.dev.yaml | 配置文件路径 | `-c resources/config.sqlite.yaml` |
-| --table | -t | ✅ | 无 | 数据库表名 | `-t sys_user` |
-| --db | -d | ❌ | sys | 数据库名称（多数据库时使用） | `-d sys` 或省略 |
-| --force | -f | ❌ | false | 是否覆盖已有文件 | `-f true` 强制覆盖 |
-| --package | -p | ❌ | 自动生成 | 自定义包名 | `-p usermodule` |
-
-### 3. 查看生成的代码
-
-**生成的文件位置**：
+### 步骤 3：验证生成
 ```
-internal/sys/repository/
-├── model/
-│   └── sys_user.gen.go      # Model 层定义
-└── query/
-    └── sys_user.gen.go      # Query 层操作
+# 检查生成的文件
+ls internal/sys/repository/model/sys_user.gen.go
+ls internal/sys/repository/query/sys_user.gen.go
 ```
 
-**Model 层内容** (`sys_user.gen.go`)：
-```go
-// Code generated by gorm.io/gen. DO NOT EDIT.
-package model
-
-import "time"
-
-const TableNameSysUser = "sys_user"
-
-// SysUser mapped from table <sys_user>
-type SysUser struct {
-    ID        int32     `gorm:"column:id;primaryKey"`
-    Username  string    `gorm:"column:username;uniqueIndex"`
-    Password  string    `gorm:"column:password;not null"`
-    Nickname  string    `gorm:"column:nickname"`
-    Email     string    `gorm:"column:email"`
-    Phone     string    `gorm:"column:phone"`
-    Avatar    string    `gorm:"column:avatar"`
-    Status    int32     `gorm:"column:status;default:1"`
-    DeptID    int32     `gorm:"column:dept_id"`
-    Remark    string    `gorm:"column:remark"`
-    CreatedAt time.Time `gorm:"column:created_at"`
-    UpdatedAt time.Time `gorm:"column:updated_at"`
-}
-
-func (*SysUser) TableName() string {
-    return TableNameSysUser
-}
-```
-
-**Query 层内容** (部分)：
-```
-// Code generated by gorm.io/gen. DO NOT EDIT.
-package query
-
-type sysUser struct {
-    sysUserDo sysUserDo
-    
-    // Fields
-    ALL      field.Asterisk
-    ID       field.Int32
-    Username field.String
-    Password field.String
-    // ... other fields
-}
-
-// Methods
-func (q sysUser) WithContext(ctx context.Context) *sysUserDo { return q.sysUserDo.WithContext(ctx) }
-func (q sysUser) Create(value *model.SysUser) error { return q.sysUserDo.Create(value) }
-func (q sysUser) First() (*model.SysUser, error) { return q.sysUserDo.First() }
-// ... more methods
-```
-
-### 4. 在生成的代码基础上扩展
-
-**❌ 错误做法**：直接修改 `.gen.go` 文件
-```
-// ❌ 不要这样做！
-// internal/sys/repository/model/sys_user.gen.go
-type SysUser struct {
-    CustomField string  // ⚠️ 重新生成时会丢失
-}
-
-```
-
-**✅ 正确做法**：创建扩展文件
-```
-// ✅ 推荐：创建单独的扩展文件
+### 步骤 4：扩展实现
+``go
+// ✅ 创建扩展文件（不要修改 .gen.go）
 // internal/sys/repository/model/sys_user_extend.go
 package model
 
-// SysUserWithRoles 带角色的用户扩展
 type SysUserWithRoles struct {
     SysUser
-    Roles []SysRole `json:"roles" gorm:"many2many:sys_user_role;"`
-}
-
-// GetUserWithRoles 获取用户及其角色
-func GetUserWithRoles(userID uint) (*SysUserWithRoles, error) {
-    // 实现复杂查询
-    var user SysUserWithRoles
-    err := db.Preload("Roles").First(&user, userID).Error
-    return &user, err
+    Roles []SysRole `json:"roles"`
 }
 ```
 
-## 🌐 AI 辅助 API 开发
+---
 
-### RESTful API 设计规范
+## 🌐 API 开发规范
 
-遵循 RESTful 规范，AI 可以帮助生成标准化的 API：
-
-```
-// 资源获取 - GET
-// @Router /api/v1/user/{id} [get]
-func GetUser(c *gin.Context)
-
-// 资源列表 - GET
-// @Router /api/v1/user [get]
-func GetUserList(c *gin.Context)
-
-// 创建资源 - POST
-// @Router /api/v1/user [post]
-func CreateUser(c *gin.Context)
-
-// 更新资源 - PUT
-// @Router /api/v1/user/{id} [put]
-func UpdateUser(c *gin.Context)
-
-// 删除资源 - DELETE
-// @Router /api/v1/user/{id} [delete]
-func DeleteUser(c *gin.Context)
-```
-
-### AI 辅助生成 Swagger 文档
-
-```
-// 提示词示例：
-// "为以下 API 生成完整的 Swagger 注解：
-// - 分页查询用户列表，支持按姓名、邮箱、状态筛选
-// - 批量删除用户
-// - 导出用户数据为 Excel"
-
-// @Summary 用户列表分页查询
-// @Description 支持多条件筛选和排序
-// @Tags 用户管理
-// @Accept application/json
-// @Product application/json
-// @Param username query string false "用户名"
-// @Param email query string false "邮箱"
-// @Param status query int false "状态"
-// @Param page query int false "页码" default(1)
-// @Param pageSize query int false "每页数量" default(10)
-// @Success 200 {object} base.PageResponse
-// @Router /api/v1/user [get]
-func GetUserList(c *gin.Context) {
-    // AI 辅助实现查询逻辑
-}
+### RESTful 路由设计
+```go
+// QueryPage - POST /api/v1/sys/user/page     - 分页查询列表
+// Get      - GET  /api/v1/sys/user/{id}      - 获取单个记录
+// Create   - POST /api/v1/sys/user/create    - 创建记录
+// Update   - POST /api/v1/sys/user/update    - 更新记录
+// Del      - POST /api/v1/sys/user/del       - 删除记录
 ```
 
 ### 统一响应格式
+``go
+// 成功响应（带数据）
+e.Ok(c, data)
+// 返回：{"code": 200, "message": "success", "data": {...}}
 
-```
-// 提示词示例：
-// "定义统一的 API 响应格式，包括成功响应、错误响应、分页响应"
+// 成功响应（无数据）
+e.Ok(c)
+// 返回：{"code": 200, "message": "success"}
 
-package base
+// 分页响应
+e.Page(c, list, total, page, pageSize)
+// 返回：{"code": 200, "data": {"list": [...], "total": 100}}
 
-type Response struct {
-    Code    int         `json:"code"`
-    Message string      `json:"message"`
-    Data    interface{} `json:"data"`
-}
-
-type PageResponse struct {
-    List     interface{} `json:"list"`
-    Total    int64       `json:"total"`
-    Page     int         `json:"page"`
-    PageSize int         `json:"pageSize"`
-}
-
-func Success(data interface{}) Response {
-    return Response{
-        Code:    200,
-        Message: "success",
-        Data:    data,
-    }
-}
-
-func Error(code int, message string) Response {
-    return Response{
-        Code:    code,
-        Message: message,
-        Data:    nil,
-    }
-}
+// 错误响应
+e.Error(c, err)
+// 返回：{"code": 500, "message": "error message"}
 ```
 
-## 🗄️ AI 辅助数据库设计
+---
 
-### 数据库表设计
+## 🗄️ 数据库设计
 
-```
--- 提示词示例：
--- "设计一个完整的用户管理系统数据库表结构，包括：
--- 1. 用户表 (sys_user)
--- 2. 角色表 (sys_role)
--- 3. 部门表 (sys_dept)
--- 4. 用户角色关联表 (sys_user_role)
--- 5. 菜单权限表 (sys_menu)
--- 要求包含适当的索引、外键约束、注释"
-
+### 表设计规范
+```sql
 -- 用户表
 CREATE TABLE `sys_user` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '用户 ID',
   `username` varchar(100) NOT NULL COMMENT '用户名',
-  `password` varchar(255) NOT NULL COMMENT '密码 (加密)',
-  `nickname` varchar(100) DEFAULT NULL COMMENT '昵称',
-  `email` varchar(100) DEFAULT NULL COMMENT '邮箱',
-  `phone` varchar(20) DEFAULT NULL COMMENT '手机号',
-  `avatar` varchar(500) DEFAULT NULL COMMENT '头像 URL',
-  `dept_id` int DEFAULT NULL COMMENT '部门 ID',
-  `status` tinyint DEFAULT '1' COMMENT '状态：1 正常 2 禁用',
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `password` varchar(255) NOT NULL COMMENT '密码',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_username` (`username`),
-  KEY `idx_dept_id` (`dept_id`),
-  KEY `idx_status` (`status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
-
--- AI 辅助生成对应的 GORM 模型
+  UNIQUE KEY `uk_username` (`username`)
+) ENGINE=InnoDB COMMENT='用户表';
 ```
 
-## 📋 文档管理规范
-
-### 文档分类与目录结构
-
-AI 在生成或更新文档时，必须遵循以下文档分类和目录组织规范：
-
-```
-dilu/
-├── README.md                      # 项目主文档（人类用户）
-├── README_en.md                   # 英文版项目主文档
-├── AI_CODE_SPEC.md                # AI 代码生成规范（AI 助手）
-├── AI_CODE_SPEC_en.md             # 英文版 AI 代码生成规范
-├── docs/                          # 用户文档目录
-│   ├── api/                       # API 文档
-│   ├── user-guide/                # 用户使用手册
-│   └── deployment/                # 部署指南
-├── dev-docs/                      # 开发文档目录 ⭐
-│   ├── design/                    # 系统设计文档
-│   ├── architecture/              # 架构设计文档
-│   ├── specifications/            # 技术规范文档
-│   ├── decisions/                 # 技术决策记录 (ADR)
-│   ├── ai-memory/                 # AI 开发过程记忆文档
-│   └── releases/                  # 发布文档目录 ⭐ 新增
-│       ├── RELEASE_NOTES_V1.1.3.md    # v1.1.3 发布说明
-│       ├── RELEASE_NOTES_V1.2.0.md    # v1.2.0 发布说明 ⭐ 新增
-│       ├── RELEASE_NOTES_V2.md    # v2.0 发布说明
-│       ├── CHANGELOG.md           # 变更日志
-└── tests/                         # 测试代码目录
-```
-
-### 发布文档规范
-
-#### 发布文档位置
-
-**所有发布文档必须存放在 `dev-docs/releases/` 目录下**：
-
-- ✅ **正确位置**：`dev-docs/releases/RELEASE_NOTES_V2.md`
-- ❌ **错误位置**：根目录、`docs/` 或其他目录
-
-#### 发布文档命名规则
-
-| 文档类型 | 命名格式 | 示例 |
-|----------|---------|------|
-| 版本发布说明 | `RELEASE_NOTES_V{version}.md` | `RELEASE_NOTES_V1.2.0.md` |
-| 变更日志 | `CHANGELOG.md` | `CHANGELOG.md` |
-| 升级指南 | `UPGRADE_GUIDE_V{major}.md` | `UPGRADE_GUIDE_V2.md` |
-| 迁移文档 | `MIGRATION_{from}_to_{to}.md` | `MIGRATION_V1_to_V2.md` |
-
-#### 发布文档内容结构
-
-**发布说明文档必须包含以下章节**：
-
-```
-# 发布说明 v{version} - {标题}
-
-**发布日期**: YYYY-MM-DD  
-**版本类型**: 重大更新 / 功能更新 / 补丁更新  
-**兼容性**: ⚠️ 破坏性变更 / ✅ 向后兼容
-
----
-
-## 📋 目录
-
-- [🎯 更新概览](#-更新概览)
-- [✨ 主要特性](#-主要特性)
-- [🔧 破坏性变更](#-破坏性变更)
-- [📁 目录结构调整](#-目录结构调整)
-- [📝 文档更新](#-文档更新)
-- [⚠️ 迁移指南](#-迁移指南)
-- [🐛 问题修复](#-问题修复)
-- [📊 统计信息](#-统计信息)
-
----
-
-## 🎯 更新概览
-
-简要描述本次更新的主要内容和目标。
-
-## ✨ 主要特性
-
-详细描述新增的功能特性。
-
-## 🔧 破坏性变更
-
-⚠️ **重要提醒**：列出所有破坏性变更和迁移必要性。
-
-## 📁 目录结构调整
-
-如有目录结构变更，详细说明调整内容。
-
-## 📝 文档更新
-
-列出所有文档的变更情况。
-
-## ⚠️ 迁移指南
-
-提供详细的迁移步骤和命令示例。
-
-## 🐛 问题修复
-
-列出修复的问题和已知问题。
-
-## 📊 统计信息
-
-使用表格展示文件变更统计、代码行数对比等数据。
-```
-
-### 文档职责划分
-
-AI 在生成文档时必须准确识别文档的读者对象和内容特点：
-
-| 文档 | 文件名 | 读者对象 | 内容特点 | 存放位置 |
-|------|--------|---------|---------|---------|
-| 项目介绍 | `README.md` | 人类用户 | 项目介绍、快速开始、功能特性 | 根目录 |
-| AI 代码规范 | `AI_CODE_SPEC.md` | AI 助手 | 指令性语言、严格规范、禁止事项 | 根目录 |
-| 用户文档 | `docs/*` | 最终用户 | 使用手册、API 文档、部署指南 | `docs/` |
-| 开发文档 | `dev-docs/*` | 开发团队 + AI | 设计文档、技术规范、AI 记忆 | `dev-docs/` |
-| 发布文档 | `dev-docs/releases/*` | 开发者 + 用户 | 发布说明、升级指南、变更日志 | `dev-docs/releases/` |
-
-### 文档路径引用规范
-
-**所有文档中的路径引用必须使用相对路径**：
-
-✅ **正确示例**：
-```
-[AI 代码规范](./AI_CODE_SPEC.md)
-[发布说明](./dev-docs/releases/RELEASE_NOTES_V1.2.0.md)
-[项目结构](./README.md#目录结构)
-```
-
-❌ **错误示例**：
-```
-[AI 代码规范](file:///Users/walker/works/gos/dilus/dilu/AI_CODE_SPEC.md)
-[发布说明](/Users/walker/works/gos/dilus/dilu/dev-docs/releases/RELEASE_NOTES_V1.2.0.md)
-```
-
-### 多版本文档一致性
-
-AI 在生成或更新文档时必须确保：
-
-1. **中英文版本对应**：
-   - 中文版：`AI_CODE_SPEC.md`
-   - 英文版：`AI_CODE_SPEC_en.md`
-   - 内容一致、结构相同、章节对应
-
-2. **文档链接完整**：
-   - 中文 ↔ 英文 互相跳转链接
-   - 返回首页链接
-   - 返回目录顶部链接
-
-3. **版本同步更新**：
-   - 发布文档更新时，同时更新中英文 README
-   - 在 README 中添加发布说明链接
-   - 保持所有版本文档的时效性
-
-### 文档模板使用
-
-AI 应使用并维护以下文档模板：
-
-#### 发布说明模板
-
-位置：`dev-docs/templates/RELEASE_NOTES_TEMPLATE.md`
-
-```
-# 发布说明 v{version} - {标题}
-
-**发布日期**: {{DATE}}  
-**版本类型**: {{TYPE}}  
-**兼容性**: {{COMPATIBILITY}}
-
----
-
-## 🎯 更新概览
-
-{{OVERVIEW}}
-
-## ✨ 主要特性
-
-{{FEATURES}}
-
-## 🔧 破坏性变更
-
-{{BREAKING_CHANGES}}
-
-## 📁 目录结构调整
-
-{{DIRECTORY_CHANGES}}
-
-## 📝 文档更新
-
-{{DOCUMENT_UPDATES}}
-
-## ⚠️ 迁移指南
-
-{{MIGRATION_GUIDE}}
-
-## 🐛 问题修复
-
-{{BUG_FIXES}}
-
-## 📊 统计信息
-
-{{STATISTICS}}
+### GORM Model 规范 由 GORM 生成
+```go
+// 示例模型结构
+type SysUser struct {
+    ID       int    `gorm:"primarykey" json:"id"`
+    Username string `gorm:"uniqueIndex" json:"username"`
+    Password string `json:"password"`
+    CreatedAt time.Time `json:"created_at"`
+    UpdatedAt time.Time `json:"updated_at"`
+}
 ```
 
 ---
 
-<p align="center">
-  Made with ❤️ by <a href="https://github.com/baowk">baowk</a>
-</p>
+### 简洁优雅原则 ⭐
+
+#### ✅ 应该做的
+- **简单直接**：代码逻辑清晰，一目了然
+- **职责单一**：每个函数只做一件事
+- **命名准确**：见名知意，无需注释
+- **错误处理**：立即返回，不嵌套
+- **代码复用**：提取公共逻辑，避免重复
+
+#### ❌ 不应该做的
+- **过度设计**：不要为了炫技而使用复杂模式
+- **炫技编程**：避免晦涩的语法糖和技巧
+- **过早优化**：先让代码工作，再考虑性能
+- **滥用抽象**：不要为了抽象而抽象
+- **魔法数字**：使用有意义的常量
+
+---
+
+## ✅ TDD 编程实践
+
+### 测试先行流程
+```
+1. 编写失败的测试 → 2. 编写最小实现 → 3. 重构优化
+```
+
+### 测试覆盖要求
+- **Service层**: 核心业务逻辑覆盖率 ≥ 80%
+- **Api 层**: 主要接口测试覆盖率 ≥ 70%
+
+---
+
+## 📝 最佳实践清单
+
+### ✅ 应该做的
+- [x] 使用 gen 命令生成代码
+- [x] 在 Service 层实现业务逻辑
+- [x] 为 Service层编写单元测试
+- [x] 使用相对路径引用文件
+- [x] 遵循 RESTful API 规范
+- [x] 及时更新 Swagger 文档（使用 go generate）
+- [x] 使用结构化日志（log/slog）
+- [x] 妥善处理所有错误
+
+### ❌ 禁止做的
+- [ ] 修改 `.gen.go` 文件
+- [ ] 在 Api 层实现业务逻辑
+- [ ] 忽略错误返回值
+- [ ] 使用绝对路径
+- [ ] 写死配置信息
+- [ ] 缺少 Swagger 注解
+- [ ] 不写单元测试
+- [ ] 直接打印日志

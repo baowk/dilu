@@ -44,6 +44,9 @@ dbcfg: # 数据库配置
   #max-idle-conns: 20 #最大空闲连接数 默认 10
   #max-open-conns: 60 #最大打开数
   #prefix: 日志前缀
+  dbs:      
+    - notice:    #子配置会继承父配置
+        dns: temp/notice.db
 cors:
   enable: true
   mode: allow-all

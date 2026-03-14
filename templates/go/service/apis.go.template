@@ -20,12 +20,10 @@ type {{.ClassName}}Api struct {
 
 var Api{{.ClassName}} = {{.ClassName}}Api{}
 
-// QueryPage 获取{{.TableComment}}列表
 // @Summary 获取{{.TableComment}}列表
 // @Tags {{.PackageName}}-{{.ClassName}}
 // @Accept application/json
 // @Product application/json
-// @Param teamId header int false "团队id"
 // @Param data body dto.{{.ClassName}}GetPageReq true "body"
 // @Success 200 {object} base.Resp{data=base.PageResp{list=[]model.{{.ClassName}}}} "{"code": 200, "data": [...]}"
 // @Router {{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/page [post]
@@ -50,12 +48,10 @@ func (e *{{.ClassName}}Api) QueryPage(c *gin.Context) {
 	e.Page(c, list, total, req.GetPage(), req.GetSize())
 }
 
-// Get 获取{{.TableComment}}
 // @Summary 获取{{.TableComment}}
 // @Tags {{.PackageName}}-{{.ClassName}}
 // @Accept application/json
 // @Product application/json
-// @Param teamId header int false "团队id"
 // @Param id path {{if eq $pkType "string"}}string{{else}}int{{end}} true "记录ID"
 // @Success 200 {object} base.Resp{data=model.{{.ClassName}}} "{"code": 200, "data": [...]}"
 // @Router {{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/{id} [get]
@@ -74,12 +70,10 @@ func (e *{{.ClassName}}Api) Get(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Create 创建{{.TableComment}}
 // @Summary 创建{{.TableComment}}
 // @Tags {{.PackageName}}-{{.ClassName}}
 // @Accept application/json
 // @Product application/json
-// @Param teamId header int false "团队id"
 // @Param data body dto.{{.ClassName}}Dto true "body"
 // @Success 200 {object} base.Resp{data=model.{{.ClassName}}} "{"code": 200, "data": [...]}"
 // @Router {{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/create [post]
@@ -99,12 +93,10 @@ func (e *{{.ClassName}}Api) Create(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Update 更新{{.TableComment}}
 // @Summary 更新{{.TableComment}}
 // @Tags {{.PackageName}}-{{.ClassName}}
 // @Accept application/json
 // @Product application/json
-// @Param teamId header int false "团队id"
 // @Param data body dto.{{.ClassName}}Dto true "body"
 // @Success 200 {object} base.Resp{data=model.{{.ClassName}}} "{"code": 200, "data": [...]}"
 // @Router {{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/update [post]
@@ -134,12 +126,10 @@ func (e *{{.ClassName}}Api) Update(c *gin.Context) {
 	e.Ok(c, data)
 }
 
-// Del 删除{{.TableComment}}
 // @Summary 删除{{.TableComment}}
 // @Tags {{.PackageName}}-{{.ClassName}}
 // @Accept application/json
 // @Product application/json
-// @Param teamId header int false "团队id"
 // @Param data body dto.{{.ClassName}}DelReq true "body"
 // @Success 200 {object} base.Resp{data=model.{{.ClassName}}} "{"code": 200, "data": [...]}"
 // @Router {{.ApiRoot}}/{{.PackageName}}/{{.ModuleName}}/del [post]
