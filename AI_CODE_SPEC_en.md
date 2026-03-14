@@ -16,6 +16,7 @@
 - [💻 Code Generation Quick Start](#-code-generation-quick-start)
 - [🌐 AI-Assisted API Development](#-ai-assisted-api-development)
 - [🗄️ AI-Assisted Database Design](#-ai-assisted-database-design)
+- [📋 Documentation Management Specifications](#-documentation-management-specifications)
 
 ## 🎯 Core Principles
 
@@ -361,7 +362,7 @@ func Error(code int, message string) Response {
 
 ### Database Table Design
 
-```sql
+```
 -- Prompt example:
 -- "Design a complete user management system database table structure including:
 -- 1. User table (sys_user)
@@ -393,8 +394,167 @@ CREATE TABLE `sys_user` (
 -- AI-assisted GORM model generation
 ```
 
+## 📋 Documentation Management Specifications
+
+### Document Classification and Directory Structure
+
+AI must follow the following document classification and directory organization specifications when generating or updating documents:
+
+```
+dilu/
+├── README.md                      # Main project document (human users)
+├── README_en.md                   # English version main document
+├── AI_CODE_SPEC.md                # AI code generation specifications (AI assistant)
+├── AI_CODE_SPEC_en.md             # English version AI code specifications
+├── docs/                          # User documentation directory
+│   ├── api/                       # API documentation
+│   ├── user-guide/                # User manuals
+│   └── deployment/                # Deployment guides
+├── dev-docs/                      # Development documentation directory ⭐
+│   ├── design/                    # System design documents
+│   ├── architecture/              # Architecture design documents
+│   ├── specifications/            # Technical specification documents
+│   ├── decisions/                 # Technical decision records (ADR)
+│   ├── ai-memory/                 # AI development process memory documents
+│   └── releases/                  # Release documentation directory ⭐ New
+│       ├── RELEASE_NOTES_V1.md    # v1.0 release notes
+│       ├── RELEASE_NOTES_V2.md    # v2.0 release notes
+│       └── CHANGELOG.md           # Change log
+└── tests/                         # Test code directory
+```
+
+### Release Documentation Specifications
+
+#### Release Document Location
+
+**All release documents must be stored in the `dev-docs/releases/` directory**:
+
+- ✅ **Correct Location**: `dev-docs/releases/RELEASE_NOTES_V2.md`
+- ❌ **Wrong Location**: Root directory, `docs/`, or other directories
+
+#### Release Document Naming Rules
+
+| Document Type | Naming Format | Example |
+|---------------|--------------|---------|
+| Release Notes | `RELEASE_NOTES_V{major}.md` | `RELEASE_NOTES_V2.md` |
+| Change Log | `CHANGELOG.md` | `CHANGELOG.md` |
+| Upgrade Guide | `UPGRADE_GUIDE_V{major}.md` | `UPGRADE_GUIDE_V2.md` |
+| Migration Document | `MIGRATION_{from}_to_{to}.md` | `MIGRATION_V1_to_V2.md` |
+
+#### Release Document Content Structure
+
+**Release notes documents must contain the following sections**:
+
+```
+# Release Notes v{version} - {Title}
+
+**Release Date**: YYYY-MM-DD  
+**Version Type**: Major Release / Feature Release / Patch Release  
+**Compatibility**: ⚠️ Breaking Changes / ✅ Backward Compatible
+
 ---
 
-<p align="center">
-  Made with ❤️ by <a href="https://github.com/baowk">baowk</a>
-</p>
+## 📋 Table of Contents
+
+- [🎯 Overview](#-overview)
+- [✨ Key Features](#-key-features)
+- [🔧 Breaking Changes](#-breaking-changes)
+- [📁 Directory Structure Changes](#-directory-structure-changes)
+- [📝 Documentation Updates](#-documentation-updates)
+- [⚠️ Migration Guide](#-migration-guide)
+- [🐛 Bug Fixes](#-bug-fixes)
+- [📊 Statistics](#-statistics)
+
+---
+
+## 🎯 Overview
+
+Briefly describe the main content and objectives of this release.
+
+## ✨ Key Features
+
+Describe the new features in detail.
+
+## 🔧 Breaking Changes
+
+⚠️ **IMPORTANT**: List all breaking changes and migration requirements.
+
+## 📁 Directory Structure Changes
+
+Detail any directory structure changes.
+
+## 📝 Documentation Updates
+
+List all documentation changes.
+
+## ⚠️ Migration Guide
+
+Provide detailed migration steps and command examples.
+
+## 🐛 Bug Fixes
+
+List fixed issues and known issues.
+
+## 📊 Statistics
+
+Use tables to show file change statistics, line count comparisons, etc.
+```
+
+### Document Responsibility Division
+
+AI must accurately identify the target audience and content characteristics when generating documents:
+
+| Document | Filename | Audience | Content Characteristics | Location |
+|----------|----------|----------|----------------------|----------|
+| Project Introduction | `README.md` | Human users | Project overview, quick start, features | Root directory |
+| AI Code Spec | `AI_CODE_SPEC.md` | AI assistant | Imperative language, strict specifications, prohibitions | Root directory |
+| User Docs | `docs/*` | End users | User manuals, API docs, deployment guides | `docs/` |
+| Dev Docs | `dev-docs/*` | Dev team + AI | Design docs, technical specs, AI memory | `dev-docs/` |
+| Release Docs | `dev-docs/releases/*` | Developers + users | Release notes, upgrade guides, changelogs | `dev-docs/releases/` |
+
+### Document Path Reference Specifications
+
+**All path references in documents must use relative paths**:
+
+✅ **Correct Examples**:
+```
+[AI Code Specifications](./AI_CODE_SPEC.md)
+[Release Notes](./dev-docs/releases/RELEASE_NOTES_V2.md)
+[Project Structure](./README.md#directory-structure)
+```
+
+❌ **Wrong Examples**:
+```
+[AI Code Specifications](file:///Users/walker/works/gos/dilus/dilu/AI_CODE_SPEC.md)
+[Release Notes](/Users/walker/works/gos/dilus/dilu/dev-docs/releases/RELEASE_NOTES_V2.md)
+```
+
+### Multi-Version Document Consistency
+
+AI must ensure when generating or updating documents:
+
+1. **Chinese-English Version Correspondence**:
+   - Chinese version: `AI_CODE_SPEC.md`
+   - English version: `AI_CODE_SPEC_en.md`
+   - Consistent content, same structure, corresponding sections
+
+2. **Complete Document Links**:
+   - Chinese ↔ English mutual navigation links
+   - Return to homepage links
+   - Return to table of contents links
+
+3. **Version Synchronization**:
+   - When release documents are updated, simultaneously update Chinese and English README
+   - Add release notes links in README
+   - Maintain timeliness of all version documents
+
+### Document Template Usage
+
+AI should use and maintain the following document templates:
+
+#### Release Notes Template
+
+Location: `dev-docs/templates/RELEASE_NOTES_TEMPLATE.md`
+
+```
+
