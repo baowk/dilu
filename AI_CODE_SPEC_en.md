@@ -265,10 +265,4 @@ type SysUser struct {
 - [ ] Hard-code configuration
 - [ ] Missing Swagger annotations
 - [ ] Skip unit tests
-- [ ] Use println for logging (use slog)
-
----
-
-<p align="center">
-  Made with ❤️ by <a href="https://github.com/baowk">baowk</a>
-</p>
+- [ ] Use println for logging 
