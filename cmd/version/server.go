@@ -1,11 +1,13 @@
 package version
 
 import (
-	"dilu/internal/common/consts"
 	"fmt"
 
 	"github.com/spf13/cobra"
 )
+
+// Version is set via -ldflags at build time.
+var Version = "dev"
 
 var (
 	StartCmd = &cobra.Command{
@@ -22,6 +24,6 @@ var (
 )
 
 func run() error {
-	fmt.Println(consts.Version)
+	fmt.Println(Version)
 	return nil
 }

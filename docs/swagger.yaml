@@ -311,7 +311,7 @@ info:
     url: https://github.com/baowk/dilu
   description: 致力于做一个开发快速，运行稳定的框架
   title: Dilu API
-  version: V0.0.1
+  version: V1.2.2
 paths:
   /api/v1/tools/gen/add:
     post:
