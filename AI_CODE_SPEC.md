@@ -34,15 +34,15 @@ dilu/
 ├── internal/               # 核心业务
 │   ├── bootstrap/         # 初始化
 │   ├── common/            # 公共组件
-│   ├── tools/             # 代码生成器
-│   │   ├── apis/          # API 接口
-│   │   ├── service/       # 业务逻辑
-│   │   ├── router/        # 路由配置
-│   │   └── repository/    # 数据访问 ⭐
-│   │       ├── model/     # Model 层
-│   │       └── query/     # Query 层
 │   └── modules/           # 业务模块
 │       └── sys/           # 此模块由 gen 生成，默认 sys
+│           ├── apis/      # API 接口
+│           ├── service/   # 业务逻辑
+│           │   └── dto/   # DTO
+│           ├── router/    # 路由配置
+│           └── repository/# 数据访问 ⭐
+│               ├── model/ # Model 层
+│               └── query/ # Query 层
 ├── resources/              # 配置文件
 ├── docs/                   # 用户文档
 ├── dev-docs/               # 开发文档
