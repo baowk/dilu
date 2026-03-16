@@ -10,9 +10,9 @@
 
 ## 🎯 核心原则（必须遵守）
 
-1. **优先使用gen生成代码** - 保持代码结构整洁
+1. **优先使用 `dilu-ctl gen` 生成代码** - 保持代码结构整洁
 2. **使用TDD开发模式** - 测试先行
-3. **生成的代码禁止修改** - gen 命令生成的 Repository/Model/Query 层代码严禁手动修改
+3. **生成的代码禁止修改** - `dilu-ctl gen` 生成的 Repository/Model/Query 层代码严禁手动修改
 4. **业务逻辑在 Service层** - 所有业务逻辑必须在 Service 层实现
 5. **职责边界清晰** - Repository 管数据、Service 管业务、Api 管接口
 6. **安全迭代** - 修改数据库 → 重新生成 → Service 层适配
@@ -50,7 +50,7 @@ dilu/
 ### 分层职责
 | 层级 | 职责 | 文件示例 |
 |------|------|---------|
-| **Repository** | 数据持久化 | `*.gen.go` (禁止修改,字段改变从新生成，默认会覆盖) |
+| **Repository** | 数据持久化 | `*.gen.go` (禁止修改,字段改变重新生成，默认会覆盖) |
 | **Service** | 业务逻辑 | `sys_user_service.go` |
 | **Api** | HTTP 接口封装 | `sys_user_api.go` |
 | **Router** | 路由配置 | `sys_user_router.go` |
@@ -109,25 +109,27 @@ mysql -u root -p -e "CREATE DATABASE dilu_db"
 
 #### 示例 1：生成系统库的 sys_user 表（默认数据库）
 ```bash
-go run main.go gen \
-  -c resources/config.sqlite.yaml \
-  -t sys_user
+dilu-ctl gen \
+  -t sys_user \
+  -d "sqlite:./data/dev.db" \
+  -P .
 ```
 
 #### 示例 2：生成 notice 库的 message 表（指定数据库）
 ```bash
-go run main.go gen \
-  -c resources/config.sqlite.yaml \
-  -d notice \
-  -t message
+dilu-ctl gen \
+  -t message \
+  -p notice \
+  -d "sqlite:./data/dev.db" \
+  -P .
 ```
 
 **参数说明**：
-- `-c`：配置文件路径
-- `-d`：数据库名称（可选，默认为 `sys`）
 - `-t`：表名
+- `-d`：数据库 DSN
+- `-p`：包名（可选，默认用表名前缀）
+- `-P`：项目根目录
 - `-f`：覆盖已存在的文件（可选）
-- `-p`：包名（可选，默认 根 -d 参数一致）
 
 ### 步骤 3：验证生成
 ```
@@ -246,7 +248,7 @@ type SysUser struct {
 ## 📝 最佳实践清单
 
 ### ✅ 应该做的
-- [x] 使用 gen 命令生成代码
+- [x] 使用 `dilu-ctl gen` 生成代码
 - [x] 在 Service 层实现业务逻辑
 - [x] 为 Service层编写单元测试
 - [x] 使用相对路径引用文件

@@ -146,7 +146,7 @@ Dilu framework provides comprehensive AI-assisted development support to help yo
 
 ### Core AI Development Capabilities
 
-- ✅ **Intelligent Code Generation** - Use built-in gen command to rapidly generate Model, Service, Api, Router code
+- ✅ **Intelligent Code Generation** - Use `dilu-ctl gen` to rapidly generate Model, Service, Api, Router code
 - ✅ **API Development Assistant** - AI-assisted RESTful API design with automatic Swagger documentation
 - ✅ **Database Design** - AI-assisted table structure design, GORM model and migration script generation
 - ✅ **Frontend Development** - AI generates Vue3 components and TypeScript API wrappers
@@ -159,8 +159,8 @@ Dilu framework provides comprehensive AI-assisted development support to help yo
 # 1. Prepare database (using SQLite)
 go run scripts/init_sqlite.go
 
-# 2. Call gen command to generate code
-go run main.go gen -c resources/config.sqlite.yaml -t sys_user -f false
+# 2. Call dilu-ctl to generate code
+dilu-ctl gen -t sys_user -d "sqlite:./data/dev.db" -P . -f false
 
 # 3. View generated files
 ls internal/sys/repository/model/sys_user.gen.go

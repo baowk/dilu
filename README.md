@@ -144,7 +144,7 @@ Dilu框架提供完整的 AI 辅助开发支持，帮助您高效构建企业级
 
 ### AI 开发核心能力
 
-- ✅ **智能代码生成** - 使用内置 gen 命令快速生成 Model、Service、Api、Router 代码
+- ✅ **智能代码生成** - 使用 `dilu-ctl gen` 快速生成 Model、Service、Api、Router 代码
 - ✅ **API 开发辅助** - AI 辅助设计 RESTful API，自动生成 Swagger 文档
 - ✅ **数据库设计** - AI 辅助设计表结构，生成 GORM 模型和迁移脚本
 - ✅ **前端开发** - AI 生成 Vue3 组件和 TypeScript API 封装
@@ -157,8 +157,8 @@ Dilu框架提供完整的 AI 辅助开发支持，帮助您高效构建企业级
 # 1. 准备数据库（使用 SQLite）
 go run scripts/init_sqlite.go
 
-# 2. 调用 gen 命令生成代码
-go run main.go gen -c resources/config.sqlite.yaml -t sys_user -f false
+# 2. 调用 dilu-ctl 生成代码
+dilu-ctl gen -t sys_user -d "sqlite:./data/dev.db" -P . -f false
 
 # 3. 查看生成的文件
 ls internal/sys/repository/model/sys_user.gen.go
