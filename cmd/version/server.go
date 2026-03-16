@@ -2,6 +2,7 @@ package version
 
 import (
 	"fmt"
+	"runtime/debug"
 
 	"github.com/spf13/cobra"
 )
@@ -24,6 +25,23 @@ var (
 )
 
 func run() error {
-	fmt.Println(Version)
+	fmt.Println(resolveVersion())
 	return nil
+}
+
+func resolveVersion() string {
+	if Version != "" && Version != "dev" {
+		return Version
+	}
+
+	if info, ok := debug.ReadBuildInfo(); ok {
+		if info.Main.Version != "" && info.Main.Version != "(devel)" {
+			return info.Main.Version
+		}
+	}
+
+	if Version == "" {
+		return "dev"
+	}
+	return Version
 }
