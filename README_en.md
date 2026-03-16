@@ -138,7 +138,7 @@ Dilu framework provides comprehensive AI-assisted development support to help yo
 ### 📋 AI Code Specifications
 
 - 🇨🇳 **[Chinese AI Code Spec](./AI_CODE_SPEC.md)** - Development specifications and conventions for AI code generation
-- 🌐 **[English AI Code Spec](./AI_CODE_SPEC_en.md)** - AI code generation specifications and conventions
+- 🌐 **[English AI Code Spec](./dev-docs/ai/AI_CODE_SPEC_en.md)** - Human-readable note (English)
 
 ### Read AI Development Guides
 

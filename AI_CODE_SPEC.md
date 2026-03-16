@@ -1,8 +1,10 @@
 # Dilu AI 代码生成规范
 
 <p align="center">
-  🇨🇳 中文版本 • <a href="./AI_CODE_SPEC_en.md">🇺🇸 English</a>
+  🇨🇳 中文版本 • <a href="./dev-docs/ai/AI_CODE_SPEC_en.md">🇺🇸 English (Human Note)</a>
 </p>
+
+> **说明**：英文版本为人类阅读备注，放在 `dev-docs/ai/AI_CODE_SPEC_en.md`。
 
 > **⚠️ 重要说明**：本文档是**给 AI 助手遵循的代码生成规范**，AI 必须严格遵守。
 

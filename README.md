@@ -140,7 +140,7 @@ Dilu框架提供完整的 AI 辅助开发支持，帮助您高效构建企业级
 ### 📋 AI 代码规范
 
 - 🇨🇳 **[中文版 AI 代码规范](./AI_CODE_SPEC.md)** - AI 生成代码的开发规范和约定
-- 🌐 **[English AI Code Spec](./AI_CODE_SPEC_en.md)** - AI code generation specifications and conventions
+- 🌐 **[English AI Code Spec](./dev-docs/ai/AI_CODE_SPEC_en.md)** - 人类阅读备注（英文版）
 
 
 ### AI 开发核心能力
