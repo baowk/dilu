@@ -3,7 +3,7 @@ package middleware
 import (
 	"bufio"
 	"bytes"
-	"dilu/common/config"
+	"dilu/internal/common/config"
 	"io"
 	"log/slog"
 	"net/http"

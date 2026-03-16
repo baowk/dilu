@@ -1,7 +1,7 @@
 package bootstrap
 
 import (
-	"dilu/common/config"
+	"dilu/internal/common/config"
 	"fmt"
 	"log/slog"
 	"strings"

@@ -11,14 +11,14 @@
 ## 🎯 核心原则（必须遵守）
 
 1. **优先使用 `dilu-ctl gen` 生成代码** - 保持代码结构整洁
-2. **使用TDD开发模式** - 测试先行
+2. **使用TDD开发模式** - 生成器/基础设施改动必须补测试，业务改动优先补测试
 3. **生成的代码禁止修改** - `dilu-ctl gen` 生成的 Repository/Model/Query 层代码严禁手动修改
 4. **业务逻辑在 Service层** - 所有业务逻辑必须在 Service 层实现
 5. **职责边界清晰** - Repository 管数据、Service 管业务、Api 管接口
 6. **安全迭代** - 修改数据库 → 重新生成 → Service 层适配
 7. **使用结构化日志** - 使用 log/slog
 8. **不重复造轮子** - 标准库优先，三方库使用需谨慎
-9. **swagger文档** - 接口采用swagger做文档，注释清晰，使用 go generate 生成
+9. **swagger文档** - 接口采用swagger做文档，注释清晰，使用 go generate 生成（默认输出到 `docs/`）
 10. **遵守 golang 代码规范** - 版本 go 1.26 +
 
 ---
@@ -29,9 +29,9 @@
 ```
 dilu/
 ├── cmd/                    # 命令行工具
-├── common/                 # 公共组件
 ├── internal/               # 核心业务
 │   ├── bootstrap/         # 初始化
+│   ├── common/            # 公共组件
 │   ├── tools/             # 代码生成器
 │   │   ├── apis/          # API 接口
 │   │   ├── service/       # 业务逻辑
@@ -39,7 +39,8 @@ dilu/
 │   │   └── repository/    # 数据访问 ⭐
 │   │       ├── model/     # Model 层
 │   │       └── query/     # Query 层
-│   └── sys/               # 此模块由gen生成，默认sys
+│   └── modules/           # 业务模块
+│       └── sys/           # 此模块由 gen 生成，默认 sys
 ├── resources/              # 配置文件
 ├── docs/                   # 用户文档
 ├── dev-docs/               # 开发文档
@@ -134,14 +135,14 @@ dilu-ctl gen \
 ### 步骤 3：验证生成
 ```
 # 检查生成的文件
-ls internal/sys/repository/model/sys_user.gen.go
-ls internal/sys/repository/query/sys_user.gen.go
+ls internal/modules/sys/repository/model/sys_user.gen.go
+ls internal/modules/sys/repository/query/sys_user.gen.go
 ```
 
 ### 步骤 4：扩展实现
 ```go
 // ✅ 创建扩展文件（不要修改 .gen.go）
-// internal/sys/repository/model/sys_user_extend.go
+// internal/modules/sys/repository/model/sys_user_extend.go
 package model
 
 type SysUserWithRoles struct {

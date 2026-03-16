@@ -2,7 +2,7 @@
 package start
 
 import (
-	"dilu/common/config"
+	"dilu/internal/common/config"
 	"fmt"
 	"log"
 	"log/slog"

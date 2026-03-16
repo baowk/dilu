@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"dilu/common/config"
+	"dilu/internal/common/config"
 	"log/slog"
 	"net/http"
 	"runtime"

@@ -83,10 +83,10 @@ go run main.go start -c resources/config.dev.yaml
 
 ```
 dilu/
-├── cmd/                    # 命令行工具入口（gen、start、version 等）
-├── common/                 # 公共组件库（工具函数、中间件、常量定义）
+├── cmd/                    # 命令行工具入口（start、version 等）
 ├── internal/               # 核心业务逻辑层
 │   ├── bootstrap/         # 应用初始化引导
+│   ├── common/            # 公共组件库（工具函数、中间件、常量定义）
 │   ├── tools/             # 代码生成器核心实现
 │   │   ├── apis/          # API 接口层
 │   │   ├── service/       # 业务逻辑层
@@ -94,13 +94,14 @@ dilu/
 │   │   └── repository/    # 数据访问层
 │   │       ├── model/     # Model 模型层
 │   │       └── query/     # Query 查询层
-│   └── sys/               # 系统管理模块（自动生成 + 手动扩展）
-│       ├── repository/    # 数据访问层（Model、Query）
-│       │   ├── model/     # Model 模型层 (*.gen.go)
-│       │   └── query/     # Query 查询层 (*.gen.go)
-│       ├── apis/          # API 接口层
-│       ├── service/       # 业务逻辑层
-│       └── router/        # 路由配置层
+│   └── modules/           # 业务模块
+│       └── sys/           # 系统管理模块（自动生成 + 手动扩展）
+│           ├── repository/    # 数据访问层（Model、Query）
+│           │   ├── model/     # Model 模型层 (*.gen.go)
+│           │   └── query/     # Query 查询层 (*.gen.go)
+│           ├── apis/          # API 接口层
+│           ├── service/       # 业务逻辑层
+│           └── router/        # 路由配置层
 ├── resources/              # 配置文件区（不同环境配置）
 ├── scripts/                # 脚本工具区（数据库初始化、迁移等）
 ├── temp/                   # 临时文件区（日志、SQLite 数据库等）
@@ -161,11 +162,11 @@ go run scripts/init_sqlite.go
 dilu-ctl gen -t sys_user -d "sqlite:./data/dev.db" -P . -f false
 
 # 3. 查看生成的文件
-ls internal/sys/repository/model/sys_user.gen.go
-ls internal/sys/repository/query/sys_user.gen.go
+ls internal/modules/sys/repository/model/sys_user.gen.go
+ls internal/modules/sys/repository/query/sys_user.gen.go
 
 # 4. 在 Service 层扩展业务逻辑
-vim internal/sys/service/sys_user_extend.go
+vim internal/modules/sys/service/sys_user_extend.go
 
 # 5. 启动服务
 go run main.go start -c resources/config.sqlite.yaml

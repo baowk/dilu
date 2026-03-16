@@ -1,7 +1,7 @@
 package version
 
 import (
-	"dilu/common/consts"
+	"dilu/internal/common/consts"
 	"fmt"
 
 	"github.com/spf13/cobra"

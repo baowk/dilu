@@ -81,10 +81,10 @@ Access Swagger documentation at: http://localhost:7888/swagger/index.html
 
 ```
 dilu/
-├── cmd/                    # Command line tool entry (gen, start, version, etc.)
-├── common/                 # Common utilities (tools, middleware, constants)
+├── cmd/                    # Command line tool entry (start, version, etc.)
 ├── internal/               # Core business logic layer
 │   ├── bootstrap/         # Application initialization
+│   ├── common/            # Common utilities (tools, middleware, constants)
 │   ├── tools/             # Code generator core implementation
 │   │   ├── apis/          # API interface layer
 │   │   ├── service/       # Business logic layer
@@ -92,13 +92,14 @@ dilu/
 │   │   └── repository/    # Data access layer
 │   │       ├── model/     # Model layer
 │   │       └── query/     # Query layer
-│   └── sys/               # System management module (auto-generated + manual extension)
-│       ├── repository/    # Data access layer (Model, Query)
-│       │   ├── model/     # Model layer (*.gen.go)
-│       │   └── query/     # Query layer (*.gen.go)
-│       ├── apis/          # API interface layer
-│       ├── service/       # Business logic layer
-│       └── router/        # Router configuration layer
+│   └── modules/           # Business modules
+│       └── sys/           # System module (auto-generated + manual extension)
+│           ├── repository/    # Data access layer (Model, Query)
+│           │   ├── model/     # Model layer (*.gen.go)
+│           │   └── query/     # Query layer (*.gen.go)
+│           ├── apis/          # API interface layer
+│           ├── service/       # Business logic layer
+│           └── router/        # Router configuration layer
 ├── resources/              # Configuration files (different environments)
 ├── scripts/                # Scripts (database initialization, migration, etc.)
 ├── temp/                   # Temporary files (logs, SQLite database, etc.)
@@ -163,11 +164,11 @@ go run scripts/init_sqlite.go
 dilu-ctl gen -t sys_user -d "sqlite:./data/dev.db" -P . -f false
 
 # 3. View generated files
-ls internal/sys/repository/model/sys_user.gen.go
-ls internal/sys/repository/query/sys_user.gen.go
+ls internal/modules/sys/repository/model/sys_user.gen.go
+ls internal/modules/sys/repository/query/sys_user.gen.go
 
 # 4. Extend business logic in Service layer
-vim internal/sys/service/sys_user_extend.go
+vim internal/modules/sys/service/sys_user_extend.go
 
 # 5. Start service
 go run main.go start -c resources/config.sqlite.yaml

@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"dilu/common/config"
-	"dilu/common/utils"
+	"dilu/internal/common/config"
+	"dilu/internal/common/utils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"

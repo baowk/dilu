@@ -1,10 +1,10 @@
 package start
 
 import (
-	"dilu/common/codes"
-	"dilu/common/config"
-	"dilu/common/middleware"
 	"dilu/internal/bootstrap"
+	"dilu/internal/common/codes"
+	"dilu/internal/common/config"
+	"dilu/internal/common/middleware"
 	"log/slog"
 
 	"github.com/baowk/dilu-core/core"
