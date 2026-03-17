@@ -9,6 +9,7 @@ type SmsSend interface {
 	Send(phone string, code string, tmpId string)
 }
 
+// Deprecated: 使用 container.Global().SMS 替代
 var SMSSend SmsSend
 
 func Setup(smsSend SmsSend) {

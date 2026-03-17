@@ -1,6 +1,7 @@
 package bootstrap
 
 import (
+	"context"
 	"dilu/internal/common/config"
 	"fmt"
 	"strings"
@@ -11,6 +12,9 @@ import (
 	"github.com/spf13/viper"
 	_ "github.com/spf13/viper/remote"
 )
+
+// configCancel 用于停止远程配置监听 goroutine
+var configCancel context.CancelFunc
 
 func LoadConfig(configPath string) (*config.Config, error) {
 	if strings.TrimSpace(configPath) == "" {
@@ -29,18 +33,31 @@ func LoadConfig(configPath string) (*config.Config, error) {
 	}
 
 	if cfg.Server.RemoteEnable {
-		if err := loadRemoteConfig(&cfg); err != nil {
+		ctx, cancel := context.WithCancel(context.Background())
+		configCancel = cancel
+		if err := loadRemoteConfig(ctx, &cfg); err != nil {
+			cancel()
 			return nil, err
 		}
 		return &cfg, nil
 	}
 
 	config.SaveConfig(&cfg, nil)
+	if err := cfg.Validate(); err != nil {
+		return nil, err
+	}
 	watchLocalConfig(v, &cfg)
 	return &cfg, nil
 }
 
-func loadRemoteConfig(cfg *config.Config) error {
+// StopConfigWatch 停止远程配置监听，用于优雅退出
+func StopConfigWatch() {
+	if configCancel != nil {
+		configCancel()
+	}
+}
+
+func loadRemoteConfig(ctx context.Context, cfg *config.Config) error {
 	rviper := viper.New()
 	var err error
 	if cfg.Remote.SecretKeyring == "" {
@@ -64,17 +81,24 @@ func loadRemoteConfig(cfg *config.Config) error {
 	config.SaveConfig(cfg, &remoteCfg)
 
 	go func() {
+		ticker := time.NewTicker(5 * time.Second)
+		defer ticker.Stop()
 		for {
-			time.Sleep(5 * time.Second)
-			if watchErr := rviper.WatchRemoteConfig(); watchErr != nil {
-				logger.Warn("watch remote config failed", "err", watchErr)
-				continue
+			select {
+			case <-ctx.Done():
+				logger.Info("remote config watcher stopped")
+				return
+			case <-ticker.C:
+				if watchErr := rviper.WatchRemoteConfig(); watchErr != nil {
+					logger.Warn("watch remote config failed", "err", watchErr)
+					continue
+				}
+				if unmarshalErr := rviper.Unmarshal(&remoteCfg); unmarshalErr != nil {
+					logger.Warn("unmarshal remote config failed", "err", unmarshalErr)
+					continue
+				}
+				config.SaveConfig(cfg, &remoteCfg)
 			}
-			if unmarshalErr := rviper.Unmarshal(&remoteCfg); unmarshalErr != nil {
-				logger.Warn("unmarshal remote config failed", "err", unmarshalErr)
-				continue
-			}
-			config.SaveConfig(cfg, &remoteCfg)
 		}
 	}()
 	return nil

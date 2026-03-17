@@ -1,6 +1,8 @@
 package config
 
 import (
+	"fmt"
+
 	"github.com/baowk/dilu-core/config"
 	rdConfig "github.com/baowk/dilu-rd/config"
 )
@@ -57,4 +59,18 @@ func SaveConfig(local, remote *Config) {
 
 func Get() *Config {
 	return cfg
+}
+
+// Validate 校验必填配置项
+func (c *Config) Validate() error {
+	if c.Server.Name == "" {
+		return fmt.Errorf("config: server.name is required")
+	}
+	if c.Server.Port == 0 {
+		return fmt.Errorf("config: server.port is required")
+	}
+	if c.JWT.SignKey == "" {
+		return fmt.Errorf("config: jwt.sign-key is required")
+	}
+	return nil
 }

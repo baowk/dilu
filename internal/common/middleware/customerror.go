@@ -1,11 +1,11 @@
 package middleware
 
 import (
+	"dilu/internal/common/codes"
 	"dilu/internal/common/config"
+	"errors"
 	"net/http"
 	"runtime/debug"
-	"strconv"
-	"strings"
 
 	"github.com/baowk/dilu-core/common/utils"
 	"github.com/baowk/dilu-core/common/utils/ips"
@@ -19,49 +19,37 @@ func CustomError(c *gin.Context) {
 			if c.IsAborted() {
 				c.Status(200)
 			}
-			switch errStr := err.(type) {
-			case string:
-				p := strings.Split(errStr, "#")
-				if len(p) == 3 && p[0] == "CustomError" {
-					statusCode, e := strconv.Atoi(p[1])
-					if e != nil {
-						break
-					}
-					c.Status(statusCode)
 
-					logger.Warn("request", "ip", ips.GetIP(c), "method", c.Request.Method, "path", c.Request.RequestURI,
-						"query", c.Request.URL.RawQuery, "source", config.Get().Server.Name, "reqId", utils.GetReqId(c),
-						"error", p[2])
-
-					c.JSON(statusCode, gin.H{
-						"code": statusCode,
-						"msg":  p[2],
-					})
-				} else {
-					logger.Error("unexpected panic", "error", errStr, "ip", ips.GetIP(c),
-						"method", c.Request.Method, "path", c.Request.RequestURI)
-					c.JSON(http.StatusInternalServerError, gin.H{
-						"code": 500,
-						"msg":  "Internal Server Error",
-					})
-				}
+			// 优先匹配类型化的 AppError
+			var appErr *codes.AppError
+			switch v := err.(type) {
+			case *codes.AppError:
+				appErr = v
 			case error:
-				logger.Error("unexpected panic", "error", errStr.Error(), "ip", ips.GetIP(c),
-					"method", c.Request.Method, "path", c.Request.RequestURI,
-					"stack", string(debug.Stack()))
-				c.JSON(http.StatusInternalServerError, gin.H{
-					"code": 500,
-					"msg":  "Internal Server Error",
-				})
-			default:
-				logger.Error("unexpected panic", "error", err, "ip", ips.GetIP(c),
-					"method", c.Request.Method, "path", c.Request.RequestURI,
-					"stack", string(debug.Stack()))
-				c.JSON(http.StatusInternalServerError, gin.H{
-					"code": 500,
-					"msg":  "Internal Server Error",
-				})
+				if errors.As(v, &appErr) {
+					// wrapped AppError
+				}
 			}
+
+			if appErr != nil {
+				logger.Warn("request", "ip", ips.GetIP(c), "method", c.Request.Method, "path", c.Request.RequestURI,
+					"query", c.Request.URL.RawQuery, "source", config.Get().Server.Name, "reqId", utils.GetReqId(c),
+					"error", appErr.Msg)
+				c.JSON(appErr.Code, gin.H{
+					"code": appErr.Code,
+					"msg":  appErr.Msg,
+				})
+				return
+			}
+
+			// 未知 panic，记录堆栈，返回通用错误
+			logger.Error("unexpected panic", "error", err, "ip", ips.GetIP(c),
+				"method", c.Request.Method, "path", c.Request.RequestURI,
+				"stack", string(debug.Stack()))
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"code": 500,
+				"msg":  "Internal Server Error",
+			})
 		}
 	}()
 	c.Next()

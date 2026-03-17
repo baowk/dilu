@@ -10,24 +10,48 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func GetUserId(c *gin.Context) int {
-	uid := c.GetInt("a_uid")
-	if uid == 0 {
-		suid := c.GetHeader("a_uid")
-		if suid != "" {
-			uid, _ = strconv.Atoi(suid)
+// getIntFromContext 从 gin.Context 中获取 int 值，优先取 context key，fallback 到 header
+func getIntFromContext(c *gin.Context, ctxKey, headerKey string) int {
+	v := c.GetInt(ctxKey)
+	if v == 0 {
+		if s := c.GetHeader(headerKey); s != "" {
+			v, _ = strconv.Atoi(s)
 		}
 	}
-	return uid
+	return v
+}
+
+// getStringFromContext 从 gin.Context 中获取 string 值，优先取 context key，fallback 到 header
+func getStringFromContext(c *gin.Context, ctxKey, headerKey string) string {
+	v := c.GetString(ctxKey)
+	if v == "" {
+		v = c.GetHeader(headerKey)
+	}
+	return v
+}
+
+func GetUserId(c *gin.Context) int {
+	return getIntFromContext(c, "a_uid", "a_uid")
+}
+
+func GetRoleId(c *gin.Context) int {
+	return getIntFromContext(c, "a_rid", "a_rid")
+}
+
+func GetPhone(c *gin.Context) string {
+	return getStringFromContext(c, "a_mobile", "phone")
+}
+
+func GetNickname(c *gin.Context) string {
+	return getStringFromContext(c, "a_nickname", "a_nickname")
 }
 
 func GetTeamId(c *gin.Context) int {
 	if GetRoleId(c) != 0 {
 		return -1
 	}
-	sTeamId := c.GetHeader("teamId")
-	if sTeamId != "" {
-		teamId, _ := strconv.Atoi(sTeamId)
+	if s := c.GetHeader("teamId"); s != "" {
+		teamId, _ := strconv.Atoi(s)
 		return teamId
 	}
 	return c.GetInt("teamId")
@@ -42,33 +66,6 @@ func GetReqTeamId(c *gin.Context, reqTeamId int) int {
 		return reqTeamId
 	}
 	return teamId
-}
-
-func GetRoleId(c *gin.Context) int {
-	rid := c.GetInt("a_rid")
-	if rid == 0 {
-		suid := c.GetHeader("a_rid")
-		if suid != "" {
-			rid, _ = strconv.Atoi(suid)
-		}
-	}
-	return rid
-}
-
-func GetPhone(c *gin.Context) string {
-	phone := c.GetString("a_mobile")
-	if phone == "" {
-		phone = c.GetHeader("phone")
-	}
-	return phone
-}
-
-func GetNickname(c *gin.Context) string {
-	nickname := c.GetString("a_nickname")
-	if nickname == "" {
-		nickname = c.GetHeader("a_nickname")
-	}
-	return nickname
 }
 
 // Generate 生成JWT Token

@@ -10,6 +10,7 @@ type OSSHandler interface {
 	DeleteFile(key string) error
 }
 
+// Deprecated: 使用 container.Global().OSS 替代
 var Oss OSSHandler
 
 func Setup(oss OSSHandler) {

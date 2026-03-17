@@ -3,6 +3,7 @@ package start
 
 import (
 	"dilu/internal/common/config"
+	"dilu/internal/common/container"
 	"fmt"
 	"log"
 	"net"
@@ -13,10 +14,9 @@ import (
 	"google.golang.org/grpc"
 )
 
-var grpcServer *grpc.Server
-
 func grpcInit() {
-	grpcServer = grpc.NewServer()
+	grpcServer := grpc.NewServer()
+	container.Global().GrpcServer = grpcServer
 	//注册grpc服务
 	health.RegisterHealthServer(grpcServer, &health.HealthServerImpl{}) //健康检测服务
 	//service.RegisterGreeterServer(grpcServer, &impl.TempimplementedGreeterServer{})
@@ -38,5 +38,7 @@ func grpcInit() {
 }
 
 func closeGrpc() {
-	grpcServer.GracefulStop()
+	if s := container.Global().GrpcServer; s != nil {
+		s.GracefulStop()
+	}
 }

@@ -6,36 +6,22 @@ package start
 
 import (
 	"dilu/internal/common/config"
+	"dilu/internal/common/container"
 	"fmt"
 	"net/http"
 
 	"github.com/baowk/dilu-core/common/utils/ips"
-	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/logger"
 	"github.com/baowk/dilu-rd/rd"
 	"github.com/gin-gonic/gin"
 )
 
-var (
-	routerNoCheckRole = make([]func(*gin.RouterGroup), 0)
-)
-
 func init() {
-	routerNoCheckRole = append(routerNoCheckRole, registerHealthRouter)
-	AppRouters = append(AppRouters, InitRouter)
+	Routers.Register(initBaseRouter)
 }
 
-func InitRouter() {
-	r := core.GetApp().GetGinEngine()
-	noCheckRoleRouter(r)
-}
-
-func noCheckRoleRouter(r *gin.Engine) {
-	v := r.Group("")
-
-	for _, f := range routerNoCheckRole {
-		f(v)
-	}
+func initBaseRouter(r *gin.Engine) {
+	registerHealthRouter(r.Group(""))
 }
 
 func registerHealthRouter(v1 *gin.RouterGroup) {
@@ -46,8 +32,6 @@ func registerHealthRouter(v1 *gin.RouterGroup) {
 		})
 	}
 }
-
-var rdclient rd.RDClient
 
 func rdInit() {
 	//注册中心
@@ -102,7 +86,7 @@ func rdInit() {
 
 		logger.Debug("注册中心连接", "rdcfg", rdcfg)
 		var err error
-		rdclient, err = rd.NewRDClient(&rdcfg)
+		container.Global().RDClient, err = rd.NewRDClient(&rdcfg)
 		if err != nil {
 			logger.Error("注册中心连接失败", "err", err)
 		}
@@ -110,7 +94,7 @@ func rdInit() {
 }
 
 func rdRelease() {
-	if rdclient != nil {
-		rdclient.Deregister()
+	if container.Global().RDClient != nil {
+		container.Global().RDClient.Deregister()
 	}
 }

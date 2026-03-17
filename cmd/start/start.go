@@ -47,9 +47,7 @@ func run() error {
 	r := core.GetApp().GetGinEngine()
 	middleware.InitMiddleware(r, config.Get())
 	//初始化路由
-	for _, f := range AppRouters {
-		f()
-	}
+	Routers.Init(r)
 	go func() { //主服务启动后回调
 		<-core.GetApp().WaitForStart()
 		startedInit()
@@ -78,6 +76,7 @@ func startedInit() {
 
 // 服务关闭要释放的资源
 func toClose() {
+	bootstrap.StopConfigWatch()
 	if config.Get().GrpcServer.Enable {
 		closeGrpc()
 	}
