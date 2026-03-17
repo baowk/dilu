@@ -1,52 +1,62 @@
 package middleware
 
 import (
-	"bufio"
 	"bytes"
 	"dilu/internal/common/config"
 	"io"
-	"log/slog"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/baowk/dilu-core/common/utils"
 	"github.com/baowk/dilu-core/common/utils/ips"
+	"github.com/baowk/dilu-core/core/logger"
 	"github.com/gin-gonic/gin"
 )
 
-// LogLayout 日志layout
-// type LogLayout struct {
-// 	//Metadata  map[string]interface{} // 存储自定义原数据
-// 	Method    string //方法
-// 	Path      string // 访问路径
-// 	Query     string // 携带query
-// 	Body      string // 携带body数据
-// 	IP        string // ip地址
-// 	UserAgent string // 代理
-// 	Error     string // 错误
-// 	Cost      string // 花费时间
-// 	Source    string // 来源
-// }
+// sensitiveFields 需要在日志中过滤的敏感字段（小写）
+var sensitiveFields = []string{
+	"password", "passwd", "pwd", "secret", "token",
+	"access_token", "refresh_token", "authorization",
+	"credit_card", "card_number", "cvv", "ssn",
+	"api_key", "apikey", "private_key",
+}
+
+const maxBodyLogLen = 1024
+
+// hasSensitiveField 检查 body 中是否包含敏感字段
+func hasSensitiveField(body []byte) bool {
+	lower := bytes.ToLower(body)
+	for _, field := range sensitiveFields {
+		if bytes.Contains(lower, []byte(field)) {
+			return true
+		}
+	}
+	return false
+}
 
 // LoggerToFile 日志记录到文件
 func LoggerToFile() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// 开始时间
 		startTime := time.Now()
-		// 处理请求
+
 		var body string
 		switch c.Request.Method {
-		case http.MethodPost, http.MethodPut, http.MethodGet, http.MethodDelete:
-			bf := bytes.NewBuffer(nil)
-			wt := bufio.NewWriter(bf)
-			_, err := io.Copy(wt, c.Request.Body)
+		case http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete:
+			// 直接用 io.ReadAll，避免 buffer→writer→readAll 三次分配
+			rb, err := io.ReadAll(c.Request.Body)
 			if err != nil {
-				slog.Warn("copy body error", "err", err)
-				err = nil
+				logger.Warn("read body error", "err", err)
+			} else {
+				c.Request.Body = io.NopCloser(bytes.NewReader(rb))
+				if hasSensitiveField(rb) {
+					body = "***[contains sensitive data, masked]***"
+				} else if len(rb) > maxBodyLogLen {
+					body = string(rb[:maxBodyLogLen]) + "...[truncated]"
+				} else {
+					body = string(rb)
+				}
 			}
-			rb, _ := io.ReadAll(bf)
-			c.Request.Body = io.NopCloser(bytes.NewBuffer(rb))
-			body = string(rb)
 		}
 
 		c.Next()
@@ -56,21 +66,33 @@ func LoggerToFile() gin.HandlerFunc {
 }
 
 func writeLog(startTime time.Time, body string, c *gin.Context) {
-	// 结束时间
 	if c.Request.Method == http.MethodOptions {
 		return
 	}
 	cost := time.Since(startTime)
 
-	if cost.Milliseconds() < 200 {
-		slog.Info("request", "ip", ips.GetIP(c), "method", c.Request.Method, "path", c.Request.RequestURI,
-			"cost", cost, "userAgent", c.Request.UserAgent(), "query", c.Request.URL.RawQuery,
-			"body", body, "source", config.Get().Server.Name, "reqId", utils.GetReqId(c))
-		//,"error", strings.TrimRight(c.Errors.ByType(gin.ErrorTypePrivate).String(), "\n")))
-	} else {
-		slog.Warn("request", "ip", ips.GetIP(c), "method", c.Request.Method, "path", c.Request.RequestURI,
-			"cost", cost, "userAgent", c.Request.UserAgent(), "query", c.Request.URL.RawQuery,
-			"body", body, "source", config.Get().Server.Name, "reqId", utils.GetReqId(c))
-		//,"error", strings.TrimRight(c.Errors.ByType(gin.ErrorTypePrivate).String(), "\n")))
+	args := []any{
+		"ip", ips.GetIP(c),
+		"method", c.Request.Method,
+		"path", c.Request.RequestURI,
+		"cost", cost,
+		"query", c.Request.URL.RawQuery,
+		"source", config.Get().Server.Name,
+		"reqId", utils.GetReqId(c),
 	}
+	if body != "" {
+		args = append(args, "body", body)
+	}
+
+	if cost.Milliseconds() < 200 {
+		logger.Info("request", args...)
+	} else {
+		logger.Warn("request", args...)
+	}
+}
+
+// bodyNeedLog 判断是否需要记录 body 的方法（预留扩展）
+func bodyNeedLog(path string) bool {
+	// 可根据路径过滤，如文件上传路径跳过 body 记录
+	return !strings.HasPrefix(path, "/api/upload")
 }

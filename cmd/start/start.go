@@ -5,10 +5,10 @@ import (
 	"dilu/internal/common/codes"
 	"dilu/internal/common/config"
 	"dilu/internal/common/middleware"
-	"log/slog"
 
 	"github.com/baowk/dilu-core/core"
 	"github.com/baowk/dilu-core/core/i18n"
+	"github.com/baowk/dilu-core/core/logger"
 	"github.com/spf13/cobra"
 )
 
@@ -63,7 +63,7 @@ func run() error {
 	if err := core.GetApp().Run(); err != nil {
 		return err
 	}
-	slog.Info("Server exited")
+	logger.Info("Server exited")
 	return nil
 }
 
@@ -73,7 +73,7 @@ func startedInit() {
 		grpcInit()
 	}
 	rdInit()
-	slog.Debug("服务启动，初始化执行完成")
+	logger.Debug("服务启动，初始化执行完成")
 }
 
 // 服务关闭要释放的资源
@@ -82,5 +82,5 @@ func toClose() {
 		closeGrpc()
 	}
 	rdRelease()
-	slog.Debug("服务关闭需要释放的资源")
+	logger.Debug("服务关闭需要释放的资源")
 }

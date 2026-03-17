@@ -3,52 +3,53 @@ package middleware
 import (
 	"dilu/internal/common/config"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/baowk/dilu-core/common/utils/ips"
 	"github.com/gin-gonic/gin"
 )
 
-type Access struct {
-	beginTime time.Time
-	accessCnt int
+type accessEntry struct {
+	count     atomic.Int64
+	resetTime atomic.Int64 // unix nano
+	mu        sync.Mutex   // 仅用于重置操作
 }
 
-var (
-	accessMap = make(map[string]*Access, 0)
-	accessMu  sync.Mutex
-)
+var accessMap sync.Map // map[string]*accessEntry
 
 func AccessLimitfunc() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ip := ips.GetIP(c)
-		blocked := false
+		limit := int64(config.Get().AccessLimit.GetTotal())
+		window := config.Get().AccessLimit.Duration
 
-		accessMu.Lock()
-		v, ok := accessMap[ip]
-		if !ok {
-			accessMap[ip] = &Access{beginTime: time.Now(), accessCnt: 1}
-		} else {
-			curT := time.Now()
-			if curT.Sub(v.beginTime) > config.Get().AccessLimit.Duration {
-				v.accessCnt = 1
-				v.beginTime = curT
-			} else if v.accessCnt > config.Get().AccessLimit.GetTotal() {
-				v.accessCnt++
-				if v.accessCnt/config.Get().AccessLimit.GetTotal() > 1 {
-					v.beginTime = curT
-				}
-				blocked = true
-			} else {
-				v.accessCnt++
+		val, _ := accessMap.LoadOrStore(ip, &accessEntry{})
+		entry := val.(*accessEntry)
+
+		now := time.Now().UnixNano()
+		resetAt := entry.resetTime.Load()
+
+		// 时间窗口过期，重置计数
+		if now-resetAt > int64(window) {
+			entry.mu.Lock()
+			// double-check 避免多个 goroutine 同时重置
+			if now-entry.resetTime.Load() > int64(window) {
+				entry.count.Store(1)
+				entry.resetTime.Store(now)
 			}
+			entry.mu.Unlock()
+			c.Next()
+			return
 		}
-		accessMu.Unlock()
 
-		if blocked {
+		// 原子递增计数
+		cnt := entry.count.Add(1)
+		if cnt > limit {
 			Fail(c, 429, "too many requests")
 			return
 		}
+
 		c.Next()
 	}
 }

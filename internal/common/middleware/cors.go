@@ -7,20 +7,25 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Cors 直接放行所有跨域请求并放行所有 OPTIONS 方法
+// cors 放行所有跨域请求（仅用于开发环境）
 func cors() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		method := c.Request.Method
 		origin := c.Request.Header.Get("Origin")
+		if origin == "" {
+			origin = "*"
+		}
 		c.Header("Access-Control-Allow-Origin", origin)
 		c.Header("Access-Control-Allow-Headers", "Content-Type,AccessToken,X-CSRF-Token, Authorization, Token,X-Token,X-User-Id,X-Requested-With,teamid")
 		c.Header("Access-Control-Allow-Methods", "POST, GET, OPTIONS,DELETE,PUT")
 		c.Header("Access-Control-Expose-Headers", "Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type, New-Token, New-Expires-At")
 		c.Header("Access-Control-Allow-Credentials", "true")
+		c.Header("Access-Control-Max-Age", "3600")
 
 		// 放行所有OPTIONS方法
 		if method == "OPTIONS" {
 			c.AbortWithStatus(http.StatusNoContent)
+			return
 		}
 		// 处理请求
 		c.Next()
@@ -29,7 +34,7 @@ func cors() gin.HandlerFunc {
 
 // CorsByRules 按照配置处理跨域请求
 func CorsByRules(corsCfg *config.CORS) gin.HandlerFunc {
-	// 放行全部
+	// 放行全部（仅建议开发环境使用）
 	if corsCfg.Mode == "allow-all" {
 		return cors()
 	}
@@ -45,16 +50,19 @@ func CorsByRules(corsCfg *config.CORS) gin.HandlerFunc {
 			if whitelist.AllowCredentials {
 				c.Header("Access-Control-Allow-Credentials", "true")
 			}
+			c.Header("Access-Control-Max-Age", "3600")
 		}
 
 		// 严格白名单模式且未通过检查，直接拒绝处理请求
 		if whitelist == nil && corsCfg.Mode == "strict-whitelist" && !(c.Request.Method == "GET" && c.Request.URL.Path == "/health") {
 			c.AbortWithStatus(http.StatusForbidden)
-		} else {
-			// 非严格白名单模式，无论是否通过检查均放行所有 OPTIONS 方法
-			if c.Request.Method == http.MethodOptions {
-				c.AbortWithStatus(http.StatusNoContent)
-			}
+			return
+		}
+
+		// 非严格白名单模式，无论是否通过检查均放行所有 OPTIONS 方法
+		if c.Request.Method == http.MethodOptions {
+			c.AbortWithStatus(http.StatusNoContent)
+			return
 		}
 
 		// 处理请求

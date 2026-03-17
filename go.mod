@@ -16,7 +16,7 @@ require (
 	google.golang.org/grpc v1.62.1
 )
 
-//replace github.com/baowk/dilu-core => ../dilu-core
+replace github.com/baowk/dilu-core => ../dilu-core
 
 require (
 	cloud.google.com/go v0.112.0 // indirect

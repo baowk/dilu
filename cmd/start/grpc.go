@@ -5,10 +5,10 @@ import (
 	"dilu/internal/common/config"
 	"fmt"
 	"log"
-	"log/slog"
 	"net"
 
 	"github.com/baowk/dilu-core/common/utils/text"
+	"github.com/baowk/dilu-core/core/logger"
 	"github.com/baowk/dilu-rd/grpc/pb/health"
 	"google.golang.org/grpc"
 )
@@ -25,12 +25,12 @@ func grpcInit() {
 	grpcAddr := fmt.Sprintf("%s:%d", config.Get().GrpcServer.GetHost(), config.Get().GrpcServer.GetPort())
 	lis, err := net.Listen("tcp", grpcAddr)
 	if err != nil {
-		slog.Error("failed to listen", "err", err)
+		logger.Error("failed to listen", "err", err)
 		log.Fatal("failed to listen:", err)
 	}
 	go func() {
 		if err := grpcServer.Serve(lis); err != nil {
-			slog.Error("failed to serve", "err", err)
+			logger.Error("failed to serve", "err", err)
 			log.Fatal("failed to serve:", err)
 		}
 	}()

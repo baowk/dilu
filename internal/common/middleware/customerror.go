@@ -2,21 +2,20 @@ package middleware
 
 import (
 	"dilu/internal/common/config"
-	"log/slog"
 	"net/http"
-	"runtime"
+	"runtime/debug"
 	"strconv"
 	"strings"
 
 	"github.com/baowk/dilu-core/common/utils"
 	"github.com/baowk/dilu-core/common/utils/ips"
+	"github.com/baowk/dilu-core/core/logger"
 	"github.com/gin-gonic/gin"
 )
 
 func CustomError(c *gin.Context) {
 	defer func() {
 		if err := recover(); err != nil {
-			//fmt.Printf("Custom error %v \n", err)
 			if c.IsAborted() {
 				c.Status(200)
 			}
@@ -30,27 +29,38 @@ func CustomError(c *gin.Context) {
 					}
 					c.Status(statusCode)
 
-					slog.Warn("request", "ip", ips.GetIP(c), "method", c.Request.Method, "path", c.Request.RequestURI,
+					logger.Warn("request", "ip", ips.GetIP(c), "method", c.Request.Method, "path", c.Request.RequestURI,
 						"query", c.Request.URL.RawQuery, "source", config.Get().Server.Name, "reqId", utils.GetReqId(c),
 						"error", p[2])
 
-					c.JSON(http.StatusOK, gin.H{
+					c.JSON(statusCode, gin.H{
 						"code": statusCode,
 						"msg":  p[2],
 					})
 				} else {
-					c.JSON(http.StatusOK, gin.H{
+					logger.Error("unexpected panic", "error", errStr, "ip", ips.GetIP(c),
+						"method", c.Request.Method, "path", c.Request.RequestURI)
+					c.JSON(http.StatusInternalServerError, gin.H{
 						"code": 500,
-						"msg":  errStr,
+						"msg":  "Internal Server Error",
 					})
 				}
-			case runtime.Error:
-				c.JSON(http.StatusOK, gin.H{
+			case error:
+				logger.Error("unexpected panic", "error", errStr.Error(), "ip", ips.GetIP(c),
+					"method", c.Request.Method, "path", c.Request.RequestURI,
+					"stack", string(debug.Stack()))
+				c.JSON(http.StatusInternalServerError, gin.H{
 					"code": 500,
-					"msg":  errStr.Error(),
+					"msg":  "Internal Server Error",
 				})
 			default:
-				panic(err)
+				logger.Error("unexpected panic", "error", err, "ip", ips.GetIP(c),
+					"method", c.Request.Method, "path", c.Request.RequestURI,
+					"stack", string(debug.Stack()))
+				c.JSON(http.StatusInternalServerError, gin.H{
+					"code": 500,
+					"msg":  "Internal Server Error",
+				})
 			}
 		}
 	}()

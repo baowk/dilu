@@ -3,10 +3,10 @@ package bootstrap
 import (
 	"dilu/internal/common/config"
 	"fmt"
-	"log/slog"
 	"strings"
 	"time"
 
+	"github.com/baowk/dilu-core/core/logger"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 	_ "github.com/spf13/viper/remote"
@@ -67,11 +67,11 @@ func loadRemoteConfig(cfg *config.Config) error {
 		for {
 			time.Sleep(5 * time.Second)
 			if watchErr := rviper.WatchRemoteConfig(); watchErr != nil {
-				slog.Warn("watch remote config failed", "err", watchErr)
+				logger.Warn("watch remote config failed", "err", watchErr)
 				continue
 			}
 			if unmarshalErr := rviper.Unmarshal(&remoteCfg); unmarshalErr != nil {
-				slog.Warn("unmarshal remote config failed", "err", unmarshalErr)
+				logger.Warn("unmarshal remote config failed", "err", unmarshalErr)
 				continue
 			}
 			config.SaveConfig(cfg, &remoteCfg)
@@ -84,10 +84,10 @@ func watchLocalConfig(v *viper.Viper, cfg *config.Config) {
 	v.WatchConfig()
 	v.OnConfigChange(func(e fsnotify.Event) {
 		if err := v.Unmarshal(cfg); err != nil {
-			slog.Warn("unmarshal changed config failed", "err", err)
+			logger.Warn("unmarshal changed config failed", "err", err)
 			return
 		}
 		config.SaveConfig(cfg, nil)
-		slog.Info("config file changed", "file", e.Name)
+		logger.Info("config file changed", "file", e.Name)
 	})
 }

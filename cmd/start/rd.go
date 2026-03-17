@@ -7,11 +7,11 @@ package start
 import (
 	"dilu/internal/common/config"
 	"fmt"
-	"log/slog"
 	"net/http"
 
 	"github.com/baowk/dilu-core/common/utils/ips"
 	"github.com/baowk/dilu-core/core"
+	"github.com/baowk/dilu-core/core/logger"
 	"github.com/baowk/dilu-rd/rd"
 	"github.com/gin-gonic/gin"
 )
@@ -55,11 +55,11 @@ func rdInit() {
 		rdcfg := config.Get().RdConfig
 		for _, v := range rdcfg.Registers {
 			if v.Protocol != "grpc" && v.Protocol != "http" {
-				slog.Error("rd register error", "protocol", v.Protocol)
+				logger.Error("rd register error", "protocol", v.Protocol)
 				continue
 			}
 			if v.Protocol == "grpc" && !config.Get().GrpcServer.Enable {
-				slog.Error("rd register error", "protocol", v.Protocol, "GrpcServer enable", false)
+				logger.Error("rd register error", "protocol", v.Protocol, "GrpcServer enable", false)
 				continue
 			}
 			if v.Name == "" {
@@ -100,11 +100,11 @@ func rdInit() {
 			}
 		}
 
-		slog.Debug("注册中心连接", "rdcfg", rdcfg)
+		logger.Debug("注册中心连接", "rdcfg", rdcfg)
 		var err error
 		rdclient, err = rd.NewRDClient(&rdcfg)
 		if err != nil {
-			slog.Error("注册中心连接失败", "err", err)
+			logger.Error("注册中心连接失败", "err", err)
 		}
 	}
 }
