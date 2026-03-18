@@ -63,7 +63,15 @@ gen:
   #  sys: user
   #  dental: crm
 
-rd-config:
+rd:                 # 注册发现配置（可选，dilu-core v1.2.0+）
+  enable: false     # 启用后自动注册到注册中心
+  driver: consul    # consul 或 etcd
+  endpoints:
+    - 172.19.167.104:8500
+  tags:             # 服务标签
+    - "dev"
+
+rd-config:          # dilu-rd 详细配置（enable=true 时生效）
   enable: false
   driver: consul
   endpoints:
@@ -76,7 +84,7 @@ rd-config:
       #name: dilu-app
       #addr: 172.19.167.104
       #port: 7888
-      #health-check: http://172.19.167.104:7888/api/health
+      #health-check: http://172.19.167.104:7888/health  # dilu-core v1.2.0 自动注册 /health
       #tags:
       #  - "dev"
       #interval: 5s
@@ -95,4 +103,3 @@ rd-config:
     - name: name
       enable: false
       fail-limit: 3
-    
