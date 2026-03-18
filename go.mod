@@ -3,7 +3,7 @@ module dilu
 go 1.26
 
 require (
-	github.com/baowk/dilu-core v1.1.1
+	github.com/baowk/dilu-core v1.1.2
 	github.com/baowk/dilu-rd v1.0.0
 	github.com/fsnotify/fsnotify v1.7.0
 	github.com/gin-gonic/gin v1.11.0
@@ -16,7 +16,7 @@ require (
 	google.golang.org/grpc v1.62.1
 )
 
-replace github.com/baowk/dilu-core => ../dilu-core
+//replace github.com/baowk/dilu-core => ../dilu-core
 
 require (
 	cloud.google.com/go v0.112.0 // indirect

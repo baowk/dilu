@@ -119,7 +119,7 @@ func (t *LocalTime) UnmarshalJSON(data []byte) error {
 func (t LocalTime) MarshalJSON() ([]byte, error) {
 	tTime := time.Time(t)
 	// 如果时间值是空或者0值 返回为null 如果写空字符串会报错
-	if &t == nil || t.IsZero() {
+	if t.IsZero() {
 		return []byte("null"), nil
 	}
 	return []byte(fmt.Sprintf("\"%s\"", tTime.Format("2006-01-02 15:04:05"))), nil
