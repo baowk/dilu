@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/baowk/dilu-core/common/utils"
+	"github.com/baowk/dilu-core/core/logger"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,9 +18,11 @@ func NoCache(c *gin.Context) {
 	c.Next()
 }
 
-// 获取请求id，没有默认一个
+// ReqId 生成/提取请求 ID，注入到 zerolog context，下游所有日志自动携带 reqId
 func ReqId(c *gin.Context) {
-	utils.GetReqId(c)
+	reqId := utils.GetReqId(c)
+	log := logger.Default().With().Str("reqId", reqId).Logger()
+	c.Request = c.Request.WithContext(log.WithContext(c.Request.Context()))
 	c.Next()
 }
 

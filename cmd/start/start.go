@@ -61,7 +61,7 @@ func run() error {
 	if err := core.GetApp().Run(); err != nil {
 		return err
 	}
-	logger.Info("Server exited")
+	logger.Info().Msg("Server exited")
 	return nil
 }
 
@@ -71,7 +71,7 @@ func startedInit() {
 		grpcInit()
 	}
 	rdInit()
-	logger.Debug("服务启动，初始化执行完成")
+	logger.Debug().Msg("服务启动，初始化执行完成")
 }
 
 // 服务关闭要释放的资源
@@ -81,5 +81,5 @@ func toClose() {
 		closeGrpc()
 	}
 	rdRelease()
-	logger.Debug("服务关闭需要释放的资源")
+	logger.Debug().Msg("服务关闭需要释放的资源")
 }

@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"runtime/debug"
 
-	"github.com/baowk/dilu-core/common/utils"
 	"github.com/baowk/dilu-core/common/utils/ips"
 	"github.com/baowk/dilu-core/core/logger"
 	"github.com/gin-gonic/gin"
@@ -32,9 +31,14 @@ func CustomError(c *gin.Context) {
 			}
 
 			if appErr != nil {
-				logger.Warn("request", "ip", ips.GetIP(c), "method", c.Request.Method, "path", c.Request.RequestURI,
-					"query", c.Request.URL.RawQuery, "source", config.Get().Server.Name, "reqId", utils.GetReqId(c),
-					"error", appErr.Msg)
+				logger.Ctx(c.Request.Context()).Warn().
+					Str("ip", ips.GetIP(c)).
+					Str("method", c.Request.Method).
+					Str("path", c.Request.RequestURI).
+					Str("query", c.Request.URL.RawQuery).
+					Str("source", config.Get().Server.Name).
+					Str("error", appErr.Msg).
+					Msg("request")
 				c.JSON(appErr.Code, gin.H{
 					"code": appErr.Code,
 					"msg":  appErr.Msg,
@@ -43,9 +47,13 @@ func CustomError(c *gin.Context) {
 			}
 
 			// 未知 panic，记录堆栈，返回通用错误
-			logger.Error("unexpected panic", "error", err, "ip", ips.GetIP(c),
-				"method", c.Request.Method, "path", c.Request.RequestURI,
-				"stack", string(debug.Stack()))
+			logger.Ctx(c.Request.Context()).Error().
+				Interface("error", err).
+				Str("ip", ips.GetIP(c)).
+				Str("method", c.Request.Method).
+				Str("path", c.Request.RequestURI).
+				Str("stack", string(debug.Stack())).
+				Msg("unexpected panic")
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"code": 500,
 				"msg":  "Internal Server Error",

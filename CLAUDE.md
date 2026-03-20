@@ -370,14 +370,31 @@ func RegisterSysRoutes(v1 *gin.RouterGroup) {
 
 ## 九、日志规范
 
+使用 `github.com/baowk/dilu-core/core/logger` 包（基于 zerolog），**禁止直接 import `log/slog` 或 `github.com/rs/zerolog`**。
+
 ```go
-// ✅ 结构化日志（强制）
-slog.Info("user created", "userId", user.Id, "username", user.Username)
-slog.Error("query failed", "err", err, "req", req)
+import "github.com/baowk/dilu-core/core/logger"
+
+// ✅ 结构化日志（zerolog 链式调用）
+logger.Info().Str("username", user.Username).Int("userId", user.Id).Msg("user created")
+logger.Warn().Dur("duration", elapsed).Msg("query slow")
+logger.Error().Err(err).Interface("req", req).Msg("query failed")
+logger.Debug().Str("key", "val").Msg("debug info")
+
+// ✅ 固定字段子 logger（模块级别）
+log := logger.With().Str("module", "auth").Logger()
+log.Info().Int("userId", userId).Msg("token issued")
+
+// ✅ 从 context 取 logger（自动带 reqId，Service/Api 层推荐用法）
+// ctx 来自 c.Request.Context() 或 service 方法参数
+logger.Ctx(ctx).Info().Str("userId", userId).Msg("user action")
+logger.Ctx(ctx).Error().Err(err).Msg("query failed")
 
 // ❌ 禁止
-log.Println("error")
-fmt.Println("debug")
+slog.Info("...")       // 直接用 slog
+zerolog.New(os.Stdout) // 直接用 zerolog
+log.Println("error")   // 标准库 log
+fmt.Println("debug")   // fmt 打印
 ```
 
 ---
@@ -408,7 +425,7 @@ result, _ := service.Get(id)
 | 硬编码配置值 | 用 `config.Get()` |
 | 自创目录层级 | 破坏项目结构 |
 | 跳过 Swagger 注释 | 接口文档缺失 |
-| 使用 `fmt.Println` 调试 | 用 slog |
+| 使用 `fmt.Println` / `slog` 直接打印 | 用 `logger` 包 |
 
 ---
 

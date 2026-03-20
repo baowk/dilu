@@ -8,7 +8,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/baowk/dilu-core/common/utils"
 	"github.com/baowk/dilu-core/common/utils/ips"
 	"github.com/baowk/dilu-core/core/logger"
 	"github.com/gin-gonic/gin"
@@ -46,7 +45,7 @@ func LoggerToFile() gin.HandlerFunc {
 			// 直接用 io.ReadAll，避免 buffer→writer→readAll 三次分配
 			rb, err := io.ReadAll(c.Request.Body)
 			if err != nil {
-				logger.Warn("read body error", "err", err)
+				logger.Warn().Err(err).Msg("read body error")
 			} else {
 				c.Request.Body = io.NopCloser(bytes.NewReader(rb))
 				if hasSensitiveField(rb) {
@@ -71,24 +70,23 @@ func writeLog(startTime time.Time, body string, c *gin.Context) {
 	}
 	cost := time.Since(startTime)
 
-	args := []any{
-		"ip", ips.GetIP(c),
-		"method", c.Request.Method,
-		"path", c.Request.RequestURI,
-		"cost", cost,
-		"query", c.Request.URL.RawQuery,
-		"source", config.Get().Server.Name,
-		"reqId", utils.GetReqId(c),
+	// 从 context 取出带 reqId 的 logger（由 ReqId 中间件注入）
+	log := logger.Ctx(c.Request.Context())
+	ev := log.Info()
+	if cost.Milliseconds() >= 200 {
+		ev = log.Warn()
 	}
+	ev = ev.
+		Str("ip", ips.GetIP(c)).
+		Str("method", c.Request.Method).
+		Str("path", c.Request.RequestURI).
+		Dur("cost", cost).
+		Str("query", c.Request.URL.RawQuery).
+		Str("source", config.Get().Server.Name)
 	if body != "" {
-		args = append(args, "body", body)
+		ev = ev.Str("body", body)
 	}
-
-	if cost.Milliseconds() < 200 {
-		logger.Info("request", args...)
-	} else {
-		logger.Warn("request", args...)
-	}
+	ev.Msg("request")
 }
 
 // bodyNeedLog 判断是否需要记录 body 的方法（预留扩展）

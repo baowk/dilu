@@ -25,12 +25,12 @@ func grpcInit() {
 	grpcAddr := fmt.Sprintf("%s:%d", config.Get().GrpcServer.GetHost(), config.Get().GrpcServer.GetPort())
 	lis, err := net.Listen("tcp", grpcAddr)
 	if err != nil {
-		logger.Error("failed to listen", "err", err)
+		logger.Error().Err(err).Msg("failed to listen")
 		log.Fatal("failed to listen:", err)
 	}
 	go func() {
 		if err := grpcServer.Serve(lis); err != nil {
-			logger.Error("failed to serve", "err", err)
+			logger.Error().Err(err).Msg("failed to serve")
 			log.Fatal("failed to serve:", err)
 		}
 	}()

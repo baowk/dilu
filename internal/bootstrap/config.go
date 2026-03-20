@@ -94,15 +94,15 @@ func loadRemoteConfig(ctx context.Context, cfg *config.Config) error {
 		for {
 			select {
 			case <-ctx.Done():
-				logger.Info("remote config watcher stopped")
+				logger.Info().Msg("remote config watcher stopped")
 				return
 			case <-ticker.C:
 				if watchErr := rviper.WatchRemoteConfig(); watchErr != nil {
-					logger.Warn("watch remote config failed", "err", watchErr)
+					logger.Warn().Err(watchErr).Msg("watch remote config failed")
 					continue
 				}
 				if unmarshalErr := rviper.Unmarshal(&remoteCfg); unmarshalErr != nil {
-					logger.Warn("unmarshal remote config failed", "err", unmarshalErr)
+					logger.Warn().Err(unmarshalErr).Msg("unmarshal remote config failed")
 					continue
 				}
 				config.SaveConfig(cfg, &remoteCfg)
@@ -116,10 +116,10 @@ func watchLocalConfig(v *viper.Viper, cfg *config.Config) {
 	v.WatchConfig()
 	v.OnConfigChange(func(e fsnotify.Event) {
 		if err := v.Unmarshal(cfg); err != nil {
-			logger.Warn("unmarshal changed config failed", "err", err)
+			logger.Warn().Err(err).Msg("unmarshal changed config failed")
 			return
 		}
 		config.SaveConfig(cfg, nil)
-		logger.Info("config file changed", "file", e.Name)
+		logger.Info().Str("file", e.Name).Msg("config file changed")
 	})
 }

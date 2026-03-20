@@ -39,11 +39,11 @@ func rdInit() {
 		rdcfg := config.Get().RdConfig
 		for _, v := range rdcfg.Registers {
 			if v.Protocol != "grpc" && v.Protocol != "http" {
-				logger.Error("rd register error", "protocol", v.Protocol)
+				logger.Error().Str("protocol", v.Protocol).Msg("rd register error")
 				continue
 			}
 			if v.Protocol == "grpc" && !config.Get().GrpcServer.Enable {
-				logger.Error("rd register error", "protocol", v.Protocol, "GrpcServer enable", false)
+				logger.Error().Str("protocol", v.Protocol).Bool("GrpcServer enable", false).Msg("rd register error")
 				continue
 			}
 			if v.Name == "" {
@@ -84,11 +84,11 @@ func rdInit() {
 			}
 		}
 
-		logger.Debug("注册中心连接", "rdcfg", rdcfg)
+		logger.Debug().Interface("rdcfg", rdcfg).Msg("注册中心连接")
 		var err error
 		container.Global().RDClient, err = rd.NewRDClient(&rdcfg)
 		if err != nil {
-			logger.Error("注册中心连接失败", "err", err)
+			logger.Error().Err(err).Msg("注册中心连接失败")
 		}
 	}
 }
