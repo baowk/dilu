@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dilu
+  namespace: default
+  labels:
+    app: dilu
+spec:
+  type: ClusterIP
+  selector:
+    app: dilu
+  ports:
+    - name: http
+      port: 80
+      targetPort: 7888
+      protocol: TCP

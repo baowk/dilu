@@ -27,7 +27,9 @@ access-limit: #访问频率限制
   duration: 5s #时长
   total: 300 #300次
 jwt:                # JWT配置
-  sign-key: 56n1KywHIPEkWWIxffGpp8Dfl3z5SjE5WBeDStc1T64klnpoAqHrHN01vnete123   # Token密钥
+  # 生产环境请通过环境变量设置：export JWT_SIGN_KEY=your-secret（至少32字符）
+  # 环境变量优先级高于此处配置，配置文件中的值仅用于开发环境
+  sign-key: 56n1KywHIPEkWWIxffGpp8Dfl3z5SjE5WBeDStc1T64klnpoAqHrHN01vnete123   # Token密钥（开发环境）
   expires: 10080    # Token过期时长（单位：分钟）
   refresh: 14400    # Token 刷新时长（单位：分钟）
 cache:              # 缓存配置

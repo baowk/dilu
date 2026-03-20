@@ -70,7 +70,10 @@ func (c *Config) Validate() error {
 		return fmt.Errorf("config: server.port is required")
 	}
 	if c.JWT.SignKey == "" {
-		return fmt.Errorf("config: jwt.sign-key is required")
+		return fmt.Errorf("config: jwt.sign-key is required (set via JWT_SIGN_KEY env var in production)")
+	}
+	if len(c.JWT.SignKey) < 32 {
+		return fmt.Errorf("config: jwt.sign-key must be at least 32 characters long")
 	}
 	return nil
 }

@@ -27,6 +27,14 @@ func LoadConfig(configPath string) (*config.Config, error) {
 		return nil, fmt.Errorf("fatal error config file: %w", err)
 	}
 
+	// 支持通过环境变量覆盖敏感配置，优先级高于配置文件
+	// 例：export JWT_SIGN_KEY=your-secret 即可覆盖 jwt.sign-key
+	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_", "-", "_"))
+	v.AutomaticEnv()
+	_ = v.BindEnv("jwt.sign-key", "JWT_SIGN_KEY")
+	_ = v.BindEnv("dbcfg.dns", "DB_DNS")
+	_ = v.BindEnv("cache.password", "REDIS_PASSWORD")
+
 	var cfg config.Config
 	if err := v.Unmarshal(&cfg); err != nil {
 		return nil, fmt.Errorf("unmarshal config failed: %w", err)

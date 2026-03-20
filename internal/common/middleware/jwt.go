@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -62,7 +63,16 @@ func JwtHandler() gin.HandlerFunc {
 }
 
 func Fail(c *gin.Context, code int, msg string, data ...any) {
-	c.AbortWithStatusJSON(http.StatusOK, gin.H{
+	httpStatus := http.StatusOK
+	switch code {
+	case 401:
+		httpStatus = http.StatusUnauthorized
+	case 403:
+		httpStatus = http.StatusForbidden
+	case 429:
+		httpStatus = http.StatusTooManyRequests
+	}
+	c.AbortWithStatusJSON(httpStatus, gin.H{
 		"code": code,
 		"msg":  msg,
 	})
@@ -75,8 +85,12 @@ func Refresh(claims jwt.Claims, secretKey string) (string, error) {
 
 // Parse 解析token
 func Parse(accessToken string, claims jwt.Claims, secretKey string, options ...jwt.ParserOption) error {
-	token, err := jwt.ParseWithClaims(accessToken, claims, func(token *jwt.Token) (i interface{}, err error) {
-		return []byte(secretKey), err
+	token, err := jwt.ParseWithClaims(accessToken, claims, func(token *jwt.Token) (interface{}, error) {
+		// 验证签名算法，防止 alg:none 绕过攻击
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(secretKey), nil
 	}, options...)
 	if err != nil {
 		return err

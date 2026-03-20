@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dilu
+  namespace: default
+  labels:
+    app: dilu
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: dilu
+  template:
+    metadata:
+      labels:
+        app: dilu
+    spec:
+      # 非 root 用户运行，提升安全性
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+
+      containers:
+        - name: dilu
+          image: your-registry/dilu:latest   # ← 替换为实际镜像地址
+          imagePullPolicy: Always
+
+          # 覆盖 Dockerfile 中的 CMD，使用 Secret 挂载的配置文件
+          command: ["./server", "start", "-c", "/etc/dilu/config.prod.yaml"]
+
+          ports:
+            - name: http
+              containerPort: 7888
+              protocol: TCP
+
+          # 将 Secret 中的 config.prod.yaml 挂载到容器内
+          volumeMounts:
+            - name: config
+              mountPath: /etc/dilu
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp              # 日志写入目录
+
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 7888
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            failureThreshold: 3
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 7888
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+
+      volumes:
+        # 将 Secret dilu-config 中的 config.prod.yaml 文件挂载进来
+        - name: config
+          secret:
+            secretName: dilu-config
+            items:
+              - key: config.prod.yaml
+                path: config.prod.yaml
+                mode: 0400              # 只读权限，防止容器内篡改
+        - name: tmp
+          emptyDir: {}
+
+      # 优雅终止等待时间，给在途请求处理完成的机会
+      terminationGracePeriodSeconds: 30

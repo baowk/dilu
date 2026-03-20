@@ -139,13 +139,11 @@ Dilu框架提供完整的 AI 辅助开发支持，帮助您高效构建企业级
 
 ### 📋 AI 代码规范
 
-- 🇨🇳 **[中文版 AI 代码规范](./AI_CODE_SPEC.md)** - AI 生成代码的开发规范和约定
-- 🌐 **[English AI Code Spec](./dev-docs/ai/AI_CODE_SPEC_en.md)** - 人类阅读备注（英文版）
-
+- **[CLAUDE.md](./CLAUDE.md)** - AI 协作规范（Claude Code 自动加载）
 
 ### AI 开发核心能力
 
-- ✅ **智能代码生成** - 使用 `dilu-ctl gen` 快速生成 Model、Service、Api、Router 代码
+- ✅ **智能代码生成** - AI 直接编写 Model、Service、Api、Router 代码
 - ✅ **API 开发辅助** - AI 辅助设计 RESTful API，自动生成 Swagger 文档
 - ✅ **数据库设计** - AI 辅助设计表结构，生成 GORM 模型和迁移脚本
 - ✅ **前端开发** - AI 生成 Vue3 组件和 TypeScript API 封装
