@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"time"
 
 	"github.com/baowk/dilu-core/common/utils/text"
 	"github.com/baowk/dilu-core/core/logger"
@@ -38,7 +39,19 @@ func grpcInit() {
 }
 
 func closeGrpc() {
-	if s := container.Global().GrpcServer; s != nil {
+	s := container.Global().GrpcServer
+	if s == nil {
+		return
+	}
+	done := make(chan struct{})
+	go func() {
 		s.GracefulStop()
+		close(done)
+	}()
+	select {
+	case <-done:
+	case <-time.After(10 * time.Second):
+		logger.Warn().Msg("grpc graceful stop timeout, forcing stop")
+		s.Stop()
 	}
 }
